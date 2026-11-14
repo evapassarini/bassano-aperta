@@ -1,0 +1,2396 @@
+{
+ "ponte": {
+  "places": [
+   {
+    "name": "Ponte Vecchio (Ponte degli Alpini)",
+    "identification_note": "Ponte coperto in legno sul Brenta a Bassano del Grappa, su progetto di Andrea Palladio (progetto definitivo: estate 1569, confermato dalla scheda del Palladio Museum/CISA). 'Ponte Vecchio', 'Ponte di Bassano' e 'Ponte degli Alpini' indicano lo stesso manufatto: identificazione solida. Meno solida l'origine del nome 'degli Alpini': la dedica del 1928 e' riportata da Wikipedia IT (senza nota) e da ilDolomiti, ma non ho trovato un atto o una fonte primaria; che il nome derivi anche dalla ricostruzione del 1948 e' una lettura corrente, non un dato documentato. Coordinate verificate su OpenStreetMap/Nominatim: 45.76751 N, 11.73111 E (coerenti con Wikipedia IT; quelle di Wikipedia EN, 45.76868/11.72929, cadono circa 200 m a nord-ovest e sono da scartare).",
+    "lat": 45.76751,
+    "lon": 11.73111,
+    "story_beats": [
+     {
+      "year": "1209",
+      "text": "Prima menzione del ponte, nel cronista Gerardo Maurisio. Nel 1259 compare negli statuti di Bassano, in una rubrica su manutenzione e furti di legname: a quell'epoca era gia' di legno e apparteneva alla citta', che ne pagava le riparazioni e riscuoteva il pedaggio.",
+      "source_url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
+     },
+     {
+      "year": "1511",
+      "text": "Le truppe francesi di Jacques de La Palice incendiano il ponte per sfuggire all'esercito imperiale durante la guerra della Lega di Cambrai.",
+      "source_url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
+     },
+     {
+      "year": "1567",
+      "text": "Nell'ottobre 1567 una piena del Brenta travolge il ponte. Andrea Palladio propone dapprima un ponte in pietra a tre arcate, sul modello dei ponti romani: il Consiglio cittadino lo boccia e gli impone di non discostarsi dalla struttura tradizionale.",
+      "source_url": "https://mediateca.palladiomuseum.org/palladio/opera.php?id=29"
+     },
+     {
+      "year": "1569",
+      "text": "Nell'estate del 1569 Palladio presenta il progetto definitivo: un ponte in legno che richiama il precedente, con colonne tuscaniche a reggere la copertura. Nel 1570 lo pubblica nel terzo dei Quattro libri dell'architettura.",
+      "source_url": "https://mediateca.palladiomuseum.org/palladio/opera.php?id=29"
+     },
+     {
+      "year": "1748",
+      "text": "Il 19 agosto una piena fa crollare il ponte palladiano, dopo quasi duecento anni. Lo ricostruisce Bartolomeo Ferracina rispettando la struttura di Palladio.",
+      "source_url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
+     },
+     {
+      "year": "1813-1821",
+      "text": "Nel 1813 il vicere' Eugenio di Beauharnais fa incendiare il ponte. Nel 1821 Angelo Casarotti lo ricostruisce nelle stesse forme.",
+      "source_url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
+     },
+     {
+      "year": "1915-1918",
+      "text": "Durante la Grande Guerra le truppe italiane attraversano il ponte per salire all'Altopiano dei Sette Comuni.",
+      "source_url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
+     },
+     {
+      "year": "1928",
+      "text": "Dal 1928 il ponte e' dedicato anche alla memoria dei soldati, in particolare degli Alpini, che lo avevano attraversato durante la guerra. (Dato riportato da Wikipedia IT e da ilDolomiti, senza fonte primaria: da confermare.)",
+      "source_url": "https://www.ildolomiti.it/cronaca/2021/dopo-7-anni-di-restauro-gli-alpini-tornano-a-sfilare-sul-loro-ponte-video-oltre-800-penne-nere-in-festa-a-bassano"
+     },
+     {
+      "year": "Prima guerra mondiale",
+      "text": "Gli alpini cantano 'Sul ponte di Bassano, bandiera nera, e' il lutto degli Alpini che va alla guerra'. Testo e melodia saranno ripresi nel 1940-41 per 'Sul ponte di Perati' della brigata Julia. Autore non indicato dalle fonti. Attenzione: esiste anche un'altra canzone con lo stesso titolo, una canzone d'amore ('Sul ponte di Bassano noi ci darem la mano').",
+      "source_url": "https://it.wikipedia.org/wiki/Sul_ponte_di_Perati"
+     },
+     {
+      "year": "1945",
+      "text": "Il 17 febbraio, poco dopo le 19, un gruppo di 15 partigiani guidati da Primo Visentin 'Masaccio' fa esplodere il ponte: muoiono due civili, una donna e un adolescente. Per rappresaglia tre partigiani (Federico Alberti, Cesare Lunardi, Antonio Zavagnin) vengono fucilati sul ponte. (Altre fonti attribuiscono la distruzione finale alle truppe tedesche in ritirata, il 29 aprile 1945: vedi domande aperte.)",
+      "source_url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
+     },
+     {
+      "year": "1948",
+      "text": "Il 3 ottobre il ponte, ricostruito secondo il disegno di Palladio, viene inaugurato alla presenza di Alcide De Gasperi. Secondo Wikipedia IT i lavori furono dell'impresa Giulio Tessarolo & Figli di Rosa', con molti operai reduci alpini, da cui la 'leggenda' del ponte rifatto dagli Alpini; altre fonti scrivono invece che fu ricostruito e pagato dagli Alpini.",
+      "source_url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
+     },
+     {
+      "year": "1966",
+      "text": "Il 4 novembre una piena eccezionale danneggia gravemente il ponte, che viene poi restaurato nelle strutture. Altri interventi straordinari seguono nel 1990-1993 e nel 2003-2006.",
+      "source_url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
+     },
+     {
+      "year": "2019",
+      "text": "La legge n. 65 del 5 luglio 2019 dichiara il Ponte Vecchio di Bassano monumento nazionale.",
+      "source_url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
+     },
+     {
+      "year": "2015-2021",
+      "text": "A fine 2015 parte il grande restauro: il ponte viene sollevato di circa 45 cm nella zona ceduta e le fondazioni in legno, ormai degradate, sono sostituite con travi reticolari e pilastri in acciaio. La ditta Inco di Pergine Valsugana riconsegna il ponte alla citta' il 14 maggio 2021; l'inaugurazione ufficiale e' il 3 ottobre 2021.",
+      "source_url": "https://www.ildolomiti.it/societa/2021/dopo-sei-anni-il-ponte-degli-alpini-di-bassano-del-grappa-e-rinato-grazie-anche-a-una-ditta-trentina"
+     }
+    ],
+    "media": [
+     {
+      "kind": "historic_image",
+      "title": "Palladio, I quattro libri dell'architettura (1570), Libro III - tavola del ponte di Bassano",
+      "url": "https://commons.wikimedia.org/wiki/File:Pallarch3-2.jpg",
+      "license": "Public domain",
+      "author": "Andrea Palladio",
+      "embeddable": "yes - Wikimedia Commons, public domain (licenza verificata via API Commons)"
+     },
+     {
+      "kind": "historic_image",
+      "title": "Palladio, I quattro libri (1570), Libro III - pagina sul ponte di Bassano",
+      "url": "https://commons.wikimedia.org/wiki/File:Pallarch3-1.jpg",
+      "license": "Public domain",
+      "author": "Andrea Palladio",
+      "embeddable": "yes - Wikimedia Commons, public domain"
+     },
+     {
+      "kind": "historic_image",
+      "title": "Ponte Vecchio di Bassano, disegno di Ottavio Bertotti Scamozzi (1773)",
+      "url": "https://commons.wikimedia.org/wiki/File:Ponte_Vecchio_Bassano_Bertotti_Scamozzi_1773.jpg",
+      "license": "Public domain",
+      "author": "Ottavio Bertotti Scamozzi",
+      "embeddable": "yes - Wikimedia Commons, public domain"
+     },
+     {
+      "kind": "historic_image",
+      "title": "Ponte di Bassano (incisione, 1845)",
+      "url": "https://commons.wikimedia.org/wiki/File:Ponte_di_Bassano_(incisione).jpg",
+      "license": "CC BY 4.0",
+      "author": "Corsi, Francesco (incisore)",
+      "embeddable": "yes - Wikimedia Commons, attribuzione obbligatoria"
+     },
+     {
+      "kind": "historic_image",
+      "title": "Bassano del Grappa, il ponte coperto ed il castello (xilografia, 1901)",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa,_il_ponte_coperto_ed_il_castello_(xilografia).jpg",
+      "license": "Public domain",
+      "author": "Unknown author",
+      "embeddable": "yes - Wikimedia Commons, public domain"
+     },
+     {
+      "kind": "historic_image",
+      "title": "Bassano: ponte coperto sul Brenta e Castello (xilografia, 1903)",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_ponte_coperto_sul_Brenta_e_Castello.jpg",
+      "license": "Public domain",
+      "author": "Giuseppe Barberis",
+      "embeddable": "yes - Wikimedia Commons, public domain"
+     },
+     {
+      "kind": "historic_image",
+      "title": "Bassano del Grappa, Ponte degli Alpini (fotografia 1971)",
+      "url": "https://commons.wikimedia.org/wiki/File:VI-Bassano-del-Grappa-1971-ponte-degli-alpini.jpg",
+      "license": "Public domain",
+      "author": "Unknown author",
+      "embeddable": "yes - Commons la marca 'Public domain', autore ignoto; la motivazione (foto semplice italiana, regola dei 20 anni) non e' stata letta sulla pagina: controllare prima di pubblicare"
+     },
+     {
+      "kind": "photo",
+      "title": "Lavori Ponte Vecchio (veduta aerea del cantiere, 28 dicembre 2018)",
+      "url": "https://commons.wikimedia.org/wiki/File:Lavori_Ponte_Vecchio.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Slapmysalami",
+      "embeddable": "yes - Wikimedia Commons, attribuzione + share-alike"
+     },
+     {
+      "kind": "photo",
+      "title": "Ponte Vecchio (Bassano del Grappa) 01 - dopo il restauro (31 ottobre 2022)",
+      "url": "https://commons.wikimedia.org/wiki/File:Ponte_Vecchio_(Bassano_del_Grappa)_01.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Superchilum",
+      "embeddable": "yes - Wikimedia Commons, attribuzione + share-alike"
+     },
+     {
+      "kind": "photo",
+      "title": "Ponte di Bassano panoramica (vista da sud, 2012)",
+      "url": "https://commons.wikimedia.org/wiki/File:Ponte_di_Bassano_panoramica.jpg",
+      "license": "CC BY-SA 3.0",
+      "author": "Mpiva",
+      "embeddable": "yes - Wikimedia Commons, attribuzione + share-alike"
+     },
+     {
+      "kind": "photo",
+      "title": "Bassano z01 (Ponte degli Alpini, settembre 2007)",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_z01.JPG",
+      "license": "CC BY 3.0",
+      "author": "Zyance",
+      "embeddable": "yes - Wikimedia Commons, attribuzione obbligatoria"
+     },
+     {
+      "kind": "photo",
+      "title": "Bassano del Grappa - Targa sul ponte degli Alpini 01 (2025)",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Targa_sul_ponte_degli_Alpini_01.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Syrio",
+      "embeddable": "yes - Wikimedia Commons, attribuzione + share-alike"
+     },
+     {
+      "kind": "audio",
+      "title": "Sul ponte di Bassano - Coro ICAM (registrazione Vedette, fondo ICBSA)",
+      "url": "https://commons.wikimedia.org/wiki/File:ICBSA_Coro_ICAM_-_Sul_ponte_di_Bassano.oga",
+      "license": "CC BY-SA 4.0",
+      "author": "non indicato nei metadati Commons (Coro ICAM, etichetta Vedette)",
+      "embeddable": "yes - file OGG su Commons, riproducibile con audio HTML5 (Safari/iOS puo' richiedere la versione MP3 transcodificata). Non ascoltato: non so quale delle due canzoni omonime sia, ne' la data"
+     },
+     {
+      "kind": "audio",
+      "title": "Sul ponte di Bassano - Coro ex combattenti (registrazione Columbia, fondo ICBSA)",
+      "url": "https://commons.wikimedia.org/wiki/File:ICBSA_Coro_ex_combattenti_-_Sul_ponte_di_Bassano.oga",
+      "license": "CC BY-SA 4.0",
+      "author": "non indicato nei metadati Commons (Coro ex combattenti, etichetta Columbia)",
+      "embeddable": "yes - file OGG su Commons; stesse riserve: non ascoltato, versione e data ignote"
+     },
+     {
+      "kind": "video",
+      "title": "Bassano del Grappa: ricostruito lo storico ponte.",
+      "url": "https://www.youtube.com/watch?v=w3DLmXwMgE0",
+      "license": "unknown",
+      "author": "Archivio Luce Cinecitta' (canale YouTube @istitutoluce)",
+      "embeddable": "yes - la pagina del video dichiara playableInEmbed=true (verificato 14/11/2026); nessuna licenza indicata, quindi solo embed del player YouTube. Durata 103 s, caricato il 15/06/2012; la data del cinegiornale non e' indicata nei dati letti"
+     },
+     {
+      "kind": "video",
+      "title": "TG Bassano (13/02/2019) - Ponte Vecchio, nel cantiere dove lo 'curano'",
+      "url": "https://www.youtube.com/watch?v=TWa0GW8GG90",
+      "license": "unknown",
+      "author": "Rete Veneta (TV locale)",
+      "embeddable": "yes - playableInEmbed=true; nessuna licenza indicata, solo embed del player YouTube"
+     },
+     {
+      "kind": "video",
+      "title": "72 anni fa rinasceva il Ponte Vecchio. Dal 1948 e' anche il Ponte degli Alpini (03/10/2020)",
+      "url": "https://www.youtube.com/watch?v=SPREnPFTbnQ",
+      "license": "unknown",
+      "author": "Rete Veneta (TV locale)",
+      "embeddable": "yes - playableInEmbed=true; nessuna licenza indicata, solo embed del player YouTube"
+     }
+    ],
+    "live_sources": []
+   },
+   {
+    "name": "Fiume Brenta a Bassano (riva, porto di Brenta, zattieri)",
+    "identification_note": "Il tratto urbano del Brenta a Bassano del Grappa, dove il fiume esce dal Canale di Brenta ed entra in pianura passando sotto il Ponte Vecchio. Non e' un luogo puntuale: il punto sulla mappa e' una scelta redazionale. Le coordinate indicate sono approssimative (punto sul fiume subito a valle del ponte, non tratte da una fonte). La posizione dell'antico porto fluviale ('sponda sinistra, poco a valle del ponte') poggia su una sola fonte, un pannello divulgativo del Consorzio di Bonifica Brenta; il pieghevole della mostra del 2011 cita il 'porto di Brenta' senza localizzarlo: e' un'ipotesi ragionevole ma da confermare con un locale. La stazione idrometrica ARPAV 'Brenta a Barzizza' (grafia usata da ARPAV) e' circa 1,1 km a monte del ponte, a 45.77741 N, 11.73054 E (dato API ARPAV verificato): il livello mostrato non e' misurato sotto il ponte.",
+    "lat": 45.7668,
+    "lon": 11.731,
+    "story_beats": [
+     {
+      "year": "-",
+      "text": "Il Brenta nasce dai laghi di Levico e Caldonazzo in Trentino ed e' lungo 174 km. Percorre la Valsugana, entra nel Canale di Brenta a Primolano e a Bassano passa sotto il Ponte Vecchio ed entra in pianura. La portata media a Bassano e' di 71 m3/s.",
+      "source_url": "https://it.wikipedia.org/wiki/Brenta"
+     },
+     {
+      "year": "XIV secolo",
+      "text": "A monte di Bassano, a Valstagna, viene realizzata la Cala' del Sasso: una scalinata di 4.444 gradini con una canaletta laterale in pietra per far scivolare i tronchi dall'Altopiano fino al Brenta.",
+      "source_url": "https://it.wikipedia.org/wiki/Cal%C3%A0_del_Sasso"
+     },
+     {
+      "year": "XV-XVIII secolo",
+      "text": "I veneziani sfruttano ampiamente la Cala' del Sasso per rifornire di legname l'Arsenale: da Valstagna i tronchi vengono fluitati lungo il Brenta fino a Venezia.",
+      "source_url": "https://it.wikipedia.org/wiki/Cal%C3%A0_del_Sasso"
+     },
+     {
+      "year": "epoca della fluitazione",
+      "text": "Sul Brenta navigano zattere cariche di legname: larghe non piu' di 3 metri, lunghe da 4 a 30 metri, con 4-5 uomini di equipaggio. Arrivano al porto padovano del Bassanello e, se il carico non e' a destinazione, proseguono verso Monselice, Chioggia e Venezia. (La fonte non data queste misure; cita una testimonianza del 1623.)",
+      "source_url": "https://www.consorziobrenta.it/download/52d027f_9ilbuta.pdf"
+     },
+     {
+      "year": "epoca della fluitazione",
+      "text": "Con le zattere arrivano sulla piazza di Bassano anche molte altre merci: la citta' sviluppa cosi' il proprio porto fluviale, sulla sponda sinistra del Brenta, poco a valle del ponte.",
+      "source_url": "https://www.consorziobrenta.it/download/52d027f_9ilbuta.pdf"
+     },
+     {
+      "year": "1567 e 1748",
+      "text": "Le piene del Brenta distruggono due volte il ponte di Bassano: nell'ottobre 1567 (da cui il progetto di Palladio) e il 19 agosto 1748 (ricostruzione di Bartolomeo Ferracina).",
+      "source_url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
+     },
+     {
+      "year": "1797-1805",
+      "text": "Sotto la prima dominazione austriaca nasce il 'buta'': una norma impone di chiudere le rogge il mercoledi' e il sabato, cosi' da alzare il livello del fiume e far passare il legname. La regola, ribadita nel 1815-1866, crea lunghe dispute con chi usa l'acqua per irrigare e per gli opifici.",
+      "source_url": "https://www.consorziobrenta.it/download/52d027f_9ilbuta.pdf"
+     },
+     {
+      "year": "1893",
+      "text": "Il 2 luglio un telegramma del segretario del Consorzio Rosta Rosa' al suo presidente segnala numerosi zattieri fermi a Bassano, che protestano e non vogliono partire senza la garanzia del buta' fino al tramonto.",
+      "source_url": "https://www.consorziobrenta.it/download/52d027f_9ilbuta.pdf"
+     },
+     {
+      "year": "anni 1920",
+      "text": "Con la Prima guerra mondiale il buta' viene sospeso e, con i nuovi mezzi di trasporto, dagli anni Venti scompare definitivamente. Sulla diga di derivazione del canale Medoaco, a valle del ponte, e' ancora visibile l'antico 'bocchiero', la bocca per il passaggio del legname.",
+      "source_url": "https://www.consorziobrenta.it/download/52d027f_9ilbuta.pdf"
+     },
+     {
+      "year": "1966",
+      "text": "L'alluvione del 1966 sconvolge quasi tutto il bacino del Brenta e dei suoi affluenti. (A Bassano la piena del 4 novembre danneggia gravemente il Ponte Vecchio: dato dalla voce Wikipedia sul ponte.)",
+      "source_url": "https://it.wikipedia.org/wiki/Brenta"
+     },
+     {
+      "year": "1986",
+      "text": "A Valstagna si tiene dal 1986 il Palio delle Zattere, l'ultima domenica di luglio. (Wikipedia IT lo riporta senza nota; il legame con gli antichi zattieri e' implicito nel nome ma non e' scritto nella fonte.)",
+      "source_url": "https://it.wikipedia.org/wiki/Valstagna"
+     },
+     {
+      "year": "2011",
+      "text": "Dal 9 aprile al 22 maggio Palazzo Bonaguro ospita la mostra 'Un fiume di legno', sulla fluitazione del legname dai boschi del Primiero alla laguna di Venezia; il pieghevole ricorda che Ponte Vecchio, Portici Lunghi e porto di Brenta richiamano il legame della citta' con il fiume.",
+      "source_url": "https://www.parcopan.org/wp-content/uploads/2019/03/depl-fluitazione-bassano.pdf.pdf"
+     }
+    ],
+    "media": [
+     {
+      "kind": "photo",
+      "title": "Brenta north from Ponte Vecchio (2012)",
+      "url": "https://commons.wikimedia.org/wiki/File:Brenta_north_from_Ponte_Vecchio_Bassani_di_Grappa.jpeg",
+      "license": "CC0",
+      "author": "oursana",
+      "embeddable": "yes - Wikimedia Commons, CC0"
+     },
+     {
+      "kind": "photo",
+      "title": "Brenta Bassano del Grappa (13 giugno 2021)",
+      "url": "https://commons.wikimedia.org/wiki/File:Brenta_Bassano_del_Grappa.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Wikipedian Spy",
+      "embeddable": "yes - Wikimedia Commons, attribuzione + share-alike"
+     },
+     {
+      "kind": "photo",
+      "title": "Fiume Brenta presso il Ponte Vecchio - collezione ENTER 2019",
+      "url": "https://commons.wikimedia.org/wiki/File:Fiume_Brenta_-_Tommaso_Ferracin_ENTER_2019.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Team ENTER",
+      "embeddable": "yes - Wikimedia Commons, attribuzione + share-alike"
+     },
+     {
+      "kind": "photo",
+      "title": "Riva Bassano del Grappa - ENTER 2019",
+      "url": "https://commons.wikimedia.org/wiki/File:Riva_Bassano_del_Grappa_-_ENTER_2019_by_Tommaso_Ferracin.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Team ENTER",
+      "embeddable": "yes - Wikimedia Commons, attribuzione + share-alike"
+     },
+     {
+      "kind": "photo",
+      "title": "Bassano del Grappa entlang der Brenta 01 (1 ottobre 2019)",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_entlang_der_Brenta_01.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Zairon",
+      "embeddable": "yes - Wikimedia Commons, attribuzione + share-alike (verificato solo il file 01, non l'intera serie)"
+     },
+     {
+      "kind": "photo",
+      "title": "Il Brenta (9 agosto 2011)",
+      "url": "https://commons.wikimedia.org/wiki/File:Il_Brenta_(6073221500).jpg",
+      "license": "CC BY-SA 2.0",
+      "author": "Rino Porrovecchio",
+      "embeddable": "yes - Wikimedia Commons, attribuzione + share-alike"
+     },
+     {
+      "kind": "photo",
+      "title": "Out&About - Raft Race in Valstagna (Veneto) - Palio delle Zattere",
+      "url": "https://commons.wikimedia.org/wiki/File:Out%26About_-_Raft_Race_in_Valstagna_(Veneto)_(4571358).jpg",
+      "license": "Public domain",
+      "author": "U.S. Army USAG-V, Anna Terracino",
+      "embeddable": "yes - Wikimedia Commons, public domain. Attenzione: i metadati dicono 'scattata il 19 luglio 2018' mentre la gara annunciata era il 22 luglio: e' un'immagine promozionale, probabilmente di un'edizione precedente; non datarla 2018 in didascalia"
+     },
+     {
+      "kind": "photo",
+      "title": "Valstagna, Riviera Garibaldi sul Brenta (11 agosto 2018)",
+      "url": "https://commons.wikimedia.org/wiki/File:Valstangna,_Riviera_Garibaldi.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Dedaperli",
+      "embeddable": "yes - Wikimedia Commons, attribuzione + share-alike"
+     },
+     {
+      "kind": "historic_image",
+      "title": "Pannello 'Il buta'' del Consorzio di Bonifica Brenta (testo, telegramma del 1893, immagini)",
+      "url": "https://www.consorziobrenta.it/download/52d027f_9ilbuta.pdf",
+      "license": "unknown",
+      "author": "Consorzio di Bonifica Brenta",
+      "embeddable": "no - PDF raggiungibile (3,8 MB) ma senza licenza dichiarata: solo link esterno, oppure chiedere il permesso al Consorzio"
+     },
+     {
+      "kind": "video",
+      "title": "Bassano del Grappa: il Ponte degli Alpini e il fiume Brenta",
+      "url": "https://www.youtube.com/watch?v=n1AMWOF650s",
+      "license": "unknown",
+      "author": "MagicoVeneto - Gianni Pasquale (canale privato)",
+      "embeddable": "yes - playableInEmbed=true (verificato 14/11/2026); nessuna licenza indicata, solo embed del player YouTube. Caricato il 16/03/2022, durata 286 s"
+     }
+    ],
+    "live_sources": [
+     {
+      "what": "Idrometro ARPAV 'Brenta a Barzizza' (stazione 283): ultimo livello idrometrico in metri e trend, JSON con tutte le stazioni",
+      "url": "https://api.arpa.veneto.it/REST/v1/meteo_meteogrammi?orario=0&rete=MGRAMMI&coordcd=20005",
+      "note": "Riverificato il 14/11/2026 alle 23:25: HTTP 200, 120 stazioni; 'Brenta a Barzizza', codseqst 300001722, lat 45.77741451, lon 11.73054326, quota 106 m, LIVELLO 0.96 m alle 23:00, aggiornamento 23:16 (quindi realmente aggiornato). Filtrare per codseqst. La risposta ha l'header Access-Control-Allow-Origin: * quindi si puo' chiamare direttamente dal browser, senza proxy. Dati non validati. Endpoint non documentato: puo' cambiare senza preavviso, prevedere un fallback."
+     },
+     {
+      "what": "Serie ARPAV degli ultimi 3 giorni circa per Brenta a Barzizza: livello (m) e portata (m3/s) ogni 10 minuti, JSON",
+      "url": "https://api.arpa.veneto.it/REST/v1/meteo_meteogrammi_tabella?codseqst=300001722",
+      "note": "Riverificato il 14/11/2026: HTTP 200, 852 record (426 'Livello idrometrico 1' + 426 'Portata'), dal 12/11 00:10 al 14/11 23:00; ultimo livello 0.96 m, ultima portata 51.79 m3/s. CORS aperto (Access-Control-Allow-Origin: *). Adatto a un mini-grafico 'il Brenta adesso'. Endpoint non documentato."
+     },
+     {
+      "what": "Portata istantanea ARPAV di tutte le stazioni (include Brenta a Barzizza), JSON",
+      "url": "https://api.arpa.veneto.it/REST/v1/meteo_meteogrammi?orario=0&rete=MGRAMMI&coordcd=10001",
+      "note": "Riverificato il 14/11/2026: HTTP 200, 54 stazioni; Brenta a Barzizza 51.79 m3/s alle 23:00. CORS aperto. Filtrare per codseqst 300001722."
+     },
+     {
+      "what": "Pagina ARPAV 'Principali variabili idrologiche' (dati in diretta; da usare come link 'fonte')",
+      "url": "https://www.arpa.veneto.it/dati-ambientali/dati-in-diretta/meteo-idro-nivo/variabili_idro",
+      "note": "Raggiungibile (HTTP 200). La dicitura 'Dati forniti da ARPAV in licenza CC BY 3.0' c'e' davvero, ma solo in un commento dello script incorporato nella pagina, non nel testo visibile: citare ARPAV come fonte e, se possibile, farsi confermare la licenza."
+     }
+    ]
+   }
+  ],
+  "open_questions": [
+   "Distruzione del 1945: le fonti NON concordano. Wikipedia IT/EN (che cita l'Enciclopedia dell'Antifascismo e la targa sul ponte) parla del sabotaggio partigiano del 17 febbraio 1945 guidato da 'Masaccio'; ilDolomiti (ottobre 2021) scrive che il ponte fu 'raso al suolo dalle truppe naziste in fuga il 29 aprile 1945' e la scheda del Palladio Museum parla di 'demolizione per mano delle truppe tedesche'; un altro articolo cita bombardamenti alleati. E' plausibile che siano due episodi distinti (danno a febbraio, distruzione ad aprile) ma non l'ho potuto confermare. Chiedere a un locale/ANPI/Museo Civico e leggere la targa sul ponte prima di pubblicare; idem per chi esegui' la rappresaglia (Wikipedia IT dice 'i fascisti', Wikipedia EN 'the Nazis').",
+   "'Ricostruito dagli Alpini' (1948): Wikipedia IT lo definisce una leggenda (impresa Tessarolo di Rosa', operai reduci alpini; voce senza nota su questo punto, ma in bibliografia c'e' A. Tessarolo, 'La ricostruzione del Ponte Vecchio 1948', 2021). ilDolomiti scrive invece 'ricostruito dagli Alpini' e 'un restauro da 38 milioni di lire pagati dagli Alpini'. Decidere come raccontarlo e verificare con ANA Bassano (sezione Monte Grappa).",
+   "Dedica del 1928 agli Alpini: riportata da Wikipedia IT (senza nota) e ripresa quasi alla lettera da ilDolomiti, quindi non e' una vera seconda fonte indipendente. Serve una conferma locale (delibera, targa, ANA).",
+   "'Sul ponte di Bassano': esistono DUE canzoni con questo titolo, il lamento alpino ('bandiera nera, e' il lutto degli Alpini') e la canzone d'amore ('noi ci darem la mano'). Non ho ascoltato le due registrazioni ICBSA su Commons: prima di pubblicarle va verificato quale versione sono, e la didascalia va scritta di conseguenza. Autore e data restano non verificati (Wikipedia dice 'alla fine della Prima guerra mondiale', il Coro Marmolada 'durante la prima guerra mondiale', un sito divulgativo '1916').",
+   "Data del progetto di Palladio: risolta a favore dell'estate 1569 (scheda Palladio Museum/CISA: 'Progetto 1567; 1569'). Il '1568' su Wikipedia IT e' solo un link interno sbagliato. Il numero di campate (cinque) viene dalla descrizione di Wikipedia, non dalla scheda CISA.",
+   "Restauro 2015-2021: durata e costo divergono tra le fonti ('sei anni' in un articolo de ilDolomiti, '7 anni per un costo di 7 milioni di euro' in un altro dello stesso giornale). Wikipedia aggiunge che il sollevamento avvenne il 12 febbraio 2019 e che i pilastri sono in acciaio inox. Non c'e' una fonte del Comune: non pubblicare il costo senza conferma.",
+   "Webcam: nessuna webcam verificata inquadra il Ponte Vecchio o il Brenta a Bassano. Le camere elencate da Windy (Piazza Liberta', Via Matteotti, Piazza Garibaldi, Cima Grappa) non sono state aperte ne' da chi ha fatto la ricerca ne' da me. L'unico dato davvero 'live' confermato e' l'idrometro ARPAV. Chiedere al Comune o a un locale affacciato sul fiume se esiste una camera.",
+   "Idrometro ARPAV: la stazione e' a Ca' Barzizza, circa 1,1 km a monte del ponte, non sotto il ponte: dirlo nella finestra. Mancano le soglie di allerta e i livelli storici (1966, Vaia 2018) per dare contesto al numero. Gli endpoint funzionano e accettano chiamate dal browser, ma non sono documentati e la licenza CC BY 3.0 compare solo in un commento del codice della pagina: chiedere conferma ad ARPAV se il sito e' istituzionale.",
+   "Video: tutti e quattro i video YouTube dichiarano l'embed consentito, ma nessuno indica una licenza. Il cinegiornale dell'Archivio Luce sull'inaugurazione risulta caricato nel 2012; la data originale (1948) non e' nei dati della pagina e va presa dal sito dell'Archivio Luce. Non ho trovato video del Comune, dei Musei Civici o del Palladio Museum.",
+   "Porto di Brenta e zattieri a Bassano: tutto poggia su un pannello divulgativo del Consorzio di Bonifica Brenta (non datato, senza bibliografia) e su un pieghevole di mostra del 2011. Far confermare a un locale/Museo Civico dove fosse il porto e se il 'bocchiero' e' ancora visibile oggi. Su Commons non ci sono immagini storiche libere di zattere sul Brenta.",
+   "Palio delle Zattere di Valstagna: 'dal 1986, ultima domenica di luglio' viene da una riga senza nota di Wikipedia IT; verificare che si tenga ancora e in quale data (Valstagna oggi e' frazione del comune di Valbrenta). La foto 'Raft Race' su Commons e' un'immagine promozionale dell'esercito USA con data incoerente.",
+   "Coordinate del luogo 'Brenta': scelta redazionale, non da fonte. Le coordinate del ponte sono invece confermate da OpenStreetMap.",
+   "La foto Commons 'Folla sul Ponte degli Alpini.JPG' (segnalata da chi ha fatto la ricerca con data 1899 errata) non e' stata ricontrollata: resta esclusa.",
+   "Fonti: la storia del ponte poggia ancora in gran parte su Wikipedia IT, con molte frasi senza nota. Sarebbe opportuna una verifica sul catalogo 'Palladio, Bassano e il Ponte' (Sagep, 2021) o con i Musei Civici.",
+   "Copertura: questa verifica riguarda solo ponte e fiume. Nardini (alto/basso) e il 'rinoceronte di Bassano', chiesti dall'utente, non sono in questo JSON."
+  ]
+ },
+ "nardini": {
+  "places": [
+   {
+    "name": "Grapperia Nardini al Ponte (\"Nardini Basso\")",
+    "identification_note": "Identificazione solida. Verificato: OpenStreetMap ha un elemento chiamato proprio \"Nardini basso\" (pub) a Ponte Vecchio 2, coordinate 45.7674625, 11.7317151; il blog viaggiadipiu.it scrive \"Un tempo le Grapperie Nardini erano due, Nardini Basso e Nardini Alto\"; la scheda Locali Storici d'Italia da' come indirizzo Ponte Vecchio 2. Il nome ufficiale e' \"Grapperia Nardini\"; \"Nardini Basso\" resta un nome d'uso, attestato da un blog e da OSM (fonti deboli ma concordi): farlo confermare a un bassanese. Attenzione: OSM riporta anche un secondo punto \"Nardini\" (negozio di bevande) in Via Ferracina, a pochi metri, da non confondere.",
+    "lat": 45.76746,
+    "lon": 11.73172,
+    "story_beats": [
+     {
+      "year": "1739",
+      "text": "Bortolo Nardini nasce a Segonzano, in Val di Cembra (Trentino).",
+      "source_url": "https://www.visititaly.eu/it/luoghi-e-itinerari/distilleria-nardini-grappa-italiana"
+     },
+     {
+      "year": "1779",
+      "text": "Bortolo Nardini compra l'Osteria al Ponte, all'ingresso del ponte sul Brenta, e vi installa in modo stabile il suo alambicco. L'azienda la presenta come la piu' antica distilleria d'Italia (primato dichiarato dall'azienda, non verificato in modo indipendente).",
+      "source_url": "https://www.visititaly.eu/it/luoghi-e-itinerari/distilleria-nardini-grappa-italiana"
+     },
+     {
+      "year": "1779",
+      "text": "Invece di spostarsi con un alambicco mobile da una cascina all'altra, Nardini apre una distilleria fissa all'imbocco del Ponte Vecchio: da allora sono i conferitori a portare le vinacce in distilleria.",
+      "source_url": "https://www.linkiesta.it/2026/07/nardini-piu-antica-distilleria-italia-futuro-tempo/"
+     },
+     {
+      "year": "1779",
+      "text": "Secondo Difford's Guide l'etichetta della grappa Nardini fu disegnata nel 1779 dai Remondini, gli stampatori di Bassano, ed e' rimasta quasi invariata.",
+      "source_url": "https://www.diffordsguide.com/producers/642/nardini-distillery/history"
+     },
+     {
+      "year": "1860",
+      "text": "La famiglia abbandona gli alambicchi a fuoco diretto e introduce la distillazione a vapore; il nipote del fondatore e' tra i primi a usarla per la grappa.",
+      "source_url": "https://www.visititaly.eu/it/luoghi-e-itinerari/distilleria-nardini-grappa-italiana"
+     },
+     {
+      "year": "1929",
+      "text": "La distilleria viene trasferita e ampliata appena fuori dalle mura della citta' vecchia; l'imbottigliamento resta sotto la grapperia del ponte fino agli anni Sessanta.",
+      "source_url": "https://www.diffordsguide.com/producers/642/nardini-distillery/history"
+     },
+     {
+      "year": "1945",
+      "text": "Il 17 febbraio 1945 il Ponte Vecchio viene raso al suolo: secondo Wikipedia fu un'azione di sabotaggio compiuta da un gruppo di 15 partigiani.",
+      "source_url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
+     },
+     {
+      "year": "1945",
+      "text": "Secondo Difford's Guide la grapperia e il reparto produttivo annesso uscirono dalla distruzione del ponte senza danni gravi (la stessa fonte pero' attribuisce la distruzione ai tedeschi e non da' la data).",
+      "source_url": "https://www.diffordsguide.com/producers/642/nardini-distillery/history"
+     },
+     {
+      "year": "1948",
+      "text": "Il 3 ottobre 1948 il ponte, ricostruito secondo il disegno originale di Palladio, viene inaugurato alla presenza del Presidente del Consiglio Alcide De Gasperi.",
+      "source_url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
+     },
+     {
+      "year": "anni '70",
+      "text": "Alla grapperia nasce il \"Mezzo e Mezzo\": un cliente chiede di provare il Rosso Nardini con un po' di Rabarbaro; col tempo le due parti diventano uguali, allungate con soda fredda e una scorza di limone.",
+      "source_url": "https://old.localistorici.it/en/?p=1914"
+     },
+     {
+      "year": "oggi",
+      "text": "La grapperia sul ponte, casa storica di Nardini, e' iscritta tra i Locali Storici d'Italia, all'indirizzo Ponte Vecchio 2.",
+      "source_url": "https://old.localistorici.it/en/listing-item/grapperia-nardini/"
+     },
+     {
+      "year": "oggi",
+      "text": "In citta' la chiamano \"Nardini Basso\": un tempo le grapperie Nardini erano due, Nardini Basso al ponte e Nardini Alto.",
+      "source_url": "https://viaggiadipiu.it/2021/04/22/bassano-del-grappa-i-migliori-locali-del-centro-storico/"
+     }
+    ],
+    "media": [
+     {
+      "kind": "photo",
+      "title": "La distilleria Nardini (foto del 9 agosto 2011)",
+      "url": "https://commons.wikimedia.org/wiki/File:La_distilleria_Nardini_(6073240844).jpg",
+      "license": "Creative Commons Attribution-Share Alike 2.0 Generic (CC BY-SA 2.0)",
+      "author": "Rino Porrovecchio (Flickr, trasferita su Commons da AnankeBot)",
+      "embeddable": "yes - pagina e licenza verificate; 3861x2355 px; coordinate di scatto 45.767537, 11.731488 (all'imbocco del ponte); usata nelle voci it.wikipedia su Bassano e sul Ponte Vecchio. Serve attribuzione + stessa licenza. Non ho potuto guardare l'immagine: controllare a occhio che mostri la grapperia."
+     },
+     {
+      "kind": "photo",
+      "title": "Scheda Locali Storici d'Italia - Grapperia Nardini (galleria fotografica)",
+      "url": "https://old.localistorici.it/en/listing-item/grapperia-nardini/",
+      "license": "unknown (il footer del sito dice \"Proprietà letteraria e artistica riservata\")",
+      "author": "Locali Storici d'Italia",
+      "embeddable": "no - diritti riservati, usare solo come link. Sito \"old.\": possibile che venga dismesso."
+     }
+    ],
+    "live_sources": []
+   },
+   {
+    "name": "Garage Nardini Osteria & Cocktail (ex \"Nardini Alto\")",
+    "identification_note": "Identificazione ben sostenuta ma costruita unendo tre fonti: (1) Difford's Guide: la distilleria era al n. 9 di Piazzale Generale Giardino e li' \"Nardini Alto\" (soprannome = Nardini di sopra) e' rimasto come grapperia-caffe', ex spaccio della distilleria; (2) viaggiadipiu.it (aprile 2021): \"Nardini alto, nel frattempo diventato Garage Nardini Osteria & Cocktail\"; (3) Milano Finanza (giugno 2026): osteria e cocktail bar aperta dal marchio in piazzale Generale Giardino. Restano NON verificati: l'anno di chiusura di Nardini Alto e di apertura del Garage (Archilovers data i lavori al 2017, ma e' una scheda autopubblicata da un collaboratore del progetto); il numero civico (9 secondo Difford's, la cui pagina e' pero' datata perche' parla ancora di Nardini Alto come aperto); le coordinate, che NON vengono da un elemento OSM del locale (Nominatim non trova \"Garage Nardini\") ma sono una stima sul piazzale: da correggere sul posto. Che lo si chiamasse \"Alto\" gia' dagli anni Trenta e' una supposizione del ricercatore: nessuna fonte data il soprannome.",
+    "lat": 45.7692,
+    "lon": 11.7383,
+    "story_beats": [
+     {
+      "year": "1929",
+      "text": "Dopo la Grande Guerra la domanda cresce e la famiglia Nardini sposta e amplia la distilleria appena fuori dalle mura della citta' vecchia; Difford's Guide la colloca al n. 9 di Piazzale Generale Giardino.",
+      "source_url": "https://www.diffordsguide.com/producers/642/nardini-distillery/history"
+     },
+     {
+      "year": "1964",
+      "text": "La distilleria si trasferisce nella sede attuale, alla periferia di Bassano. Nel piazzale resta \"Nardini Alto\" (il Nardini di sopra), grapperia e caffe' nato come spaccio della distilleria.",
+      "source_url": "https://www.diffordsguide.com/producers/642/nardini-distillery/history"
+     },
+     {
+      "year": "un tempo",
+      "text": "Le grapperie Nardini in citta' erano due, Nardini Basso e Nardini Alto, \"entrambe molto alla buona\".",
+      "source_url": "https://viaggiadipiu.it/2021/04/22/bassano-del-grappa-i-migliori-locali-del-centro-storico/"
+     },
+     {
+      "year": "2017",
+      "text": "Il vecchio edificio della Distilleria Nardini viene recuperato e ristrutturato: la scheda del progetto \"Garage Nardini\" indica inizio e fine lavori nel 2017.",
+      "source_url": "https://www.archilovers.com/projects/259246/garage-nardini.html"
+     },
+     {
+      "year": "entro il 2021",
+      "text": "Nardini Alto e' diventato Garage Nardini Osteria & Cocktail, un locale \"chic e ricercato\".",
+      "source_url": "https://viaggiadipiu.it/2021/04/22/bassano-del-grappa-i-migliori-locali-del-centro-storico/"
+     },
+     {
+      "year": "oggi",
+      "text": "Il locale, appena fuori le mura lungo il viale dei Martiri, e' arioso e luminoso, con un cortile interno arredato con pouf e tavoli in stile industriale e una zona ristorante al piano superiore.",
+      "source_url": "https://italysegreta.com/it/una-giornata-e-mezza-a-bassano/"
+     },
+     {
+      "year": "2025",
+      "text": "Nel giugno 2025 Nardini entra nel mondo del gin con \"Garage Gin\", un London Dry nato da Garage Nardini, il laboratorio sperimentale della distilleria; sull'etichetta e' rappresentata la mappa di Bassano.",
+      "source_url": "https://www.beverfood.com/garage-gin-distilleria-nardini-storia-autentica/"
+     },
+     {
+      "year": "2026",
+      "text": "Il nome del gin rende omaggio all'osteria e cocktail bar aperta dal marchio in piazzale Generale Giardino, che Milano Finanza descrive come un polo d'attrazione anche turistica.",
+      "source_url": "https://www.milanofinanza.it/news/la-piu-antica-distilleria-italiana-e-anche-agile-e-versatile-cosi-dopo-acqua-di-cedro-e-garage-gin-grappa-202606151507234589"
+     }
+    ],
+    "media": [
+     {
+      "kind": "photo",
+      "title": "Garage Nardini - progetto di recupero (galleria Archilovers)",
+      "url": "https://www.archilovers.com/projects/259246/garage-nardini.html",
+      "license": "unknown (footer del sito: \"All reproduction rights reserved\")",
+      "author": "scheda progetto, collaboratore Marco Maccagnan",
+      "embeddable": "no - diritti riservati, usare solo come link"
+     },
+     {
+      "kind": "photo",
+      "title": "I luoghi Nardini (foto ufficiali: Grapperia, Garage, Bolle)",
+      "url": "https://www.nardini.it/i-luoghi",
+      "license": "unknown",
+      "author": "Distilleria Nardini S.p.A.",
+      "embeddable": "no - materiale aziendale senza licenza indicata, chiedere autorizzazione. La pagina esiste ma si apre con un controllo dell'eta' (18+) e contiene solo immagini con etichette, nessun testo ne' video."
+     }
+    ],
+    "live_sources": []
+   },
+   {
+    "name": "Bolle di Nardini (Massimiliano e Doriana Fuksas)",
+    "identification_note": "Non e' ne' \"Nardini alto\" ne' \"Nardini basso\": e' il centro ricerche con auditorium nella sede produttiva. L'indirizzo aziendale Via Madonna di Monte Berico 7 e' confermato dal footer di nardini.it; Nominatim colloca l'area industriale \"Nardini\" a 45.74036, 11.75479, coerente con le coordinate date (l'elemento OSM \"Bolle di Nardini\" citato dal ricercatore non l'ho ricontrollato). E' a circa 3 km dal centro storico. Lo studio Fuksas intitola il progetto \"Nardini Research Centre and Auditorium\"; it.wikipedia accredita solo Massimiliano Fuksas, ArchDaily Massimiliano e Doriana.",
+    "lat": 45.7401,
+    "lon": 11.75409,
+    "story_beats": [
+     {
+      "year": "1964",
+      "text": "La famiglia Nardini trasferisce la distilleria nella sede attuale, appena fuori Bassano.",
+      "source_url": "https://www.diffordsguide.com/producers/642/nardini-distillery/history"
+     },
+     {
+      "year": "primi anni '80",
+      "text": "Intorno allo stabilimento viene realizzato il parco progettato dal paesaggista Pietro Porcinai.",
+      "source_url": "https://www.nardini.it/places?lang=en_US"
+     },
+     {
+      "year": "2001",
+      "text": "Il progetto dello Studio Fuksas per le Bolle porta la data 2001; i committenti sono Giuseppe e Cristina Nardini.",
+      "source_url": "https://divisare.com/projects/1995-studio-fuksas-gabriele-basilico-le-bolle-nardini"
+     },
+     {
+      "year": "2002-2004",
+      "text": "Lo Studio Fuksas indica come periodo dell'opera il 2002-2004, con un costo di 6 milioni di euro e una superficie di 2.496 metri quadrati.",
+      "source_url": "https://fuksas.com/?p=697"
+     },
+     {
+      "year": "2004",
+      "text": "L'edificio apre nell'ottobre 2004.",
+      "source_url": "https://divisare.com/projects/1995-studio-fuksas-gabriele-basilico-le-bolle-nardini"
+     },
+     {
+      "year": "2004",
+      "text": "Le Bolle vengono presentate al pubblico per i 225 anni dell'azienda.",
+      "source_url": "https://www.nardini.it/places?lang=en_US"
+     },
+     {
+      "year": "2004",
+      "text": "Il progetto ha due \"mondi\": uno sospeso, con due bolle ellissoidali trasparenti che ospitano i laboratori del centro ricerche, e uno sommerso, scavato nel terreno \"come un canyon naturale\", con un auditorium da 100 posti e una rampa che puo' fare da palco all'aperto.",
+      "source_url": "https://fuksas.com/?p=697"
+     },
+     {
+      "year": "2004",
+      "text": "Le bolle sono sollevate su sostegni sopra uno specchio d'acqua, che si riflette nell'involucro di vetro e acciaio.",
+      "source_url": "https://www.archdaily.com/233532/nardini-grappa-distillery-bolle-massimiliano-and-doriana-fuksas"
+     },
+     {
+      "year": "2010",
+      "text": "Nel novembre 2010 le Bolle ospitano il convegno internazionale \"Benvenuti al Capodanno 2050\", dedicato all'evoluzione della popolazione nei decenni a venire.",
+      "source_url": "https://www.italytraveller.com/it/e/bassano-e-la-sua-grappa"
+     }
+    ],
+    "media": [
+     {
+      "kind": "photo",
+      "title": "Film RUA Bolle Nardini (scena di un film)",
+      "url": "https://commons.wikimedia.org/wiki/File:Film_RUA_Bolle_Nardini.jpg",
+      "license": "Creative Commons Attribution-Share Alike 4.0 International (CC BY-SA 4.0)",
+      "author": "DavidFlos",
+      "embeddable": "yes per licenza, ma sconsigliato senza controllo: 705x881 px; la descrizione dice solo che e' una scena del film \"La rua la magic di Vicenza\", le Bolle compaiono solo nel nome del file e l'unica categoria e' \"Reflections\". Non confermato che mostri le Bolle."
+     },
+     {
+      "kind": "photo",
+      "title": "Nardini Research Centre and Auditorium - scheda ufficiale Studio Fuksas",
+      "url": "https://fuksas.com/?p=697",
+      "license": "unknown (footer: \"© FUKSAS studio 2026 – All Rights Reserved\")",
+      "author": "Studio Fuksas",
+      "embeddable": "no - diritti riservati, usare solo come link"
+     },
+     {
+      "kind": "photo",
+      "title": "Le Bolle Nardini - foto di Gabriele Basilico e altri (Divisare)",
+      "url": "https://divisare.com/projects/1995-studio-fuksas-gabriele-basilico-le-bolle-nardini",
+      "license": "unknown",
+      "author": "Gabriele Basilico, G. Chemello, M. Danesin, F. Zonta, A. Crowley, A. Boscato (\"Courtesy of Nardini\")",
+      "embeddable": "no - foto d'autore senza licenza indicata, solo link"
+     },
+     {
+      "kind": "photo",
+      "title": "Nardini Grappa Distillery \"Bolle\" (ArchDaily, 13 maggio 2012)",
+      "url": "https://www.archdaily.com/233532/nardini-grappa-distillery-bolle-massimiliano-and-doriana-fuksas",
+      "license": "unknown (immagine principale marcata \"© Matteo Danesin\")",
+      "author": "Matteo Danesin (immagine principale)",
+      "embeddable": "no - solo link"
+     }
+    ],
+    "live_sources": []
+   },
+   {
+    "name": "Poli Museo della Grappa (Bassano)",
+    "identification_note": "Identificazione confermata: museo d'impresa delle Poli Distillerie in Via Gamba 6 (Ponte Vecchio), indirizzo dato da Museimpresa e da poligrappa.com; poligrappa.com lo colloca nel quattrocentesco Palazzo delle Teste, di fronte al Ponte Vecchio. OpenStreetMap ha \"Museo della Grappa Poli\" a 45.767631, 11.732206 (Via Bartolomeo Gamba). La distilleria e' a Schiavon, dove dal 2011 c'e' una seconda sede del museo (Via Marconi 36): non confondere le due sedi nelle foto.",
+    "lat": 45.76763,
+    "lon": 11.73221,
+    "story_beats": [
+     {
+      "year": "XV secolo",
+      "text": "Il museo ha sede nel quattrocentesco Palazzo delle Teste, di fronte al Ponte Vecchio.",
+      "source_url": "https://www.poligrappa.com/eng/chronicle/on-the-threshold-of-the-third-millennium.php"
+     },
+     {
+      "year": "1500",
+      "text": "Il libro piu' antico della collezione e' il \"Liber de arte distillandi\" di Hieronymus Brunschwig, datato 8 maggio 1500, che il museo presenta come il primo libro della storia dedicato alla distillazione.",
+      "source_url": "https://artsandculture.google.com/story/1gVhNEaZ-ZJuJA"
+     },
+     {
+      "year": "1850 circa",
+      "text": "Nella sede di Schiavon e' esposto un raro alambicco mobile di meta' Ottocento, del tipo usato per la distillazione ambulante.",
+      "source_url": "https://museimpresa.com/?p=31780"
+     },
+     {
+      "year": "1898",
+      "text": "Abolita per ragioni fiscali la distillazione ambulante, GioBatta Poli installa un alambicco fisso: e' l'inizio della distilleria Poli di Schiavon.",
+      "source_url": "https://artsandculture.google.com/story/1gVhNEaZ-ZJuJA"
+     },
+     {
+      "year": "1993",
+      "text": "Il 4 luglio 1993 Jacopo e Cristina Poli inaugurano il Museo della Grappa a Bassano.",
+      "source_url": "https://museimpresa.com/?p=31780"
+     },
+     {
+      "year": "2011",
+      "text": "Viene inaugurata la seconda sede del museo a Schiavon, accanto alla distilleria, con la Grappateca: circa 2.000 bottiglie di 440 distillerie, prodotte tra gli anni Trenta e Ottanta.",
+      "source_url": "https://artsandculture.google.com/story/1gVhNEaZ-ZJuJA"
+     },
+     {
+      "year": "oggi",
+      "text": "La \"Biblioteca dello Spirito\" del museo raccoglie circa 1.600 volumi antichi e moderni sulla grappa e sulla distillazione.",
+      "source_url": "https://artsandculture.google.com/story/1gVhNEaZ-ZJuJA"
+     },
+     {
+      "year": "oggi",
+      "text": "Cinque sale: origini ed evoluzione della distillazione; la grappa, la vinaccia e gli alambicchi; un video sulla produzione; la collezione di mignon con due \"olfattometri\" per annusare venti distillati; la sala di degustazione e vendita.",
+      "source_url": "https://m.poligrappa.com/eng/geography/poli-grappa-museum-bassano.php"
+     },
+     {
+      "year": "oggi",
+      "text": "In mostra circa 1.500 bottigliette mignon di grappa di 323 distillerie; il museo la definisce la raccolta piu' ampia e completa d'Italia.",
+      "source_url": "https://artsandculture.google.com/story/1gVhNEaZ-ZJuJA"
+     },
+     {
+      "year": "oggi",
+      "text": "L'ingresso e' libero e la visita autonoma; le due sedi insieme superano i 150.000 visitatori l'anno (dato dichiarato dal museo).",
+      "source_url": "https://museimpresa.com/?p=31780"
+     }
+    ],
+    "media": [
+     {
+      "kind": "photo",
+      "title": "Poli Museo della Grappa 01 (serie 01-17, foto del 31 ottobre 2022)",
+      "url": "https://commons.wikimedia.org/wiki/File:Poli_Museo_della_Grappa_01.jpg",
+      "license": "Creative Commons Attribution-Share Alike 4.0 International (CC BY-SA 4.0)",
+      "author": "Superchilum",
+      "embeddable": "yes - verificata la foto 01 (3888x5184 px, Wiki Loves Monuments 2024) e l'esistenza dei file 01-17 nella categoria Commons \"Poli Museo della Grappa\"; licenza controllata solo sulla 01, ricontrollare le altre prima dell'uso. Attribuzione + stessa licenza."
+     },
+     {
+      "kind": "photo",
+      "title": "Poli museo museum grappa 1 (esistono anche 2 e 3)",
+      "url": "https://commons.wikimedia.org/wiki/File:Poli_museo_museum_grappa_1.jpg",
+      "license": "Creative Commons Attribution-Share Alike 3.0 Unported, in alternativa GNU Free Documentation License 1.2 o successiva (a scelta)",
+      "author": "GrappaCom (fonte dichiarata: grappa.com)",
+      "embeddable": "yes per licenza, ma solo 500x451 px; caricamento aziendale del 2010; la pagina non dice se e' la sede di Bassano o di Schiavon (nel 2010 esisteva solo Bassano, ma e' una deduzione)."
+     },
+     {
+      "kind": "photo",
+      "title": "Poli Grappa Museum - storia su Google Arts & Culture",
+      "url": "https://artsandculture.google.com/story/1gVhNEaZ-ZJuJA",
+      "license": "unknown",
+      "author": "Poli Museo della Grappa",
+      "embeddable": "unknown - usare come link"
+     },
+     {
+      "kind": "video",
+      "title": "Chi ha inventato la Grappa? (con Jacopo Poli)",
+      "url": "https://www.youtube.com/watch?v=1jFbsPYYgBo",
+      "license": "unknown (video YouTube, nessuna licenza verificata)",
+      "author": "PoliDistillerie (canale YouTube)",
+      "embeddable": "yes - l'oEmbed di YouTube risponde (titolo \"Chi ha inventato la Grappa?\", autore PoliDistillerie) e il video e' linkato dalla pagina ufficiale grappa.com. Non riprodotto: lingua dell'audio da controllare."
+     },
+     {
+      "kind": "video",
+      "title": "Discovering Grappa (playlist)",
+      "url": "https://www.youtube.com/playlist?list=PLeCiAjxkiEMK6By8FhchlDfOHMMjpS758",
+      "license": "unknown (YouTube)",
+      "author": "PoliDistillerie (canale YouTube)",
+      "embeddable": "yes - l'oEmbed di YouTube conferma titolo e autore. NON verificati numero di video (18), data di pubblicazione e lingua indicati dal ricercatore."
+     },
+     {
+      "kind": "video",
+      "title": "Come si fa la Grappa?",
+      "url": "https://www.youtube.com/watch?v=6y01iX07xpg",
+      "license": "unknown (YouTube)",
+      "author": "PoliDistillerie (canale YouTube)",
+      "embeddable": "yes - l'oEmbed risponde con titolo italiano \"Come si fa la Grappa?\". Non l'ho trovato incorporato nella pagina poligrappa.com indicata dal ricercatore; lingua dell'audio da controllare."
+     }
+    ],
+    "live_sources": []
+   },
+   {
+    "name": "La grappa a Bassano (storia generale)",
+    "identification_note": "Non e' un luogo ma un tema trasversale, utile come scheda introduttiva comune alle finestre Nardini e Poli. Nessuna coordinata. Falso amico confermato su Wikipedia: il nome \"grappa\" non deriva ne' da Bassano ne' dal Monte Grappa. Gran parte dei fatti \"storici\" sulla grappa viene da fonti aziendali (Nardini, Poli): nel testo vanno attribuiti.",
+    "story_beats": [
+     {
+      "year": "etimologia",
+      "text": "La parola \"grappa\" viene dal termine lombardo \"grapa\", che in origine indica il raspo dell'uva: l'etimologia non e' legata al Monte Grappa.",
+      "source_url": "https://it.wikipedia.org/wiki/Grappa"
+     },
+     {
+      "year": "dal 1000",
+      "text": "Secondo il Museo Poli, dall'anno Mille in poi la Scuola Medica Salernitana diffonde la cultura della distillazione lungo la penisola.",
+      "source_url": "https://grappa.com/en/news/who-invented-grappa"
+     },
+     {
+      "year": "1532",
+      "text": "Viene pubblicato il \"De arte conficendi aquam vitae\" del medico padovano Michele Savonarola (vissuto nel Quattrocento), che spiega come ottenere l'acquavite dal vino e dalle vinacce.",
+      "source_url": "https://grappa.com/en/news/who-invented-grappa"
+     },
+     {
+      "year": "1779",
+      "text": "Bortolo Nardini apre all'imbocco del Ponte Vecchio una distilleria stabile, invece di girare con l'alambicco mobile di cascina in cascina.",
+      "source_url": "https://www.linkiesta.it/2026/07/nardini-piu-antica-distilleria-italia-futuro-tempo/"
+     },
+     {
+      "year": "1860",
+      "text": "A Bassano il nipote di Bortolo Nardini e' tra i primi a introdurre la distillazione a vapore nella produzione della grappa.",
+      "source_url": "https://www.diffordsguide.com/producers/642/nardini-distillery/history"
+     },
+     {
+      "year": "1898",
+      "text": "Abolita per ragioni fiscali la distillazione ambulante, anche GioBatta Poli passa a un alambicco fisso.",
+      "source_url": "https://artsandculture.google.com/story/1gVhNEaZ-ZJuJA"
+     },
+     {
+      "year": "1928",
+      "text": "La citta' cambia nome e diventa \"Bassano del Grappa\", in ricordo dei combattimenti della Grande Guerra sul Monte Grappa: il nome c'entra con la montagna, non con il distillato.",
+      "source_url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+     },
+     {
+      "year": "1989",
+      "text": "Il regolamento CEE n. 1576/89 del 29 maggio 1989 riserva il nome \"grappa\" all'acquavite di vinaccia prodotta in Italia.",
+      "source_url": "https://it.wikipedia.org/wiki/Grappa"
+     },
+     {
+      "year": "1993",
+      "text": "Di fronte al ponte apre il Poli Museo della Grappa, a pochi metri dalla storica Grapperia Nardini.",
+      "source_url": "https://museimpresa.com/?p=31780"
+     },
+     {
+      "year": "2008",
+      "text": "Il regolamento (CE) n. 110/2008 sostituisce quello del 1989 e fa di \"grappa\" un'indicazione geografica della sola Italia.",
+      "source_url": "https://it.wikipedia.org/wiki/Grappa"
+     }
+    ],
+    "media": [
+     {
+      "kind": "video",
+      "title": "Chi ha inventato la Grappa? (con Jacopo Poli)",
+      "url": "https://www.youtube.com/watch?v=1jFbsPYYgBo",
+      "license": "unknown (YouTube)",
+      "author": "PoliDistillerie (canale YouTube)",
+      "embeddable": "yes - oEmbed YouTube verificato; lingua dell'audio da controllare"
+     },
+     {
+      "kind": "video",
+      "title": "La vinaccia, la materia prima della Grappa",
+      "url": "https://www.youtube.com/watch?v=-RP6F2RqYCo",
+      "license": "unknown (YouTube)",
+      "author": "PoliDistillerie (canale YouTube)",
+      "embeddable": "yes - oEmbed YouTube verificato (titolo italiano); lingua dell'audio da controllare"
+     },
+     {
+      "kind": "photo",
+      "title": "L'alambicco artigianale delle Distillerie Poli nel 2000",
+      "url": "https://commons.wikimedia.org/wiki/File:Poli_Distillerie_Alambic_2000_ok.jpg",
+      "license": "Creative Commons Attribution-Share Alike 3.0 Unported, in alternativa GNU Free Documentation License 1.2 o successiva",
+      "author": "GrappaCom (fonte dichiarata: poligrappa.com)",
+      "embeddable": "yes - 2480x1708 px, caricamento aziendale del 2010. L'alambicco e' a Schiavon, non a Bassano: dirlo in didascalia."
+     }
+    ],
+    "live_sources": []
+   }
+  ],
+  "open_questions": [
+   "NESSUNA FONTE LIVE VERIFICATA per questi luoghi: live_sources resta vuoto ovunque. Non esiste, per quanto ho trovato, una webcam puntata sul Ponte Vecchio o sulle grapperie. Windy elenca webcam a Bassano (Piazza della Liberta', Via Matteotti, Piazza Garibaldi) ma le pagine non restituiscono immagini ai controlli automatici: aprirle a mano in un browser prima di collegarle. La pagina ARPAV dei dati in diretta (arpa.veneto.it/dati-ambientali/dati-in-diretta/meteo-idro-nivo/variabili_idro) si carica e dichiara dati in tempo reale degli ultimi 2 giorni, ma non ho trovato l'URL diretto della stazione idrometrica sul Brenta a Bassano (Barziza): da cercare a mano. La richiesta dell'utente parla di contenuti \"live\": allo stato attuale per Nardini/Poli ci sono solo video YouTube e foto, niente in diretta.",
+   "Da confermare con un bassanese: che \"Nardini Basso\" e \"Nardini Alto\" siano davvero i nomi usati in citta' (fonti: un blog di viaggi e l'etichetta OpenStreetMap \"Nardini basso\"), e come etichettare il punto alto sulla mappa (nome storico, \"Garage Nardini\" o entrambi).",
+   "Garage Nardini: date di chiusura di Nardini Alto e di apertura del Garage NON verificate. I due articoli del Gazzettino indicati dal ricercatore non sono stati aperti (bloccano i client automatici) e non compaiono nelle ricerche: leggerli a mano. Archilovers (scheda autopubblicata) data i lavori al 2017; viaggiadipiu.it nell'aprile 2021 lo da' gia' per trasformato.",
+   "Garage Nardini: posizione esatta e numero civico non verificati. Difford's dice n. 9 di Piazzale Generale Giardino (pagina datata), Milano Finanza conferma solo il piazzale; OpenStreetMap/Nominatim non ha un elemento \"Garage Nardini\". Le coordinate 45.7692, 11.7383 sono una stima: prenderle sul posto o da una mappa.",
+   "Fatti RIMOSSI perche' non confermati da una fonte affidabile: (a) le truppe napoleoniche che nel 1797 svuotano le giare di rame di grappa Nardini: solo su it.wikipedia, in una voce marcata \"non cita le fonti necessarie\"; (b) la grappa Nardini diffusa nelle trincee della Grande Guerra: stessa voce senza fonti (Difford's dice solo che dopo la guerra la domanda crebbe); (c) il \"cicheto\" bevuto prima di imbarcarsi per Venezia o dopo un affare: solo su en.wikipedia, voce con avviso \"needs more citations\"; (d) i \"12.000 visitatori al mese\" del Museo Poli; (e) GioBatta Poli che gira con l'alambicco su un carretto: la fonte citata parla solo di un alambicco mobile di meta' Ottocento esposto a Schiavon; (f) la vista sul Grappa dall'interno delle Bolle: non c'e' su ArchDaily. Se si vogliono raccontare, serve una fonte locale (Museo Civico, archivio Nardini).",
+   "Distruzione del ponte nel 1945: Wikipedia (17 febbraio 1945, sabotaggio di 15 partigiani) e Difford's Guide (\"i tedeschi\", senza data) si contraddicono, e Difford's attribuisce la ricostruzione agli Alpini. Punto sensibile per un sito civico: far verificare il testo da uno storico locale o dal Museo degli Alpini prima di pubblicare.",
+   "Primati e affermazioni aziendali da attribuire sempre: \"la piu' antica distilleria d'Italia\" (Nardini; l'articolo visititaly e' contenuto in partnership con l'azienda), l'etichetta disegnata dai Remondini nel 1779 (solo Difford's), \"il primo libro sulla distillazione\" e \"la raccolta di mignon piu' completa d'Italia\" (Poli), i 150.000 visitatori l'anno (Poli). it.wikipedia riporta inoltre una licenza del Dogado di Venezia datata 4 agosto 1798, data sospetta (la Repubblica cadde nel 1797): non usarla.",
+   "Hemingway: la scheda Locali Storici dice che \"ambiento' qui\" Addio alle armi, in modo vago; Wikipedia dice solo che soggiorno' a Villa Ca' Erizzo durante la Grande Guerra. D'Annunzio e la Regina Madre compaiono solo come titolo di link o nome di file. Non pubblicare senza una fonte precisa.",
+   "Timeline ufficiale nardini.it: gli anni 1910, 1919, 2006 e 2019 restano senza evento verificato (testi dentro immagini). 1963 (distillazione sottovuoto, visititaly) e 1964 (trasferimento nella sede attuale, Difford's) sono due eventi diversi dati da fonti diverse: chiedere conferma all'azienda dell'anno del trasferimento.",
+   "Media rimossi: (1) \"Bassano del Grappa - Casa Nardini 01\" (Commons, CC BY-SA 4.0, Syrio): la categoria Commons da' coordinate 45°46'14.83\"N 11°43'59\"E, circa 350-400 m a nord del ponte, quindi NON e' la grapperia ne' il Garage; e' un altro palazzo, eventualmente una scheda a parte da identificare con un locale. (2) \"Taiadea PoliDistillerie\" (Commons): descrizione incoerente (attribuisce a Nardini un prodotto Poli) e metadati con copyright \"Studio Bozzetto sas\": non usare.",
+   "Media da controllare a occhio prima dell'uso (non ho potuto visualizzare le immagini): la foto \"La distilleria Nardini\" di Rino Porrovecchio (licenza e coordinate al ponte verificate, soggetto non descritto) e \"Film RUA Bolle Nardini\" (non confermato che mostri le Bolle). Per le Bolle e per il Garage non risultano foto con licenza libera: servono foto proprie o un'autorizzazione di Nardini / Studio Fuksas.",
+   "Video Poli: i tre video e la playlist rispondono all'oEmbed di YouTube (quindi esistono e sono incorporabili) con titoli in italiano e autore PoliDistillerie; non ho potuto riprodurli ne' verificare lingua dell'audio, durata, numero di video della playlist. Non ho trovato un canale YouTube ufficiale Nardini. Europeana, Internet Archive e Catalogo generale dei beni culturali non sono stati consultati.",
+   "Museo Poli: orari (tutti i giorni 9-19.30, chiuso 1 gennaio, Pasqua, 25 dicembre) e prezzo della visita con degustazione (3,50 euro) vengono da una pagina mobile di poligrappa.com non datata: verificare prima di pubblicarli. Verificare anche che la Grapperia Nardini accetti di comparire con il \"Mezzo e Mezzo\" (origine anni '70 secondo Locali Storici; un'altra fonte parla del Rosso con soda gia' negli anni '20).",
+   "Le Bolle di Nardini sono a circa 3 km dal centro (Via Madonna di Monte Berico 7): confermare se la mappa arriva fin li' o se serve un richiamo fuori mappa; le visite sono solo su prenotazione tramite nardini.it/book-your-tour (condizioni non verificate).",
+   "Fuori dal perimetro di questo JSON: il Ponte Vecchio come scheda propria e il \"rinoceronte di Bassano\", citati nella richiesta, non sono stati controllati qui."
+  ]
+ },
+ "rinoceronte": {
+  "places": [
+   {
+    "name": "Il rinoceronte di Bassano (King Kong Rhino di Li-Jen Shih, Palazzo Sturm)",
+    "identification_note": "IPOTESI, non certezza: che 'il rinoceronte di Bassano' di cui parla il progetto sia la scultura in acciaio 'King Kong Rhino' di Li-Jen Shih a Palazzo Sturm è la lettura più plausibile, ma non è stato specificato e va confermato con chi cura il sito. Fatti verificati: la scultura è stata presentata il 15 dicembre 2018 sulla terrazza/belvedere di Palazzo Sturm (Bassanonet, due articoli); è collegata alla xilografia 'Rinoceronte' di Dürer (1515), di cui Bassanonet dice che un originale è conservato a Bassano nella collezione Remondini. NON verificato: che la scultura sia ancora lì oggi. Era un comodato di dodici mesi; la scheda dei Musei Civici riporta le date 19.12.2018 - 31.12.2021 e non dice nulla sullo stato attuale; l'ultima fonte datata che la descrive sul posto è una guida di viaggio del 12 luglio 2021. Una ricerca web di controllo non ha trovato né conferme né notizie di rimozione per il 2025-2026. Posizione: Bassanonet (2018 e 2019) dice terrazza panoramica/belvedere; il blog Assoyuanfen dice 'cortile'. Materiale: 'acciaio inossidabile' per i Musei, 'acciaio cromato' per Assoyuanfen. Misure discordanti: 880x220x285 cm (Bassanonet) contro 888x220x458 o 485 cm nelle didascalie Commons caricate nel 2018 (probabile refuso in una delle fonti). Le coordinate sono quelle di Palazzo Sturm (Wikipedia IT / Commons), identiche a quelle della scheda del palazzo: sulla mappa i due punti si sovrappongono.",
+    "lat": 45.76633,
+    "lon": 11.73167,
+    "story_beats": [
+     {
+      "year": "1515",
+      "text": "Il 20 maggio 1515 un rinoceronte indiano sbarca a Lisbona: il sultano Muzafar II del Gujarat lo aveva donato al governatore portoghese Afonso de Albuquerque, che lo inoltra al re Manuele I del Portogallo.",
+      "source_url": "https://it.wikipedia.org/wiki/Rinoceronte_di_D%C3%BCrer"
+     },
+     {
+      "year": "1515",
+      "text": "Albrecht Dürer incide la xilografia del Rinoceronte senza aver mai visto l'animale dal vero: lavora su una descrizione e uno schizzo arrivati da Lisbona a Norimberga.",
+      "source_url": "https://it.wikipedia.org/wiki/Rinoceronte_di_D%C3%BCrer"
+     },
+     {
+      "year": "1516",
+      "text": "La nave che porta il rinoceronte in dono a papa Leone X naufraga in una tempesta al largo di Porto Venere, nel golfo della Spezia: l'animale, incatenato, annega. L'immagine di Dürer resta il modello di riferimento fino alla fine del Settecento.",
+      "source_url": "https://it.wikipedia.org/wiki/Rinoceronte_di_D%C3%BCrer"
+     },
+     {
+      "year": "XVIII secolo",
+      "text": "I Remondini, stampatori ed editori bassanesi del Settecento, mettono insieme una raccolta di 214 incisioni di Dürer (123 xilografie e 91 calcografie) sulle 260 che l'artista realizzò in vita; a Bassano è conservato anche un originale del Rinoceronte.",
+      "source_url": "https://www.bassanonet.it/news/27697-sturm_und_durer.html"
+     },
+     {
+      "year": "2018",
+      "text": "Prima di arrivare a Bassano la scultura 'King Kong Rhino' di Li-Jen Shih è esposta a Venezia, ai Giardini della Marinaressa, in occasione della Biennale di Architettura.",
+      "source_url": "https://www.bassanonet.it/news/27572-dammi_un_eurino.html"
+     },
+     {
+      "year": "2018",
+      "text": "La scultura misura 880x220x285 cm. Ritiro, imballaggio, trasporto da Venezia, posa sulla terrazza di Palazzo Sturm, assicurazione e pedana in legno costano al Comune 18.666 euro (15.300 più IVA); l'artista la concede in comodato d'uso per dodici mesi.",
+      "source_url": "https://www.bassanonet.it/news/27572-dammi_un_eurino.html"
+     },
+     {
+      "year": "2018",
+      "text": "Il 15 dicembre 2018 il rinoceronte viene presentato sulla terrazza panoramica di Palazzo Sturm, nel giorno dell'inaugurazione del palazzo restaurato (lavori avviati nell'aprile 2017, progetto da 1.450.000 euro).",
+      "source_url": "https://www.bassanonet.it/news/27571-sturmtruppen.html"
+     },
+     {
+      "year": "2019",
+      "text": "Dal 20 aprile al 30 settembre 2019 Palazzo Sturm espone per la prima volta tutte le 214 incisioni di Dürer della collezione Remondini; il Rinoceronte è l'immagine simbolo della mostra e la scultura resta sulla terrazza per tutta la durata.",
+      "source_url": "https://www.bassanonet.it/news/27697-sturm_und_durer.html"
+     },
+     {
+      "year": "2018-2021",
+      "text": "La scheda dei Musei Civici registra 'King Kong Rhino' con le date 19.12.2018 - 31.12.2021. Descrive il rinoceronte come simbolo di giustizia e potere, e di fortuna e gentilezza nella cultura cinese; sul corno è impressa un'impronta digitale umana, richiamo all'azione predatoria dell'uomo.",
+      "source_url": "https://www.museibassano.it/it/mostra/king-kong-rhino"
+     },
+     {
+      "year": "2021",
+      "text": "Una guida di viaggio pubblicata il 12 luglio 2021 descrive ancora l'enorme scultura in acciaio del rinoceronte di Li-Jen Shih all'esterno di Palazzo Sturm. È l'ultima testimonianza datata che è stato possibile verificare.",
+      "source_url": "https://unvenetoinviaggio.it/bassano-del-grappa-cosa-vedere/"
+     }
+    ],
+    "media": [
+     {
+      "kind": "historic_image",
+      "title": "Albrecht Dürer, The Rhinoceros, 1515 (National Gallery of Art, NGA 47903) - stessa xilografia, esemplare NON di Bassano",
+      "url": "https://commons.wikimedia.org/wiki/File:Albrecht_D%C3%BCrer,_The_Rhinoceros,_1515,_NGA_47903.jpg",
+      "license": "CC0",
+      "author": "Albrecht Dürer",
+      "embeddable": "yes - CC0 verificato via API Commons; indicare in didascalia che non è l'esemplare bassanese"
+     },
+     {
+      "kind": "historic_image",
+      "title": "Dürer's Rhinoceros, 1515 (prima edizione con testo tipografico, esemplare venduto all'asta nel 2013)",
+      "url": "https://commons.wikimedia.org/wiki/File:D%C3%BCrer%27s_Rhinoceros,_1515.jpg",
+      "license": "Public domain",
+      "author": "Albrecht Dürer",
+      "embeddable": "yes - pubblico dominio verificato via API Commons; non è l'esemplare bassanese"
+     },
+     {
+      "kind": "historic_image",
+      "title": "Albrecht Dürer - The Rhinoceros (Cleveland Museum of Art 1993.9)",
+      "url": "https://commons.wikimedia.org/wiki/File:Albrecht_D%C3%BCrer_-_The_Rhinoceros_-_1993.9_-_Cleveland_Museum_of_Art.tif",
+      "license": "CC0",
+      "author": "Albrecht Dürer",
+      "embeddable": "yes - CC0 verificato; file TIFF, usare la miniatura JPG generata da Commons"
+     },
+     {
+      "kind": "photo",
+      "title": "Li-Jen SHIH, King Kong Rhino (foto della scultura a Venezia, NON a Bassano)",
+      "url": "https://commons.wikimedia.org/wiki/File:Li-Jen_SHIH,_King_Kong_Rhino.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Li-Jen Shih (caricata dall'utente Smagtw nel 2018)",
+      "embeddable": "unknown - la licenza dichiarata è CC BY-SA 4.0, ma non è verificato che chi ha caricato il file avesse titolo per concederla a nome dell'artista; l'opera è di un artista vivente"
+     },
+     {
+      "kind": "photo",
+      "title": "Finger Print on King Kong Rhino's Horn (dettaglio dell'impronta sul corno)",
+      "url": "https://commons.wikimedia.org/wiki/File:Finger_Print_on_King_Kong_Rhino%27s_Horn.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Li-Jen Shih (caricata dall'utente Smagtw nel 2018)",
+      "embeddable": "unknown - stessa riserva della foto precedente; non scattata a Bassano"
+     },
+     {
+      "kind": "photo",
+      "title": "Scheda ufficiale 'King Kong Rhino' sul sito dei Musei Civici (con immagini della scultura)",
+      "url": "https://www.museibassano.it/it/mostra/king-kong-rhino",
+      "license": "unknown",
+      "author": "Musei Biblioteca Archivio Bassano del Grappa",
+      "embeddable": "no - nessuna licenza indicata sulla pagina; solo link, oppure chiedere autorizzazione ai Musei"
+     },
+     {
+      "kind": "video",
+      "title": "Rinascimento in bianco e nero. L'arte dell'incisione a Venezia (1494 - 1615)",
+      "url": "https://www.youtube.com/watch?v=4XlHujvWO_c",
+      "license": "unknown",
+      "author": "Musei Civici Bassano del Grappa (canale @museicivicibassano, verificato via oEmbed)",
+      "embeddable": "yes - iframe YouTube (oEmbed risponde); licenza non visibile, presumibilmente standard YouTube. Tema: incisione, NON il rinoceronte; contenuto non visionato"
+     }
+    ],
+    "live_sources": []
+   },
+   {
+    "name": "Museo Civico di Bassano del Grappa",
+    "identification_note": "Museo comunale in Piazza Garibaldi, nell'ex convento di San Francesco; identificazione solida. Date di fondazione: il sito ufficiale e il testo di Wikipedia IT dicono 1828, ma l'infobox di Wikipedia IT e la categoria di Wikipedia EN riportano 1840 (trasferimento a San Francesco): usare '1828' citando il sito dei Musei. Corretto rispetto alla ricerca: Wikipedia EN NON dice che il museo si trasferì nel 1840 (lo dice Wikipedia IT); Finestre sull'Arte NON dà la data di ritorno del Cavallo colossale (la dà il sito dei Musei). Avviso verificato sul sito ufficiale: solo il piano nobile è chiuso dal 27 ottobre all'11 dicembre 2026 compresi; la mostra Salgado resta aperta. Dato discordante: Wikipedia IT parla di 'tremila disegni autografi' di Canova, Finestre sull'Arte di 1.756 disegni. Coordinate da Wikipedia IT (45°45'59.12\"N 11°44'06.73\"E). L'indirizzo 'Via Matteotti 39' nel piè di pagina del sito è quello del Comune, non del museo.",
+    "lat": 45.76642,
+    "lon": 11.7352,
+    "story_beats": [
+     {
+      "year": "1819-1822",
+      "text": "Antonio Canova modella tra il 1819 e il 1821 il Cavallo colossale in gesso, per un monumento equestre in bronzo voluto da Ferdinando I di Borbone; la morte dello scultore nell'ottobre 1822 lascia l'opera incompiuta.",
+      "source_url": "https://www.finestresullarte.info/en/ancient-art/canova-s-colossal-horse-will-return-to-display-after-50-years"
+     },
+     {
+      "year": "1828",
+      "text": "Nasce il Museo Civico di Bassano; molti dei libri vengono dal lascito del naturalista Giambattista Brocchi.",
+      "source_url": "https://it.wikipedia.org/wiki/Museo_civico_di_Bassano_del_Grappa"
+     },
+     {
+      "year": "1831",
+      "text": "I dipinti provenienti da chiese e conventi soppressi in età napoleonica vengono sistemati in alcune sale accanto al chiostro di San Francesco.",
+      "source_url": "https://it.wikipedia.org/wiki/Museo_civico_di_Bassano_del_Grappa"
+     },
+     {
+      "year": "1840",
+      "text": "Il museo si trasferisce nell'ex convento di San Francesco, dove si trova ancora oggi; da allora vi sono ospitate anche le collezioni naturalistiche.",
+      "source_url": "https://it.wikipedia.org/wiki/Museo_civico_di_Bassano_del_Grappa"
+     },
+     {
+      "year": "1840",
+      "text": "Alle raccolte si aggiungono i dipinti della sala del Consiglio del municipio, insieme a reperti naturalistici e libri donati da Giovanni Battista Brocchi.",
+      "source_url": "https://en.wikipedia.org/wiki/Museo_Civico_di_Bassano"
+     },
+     {
+      "year": "1852-1857",
+      "text": "Giovanni Battista Sartori Canova, fratellastro dello scultore, dona a Bassano i manoscritti di Canova: 6.658 documenti per oltre 40.000 pagine. I disegni conservati nel Gabinetto delle stampe e dei disegni del Museo sono 1.756.",
+      "source_url": "https://www.finestresullarte.info/arte-antica/impresa-biblioteca-bassano-online-fondo-manoscritti-canova"
+     },
+     {
+      "year": "1945",
+      "text": "I bombardamenti del 1945 distruggono quasi del tutto il modello equestre di Carlo III di Borbone di Canova.",
+      "source_url": "https://www.finestresullarte.info/en/ancient-art/canova-s-colossal-horse-will-return-to-display-after-50-years"
+     },
+     {
+      "year": "fine anni '60",
+      "text": "Durante lavori strutturali il Cavallo colossale viene tolto dalla sala, sezionato in più parti e messo in deposito; nel percorso espositivo resta solo la testa.",
+      "source_url": "https://www.finestresullarte.info/en/ancient-art/canova-s-colossal-horse-will-return-to-display-after-50-years"
+     },
+     {
+      "year": "1978",
+      "text": "Il professor Virgilio Chini dona al museo la sua collezione archeologica, con vasi in ceramica da siti italiani e greco-romani.",
+      "source_url": "https://en.wikipedia.org/wiki/Museo_Civico_di_Bassano"
+     },
+     {
+      "year": "2011",
+      "text": "Nel giugno 2011 gli spazi del complesso museale vengono ampliati.",
+      "source_url": "https://it.wikipedia.org/wiki/Museo_civico_di_Bassano_del_Grappa"
+     },
+     {
+      "year": "2025",
+      "text": "Nel febbraio 2025 viene annunciato il restauro del Cavallo colossale: 340.500 euro di investimento, scansione 3D di ogni frammento per una ricostruzione virtuale, lavori affidati a Passarella Restauri di Padova con R.S. Ingegneria.",
+      "source_url": "https://www.finestresullarte.info/en/ancient-art/canova-s-colossal-horse-will-return-to-display-after-50-years"
+     },
+     {
+      "year": "2026",
+      "text": "Il Cavallo colossale di Canova torna visibile al Museo Civico dal 12 dicembre 2026; per trasporto e montaggio il solo piano nobile resta chiuso dal 27 ottobre all'11 dicembre compresi.",
+      "source_url": "https://www.museibassano.it/it/pagina/museo-civico"
+     }
+    ],
+    "media": [
+     {
+      "kind": "photo",
+      "title": "Chiostro Museo Civico",
+      "url": "https://commons.wikimedia.org/wiki/File:Chiostro_Museo_Civico.JPG",
+      "license": "CC BY-SA 3.0",
+      "author": "Museicivici",
+      "embeddable": "yes - licenza verificata via API Commons; attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Museo civico (Bassano del Grappa) 01",
+      "url": "https://commons.wikimedia.org/wiki/File:Museo_civico_(Bassano_del_Grappa)_01.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Superchilum",
+      "embeddable": "yes - licenza verificata; attribuzione e stessa licenza"
+     },
+     {
+      "kind": "historic_image",
+      "title": "Bassano del Grappa, Museo Civico opere di Canova (xilografia)",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa,_Museo_Civico_opere_di_Canova_(xilografia).jpg",
+      "license": "Public domain",
+      "author": "Unknown author",
+      "embeddable": "yes - pubblico dominio verificato"
+     },
+     {
+      "kind": "photo",
+      "title": "Testa del genio di Antonio Canova (calco in gesso), Museo Civico di Bassano del Grappa",
+      "url": "https://commons.wikimedia.org/wiki/File:Testa_del_genio_di_Antonio_Canova,_Museo_Civico_di_Bassano_del_Grappa.JPG",
+      "license": "CC BY-SA 3.0",
+      "author": "Dispe",
+      "embeddable": "yes - licenza verificata; attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Bassano del Grappa - Museo Civico di Bassano - Pudore (dalla mostra 'Io, Canova. Genio europeo')",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Museo_Civico_di_Bassano_-_Pudore.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Silvana Gallio",
+      "embeddable": "yes - licenza verificata; foto scattata in una mostra temporanea, l'opera potrebbe non essere della collezione permanente"
+     },
+     {
+      "kind": "video",
+      "title": "Il Nuovo Museo Civico di Bassano del Grappa",
+      "url": "https://www.youtube.com/watch?v=VXzb7pBxWF0",
+      "license": "unknown",
+      "author": "Musei Civici Bassano del Grappa (canale ufficiale, verificato via oEmbed)",
+      "embeddable": "yes - iframe YouTube; licenza non visibile, presumibilmente standard YouTube; contenuto non visionato"
+     },
+     {
+      "kind": "video",
+      "title": "Io, Canova. Genio europeo: la mostra",
+      "url": "https://www.youtube.com/watch?v=34_b8Qr3a0w",
+      "license": "unknown",
+      "author": "Musei Civici Bassano del Grappa (canale ufficiale, verificato via oEmbed)",
+      "embeddable": "yes - iframe YouTube; licenza non visibile; contenuto non visionato"
+     },
+     {
+      "kind": "video",
+      "title": "Visita alla sezione \"Storia della città\"",
+      "url": "https://www.youtube.com/watch?v=Me8DQZsct4k",
+      "license": "unknown",
+      "author": "Musei Civici Bassano del Grappa (canale ufficiale, verificato via oEmbed)",
+      "embeddable": "yes - iframe YouTube; licenza non visibile; il coinvolgimento del Rotary indicato dal ricercatore non è stato verificato"
+     },
+     {
+      "kind": "video",
+      "title": "Allestimento della mostra \"Palladio, Bassano e il Ponte\"",
+      "url": "https://www.youtube.com/watch?v=58DvRP8JcXg",
+      "license": "unknown",
+      "author": "Musei Civici Bassano del Grappa (canale ufficiale, verificato via oEmbed)",
+      "embeddable": "yes - iframe YouTube; spostato qui da Palazzo Bonaguro: la mostra (2021) si tenne al Museo Civico, Piazza Garibaldi. Utile soprattutto per la scheda del Ponte Vecchio"
+     },
+     {
+      "kind": "video",
+      "title": "La collezione permanente del Museo Civico di Bassano del Grappa",
+      "url": "https://www.youtube.com/watch?v=vZqdnmC8_lI",
+      "license": "unknown",
+      "author": "Itinerarinellarte (canale @itinerarte, NON istituzionale)",
+      "embeddable": "yes - iframe YouTube; non è un canale del museo, licenza non visibile, contenuto non visionato"
+     }
+    ],
+    "live_sources": [
+     {
+      "what": "Calendario eventi di Musei, Biblioteca e Archivio (pagina HTML aggiornata: il 14 novembre 2026 mostra eventi di novembre-dicembre 2026)",
+      "url": "https://www.museibassano.it/it/eventi",
+      "note": "Verificata come aggiornata. Limiti: mescola eventi di biblioteca e musei, spesso senza indicare la sede; nessun feed RSS/ICS trovato, quindi solo link esterno o scraping."
+     },
+     {
+      "what": "Stato di apertura del giorno e avvisi (es. chiusura del piano nobile fino all'11 dicembre 2026)",
+      "url": "https://www.museibassano.it/it/pagina/museo-civico",
+      "note": "Verificato: l'intestazione mostra 'Oggi aperto | 10:00-19:00' e il banner di chiusura. Attenzione: lo stato è mostrato identico su tutte le pagine del sito, non è certo che sia specifico per sede. Solo HTML, nessuna API."
+     },
+     {
+      "what": "Mostre in corso",
+      "url": "https://www.museibassano.it/it/mostre/in_corso",
+      "note": "Raggiungibile, ma l'elenco contiene anche mostre già concluse (es. una terminata a febbraio 2026 e una a settembre 2026): non usarla come fonte automatica senza filtrare le date."
+     }
+    ]
+   },
+   {
+    "name": "Palazzo Sturm (Museo della Ceramica Giuseppe Roi, Museo della Stampa Remondini) e la dinastia Remondini",
+    "identification_note": "Palazzo settecentesco affacciato sul Brenta, via Schiavonetti 40 (indirizzo da Wikipedia IT). Identificazione solida. Museo della Ceramica 'Giuseppe Roi' al piano nobile (dal 1992), Museo della Stampa Remondini al piano terra (dal 2007, secondo il sito dei Musei; il giorno 15 settembre viene solo da Wikipedia IT). I nomi alternativi 'Palazzo Ferrari / Vanzo Mercante' derivano dai proprietari citati nelle fonti ma non li ho visti usati come denominazione: da non pubblicare come nomi ufficiali. Che la stamperia Remondini non fosse in questo palazzo è una deduzione (il fondatore prese casa sulla piazza principale), non un'affermazione esplicita delle fonti. Discrepanza: per il sito dei Musei il palazzo 'fu donato' nel 1943; Wikipedia IT parla di lascito del barone Sturm von Hirschfeld (1895-1943) senza data di passaggio. Coordinate da Wikipedia IT / Commons, identiche a quelle del rinoceronte.",
+    "lat": 45.76633,
+    "lon": 11.73167,
+    "story_beats": [
+     {
+      "year": "1634-1657",
+      "text": "Giovanni Antonio Remondini nasce a Padova nel 1634; nel 1657 prende casa sulla piazza principale di Bassano e apre una bottega di panni, lana, seta e attrezzi di ferro, a cui aggiunge poi le xilografie di santi e soggetti popolari.",
+      "source_url": "https://it.wikipedia.org/wiki/Remondini"
+     },
+     {
+      "year": "1711-1739",
+      "text": "Alla morte del fondatore (1711) la stamperia passa al figlio Giuseppe. Nel 1725 è già attiva una cartiera a Oliero e tra il 1735 e il 1739 i Remondini acquisiscono altre tre cartiere che lavorano solo per la stamperia di Bassano.",
+      "source_url": "https://it.wikipedia.org/wiki/Remondini"
+     },
+     {
+      "year": "1738-1750",
+      "text": "Nel 1738 Giuseppe Remondini ottiene dai magistrati veneziani il privilegio esclusivo di vendere senza dazi le sue stampe sacre; nel 1750 la famiglia apre una libreria a Venezia. Le stampe sono vendute da compagnie di ambulanti tesini e schiavoni.",
+      "source_url": "https://it.wikipedia.org/wiki/Remondini"
+     },
+     {
+      "year": "metà XVIII secolo",
+      "text": "Il mercante e industriale della seta Vincenzo Ferrari fa costruire il palazzo sul Brenta, su sette livelli e con oltre settanta stanze, su progetto di Daniello Bernardi.",
+      "source_url": "https://www.museibassano.it/it/pagina/palazzo-sturm"
+     },
+     {
+      "year": "1765-1766",
+      "text": "Nel 1765 il pittore Giorgio Anselmi affresca il salone d'ingresso con la Caduta dei giganti e figure allegoriche; nel 1766 un artista non identificato con certezza realizza gli stucchi con il Carro del Sole e le Stagioni.",
+      "source_url": "https://it.wikipedia.org/wiki/Palazzo_Sturm"
+     },
+     {
+      "year": "inizio XIX secolo",
+      "text": "All'inizio dell'Ottocento la stamperia Remondini conta 18 torchi tipografici e xilografici, 24 torchi calcografici, 4 cartiere e una fonderia di caratteri, con oltre 1.000 operai.",
+      "source_url": "https://it.wikipedia.org/wiki/Remondini"
+     },
+     {
+      "year": "XIX secolo",
+      "text": "Sotto i proprietari Vanzo Mercante il corpo principale del palazzo viene sopraelevato e il nuovo tetto raccordato alla loggia-belvedere, in origine aperta su tre lati.",
+      "source_url": "https://it.wikipedia.org/wiki/Palazzo_Sturm"
+     },
+     {
+      "year": "1840-1861",
+      "text": "Nel 1840 la produzione è ancora ampia ma si accumula l'invenduto, nel 1848 comincia il declino e nel 1861 l'azienda Remondini chiude. La raccolta remondiniana di 8.522 incisioni di vari artisti è conservata al Museo Civico di Bassano.",
+      "source_url": "https://it.wikipedia.org/wiki/Remondini"
+     },
+     {
+      "year": "1943",
+      "text": "Il palazzo passa al Comune di Bassano del Grappa per volontà del barone Giovanni Battista Sturm von Hirschfeld (il sito dei Musei scrive che 'fu donato' nel 1943): da lui viene il nome attuale.",
+      "source_url": "https://www.museibassano.it/it/pagina/palazzo-sturm"
+     },
+     {
+      "year": "1992",
+      "text": "Dal 1992 le collezioni di ceramica vengono trasferite ed esposte a Palazzo Sturm: al piano nobile ha sede il Museo della Ceramica Giuseppe Roi.",
+      "source_url": "https://www.museibassano.it/it/pagina/palazzo-sturm"
+     },
+     {
+      "year": "2007",
+      "text": "Nel 2007 apre al pubblico, al piano terra, il Museo della Stampa Remondini, dedicato alla famiglia di stampatori.",
+      "source_url": "https://www.museibassano.it/it/pagina/palazzo-sturm"
+     },
+     {
+      "year": "2017-2018",
+      "text": "Dopo un restauro avviato nell'aprile 2017 (progetto da 1.450.000 euro) il palazzo viene inaugurato il 15 dicembre 2018.",
+      "source_url": "https://www.bassanonet.it/news/27571-sturmtruppen.html"
+     },
+     {
+      "year": "2019",
+      "text": "Dal 20 aprile al 30 settembre 2019 Palazzo Sturm espone per la prima volta tutte le 214 incisioni di Dürer della collezione Remondini.",
+      "source_url": "https://www.bassanonet.it/news/27697-sturm_und_durer.html"
+     }
+    ],
+    "media": [
+     {
+      "kind": "photo",
+      "title": "Bassano del Grappa 90 (8187906213)",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_90_(8187906213).jpg",
+      "license": "CC BY-SA 2.0",
+      "author": "Alain Rouiller",
+      "embeddable": "yes - licenza verificata; la descrizione del file NON nomina Palazzo Sturm: controllare a occhio che lo mostri davvero prima di usarla"
+     },
+     {
+      "kind": "photo",
+      "title": "Palazzo Sturm intérieur 01",
+      "url": "https://commons.wikimedia.org/wiki/File:Palazzo_Sturm_int%C3%A9rieur_01.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Peccadille",
+      "embeddable": "yes - licenza verificata; attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Palazzo Sturm intérieur plafond (soffitto a stucco)",
+      "url": "https://commons.wikimedia.org/wiki/File:Palazzo_Sturm_int%C3%A9rieur_plafond.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Peccadille",
+      "embeddable": "yes - licenza verificata; la descrizione dice soffitto in stucco, non affresco"
+     },
+     {
+      "kind": "photo",
+      "title": "Palazzo Sturm musée céramique (sala del Museo della Ceramica)",
+      "url": "https://commons.wikimedia.org/wiki/File:Palazzo_Sturm_mus%C3%A9e_c%C3%A9ramique.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Peccadille",
+      "embeddable": "yes - licenza verificata; attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Musee Remondini 04 (sala dei tesori del Museo Remondini)",
+      "url": "https://commons.wikimedia.org/wiki/File:Musee_Remondini_04.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Peccadille",
+      "embeddable": "yes - licenza verificata; la categoria Commons 'Museo Remondini' contiene 23 file in tutto"
+     },
+     {
+      "kind": "photo",
+      "title": "Musee Remondini 20 (sala dedicata alla carta decorata)",
+      "url": "https://commons.wikimedia.org/wiki/File:Musee_Remondini_20.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Peccadille",
+      "embeddable": "yes - licenza verificata; attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Categoria Commons: Palazzo Sturm (Bassano del Grappa) - 7 file e 1 sottocategoria",
+      "url": "https://commons.wikimedia.org/wiki/Category:Palazzo_Sturm_(Bassano_del_Grappa)",
+      "license": "unknown",
+      "author": "vari",
+      "embeddable": "unknown - è una categoria: la licenza va letta su ogni singolo file"
+     },
+     {
+      "kind": "video",
+      "title": "Rinascimento in bianco e nero. L'arte dell'incisione a Venezia (1494 - 1615)",
+      "url": "https://www.youtube.com/watch?v=4XlHujvWO_c",
+      "license": "unknown",
+      "author": "Musei Civici Bassano del Grappa (canale ufficiale, verificato via oEmbed)",
+      "embeddable": "yes - iframe YouTube; licenza non visibile; video di mostra sull'incisione, non specifico su Palazzo Sturm; contenuto non visionato"
+     }
+    ],
+    "live_sources": [
+     {
+      "what": "Calendario eventi di Musei, Biblioteca e Archivio (può includere eventi a Palazzo Sturm)",
+      "url": "https://www.museibassano.it/it/eventi",
+      "note": "Aggiornata (eventi di novembre-dicembre 2026), ma la sede spesso non è indicata e nessun evento a Palazzo Sturm compariva tra i primi risultati. Nessun feed."
+     },
+     {
+      "what": "Avvisi di sala e stato di apertura (es. Sala degli Specchi chiusa durante eventi)",
+      "url": "https://www.museibassano.it/it/pagina/palazzo-sturm",
+      "note": "Raggiungibile; lo stato 'Oggi aperto | 10:00-19:00' è mostrato a livello di sito, non è certo che valga per Palazzo Sturm. Solo HTML."
+     }
+    ]
+   },
+   {
+    "name": "Palazzo Bonaguro",
+    "identification_note": "Palazzo storico in via Angarano 77 (indirizzo da Wikipedia IT; il sito dei Musei non lo riporta), nel quartiere Angarano vicino al Ponte Vecchio. Sede dei Musei Civici per mostre temporanee e, all'ultimo piano, per la collezione zoologica 'Mondo Animale'. Corretto rispetto alla ricerca: il nome 'Ca' Veggia' NON compare nelle due fonti aperte (parlano solo della famiglia Veggia) ed è stato tolto dal racconto: da verificare prima di usarlo. Il video sull'allestimento di 'Palladio, Bassano e il Ponte' è stato rimosso da qui: quella mostra si tenne al Museo Civico. Discrepanza: il sito dei Musei dice 'donato al Comune nel 1969', Wikipedia IT dice che il Comune lo 'acquisì' nel 1969. Coordinate: trovate sulla categoria Wikimedia Commons 'Palazzo Bonaguro (Bassano del Grappa)' (45.76744, 11.72834); non verificate su una seconda fonte, da controllare sulla mappa.",
+    "lat": 45.76744,
+    "lon": 11.72834,
+    "story_beats": [
+     {
+      "year": "XV secolo",
+      "text": "Il palazzo sorge a partire dal Quattrocento nel quartiere Angarano, vicino al Ponte Vecchio, ed è ampiamente affrescato fin dalle origini.",
+      "source_url": "https://www.museibassano.it/it/pagina/palazzo-bonaguro"
+     },
+     {
+      "year": "XVI secolo",
+      "text": "Nel Cinquecento si aggiungono nuove decorazioni, tra cui un Banchetto di dame e gentiluomini su un tema reso popolare in quegli anni da Paolo Veronese; il palazzo ha un giardino monumentale con statue allegoriche, fontane e viali prospettici.",
+      "source_url": "https://it.wikipedia.org/wiki/Palazzo_Bonaguro"
+     },
+     {
+      "year": "inizio XVII secolo",
+      "text": "Fino ai primi del Seicento il palazzo appartiene alla famiglia veneziana dei Veggia.",
+      "source_url": "https://it.wikipedia.org/wiki/Palazzo_Bonaguro"
+     },
+     {
+      "year": "XVII-XX secolo",
+      "text": "Si succedono come proprietari i Querini, i Correr, gli Albertoni e i Giaconi Bonaguro, che contribuiscono ad abbellire l'edificio; una sala del secondo piano ha un soffitto ottocentesco a medaglioni con teste maschili e femminili.",
+      "source_url": "https://it.wikipedia.org/wiki/Palazzo_Bonaguro"
+     },
+     {
+      "year": "1969",
+      "text": "Nel 1969 il palazzo passa al Comune di Bassano del Grappa (per il sito dei Musei 'fu donato') e diventa sede di mostre ed eventi culturali.",
+      "source_url": "https://www.museibassano.it/it/pagina/palazzo-bonaguro"
+     },
+     {
+      "year": "2006",
+      "text": "All'ultimo piano apre al pubblico 'Mondo Animale', collezione zoologica affidata ai Musei Civici in deposito permanente dal servizio CITES.",
+      "source_url": "https://www.museibassano.it/it/pagina/palazzo-bonaguro"
+     }
+    ],
+    "media": [
+     {
+      "kind": "photo",
+      "title": "Bassano del Grappa - Palazzo Bonaguro - Marcok 2025-09-13 20-55-15 001",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Palazzo_Bonaguro_-_Marcok_2025-09-13_20-55-15_001.jpeg",
+      "license": "CC BY-SA 4.0",
+      "author": "Marco Chemello (WMIT)",
+      "embeddable": "yes - licenza verificata via API Commons; la categoria Commons contiene 11 file"
+     },
+     {
+      "kind": "photo",
+      "title": "Bassano del Grappa - Palazzo Bonaguro - Marcok 2025-09-13 20-55-15 002",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Palazzo_Bonaguro_-_Marcok_2025-09-13_20-55-15_002.jpeg",
+      "license": "CC BY-SA 4.0",
+      "author": "Marco Chemello (WMIT)",
+      "embeddable": "yes - licenza verificata; attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Bassano del Grappa - Palazzo Bonaguro - Marcok 2025-09-13 20-55-15 005",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Palazzo_Bonaguro_-_Marcok_2025-09-13_20-55-15_005.jpeg",
+      "license": "CC BY-SA 4.0",
+      "author": "Marco Chemello (WMIT)",
+      "embeddable": "yes - licenza verificata; attribuzione e stessa licenza"
+     }
+    ],
+    "live_sources": [
+     {
+      "what": "Calendario eventi di Musei, Biblioteca e Archivio (può includere eventi a Palazzo Bonaguro)",
+      "url": "https://www.museibassano.it/it/eventi",
+      "note": "Aggiornata, ma la sede spesso non è indicata e nessun evento a Palazzo Bonaguro compariva tra i primi risultati il 14 novembre 2026. Nessun feed."
+     }
+    ]
+   }
+  ],
+  "open_questions": [
+   "Cosa intende l'utente con 'il rinoceronte di Bassano'? L'identificazione con la scultura 'King Kong Rhino' di Li-Jen Shih a Palazzo Sturm è un'ipotesi ragionevole ma non confermata da lei: chiederglielo prima di costruire la scheda.",
+   "Il rinoceronte è ancora a Palazzo Sturm oggi (novembre 2026)? Era un comodato di dodici mesi dal dicembre 2018; la scheda dei Musei riporta 19.12.2018 - 31.12.2021 e l'ultima fonte datata verificata è del luglio 2021. Nessuna fonte istituzionale né recente lo conferma o lo smentisce: va verificato di persona o chiedendo ai Musei Civici prima di metterlo sulla mappa come presenza fissa.",
+   "Posizione esatta della scultura: Bassanonet (2018-2019) dice terrazza panoramica/belvedere di Palazzo Sturm, il blog Assoyuanfen dice 'cortile'. Da verificare sul posto.",
+   "Dati tecnici della scultura discordanti: 880x220x285 cm (Bassanonet) contro 888x220x458 e 888x220x485 cm nelle didascalie Commons; materiale 'acciaio inossidabile' (Musei) o 'acciaio cromato' (Assoyuanfen). Non pubblicare misure senza una conferma dei Musei. Peso non trovato.",
+   "Permanenza a Venezia: Bassanonet la lega alla Biennale di Architettura 2018 ai Giardini della Marinaressa (arte.it, visto solo nei risultati di ricerca, indica 26 maggio - 25 novembre 2018); Assoyuanfen scrive invece che il rinoceronte era a Venezia da due anni. Dato non risolto: nel racconto è stata tenuta solo la versione Bassanonet.",
+   "L'attribuzione a Stefano Bombardieri fatta da alcuni siti di viaggio non è stata ricontrollata in questo passaggio: tutte le fonti aperte (Musei, Bassanonet, Assoyuanfen, unvenetoinviaggio) indicano Li-Jen Shih. Ignorare Bombardieri salvo smentita locale.",
+   "Foto della scultura: su Commons esistono foto di King Kong Rhino dichiarate CC BY-SA 4.0 (caricate nel 2018 dall'utente Smagtw, attribuite all'artista), ma nessuna scattata a Bassano e non è verificato che chi le ha caricate avesse titolo per la licenza. L'opera è di un artista vivente e in Italia non c'è libertà di panorama: per una foto a Bassano serve l'autorizzazione dell'artista o dei Musei.",
+   "L'esemplare bassanese del Rinoceronte di Dürer: Bassanonet dice che un originale è conservato a Bassano, ma non ho trovato un'immagine libera di quell'esemplare; le tre immagini proposte sono di altri musei e vanno didascalizzate come tali. Chiedere ai Musei un'immagine dell'esemplare Remondini.",
+   "Fondazione del Museo Civico: 1828 (sito ufficiale, testo Wikipedia IT) o 1840 (infobox Wikipedia IT, categoria Wikipedia EN)? Il trasferimento a San Francesco nel 1840 è sostenuto solo da Wikipedia IT. Chiedere conferma ai Musei.",
+   "Disegni di Canova al Museo: 1.756 (Finestre sull'Arte) o 'tremila disegni autografi' (Wikipedia IT)? La ricerca originale affermava anche che Sartori Canova portò album di disegni, incisioni e biblioteca nel 1852-1857: la fonte aperta conferma solo i manoscritti, il resto è stato tolto.",
+   "Palazzo Sturm: 'donato nel 1943' (sito Musei) o lascito alla morte del barone (Wikipedia IT)? Palazzo Bonaguro: 'donato nel 1969' (sito Musei) o 'acquisito' (Wikipedia IT)? Scegliere la formulazione con un locale o con i Musei.",
+   "Palazzo Bonaguro: il nome 'Ca' Veggia' non compare nelle fonti aperte; le coordinate vengono solo dalla categoria Commons; i fatti documentati sono appena sei e vengono da due fonti che si ripetono. Serve una fonte locale più ricca. Verificare anche se 'Mondo Animale' è oggi regolarmente aperto.",
+   "Nessuna sorgente davvero 'live' (webcam, sensori, feed) esiste per questi quattro luoghi. Le pagine dei Musei si aggiornano ma non hanno feed né API, lo stato 'Oggi aperto' è mostrato a livello di sito e la pagina 'Mostre in corso' elenca anche mostre già concluse. L'utente ha chiesto 'video o qualcosa live': va chiarito con lei se bastano video e link aggiornati o se serve una webcam (ad esempio sul Ponte Vecchio, non cercata in questo passaggio).",
+   "L'Archivio digitale Antonio Canova (https://archiviocanova.medialibrary.it/home/index.aspx) è raggiungibile e offre manoscritti digitalizzati, ma non è una sorgente live ed è stato tolto da quell'elenco; alcune funzioni prevedono login e la pagina ha una sezione sulle licenze dei contenuti da leggere prima di riusare immagini.",
+   "Video YouTube: titoli e canali verificati via oEmbed, ma nessun contenuto è stato visionato e la licenza non è stata letta sulla pagina (presumibilmente licenza standard YouTube, che consente l'embed ma non la copia). Guardarli prima di incorporarli. Non è stato trovato alcun video dedicato al rinoceronte, a Palazzo Sturm o a Palazzo Bonaguro.",
+   "La foto Commons 'Bassano del Grappa 90 (8187906213)' è stata indicata come veduta con Palazzo Sturm, ma la sua descrizione non lo dice: controllare a occhio.",
+   "La richiesta dell'utente cita anche Ponte Vecchio, Nardini alto e Nardini basso, che non sono in questo blocco di ricerca: vanno coperti altrove."
+  ]
+ },
+ "centro": {
+  "places": [
+   {
+    "name": "Castello degli Ezzelini (Castello Superiore) e Duomo di Santa Maria in Colle",
+    "identification_note": "Identificazione confermata: complesso fortificato sul colle a nord del centro, con il Duomo (antica pieve di Santa Maria in Colle) dentro la prima cinta. Resta aperta la contraddizione sul nome: la voce Wikipedia su Bassano dice che il castello 'non appartenne mai agli Ezzelini' perché 'sorto per volontà degli abitanti'; la voce sul castello dice che il vescovo di Vicenza lo donò a Ezzelino I nella seconda metà del XII secolo. Nessuna delle due frasi ha una nota puntuale: non scrivere né l'una né l'altra senza una fonte locale. La voce del castello colloca la Torre dell'Ortazzo a sud-ovest e chiama 'Torre Bolzonella' quella oggi detta di Ser Ivano. Coordinate riprese dal ricercatore, non ricontrollate su mappa.",
+    "lat": 45.76912,
+    "lon": 11.73291,
+    "story_beats": [
+     {
+      "year": "998",
+      "text": "Un documento cita per la prima volta la pieve di Santa Maria in Colle: è la più antica notizia scritta sul colle del castello.",
+      "source_url": "https://it.wikipedia.org/wiki/Duomo_di_Bassano_del_Grappa"
+     },
+     {
+      "year": "XII-XIII secolo",
+      "text": "Le murature più antiche ancora visibili risalgono ai primi decenni del XII secolo; tra XII e XIII secolo vengono costruiti il muro di cinta a nord e la Torre dell'Ortazzo.",
+      "source_url": "https://it.wikipedia.org/wiki/Castello_degli_Ezzelini_(Bassano_del_Grappa)"
+     },
+     {
+      "year": "1223",
+      "text": "A luglio il vescovo di Vicenza concede di erigere presso la chiesa di Bassano una collegiata di canonici.",
+      "source_url": "https://it.wikipedia.org/wiki/Duomo_di_Bassano_del_Grappa"
+     },
+     {
+      "year": "1311-1404",
+      "text": "Il castello è attivo sotto gli Scaligeri (1311-1387) e poi sotto i Visconti (1387-1404). Il 10 giugno 1404 Bassano si dà alla Repubblica di Venezia.",
+      "source_url": "https://it.wikipedia.org/wiki/Castello_degli_Ezzelini_(Bassano_del_Grappa)"
+     },
+     {
+      "year": "1411",
+      "text": "Durante la guerra tra Venezia e il Regno d'Ungheria le fortificazioni resistono alle prime bombarde delle truppe dell'imperatore Sigismondo di Lussemburgo.",
+      "source_url": "https://it.wikipedia.org/wiki/Castello_degli_Ezzelini_(Bassano_del_Grappa)"
+     },
+     {
+      "year": "1460-1473",
+      "text": "L'8 ottobre 1460 il visitatore pastorale Pietro Barno trova l'antica chiesa in abbandono e a rischio di crollo; tra il 1465 e il 1473 viene riparata, riportata a una sola navata e ricoperta con un nuovo tetto.",
+      "source_url": "https://it.wikipedia.org/wiki/Duomo_di_Bassano_del_Grappa"
+     },
+     {
+      "year": "1508 (data da verificare)",
+      "text": "Nella guerra della Lega di Cambrai le fortificazioni cedono agli eserciti di Massimiliano I d'Asburgo; dopo, il castello perde la funzione militare.",
+      "source_url": "https://it.wikipedia.org/wiki/Castello_degli_Ezzelini_(Bassano_del_Grappa)"
+     },
+     {
+      "year": "1519",
+      "text": "Un terremoto fa crollare il campanile della chiesa.",
+      "source_url": "https://it.wikipedia.org/wiki/Duomo_di_Bassano_del_Grappa"
+     },
+     {
+      "year": "1584-1588",
+      "text": "Nel 1584 viene eretto l'altare della Madonna del Rosario (ricostruito nel secondo Seicento), che oggi ospita la pala firmata da Leandro Bassano; nel 1588 l'arciprete Giovanni Micheli avvia la demolizione dell'antico edificio ridotto a cripta e sistema il coro.",
+      "source_url": "https://it.wikipedia.org/wiki/Duomo_di_Bassano_del_Grappa"
+     },
+     {
+      "year": "1688-1689",
+      "text": "Giovanni Battista Volpato dipinge per il Duomo l'Assunzione di Maria e le due tele ottagonali con San Bassiano e San Clemente.",
+      "source_url": "https://it.wikipedia.org/wiki/Duomo_di_Bassano_del_Grappa"
+     },
+     {
+      "year": "1908-1930",
+      "text": "L'arciprete Giovanni Battista Gobbi avvia un nuovo duomo in località Bastion: il cantiere si ferma con la Grande Guerra, riprende nel dopoguerra e nel 1930 l'edificio viene destinato a tempio-ossario. Il Duomo resta sul colle.",
+      "source_url": "https://it.wikipedia.org/wiki/Duomo_di_Bassano_del_Grappa"
+     },
+     {
+      "year": "anni 1990",
+      "text": "I restauri degli anni Novanta rendono fruibili la Torre dell'Ortazzo, la Torre di Ser Ivano e il Corpo di Guardia, che ospitano mostre e spettacoli di Operaestate.",
+      "source_url": "https://it.wikipedia.org/wiki/Castello_degli_Ezzelini_(Bassano_del_Grappa)"
+     },
+     {
+      "year": "fine anni 1990",
+      "text": "Viene inaugurato il Teatro al Castello 'Tito Gobbi', sede degli spettacoli estivi di Operaestate Festival Veneto.",
+      "source_url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+     }
+    ],
+    "media": [
+     {
+      "kind": "historic_image",
+      "title": "Bassano del Grappa, Castello degli Ezzelini (xilografia, datata 1901 su Commons)",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa,_Castello_degli_Ezzelini_(xilografia).jpg",
+      "license": "Public domain",
+      "author": "Unknown author",
+      "embeddable": "yes - Commons, pubblico dominio (licenza riletta dai metadati Commons)"
+     },
+     {
+      "kind": "photo",
+      "title": "Bassano del Grappa - Castello degli Ezzelini - 2023-09-13",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Castello_degli_Ezzelini_-_2023-09-13_19-58-47_001.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Bruschi alberto",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Camminamento fra le due mura del castello degli Ezzelini",
+      "url": "https://commons.wikimedia.org/wiki/File:Camminamento_fra_le_due_mura_del_castello_degli_Ezzelini.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Ezio1937",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Parte superiore della Torre dell'Ortazzo",
+      "url": "https://commons.wikimedia.org/wiki/File:Parte_superiore_della_Torre_dell'Ortazzo.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Ezio1937",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Duomo di Santa Maria Assunta in Colle",
+      "url": "https://commons.wikimedia.org/wiki/File:Duomo_di_Santa_Maria_Assunta_in_Colle.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Gito Trevisan",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Vista particolare Interno Duomo S.M. in Colle",
+      "url": "https://commons.wikimedia.org/wiki/File:Vista_particolare_Interno_Duomo_S.M._in_Colle.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Gito Trevisan",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Duomo campanile bassano",
+      "url": "https://commons.wikimedia.org/wiki/File:Duomo_campanile_bassano.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Ezio1937",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     },
+     {
+      "kind": "video",
+      "title": "Castello degli Ezzelini: riaperto camminamento tra le mura e il Corpo di Guardia (03/03/2023)",
+      "url": "https://www.youtube.com/watch?v=61rteLifD18",
+      "license": "unknown",
+      "author": "Rete Veneta (TV regionale privata; il ricercatore indicava 'TG Bassano', ma il canale YouTube è Rete Veneta)",
+      "embeddable": "yes - YouTube oEmbed restituisce il codice iframe, quindi l'embed non è disattivato; solo tramite player YouTube"
+     },
+     {
+      "kind": "video",
+      "title": "Via al restauro della Torre di Ser Ivano e della Porta delle Campanelle (07/11/2024)",
+      "url": "https://www.youtube.com/watch?v=bmJv2sGn704",
+      "license": "unknown",
+      "author": "Rete Veneta (TV regionale privata)",
+      "embeddable": "yes - YouTube oEmbed restituisce il codice iframe; solo tramite player YouTube"
+     }
+    ],
+    "live_sources": []
+   },
+   {
+    "name": "Torre Civica, Piazza Garibaldi e Piazza Libertà (Loggia del Comune, San Giovanni)",
+    "identification_note": "Identificazione confermata sulle fonti: Torre Civica sul lato nord di Piazza Garibaldi; Loggia dei Podestà in Piazza Libertà con il Municipio sopra e dietro (la Regione la chiama 'Loggia dei Podestà': che i bassanesi dicano 'Loggia del Comune' è un'ipotesi del ricercatore, da confermare); chiesa di San Giovanni Battista sul lato sud di Piazza Libertà. Le coordinate sono quelle della Loggia, non della torre (la scheda regionale dà la Torre Civica a 0,07 km). Altezza torre: 43 m per MiC e Wikipedia; il dato '42 m' di magicoveneto.it non è stato ricontrollato. Origine della torre: tradizione ezzeliniana (metà Duecento) per i Musei Civici; 'anni Venti-Quaranta del XIII secolo' oppure, più probabile, 1312 per il MiC. Nota: il testo Wikipedia sulla torre è identico a quello del MiC, quindi non è una seconda fonte indipendente.",
+    "lat": 45.76702,
+    "lon": 11.73436,
+    "story_beats": [
+     {
+      "year": "metà del 1200 (tradizione)",
+      "text": "La tradizione attribuisce la fondazione della torre a Ezzelino da Romano, per scopi difensivi e militari.",
+      "source_url": "https://www.museibassano.it/it/pagina/torre-civica"
+     },
+     {
+      "year": "1308",
+      "text": "Sorge la chiesa di San Giovanni Battista, commissionata dalla famiglia Blasi: la piazza, ricavata riempiendo il fossato della seconda cerchia di mura, all'inizio prende il suo nome.",
+      "source_url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+     },
+     {
+      "year": "1312",
+      "text": "Secondo la scheda del Ministero della Cultura la data più probabile per la costruzione della torre è il 1312, quando viene allungata la seconda cinta muraria.",
+      "source_url": "https://cultura.gov.it/luogo/torre-civica"
+     },
+     {
+      "year": "1349",
+      "text": "Prima notizia documentata della torre: vi viene collocata una campana di 500 chili. Da allora risulta intestata al Comune, che paga manutenzione e custodi.",
+      "source_url": "https://cultura.gov.it/luogo/torre-civica"
+     },
+     {
+      "year": "1430",
+      "text": "Sulla Loggia entra in funzione un orologio dal quadrante azzurro, opera di Mastro Corrado da Feltre.",
+      "source_url": "https://venetoaroundme.regione.veneto.it/en/node/94076"
+     },
+     {
+      "year": "1494",
+      "text": "Alla base della torre si apre una porta in pietra con sopra dipinto lo stemma della città: da qui il nome 'Torre Civica'.",
+      "source_url": "https://cultura.gov.it/luogo/torre-civica"
+     },
+     {
+      "year": "1682",
+      "text": "Un incendio distrugge gli affreschi di Jacopo dal Ponte nella Loggia. Restano i 120 stemmi affrescati dei primi podestà veneti e, sulla parete sud, il San Cristoforo di Francesco Bassano il Vecchio.",
+      "source_url": "https://venetoaroundme.regione.veneto.it/en/node/94076"
+     },
+     {
+      "year": "1747",
+      "text": "L'ingegnere Bartolomeo Ferracina costruisce il meccanismo dell'orologio della Loggia, quello ancora in uso.",
+      "source_url": "https://venetoaroundme.regione.veneto.it/en/node/94076"
+     },
+     {
+      "year": "1776",
+      "text": "Piazza Garibaldi, per secoli 'piazza delle Erbe' per il mercato degli ortaggi, riceve la sistemazione definitiva da Antonio Gaidon.",
+      "source_url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+     },
+     {
+      "year": "Settecento - prima metà dell'Ottocento",
+      "text": "Nel Settecento la torre riceve l'orologio; le merlature in cima risalgono a un restauro della prima metà dell'Ottocento.",
+      "source_url": "https://www.museibassano.it/it/pagina/torre-civica"
+     },
+     {
+      "year": "1867",
+      "text": "Piazza Libertà, già 'piazza dei Signori', viene dedicata a Vittorio Emanuele II; durante la seconda guerra mondiale diventa 'piazza del Popolo' e infine 'piazza Libertà'.",
+      "source_url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+     },
+     {
+      "year": "1898",
+      "text": "Una conduttura porta in centro l'acqua delle sorgenti dei Fontanazzi: in Piazza Garibaldi viene costruita la Fontana Bonaguro, opera dello scultore Carlo Spazzi, donata dal sindaco Antonio Bonaguro.",
+      "source_url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+     }
+    ],
+    "media": [
+     {
+      "kind": "photo",
+      "title": "Bassano del Grappa - Torre civica 01",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Torre_civica_01.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Syrio",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Torre civica, Bassano del Grappa 01",
+      "url": "https://commons.wikimedia.org/wiki/File:Torre_civica,_Bassano_del_Grappa_01.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Superchilum",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Bassano del Grappa - Piazza Garibaldi",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Piazza_Garibaldi.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Syrio",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Loggia del Podesta sotto Palazzo Municipale",
+      "url": "https://commons.wikimedia.org/wiki/File:Loggia_del_Podesta_sotto_Palazzo_Municipale.jpg",
+      "license": "CC0",
+      "author": "Oursana",
+      "embeddable": "yes - CC0"
+     },
+     {
+      "kind": "photo",
+      "title": "Piazza Libertà (Bassano del Grappa) 01",
+      "url": "https://commons.wikimedia.org/wiki/File:Piazza_Libert%C3%A0_(Bassano_del_Grappa)_01.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Superchilum",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Piazza Liberta, colonna con leone alato",
+      "url": "https://commons.wikimedia.org/wiki/File:Piazza_Liberta,_colonna_con_leone_alato.jpg",
+      "license": "CC0",
+      "author": "Oursana",
+      "embeddable": "yes - CC0"
+     },
+     {
+      "kind": "historic_image",
+      "title": "Bassano del Grappa, Piazza Vittorio Emanuele (xilografia, datata 1901 su Commons) - l'attuale Piazza Libertà",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa,_Piazza_Vittorio_Emanuele_(xilografia).jpg",
+      "license": "Public domain",
+      "author": "Unknown author",
+      "embeddable": "yes - pubblico dominio"
+     },
+     {
+      "kind": "historic_image",
+      "title": "VI-Bassano-del-Grappa-1903-Piazza-Vittorio-Emanuele-II (cartolina 1903)",
+      "url": "https://commons.wikimedia.org/wiki/File:VI-Bassano-del-Grappa-1903-Piazza-Vittorio-Emanuele-II.jpg",
+      "license": "Public domain",
+      "author": "Unknown author",
+      "embeddable": "yes - pubblico dominio"
+     }
+    ],
+    "live_sources": [
+     {
+      "what": "Webcam Windy 'Bassano del Grappa: Piazza della Libertà'",
+      "url": "https://www.windy.com/webcams/1304014898",
+      "note": "Verificata il 14/11/2026: l'ID corrisponde davvero a 'Bassano del Grappa: Piazza della Libertà', la camera risulta attiva e il player contiene fotogrammi della giornata (un'immagine circa ogni 50 minuti: è un timelapse, non un video in diretta). Non ho guardato l'inquadratura né i termini d'uso: prima di incorporarla controllare cosa si vede e usare il widget di embed ufficiale di Windy."
+     },
+     {
+      "what": "Aperture stagionali della Torre Civica (pagina ufficiale Musei Civici)",
+      "url": "https://www.museibassano.it/it/pagina/torre-civica",
+      "note": "Non è una fonte live: è una pagina da linkare. Stagione 2026: dal 21 marzo al 31 ottobre, weekend e festivi dalle 15 (Pasqua esclusa). Alla data della verifica (14/11/2026) la stagione è quindi chiusa: non scrivere 'aperta' in modo fisso nel sito."
+     }
+    ]
+   },
+   {
+    "name": "Mura e porte della città (Porta Dieda, Porta delle Grazie)",
+    "identification_note": "Porta Dieda: confermata sulla scheda regionale (Via Roma 103, sul sito del Castello Inferiore 'dei Berri'). Porta delle Grazie o Porta Aureola: antico accesso nord-orientale, vicino alla chiesa di Santa Maria delle Grazie e al Belvedere (Wikipedia). Le coordinate indicate sono quelle di Porta Dieda. Per Porta delle Grazie nessuna coordinata da fonte: il valore 45.7693, 11.7375 è una stima del ricercatore e va controllato su mappa. Piccola divergenza: Wikipedia data il Castello Inferiore al 1315; la Regione dice genericamente 'XIV secolo, durante la dominazione padovana'.",
+    "lat": 45.764928,
+    "lon": 11.736005,
+    "story_beats": [
+     {
+      "year": "XIII secolo",
+      "text": "Una nuova cinta di mura protegge i borghi cresciuti fuori dal primo nucleo attorno al castello.",
+      "source_url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+     },
+     {
+      "year": "1315",
+      "text": "I padovani costruiscono a sud il Castello Inferiore, detto 'dei Berri', per proteggere i nuovi borghi sorti fuori le mura.",
+      "source_url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+     },
+     {
+      "year": "1389",
+      "text": "Gian Galeazzo Visconti fa erigere una nuova cinta che ingloba il Castello Inferiore; il castello poi cade in rovina e viene sostituito da case.",
+      "source_url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+     },
+     {
+      "year": "fine XIV secolo",
+      "text": "L'ultimo ampliamento delle mura è di fine Trecento: se ne vedono ancora tratti in Viale delle Fosse.",
+      "source_url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+     },
+     {
+      "year": "1541",
+      "text": "Il podestà Domenico Diedo fa aprire la porta che porta il suo nome.",
+      "source_url": "https://venetoaroundme.regione.veneto.it/en/node/92967"
+     },
+     {
+      "year": "1541",
+      "text": "Jacopo dal Ponte affresca su Porta Dieda Marco Curzio a cavallo che si getta nella voragine; nella parte alta, l'aquila imperiale e il leone di Venezia. Oggi ne restano poche tracce.",
+      "source_url": "https://venetoaroundme.regione.veneto.it/en/node/92967"
+     },
+     {
+      "year": "1561",
+      "text": "Il podestà veneto commissiona Porta delle Grazie, dalle linee classicheggianti con colonne, architrave, fregio e timpano, a un architetto locale contemporaneo di Palladio. È la porta meglio conservata.",
+      "source_url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+     },
+     {
+      "year": "1886",
+      "text": "Le mura medievali sul lato nord dell'attuale Viale dei Martiri vengono demolite per aprire la vista sul paesaggio ai palazzi delle famiglie bassanesi.",
+      "source_url": "https://venetoaroundme.regione.veneto.it/en/node/96247"
+     },
+     {
+      "year": "oggi",
+      "text": "Accanto a Porta delle Grazie si apre il Belvedere: a sinistra l'Altopiano di Asiago, a destra il Massiccio del Grappa.",
+      "source_url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+     }
+    ],
+    "media": [
+     {
+      "kind": "photo",
+      "title": "Bassano del Grappa - Porta Dieda",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Porta_Dieda.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Syrio",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     },
+     {
+      "kind": "historic_image",
+      "title": "Bassano via Principe Amedeo e Porta Dieda (incisione, datata 1903 su Commons)",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_via_Principe_Amedeo_e_Porta_Dieda.jpg",
+      "license": "Public domain",
+      "author": "Giuseppe Barberis",
+      "embeddable": "yes - pubblico dominio"
+     },
+     {
+      "kind": "photo",
+      "title": "Bassano del Grappa - Porta delle Grazie",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Porta_delle_Grazie.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Syrio",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Bassano del Grappa - Porta delle Grazie - Timpano",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Porta_delle_Grazie_-_Timpano.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Syrio",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Bassano del Grappa - Mura presso la Porta delle Grazie",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Mura_presso_la_Porta_delle_Grazie.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Syrio",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Bassano del Grappa - Porta delle Grazie e torre nord-est",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Porta_delle_Grazie_e_torre_nord-est.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Syrio",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     }
+    ],
+    "live_sources": []
+   },
+   {
+    "name": "Viale dei Martiri e il 26 settembre 1944",
+    "identification_note": "Identificazione confermata sulla scheda regionale: viale alberato dal Castello Superiore a Porta delle Grazie, allora Viale XX Settembre. Tema delicato, tono sobrio. Divergenze reali tra le fonti, verificate: (a) la Regione dice 'la maggior parte' impiccati agli alberi del viale, Wikipedia (voce Bassano) dice 'nei viali cittadini'; (b) la Regione data il rastrellamento 20-23 settembre, la voce 'Operazione Piave' lo chiude il 28; (c) bilancio: 264 morti per 'Operazione Piave', 'più di 500 morti e 400 deportati' per la voce su Bassano; (d) la Regione parla di '31 giovani partigiani', mentre la voce 'Operazione Piave' racconta che molti si erano presentati spontaneamente ingannati dai manifesti: non definirli tutti 'partigiani' senza conferma. La voce 'Operazione Piave' non ha note puntuali per i dettagli dell'esecuzione.",
+    "lat": 45.768871,
+    "lon": 11.736044,
+    "story_beats": [
+     {
+      "year": "1886",
+      "text": "Sul lato nord del viale vengono demolite le mura medievali, per aprire la vista sul paesaggio.",
+      "source_url": "https://venetoaroundme.regione.veneto.it/en/node/96247"
+     },
+     {
+      "year": "inizio settembre 1944",
+      "text": "A Castello di Godego viene radunata una forza di circa 10.000 uomini, tedeschi e fascisti, agli ordini del colonnello Zimmermann, per accerchiare i partigiani del Grappa.",
+      "source_url": "https://it.wikipedia.org/wiki/Operazione_Piave"
+     },
+     {
+      "year": "20 settembre 1944",
+      "text": "Alle 6.30 comincia l'attacco: parte dal versante est, da Quero e Alano di Piave.",
+      "source_url": "https://it.wikipedia.org/wiki/Operazione_Piave"
+     },
+     {
+      "year": "21 settembre 1944",
+      "text": "Alle 13.30 il capitano Angelo Pasini, comandante della brigata Matteotti, dà l'ordine del 'si salvi chi può'.",
+      "source_url": "https://it.wikipedia.org/wiki/Operazione_Piave"
+     },
+     {
+      "year": "settembre 1944",
+      "text": "Avvisi affissi nei paesi promettono un lavoro nell'Organizzazione Todt o nella contraerea a chi si presenta spontaneamente: molti giovani, spinti anche dalle famiglie, si consegnano.",
+      "source_url": "https://it.wikipedia.org/wiki/Operazione_Piave"
+     },
+     {
+      "year": "26 settembre 1944",
+      "text": "A Bassano 31 giovani vengono impiccati, la maggior parte agli alberi del viale allora chiamato XX Settembre.",
+      "source_url": "https://venetoaroundme.regione.veneto.it/en/node/96247"
+     },
+     {
+      "year": "26 settembre 1944",
+      "text": "L'esecuzione avviene davanti alla popolazione. I corpi vengono lasciati appesi con al collo il cartello 'Bandito': l'ordine era di quattro giorni, rimasero circa venti ore.",
+      "source_url": "https://it.wikipedia.org/wiki/Operazione_Piave"
+     },
+     {
+      "year": "28 settembre 1944",
+      "text": "L'operazione si conclude. Il bilancio riportato da Wikipedia è di 264 morti, di cui 187 bruciati, fucilati o impiccati e 23 caduti in combattimento.",
+      "source_url": "https://it.wikipedia.org/wiki/Operazione_Piave"
+     },
+     {
+      "year": "28 aprile 1945",
+      "text": "Bassano viene liberata.",
+      "source_url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+     },
+     {
+      "year": "9 ottobre 1946",
+      "text": "La città riceve la Medaglia d'oro al valor militare per la Resistenza: la motivazione ricorda, tra città e territorio del Grappa, 171 impiccati, 603 fucilati, 804 deportati, 3.212 prigionieri e 285 case incendiate.",
+      "source_url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+     },
+     {
+      "year": "2008",
+      "text": "Karl Franz Tausch, il vicebrigadiere SS indicato come esecutore materiale delle impiccagioni e rintracciato in Germania, muore suicida il 25 settembre, alla vigilia dell'anniversario.",
+      "source_url": "https://it.wikipedia.org/wiki/Karl_Franz_Tausch"
+     },
+     {
+      "year": "oggi",
+      "text": "Il viale porta il nome dei Martiri: ogni albero ha il nome e la fotografia del giovane che vi morì.",
+      "source_url": "https://venetoaroundme.regione.veneto.it/en/node/96247"
+     }
+    ],
+    "media": [
+     {
+      "kind": "photo",
+      "title": "Viale dei martiri (6072730923)",
+      "url": "https://commons.wikimedia.org/wiki/File:Viale_dei_martiri_(6072730923).jpg",
+      "license": "CC BY-SA 2.0",
+      "author": "Rino Porrovecchio",
+      "embeddable": "yes - con attribuzione e stessa licenza (descrizione Commons: 'Bassano del Grappa (VI)', foto del 2011)"
+     },
+     {
+      "kind": "photo",
+      "title": "Viale dei martiri-2 (6072730933)",
+      "url": "https://commons.wikimedia.org/wiki/File:Viale_dei_martiri-2_(6072730933).jpg",
+      "license": "CC BY-SA 2.0",
+      "author": "Rino Porrovecchio",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Uno dei lecci di viale dei martiri (6072742587)",
+      "url": "https://commons.wikimedia.org/wiki/File:Uno_dei_lecci_di_viale_dei_martiri_(6072742587).jpg",
+      "license": "CC BY-SA 2.0",
+      "author": "Rino Porrovecchio",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     }
+    ],
+    "live_sources": []
+   },
+   {
+    "name": "Tempio Ossario",
+    "identification_note": "Identificazione confermata: chiesa monumentale iniziata nel 1908 come nuovo duomo (località Bastion) e destinata nel 1930 a ossario militare, inaugurata nel maggio 1934. Numeri non concordi: 'oltre 5.000 soldati, oltre duecento decorati' (voce dedicata), '5.405 caduti tra cui 236 decorati' (voce su Bassano), '6.000 salme' (voce sul Duomo). Architetto: Pietro Del Fabbro di Treviso per il completamento (voce dedicata), mentre la voce su Bassano nomina un 'architetto Rinaldo di Venezia'. La voce dedicata parla di accordo con il 'Ministero della difesa', che nel 1930 non esisteva con quel nome; la voce su Bassano dice 'ceduto allo Stato'. Stile 'gotico veneziano con tracce di romanico' secondo la voce dedicata, 'neogotico in mattoni rossi' secondo quella su Bassano. Coordinate del ricercatore non ricontrollate.",
+    "lat": 45.763668,
+    "lon": 11.733443,
+    "story_beats": [
+     {
+      "year": "1908",
+      "text": "A settembre comincia la costruzione di una grande chiesa: doveva essere il nuovo duomo della città.",
+      "source_url": "https://it.wikipedia.org/wiki/Tempio_ossario_di_Bassano_del_Grappa"
+     },
+     {
+      "year": "1908",
+      "text": "A volerla è l'arciprete Giovanni Battista Gobbi, tra le resistenze di chi la giudica troppo costosa e troppo lontana dal centro.",
+      "source_url": "https://it.wikipedia.org/wiki/Duomo_di_Bassano_del_Grappa"
+     },
+     {
+      "year": "1915-1918",
+      "text": "La Grande Guerra ferma il cantiere; i lavori riprendono nel dopoguerra con modifiche al progetto, ma la chiesa resta incompiuta.",
+      "source_url": "https://it.wikipedia.org/wiki/Duomo_di_Bassano_del_Grappa"
+     },
+     {
+      "year": "1930",
+      "text": "La chiesa mai finita viene destinata anche a sacrario militare, con un accordo tra la parrocchia e lo Stato: vi vengono riuniti i caduti riesumati dai cimiteri della fascia pedemontana.",
+      "source_url": "https://it.wikipedia.org/wiki/Tempio_ossario_di_Bassano_del_Grappa"
+     },
+     {
+      "year": "1930-1934",
+      "text": "L'edificio viene completato dall'architetto Pietro Del Fabbro di Treviso: 75 metri di lunghezza, due campanili di 60 metri, un rosone di circa 10 metri di diametro.",
+      "source_url": "https://it.wikipedia.org/wiki/Tempio_ossario_di_Bassano_del_Grappa"
+     },
+     {
+      "year": "maggio 1934",
+      "text": "Il Tempio Ossario viene inaugurato.",
+      "source_url": "https://it.wikipedia.org/wiki/Tempio_ossario_di_Bassano_del_Grappa"
+     },
+     {
+      "year": "oggi",
+      "text": "Custodisce oltre 5.000 soldati, tutti con nome e cognome perché morti negli ospedali da campo: combatterono sul Grappa nell'ultimo anno di guerra (1917-1918) e molti erano 'ragazzi del '99'.",
+      "source_url": "https://it.wikipedia.org/wiki/Tempio_ossario_di_Bassano_del_Grappa"
+     },
+     {
+      "year": "oggi",
+      "text": "Tra loro quattro ufficiali medaglia d'oro e il principe Umberto di Savoia-Aosta, conte di Salemi.",
+      "source_url": "https://it.wikipedia.org/wiki/Tempio_ossario_di_Bassano_del_Grappa"
+     },
+     {
+      "year": "oggi",
+      "text": "Vi riposano anche 87 tra militari morti in Germania e in Russia e civili uccisi nei bombardamenti di Bassano, trasferiti dal cimitero di Santa Croce.",
+      "source_url": "https://it.wikipedia.org/wiki/Tempio_ossario_di_Bassano_del_Grappa"
+     }
+    ],
+    "media": [
+     {
+      "kind": "photo",
+      "title": "Bassano del Grappa, tempio ossario 01",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa,_tempio_ossario_01.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Syrio",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Bassano del Grappa, tempio ossario 02",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa,_tempio_ossario_02.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Syrio",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Tempio Ossario Bassano del Grappa",
+      "url": "https://commons.wikimedia.org/wiki/File:Tempio_Ossario_Bassano_del_Grappa.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Gabrielino 86",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Umberto di Savoia-Aosta Conte di Salemi (1889-1918). Sacrario di Bassano del Grappa",
+      "url": "https://commons.wikimedia.org/wiki/File:Umberto_di_Savoia-Aosta_Conte_di_Salemi_(1889-1918)._Sacrario_di_Bassano_del_Grappa.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Avemundi",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     },
+     {
+      "kind": "video",
+      "title": "Inaugurazione del Tempio-Ossario dei caduti del Grappa (cinegiornale)",
+      "url": "https://www.youtube.com/watch?v=JrTxc6y6QiM",
+      "license": "unknown",
+      "author": "Archivio Luce Cinecittà (canale YouTube ufficiale @istitutoluce, confermato)",
+      "embeddable": "yes - YouTube oEmbed restituisce il codice iframe; solo tramite player YouTube. L'anno 1934 non compare nel titolo: va controllato nella descrizione del video"
+     }
+    ],
+    "live_sources": []
+   },
+   {
+    "name": "Monte Grappa e Sacrario militare (visti dalla città)",
+    "identification_note": "Il massiccio a nord-est di Bassano e il Sacrario sulla vetta, a 1.776 m secondo Wikipedia, 'tra le province di Treviso e di Vicenza'. Non è territorio di Bassano. L'elenco dei comuni dato dal ricercatore (Pieve del Grappa, Valbrenta, Borso) non compare nelle fonti aperte: è un'ipotesi da non pubblicare senza verifica. Anche i punti da cui si vede dalla città (Belvedere confermato da Wikipedia; Viale dei Martiri e terrazza della Torre Civica no) vanno confermati sul posto. La voce Wikipedia sul sacrario non ha note puntuali. Coordinate della cima non ricontrollate.",
+    "lat": 45.87056,
+    "lon": 11.79972,
+    "story_beats": [
+     {
+      "year": "4 agosto 1901",
+      "text": "Sulla vetta viene posta la statua della Madonna del Grappa dal patriarca di Venezia Giuseppe Sarto, il futuro papa Pio X.",
+      "source_url": "https://it.wikipedia.org/wiki/Sacrario_militare_del_monte_Grappa"
+     },
+     {
+      "year": "7 ottobre 1917",
+      "text": "Viene ultimata la Strada Cadorna, costruita per ordine del generale Luigi Cadorna per rifornire le linee difensive: è ancora la via d'accesso al Sacrario.",
+      "source_url": "https://it.wikipedia.org/wiki/Sacrario_militare_del_monte_Grappa"
+     },
+     {
+      "year": "1917",
+      "text": "Dopo Caporetto Bassano si ritrova in prima linea: il fronte si ferma sul Grappa, a pochi chilometri, e più di 7.000 persone vengono evacuate dalla città.",
+      "source_url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+     },
+     {
+      "year": "novembre 1917",
+      "text": "Nella 'battaglia d'arresto' gli attacchi austro-tedeschi sul massiccio vengono contenuti: il 26 novembre fallisce l'assalto di 15 battaglioni a Col della Berretta.",
+      "source_url": "https://it.wikipedia.org/wiki/Prima_battaglia_del_Piave"
+     },
+     {
+      "year": "24 ottobre - 3 novembre 1918",
+      "text": "Seconda battaglia del Grappa, parte dell'offensiva di Vittorio Veneto: la 4ª Armata del generale Gaetano Giardino attacca per giorni finché gli austro-ungarici si ritirano. Gli italiani contano 5.200 morti, 18.500 feriti e oltre 600 dispersi.",
+      "source_url": "https://it.wikipedia.org/wiki/Seconda_battaglia_del_monte_Grappa"
+     },
+     {
+      "year": "dopo il 1918",
+      "text": "Il Comune si fregia della Croce di guerra concessa alla 'Città di prima linea' per il conflitto 1915-1918.",
+      "source_url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+     },
+     {
+      "year": "1928",
+      "text": "La città prende il nome di Bassano del Grappa.",
+      "source_url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+     },
+     {
+      "year": "1932-1935",
+      "text": "Sulla cima si costruisce il Sacrario, progettato dall'architetto Giovanni Greppi con lo scultore Giannino Castiglioni; viene inaugurato il 22 settembre 1935.",
+      "source_url": "https://it.wikipedia.org/wiki/Sacrario_militare_del_monte_Grappa"
+     },
+     {
+      "year": "settembre 1944",
+      "text": "Lo stesso massiccio è teatro del rastrellamento contro i partigiani che culmina nelle impiccagioni di Bassano.",
+      "source_url": "https://it.wikipedia.org/wiki/Operazione_Piave"
+     },
+     {
+      "year": "oggi",
+      "text": "Il Sacrario custodisce i resti di 22.910 soldati: 12.615 italiani (2.283 identificati) e 10.295 austro-ungarici (295 identificati). Tra i due ossari corre la Via Eroica, lunga 300 metri, con 14 cippi che portano i nomi delle cime dei combattimenti.",
+      "source_url": "https://it.wikipedia.org/wiki/Sacrario_militare_del_monte_Grappa"
+     }
+    ],
+    "media": [
+     {
+      "kind": "photo",
+      "title": "Sacrario militare del monte Grappa",
+      "url": "https://commons.wikimedia.org/wiki/File:Sacrario_militare_del_monte_Grappa.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Syrio",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Sacrario militare del monte Grappa - Via Eroica 01",
+      "url": "https://commons.wikimedia.org/wiki/File:Sacrario_militare_del_monte_Grappa_-_Via_Eroica_01.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Syrio",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Sacrario militare del monte Grappa - Portale Roma",
+      "url": "https://commons.wikimedia.org/wiki/File:Sacrario_militare_del_monte_Grappa_-_Portale_Roma.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Syrio",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Sacrario militare del monte Grappa, innevato - Via Eroica 02",
+      "url": "https://commons.wikimedia.org/wiki/File:Sacrario_militare_del_monte_Grappa,_innevato_-_Via_Eroica_02.jpg",
+      "license": "CC BY-SA 4.0",
+      "author": "Syrio",
+      "embeddable": "yes - con attribuzione e stessa licenza"
+     },
+     {
+      "kind": "photo",
+      "title": "Ossario di cima Grappa (innevato)",
+      "url": "https://commons.wikimedia.org/wiki/File:Ossario_di_cima_Grappa.jpg",
+      "license": "Public domain",
+      "author": "Favarin Matteo",
+      "embeddable": "yes - rilasciata in pubblico dominio dall'autore (PD-self)"
+     },
+     {
+      "kind": "historic_image",
+      "title": "Mount Grappa as seen from Col Moschino over the Santa Felicita valley (1918), dipinto di Giulio Aristide Sartorio",
+      "url": "https://commons.wikimedia.org/wiki/File:Mount_Grappa_as_seen_from_Col_Moschino_over_the_Santa_Felicita_valley_(1918),_by_Giulio_Aristide_Sartorio.jpg",
+      "license": "Public domain",
+      "author": "Giulio Aristide Sartorio",
+      "embeddable": "yes - pubblico dominio"
+     },
+     {
+      "kind": "historic_image",
+      "title": "WWI - Battle of the Piave River - Monte Grappa area - Austrian trenches on the Asolone (foto aerea)",
+      "url": "https://commons.wikimedia.org/wiki/File:WWI_-_Battle_of_the_Piave_River_-_Monte_Grappa_area_-_Austrian_trenches_on_the_Asolone.jpg",
+      "license": "CC BY 2.5",
+      "author": "Italian Army Photographers 1915-1918 (da esercito.difesa.it, permesso VRTS confermato su Commons)",
+      "embeddable": "yes - con attribuzione"
+     }
+    ],
+    "live_sources": [
+     {
+      "what": "Webcam di Cima Grappa (nord, sud-est, sacrario) e meteo in tempo reale - Rifugio Bassano / Meteo Cima Grappa",
+      "url": "https://www.cimagrappa.it/meteo.php",
+      "note": "Verificata il 14/11/2026: le tre immagini current.jpg (nord, sudest, sacrario) avevano data di modifica di pochi minuti prima, quindi si aggiornano davvero; c'è anche un player video 'live' sul sacrario. La pagina avverte che le webcam hanno 10 anni e vanno sostituite. Nessun termine d'uso dichiarato: chiedere il permesso prima di incorporare, altrimenti linkare."
+     },
+     {
+      "what": "Webcam Windy 'Bassano del Grappa › South-east: Cima Grappa - Monte Grappa'",
+      "url": "https://www.windy.com/webcams/1322322408",
+      "note": "Verificata il 14/11/2026: l'ID corrisponde, la camera risulta attiva con fotogrammi della giornata (uno ogni 50 minuti circa, timelapse). Con ogni probabilità è la stessa camera sud-est di cimagrappa.it ripresa da Windy (ipotesi, non confermata). Usare il widget di embed ufficiale di Windy."
+     }
+    ]
+   }
+  ],
+  "open_questions": [
+   "Castello 'degli Ezzelini': due voci Wikipedia si contraddicono (mai appartenuto agli Ezzelini / donato dal vescovo di Vicenza a Ezzelino I) e nessuna delle due ha una nota puntuale. Serve una fonte dei Musei Civici o di uno storico locale prima di scrivere qualsiasi cosa sull'origine del nome.",
+   "Castello, 1508: la data della caduta sotto Massimiliano I viene solo dalla voce Wikipedia del castello; la guerra della Lega di Cambrai si combatté dal 1509, quindi l'anno potrebbe essere impreciso. Da controllare su una storia locale.",
+   "Duomo: l'altare del Rosario è del 1584 ma fu ricostruito nel secondo Seicento; la fonte non dice che la pala di Leandro Bassano sia del 1584. Le tele di Volpato (1688-1689) sono tre: la fonte non le descrive come 'tele del soffitto', da verificare sul posto dove sono collocate.",
+   "Torre Civica: origine non concorde (tradizione ezzeliniana di metà Duecento per i Musei Civici; 1312 'data più probabile' per il MiC). Altezza 43 m per il MiC; il '42 m' e la data 1823 per la merlatura (magicoveneto.it) non sono stati ricontrollati e li ho tolti dal racconto. Coordinate precise della torre mancanti: quelle date sono della Loggia.",
+   "'Loggia del Comune': la Regione la chiama 'Loggia dei Podestà'. Chiedere a un bassanese quale nome si usa davvero, e se l'orologio del 1747 di Ferracina è effettivamente ancora in funzione.",
+   "Nome della città prima del 1928: la voce Wikipedia dice in un punto 'Bassano Veneto' e in un altro 'Bassano' (Regio Decreto n. 2254). Ho scritto solo 'prende il nome di Bassano del Grappa': confermare il nome ufficiale precedente prima di citarlo.",
+   "Croce di guerra: la fonte cita lo Statuto comunale ('Città di prima linea', conflitto 1915-1918) ma non dà l'anno di concessione; il '1918' del ricercatore non era supportato.",
+   "26 settembre 1944: le fonti divergono su dove avvennero le impiccagioni (solo l'attuale Viale dei Martiri o più viali), sulle date del rastrellamento (20-23 o 20-28 settembre), sul bilancio (264 morti oppure oltre 500 morti e 400 deportati) e su chi fossero i 31 (la Regione dice 'giovani partigiani', Wikipedia racconta di giovani che si erano presentati perché ingannati dai manifesti). Da confrontare con ANPI Bassano, ISTREVI o l'Atlante delle stragi nazifasciste prima di pubblicare; decidere con loro anche se e come mostrare i 31 nomi.",
+   "I dettagli più crudi dell'esecuzione (iniezione, cavo telefonico, ruolo dei giovani avanguardisti) stanno solo nella voce Wikipedia 'Operazione Piave', senza note: li ho lasciati fuori dal racconto. Anche il ruolo di Tausch come 'esecutore' viene da Wikipedia (documenti alleati trovati nel 2003): non risulta una condanna per questi fatti, usare formule come 'indicato come'.",
+   "Su Commons esiste la categoria 'Eccidio di Bassano del Grappa': non l'ho esplorata. Eventuali foto d'epoca degli impiccati vanno valutate per diritti e soprattutto per opportunità, sentendo le famiglie o l'ANPI.",
+   "Il documentario 'Monte Grappa 1944' (scheda European Film Gateway / Cineteca di Bologna) è stato tolto: il link porta a una pagina di verifica del browser e non ho potuto confermare che la scheda esista né che il film sia visibile online.",
+   "Tempio Ossario: numero dei caduti non concorde (oltre 5.000 / 5.405 con 236 decorati / 6.000 salme) e architetto da chiarire (Pietro Del Fabbro per il completamento; la voce su Bassano nomina un 'architetto Rinaldo di Venezia'). Controllare sulla scheda del Ministero della Difesa o sul posto. Il soggetto dell'accordo del 1930 era lo Stato (il 'Ministero della difesa' citato da Wikipedia allora non esisteva con quel nome).",
+   "Sacrario del Grappa: la voce Wikipedia non ha note puntuali; i numeri (22.910, 12.615, 10.295) vanno confrontati con il Ministero della Difesa. La fonte dice solo che la Strada Cadorna fu ultimata il 7 ottobre 1917, non da dove parte: non scrivere 'da Bassano' senza verifica. I comuni su cui ricade la cima non sono stati verificati.",
+   "Da confermare sul posto: da quali punti della città si vede davvero il Grappa (Belvedere di Porta delle Grazie sì secondo Wikipedia; Viale dei Martiri e terrazza della Torre Civica sono ipotesi).",
+   "Webcam: Skyline Webcams di Cima Grappa è stata tolta perché OFFLINE alla verifica; la pagina meteotriveneto.it è stata tolta perché risulta vuota. Le due webcam Windy sono attive ma sono timelapse (un fotogramma ogni 50 minuti circa), non video in diretta: non ho guardato le inquadrature, da aprire a mano. Per cimagrappa.it serve il permesso del Rifugio Bassano / Meteo Cima Grappa prima di incorporare.",
+   "Torre Civica: la stagione di apertura 2026 è finita il 31 ottobre. Il sito non deve mostrare orari fissi: linkare la pagina dei Musei Civici e ricontrollare le date ogni anno.",
+   "Video: i due servizi sul castello sono di Rete Veneta (TV regionale privata), non di 'TG Bassano' né di un'istituzione; la licenza non è indicata, quindi si possono solo incorporare con il player YouTube, non scaricare o rimontare. Per il cinegiornale Luce confermare l'anno nella descrizione del video. Nessun video ufficiale di Comune o Musei Civici trovato.",
+   "Licenze Commons: tutti i 36 file esistono e le licenze coincidono con i metadati Commons letti oggi. CC BY-SA richiede di citare autore e licenza e di mantenere la stessa licenza; per le foto 'Public domain' di autore ignoto (xilografie 1901, cartolina 1903) lo stato è quello dichiarato da Commons. La foto aerea di Paolo Fiorese è stata tolta dalla scheda del Grappa perché la descrizione parla solo del centro storico.",
+   "Coordinate: sono quelle del ricercatore e non le ho ricontrollate su mappa; quella di Porta delle Grazie è una stima. Da verificare tutte prima di piazzare i punti cliccabili.",
+   "Europeana, Internet Archive e Catalogo generale dei beni culturali non sono stati consultati: possibili fonti per altre immagini storiche."
+  ]
+ },
+ "contesto": {
+  "places": [
+   {
+    "name": "Bassano del Grappa candidata a Capitale italiana della Cultura 2029",
+    "identification_note": "Non e' un luogo ma un tema di contesto. Verificato il 14/11/2026: Bassano e' CANDIDATA (non titolare) a 'Capitale italiana della Cultura 2029' (Ministero della Cultura). 'Citta' della cultura 2029' non e' un titolo ufficiale; il titolo gia' ottenuto e' 'Citta' Veneta della Cultura 2025' (Regione Veneto), confermato pero' da una sola fonte giornalistica. Il sito bassano2029.it ha nel link del logo la dicitura 'Capitale della cultura europea 2029' (confermato), in contrasto col testo della pagina che parla di Capitale italiana: usare sempre 'italiana'. Footer confermato: '(c) 2026 Comune di Bassano del Grappa - Tutti i diritti riservati'. Le coordinate sono solo indicative (zona Museo Civico) e NON sono state verificate: non usarle come punto preciso senza controllo.",
+    "lat": 45.7672,
+    "lon": 11.7353,
+    "story_beats": [
+     {
+      "year": "2025",
+      "text": "Bassano del Grappa riceve dalla Regione del Veneto il titolo di Citta' Veneta della Cultura 2025, riconoscimento del lavoro culturale della citta'.",
+      "source_url": "https://www.ilnordest.it/vivere-il-nord-est/cultura/capitale-cultura-2029-bassano-del-grappa-candidatura-garexgjf"
+     },
+     {
+      "year": "2026 (aprile)",
+      "text": "La candidatura a Capitale italiana della Cultura 2029 viene presentata alle Gallerie d'Italia di Milano dal sindaco Nicola Ignazio Finco insieme al presidente della Regione del Veneto Alberto Stefani, che la sostiene (articolo del 2 aprile 2026). Alla citta' vincitrice va un contributo statale di un milione di euro.",
+      "source_url": "https://www.ilnordest.it/vivere-il-nord-est/cultura/capitale-cultura-2029-bassano-del-grappa-candidatura-garexgjf"
+     },
+     {
+      "year": "2026 (maggio)",
+      "text": "Il Comune avvia la fase partecipata: prima riunione del Comitato promotore il 22 maggio, laboratorio di co-progettazione il 23 maggio in Sala Chilesotti al Museo Civico, e istituzione del TAG - Tavolo Agenda Giovani, rivolto ai residenti tra 18 e 27 anni (date annunciate in un articolo del 12 maggio 2026).",
+      "source_url": "https://www.initaly.it/en/articolo/bassano-del-grappa-avanza-nella-candidatura-a-capitale-italiana-della-14217"
+     },
+     {
+      "year": "2026 (26 maggio)",
+      "text": "Il Ministero della Cultura pubblica il bando per il titolo di Capitale italiana della Cultura 2029: possono candidarsi Comuni, Citta' metropolitane e Unioni di Comuni che non abbiano partecipato alle procedure di selezione 2027 e 2028.",
+      "source_url": "https://cultura.gov.it/comunicato/bando-per-il-conferimento-del-titolo-di-capitale-italiana-della-cultura-per-lanno-2029"
+     },
+     {
+      "year": "2026 (luglio)",
+      "text": "Una Call for Ideas (annunciata il 3 luglio, aperta fino al 27 luglio) raccoglie 87 proposte progettuali a sostegno del dossier, secondo le notizie del sito ufficiale della candidatura.",
+      "source_url": "https://bassano2029.it"
+     },
+     {
+      "year": "2026 (agosto)",
+      "text": "Le candidature arrivate al Ministero sono 17 (termine per la manifestazione di interesse: 1 luglio). Bassano del Grappa e' in elenco insieme a un'altra veneta, Bardolino. I dossier vanno consegnati entro il 23 settembre; la proclamazione e' prevista entro marzo 2027.",
+      "source_url": "https://www.finestresullarte.info/attualita/capitale-italiana-cultura-2029-sono-17-le-citta-candidate"
+     },
+     {
+      "year": "2026 (settembre)",
+      "text": "Bassano consegna al Ministero della Cultura il dossier di candidatura; la notizia esce il 24 settembre. Il manifesto e' 'La cultura ha un'intelligenza umana' e il simbolo della candidatura e' il Ponte Vecchio.",
+      "source_url": "https://www.ilgiornaledellarte.com/Articolo/Bassano-del-Grappa-ha-presentato-la-candidatura-per-Capitale-italiana-della-cultura-"
+     },
+     {
+      "year": "2026 (settembre)",
+      "text": "Il dossier si intitola 'Bassano 2029. La cultura ha un'intelligenza umana' e poggia su quattro pilastri: 'Bassano a vent'anni', 'La citta' delle immagini', 'Geografia della storia', 'Officine del terzo millennio'. Lo presentano il sindaco Nicola Finco, l'assessora alla Cultura Giada Pontarollo, la dirigente Cultura Barbara Guidi e l'advisor Paolo Dalla Sega (PTS).",
+      "source_url": "https://www.bassanonet.it/news/33976-bassano_del_grappa_consegna_il_dossier_per_capitale_della_cultura_2029.html"
+     },
+     {
+      "year": "2026 (settembre)",
+      "text": "La candidatura e' sostenuta da oltre 40 Comuni della Pedemontana veneta in tre province, da quasi 200 realta' del territorio e da un comitato promotore di 28 componenti; il programma prevede 'mille giorni' di attivita', da aprile 2027 a fine 2029.",
+      "source_url": "https://www.bassanonet.it/news/33976-bassano_del_grappa_consegna_il_dossier_per_capitale_della_cultura_2029.html"
+     },
+     {
+      "year": "2026 (ottobre)",
+      "text": "Nel comunicato n. 1867 del 22 ottobre della Regione del Veneto, l'assessore Marco Zecchinato colloca l'inaugurazione della mostra di Sebastiao Salgado 'nel percorso di Bassano verso la candidatura a Capitale italiana della Cultura 2029'.",
+      "source_url": "https://www.regione.veneto.it/article-detail?articleId=14427706"
+     },
+     {
+      "year": "2026 (novembre)",
+      "text": "I quattro pilastri del dossier sono ispirati alle stilate del Ponte Vecchio, con al centro la 'piazza sospesa del Ponte'. Il piano di investimenti 2026-2029 collegato vale 51.055.898,97 euro; non e' il premio, che per la citta' vincitrice e' un contributo ministeriale di 1 milione di euro.",
+      "source_url": "https://www.bassanonet.it/news/34093-bassano_candidata_a_capitale_italiana_della_cultura_2029_51_milioni_per_guardare_al_futuro.html"
+     },
+     {
+      "year": "2026-2027 (prossime tappe)",
+      "text": "Secondo la stampa locale (10 novembre 2026), le dieci finaliste saranno indicate il 16 dicembre 2026 e la proclamazione e' attesa il 27 marzo 2027. Queste due date vengono da un'unica fonte; le altre fonti lette dicono solo 'entro marzo 2027'. Al 14 novembre 2026 Bassano e' una delle 17 candidate, in attesa della selezione.",
+      "source_url": "https://www.bassanonet.it/news/34093-bassano_candidata_a_capitale_italiana_della_cultura_2029_51_milioni_per_guardare_al_futuro.html"
+     }
+    ],
+    "media": [
+     {
+      "kind": "photo",
+      "title": "Sito ufficiale della candidatura 'Bassano 2029' (non e' una foto: e' un link; contiene il dossier in versione ridotta in PDF, senza iniziative di dettaglio e budget)",
+      "url": "https://bassano2029.it",
+      "license": "Tutti i diritti riservati",
+      "author": "Comune di Bassano del Grappa",
+      "embeddable": "no - nessuna licenza aperta; usare solo come link esterno"
+     }
+    ],
+    "live_sources": []
+   },
+   {
+    "name": "Dati live e open data per Bassano (aria, Brenta, trasporti, ciclabili)",
+    "identification_note": "Voce tecnica, non un luogo. Endpoint ARPAV richiamati di nuovo il 14/11/2026 sera: rispondono con dati del giorno. ARPAV scrive 'Brenta a Barzizza'; la stazione e' a 45.7774 N, 11.7305 E. Che sia 'a monte del Ponte Vecchio' e' una deduzione dalle coordinate, non una dichiarazione ARPAV: farlo confermare. Le coordinate qui sotto sono quelle della stazione aria ARPAV 'Bassano' (da coords.json). Licenze: la pagina open data ARPAV dichiara CC BY 4.0 per 'i file XML' ed elenca li' anche i tre JSON aria (l'estensione ai JSON e' un'interpretazione ragionevole, non testuale); nel codice della pagina idro c'e' il commento 'Dati forniti da ARPAV in licenza CC BY 3.0' (mentre lo script stesso e' CC BY-NC-SA 3.0 IT: non copiarlo). I dati in diretta non sono validati.",
+    "lat": 45.75943177,
+    "lon": 11.73587076,
+    "story_beats": [
+     {
+      "year": "2026",
+      "text": "Qualita' dell'aria: ARPAV ha una stazione 'Bassano' (localita' Bassano del Grappa, tipo zona BU), codice codseqst 500000106, a 45.7594 N, 11.7359 E (coordinate in coords.json). Pubblica ozono orario delle ultime 48 ore circa e PM10 giornaliero degli ultimi 7 giorni.",
+      "source_url": "https://www2.arpa.veneto.it/aria-json/exported/aria/stats.json"
+     },
+     {
+      "year": "2026",
+      "text": "Formato aria: tre file JSON statici (data.json con le misure per codseqst, stats.json con l'anagrafica, coords.json con lat/lon), senza chiave. Alla prova del 14/11/2026 l'ultimo dato di ozono era delle 22:25 e il file era aggiornato alla stessa ora. Il server non ha restituito header CORS: vanno scaricati da uno script di build o da una funzione server, non dal browser.",
+      "source_url": "https://www2.arpa.veneto.it/aria-json/exported/aria/data.json"
+     },
+     {
+      "year": "2026",
+      "text": "Licenza aria: la pagina open data ARPAV che elenca questi tre file dichiara 'I file XML sono rilasciati da ARPAV secondo la licenza CC BY 4.0'.",
+      "source_url": "https://www.arpa.veneto.it/dati-ambientali/open-data/dati-arpav-in-formato-xml"
+     },
+     {
+      "year": "2026",
+      "text": "Brenta: la stazione ARPAV 'Brenta a Barzizza' (codice 283, codseqst 300001722, quota 106 m, 45.7774 N 11.7305 E) misura il livello idrometrico in metri con tendenza e la portata in m3/s. Il 14/11/2026 alle 23:00 segnava 0,96 m (tendenza stabile) e 51,79 m3/s.",
+      "source_url": "https://api.arpa.veneto.it/REST/v1/meteo_meteogrammi?rete=MGRAMMI&coordcd=20005&orario=0"
+     },
+     {
+      "year": "2026",
+      "text": "Formato Brenta: API REST JSON senza chiave. Ultimo valore per stazione: coordcd=20005 (livello) o 10001 (portata). Serie degli ultimi giorni a passo 10 minuti: meteo_meteogrammi_tabella?codseqst=300001722 (tipi LIDRO e PORT). Risponde con Access-Control-Allow-Origin: *, quindi e' leggibile anche dal browser.",
+      "source_url": "https://api.arpa.veneto.it/REST/v1/meteo_meteogrammi_tabella?codseqst=300001722"
+     },
+     {
+      "year": "2026",
+      "text": "Licenza Brenta: la pagina ARPAV 'Principali variabili idrologiche' precisa che sono dati in tempo reale non ancora validati; nel codice della pagina e' scritto 'Dati forniti da ARPAV in licenza CC BY 3.0'.",
+      "source_url": "https://www.arpa.veneto.it/dati-ambientali/dati-in-diretta/meteo-idro-nivo/variabili_idro"
+     },
+     {
+      "year": "2026",
+      "text": "Bus SVT: gli indirizzi /open-data, /opendata e /gtfs di svt.vi.it danno 404; SVT pubblica gli orari come libretti PDF (ad esempio l'extraurbano invernale 2026-2027 in vigore dal 16 novembre). Non e' stato trovato un feed GTFS pubblico, ma l'assenza non e' dimostrata.",
+      "source_url": "https://www.svt.vi.it/sites/default/files/2026-11/invernale-2026-2027-extraurbano-2026-11-16.pdf"
+     },
+     {
+      "year": "2026",
+      "text": "Fermate bus: in OpenStreetMap il riquadro 45.74-45.79 N, 11.70-11.77 E contiene 250 fermate (226 con operatore 'SVT - Societa' Vicentina Trasporti'), scaricabili via Overpass API in JSON. Licenza ODbL, attribuzione ai contributori OpenStreetMap.",
+      "source_url": "https://overpass-api.de/api/interpreter"
+     },
+     {
+      "year": "2026",
+      "text": "Treni: la stazione 'Bassano del Grappa' (RFI) e' in OpenStreetMap come nodo 6813645681 (45.76663 N, 11.74127 E, Wikidata Q3969005).",
+      "source_url": "https://www.openstreetmap.org/node/6813645681"
+     },
+     {
+      "year": "2026",
+      "text": "Orari treni: BusOne pubblica un GTFS Trenitalia nazionale convertito dai NeTEx pubblici del NAP/CCISS (non e' un feed ufficiale Trenitalia). E' gratuito solo per usi non commerciali di privati, enti senza scopo di lucro e ONG; per tutti gli altri serve il consenso scritto di BusOne.",
+      "source_url": "https://proxy.busone.app/trenitalia/readme"
+     },
+     {
+      "year": "2026",
+      "text": "Ciclabili: in OpenStreetMap la 'Ciclopista del Brenta' e' la relazione 32302 (route=bicycle, rete rcn, distanza indicata 38 km); la 'Ciclovia della Valsugana' e' la relazione 275663 (71,9 km, operatore Provincia Autonoma di Trento). Geometrie scaricabili via Overpass, licenza ODbL.",
+      "source_url": "https://www.openstreetmap.org/relation/32302"
+     }
+    ],
+    "media": [],
+    "live_sources": [
+     {
+      "what": "Livello idrometrico del Brenta a Barzizza (ultimo valore + tendenza), JSON",
+      "url": "https://api.arpa.veneto.it/REST/v1/meteo_meteogrammi?rete=MGRAMMI&coordcd=20005&orario=0",
+      "note": "Riverificato 14/11/2026: dato delle 23:00, campo 'aggiornamento' 23:25. Filtrare codseqst 300001722. Senza chiave, CORS aperto. Portata: stesso URL con coordcd=10001. La frequenza reale di aggiornamento non e' documentata. Attribuzione ARPAV."
+     },
+     {
+      "what": "Serie livello e portata Brenta a Barzizza (passo 10 min), JSON",
+      "url": "https://api.arpa.veneto.it/REST/v1/meteo_meteogrammi_tabella?codseqst=300001722",
+      "note": "Riverificato: 855 record dal 12/11 00:10 al 14/11 23:10 (circa 3 giorni, non 48 ore esatte); tipi LIDRO (m) e PORT (m3/s). Dati non validati."
+     },
+     {
+      "what": "Qualita' dell'aria ARPAV, stazione Bassano (ozono orario, PM10 giornaliero), JSON",
+      "url": "https://www2.arpa.veneto.it/aria-json/exported/aria/data.json",
+      "note": "Riverificato: Last-Modified 14/11/2026 22:25 GMT, ultimo ozono 22:25. Filtrare codseqst 500000106. Nessun header CORS: usare build script o proxy. Il PM10 e' giornaliero: l'ultimo valore e' del giorno prima."
+     },
+     {
+      "what": "Pagina ARPAV con grafico della stazione Brenta a Barzizza",
+      "url": "https://www.arpa.veneto.it/dati-ambientali/dati-in-diretta/meteo-idro-nivo/variabili_idro?codseqst=300001722&focus=LIVIDRO",
+      "note": "Risponde 200; il grafico e' disegnato via JavaScript e non e' stato visto renderizzato. Link umano di riferimento."
+     }
+    ]
+   },
+   {
+    "name": "Webcam pubbliche a Bassano del Grappa",
+    "identification_note": "Confermato: non c'e' alcuna diretta video ne' una webcam funzionante sul Ponte Vecchio tra le fonti controllate. L'istantanea comunale snap_ponte.jpg ha Last-Modified 9 novembre 2023 (riverificato) e la pagina comunale /Webcam/Ponte-degli-alpini restituisce solo il guscio 'myPortal' senza contenuto webcam. venetowebcam.it ripropone quella stessa immagine; per meteoplanet e see.cam non e' stato verificato. meteobassano.it non risponde nemmeno ora (nessuna connessione): la sua presunta webcam sul ponte resta non verificata. Le due webcam Windy indicano come fonte il sito del Comune, ma che siano tuttora gestite dal Comune e' una deduzione. Coordinate indicative del Ponte, non verificate.",
+    "lat": 45.7675,
+    "lon": 11.7312,
+    "story_beats": [
+     {
+      "year": "2023",
+      "text": "L'istantanea della webcam comunale sul Ponte degli Alpini (snap_ponte.jpg) non viene aggiornata dal 9 novembre 2023, secondo l'intestazione Last-Modified del server del Comune: non va presentata come 'live'.",
+      "source_url": "https://servizi.comune.bassano.vi.it/webcamponte/snap_ponte.jpg"
+     },
+     {
+      "year": "2026",
+      "text": "venetowebcam.it continua a mostrare la webcam del Ponte degli Alpini indicando come fornitore la Citta' di Bassano del Grappa e usando come sorgente l'immagine fissa del Comune, ferma al 2023.",
+      "source_url": "https://venetowebcam.it/webcam/bassano-del-grappa-ponte-alpini/en"
+     },
+     {
+      "year": "2026",
+      "text": "Su Windy sono attive due webcam che indicano come fonte comune.bassano.vi.it: 'Bassano del Grappa: Piazza della Liberta'' (id 1304014898) e 'Bassano del Grappa: Via Matteotti' (id 1225647707). Il 14/11/2026 il player conteneva 24 fotogrammi della giornata, uno ogni 50 minuti circa: sono timelapse, non video in diretta.",
+      "source_url": "https://webcams.windy.com/webcams/public/embed/player/1304014898/day"
+     },
+     {
+      "year": "2026",
+      "text": "Il piano gratuito di Windy Webcams consente di linkare le immagini a windy.com o incorporare il player timelapse; gli URL delle immagini valgono 15 minuti, quindi non vanno salvati in build. Il piano Professional (senza pubblicita' nel player) costa 9.990 euro l'anno.",
+      "source_url": "https://api.windy.com/webcams"
+     },
+     {
+      "year": "2026",
+      "text": "Windy ha anche una webcam 'Cima Grappa - Monte Grappa' (id 1322322408), attiva il 14/11/2026 con fotogrammi della giornata: utile per una vista verso il Grappa, non per il centro storico.",
+      "source_url": "https://webcams.windy.com/webcams/public/embed/player/1322322408/day"
+     }
+    ],
+    "media": [
+     {
+      "kind": "webcam",
+      "title": "Bassano del Grappa: Piazza della Liberta' (timelapse Windy)",
+      "url": "https://webcams.windy.com/webcams/public/embed/player/1304014898/day",
+      "license": "unknown",
+      "author": "Fonte indicata dal player: comune.bassano.vi.it (via Windy)",
+      "embeddable": "unknown - il piano gratuito Windy prevede l'embed del player timelapse, ma i termini completi non sono stati letti e non c'e' un consenso del Comune"
+     },
+     {
+      "kind": "webcam",
+      "title": "Bassano del Grappa: Via Matteotti (timelapse Windy)",
+      "url": "https://webcams.windy.com/webcams/public/embed/player/1225647707/day",
+      "license": "unknown",
+      "author": "Fonte indicata dal player: comune.bassano.vi.it/Webcam/Via-Matteotti (via Windy)",
+      "embeddable": "unknown - stesse condizioni e stessi dubbi"
+     },
+     {
+      "kind": "webcam",
+      "title": "Ponte degli Alpini - istantanea comunale (FERMA dal 9/11/2023)",
+      "url": "https://servizi.comune.bassano.vi.it/webcamponte/snap_ponte.jpg",
+      "license": "unknown",
+      "author": "Comune di Bassano del Grappa",
+      "embeddable": "no - immagine non aggiornata dal 2023 e nessuna condizione d'uso pubblicata"
+     }
+    ],
+    "live_sources": [
+     {
+      "what": "Webcam Piazza della Liberta' (timelapse, un fotogramma ogni ~50 minuti)",
+      "url": "https://webcams.windy.com/webcams/public/embed/player/1304014898/day",
+      "note": "Riverificata 14/11/2026: ultimo fotogramma della sera stessa (etichetta 'Sat 23:24'). Non e' video in diretta."
+     },
+     {
+      "what": "Webcam Via Matteotti (timelapse, un fotogramma ogni ~50 minuti)",
+      "url": "https://webcams.windy.com/webcams/public/embed/player/1225647707/day",
+      "note": "Riverificata 14/11/2026: ultimo fotogramma 'Sat 23:23'. Non e' video in diretta."
+     }
+    ]
+   }
+  ],
+  "open_questions": [
+   "RICHIESTA DELL'UTENTE NON COPERTA: questa ricerca non contiene nulla sui luoghi chiesti (Ponte Vecchio come storia, Nardini 'alto' e 'basso', il rinoceronte di Bassano). Servono schede dedicate; in particolare va chiesto a un bassanese cosa si intende esattamente per 'Nardini alto / Nardini basso' e per 'il rinoceronte'.",
+   "'Live' sul Ponte Vecchio: non esiste oggi una webcam funzionante ne' un video in diretta. Chiedere al Comune se la webcam del ponte verra' riattivata e a quali condizioni si possono incorporare le immagini. meteobassano.it dichiarerebbe una propria webcam sul ponte ma il sito non risponde: non verificata.",
+   "Capitale della Cultura: le date 16 dicembre 2026 (dieci finaliste) e 27 marzo 2027 (proclamazione) vengono da un solo articolo locale (bassanonet.it, 10/11/2026). Il comunicato ministeriale non riporta scadenze e il decreto allegato non e' stato letto. Riverificare prima di pubblicare e aggiornare dopo il 16 dicembre.",
+   "Data di consegna del dossier: nessuna fonte letta indica il giorno esatto. Il Giornale dell'Arte e il sito ufficiale danno la notizia il 24/09/2026, bassanonet il 25/09; il termine riportato da Finestre sull'Arte era il 23 settembre. Scrivere 'settembre 2026' o chiedere al Comune.",
+   "Il titolo 'Citta' Veneta della Cultura 2025' e' confermato solo da ilnordest.it: cercare l'atto o il comunicato della Regione.",
+   "Nessuna fonte dice che il dossier sia 'firmato' da Finco, Pontarollo, Guidi e Dalla Sega: sono le persone citate come promotori/curatori. Il comitato promotore e' di '28 membri' per bassanonet e di '28 enti' per Il Giornale dell'Arte. Le tre province non sono nominate.",
+   "Sul sito bassano2029.it il link del logo dice 'Capitale della cultura europea 2029': usare sul sito civico 'candidata a Capitale italiana della Cultura 2029'. Il sito e' 'Tutti i diritti riservati': per logo, testi e immagini serve il permesso del Comune. Il dossier pubblico e' solo una versione ridotta.",
+   "Licenza dati ARPAV: CC BY 4.0 e' dichiarata per 'i file XML' (i JSON aria sono elencati nella stessa pagina); per l'idrometria c'e' solo un commento nel codice ('CC BY 3.0'). Chiedere ad ARPAV conferma scritta per l'uso continuativo dell'API in diretta, che non e' documentata come open data, e citare sempre 'Fonte: ARPAV, dati non validati'.",
+   "Che la stazione 'Brenta a Barzizza' sia a monte del Ponte Vecchio e quanto il suo livello rappresenti quello al ponte va confermato da un locale o da ARPAV. Il significato della sigla 'BU' della stazione aria (fondo urbano) e' un'interpretazione non verificata.",
+   "GTFS SVT: non trovato, ma l'assenza non e' provata (catalogo Mobility Database e NAP/CCISS non controllati a fondo). Chiedere a SVT. Le fermate OpenStreetMap sono dati volontari: completezza da verificare a campione.",
+   "BusOne (orari treni): un sito civico rientra nell'uso gratuito solo se il gestore e' un privato o un ente non profit; se il sito e' fatto da uno studio o per un Comune serve il consenso scritto. Inoltre BusOne puo' interrompere l'accesso a sua discrezione.",
+   "OpenStreetMap: la relazione 275663 'Ciclovia della Valsugana' ha come nome alternativo proprio 'Ciclopista del Brenta'. Chiedere a un locale come si chiama davvero il tratto bassanese e se la relazione 32302 passa da Bassano (percorso e continuita' tra le due relazioni non verificati).",
+   "Windy: termini d'uso (api.windy.com/webcams/terms) non letti; il player gratuito mostra con ogni probabilita' pubblicita' (la pagina dice solo che il piano a pagamento ne e' privo). Confermare che l'embed sia ammesso e gradito al Comune. Le altre webcam citate dal ricercatore (Sacrario militare, Cartigliano) non sono state verificate e sono state tolte.",
+   "Coordinate del tema 'Capitale della Cultura' (Museo Civico) e della voce webcam (Ponte) sono indicative e non verificate su una mappa.",
+   "Le pagine di vicenzatoday.it e lapiazzaweb.it sulla consegna del dossier non sono state lette."
+  ]
+ }
+}
