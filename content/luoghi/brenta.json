@@ -1,0 +1,179 @@
+{
+  "id": "brenta",
+  "nome": "Il Brenta",
+  "sottotitolo": "Il fiume delle zattere, tra la valle e la pianura",
+  "genere": "luogo",
+  "lat": 45.7668,
+  "lon": 11.731,
+  "intro": "A Bassano il Brenta esce dalla sua valle stretta, passa sotto il Ponte Vecchio ed entra in pianura. Per secoli è stato una strada d'acqua: ci scendevano i tronchi dell'Altopiano diretti a Venezia, guidati dagli zattieri. E più di una volta, in piena, si è portato via il ponte.",
+  "tappe": [
+    {
+      "anno": "Il fiume",
+      "titolo": "Dai laghi alla pianura",
+      "testo": "Il Brenta nasce dai laghi di Levico e Caldonazzo, in Trentino, ed è lungo 174 chilometri. Percorre la Valsugana, entra nel Canale di Brenta a Primolano e a Bassano passa sotto il Ponte Vecchio ed entra in pianura. Qui la sua portata media è di 71 metri cubi al secondo.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Brenta»",
+        "url": "https://it.wikipedia.org/wiki/Brenta"
+      },
+      "media": 0
+    },
+    {
+      "anno": "XIV secolo",
+      "titolo": "Una scala per i tronchi",
+      "testo": "A monte di Bassano, a Valstagna, viene costruita la Calà del Sasso: una scalinata di 4.444 gradini con accanto una canaletta di pietra, per far scivolare i tronchi dall'Altopiano fino al Brenta.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Calà del Sasso»",
+        "url": "https://it.wikipedia.org/wiki/Cal%C3%A0_del_Sasso"
+      },
+      "media": 4
+    },
+    {
+      "anno": "XV-XVIII secolo",
+      "titolo": "Legname per l'Arsenale",
+      "testo": "I veneziani usano molto la Calà del Sasso per rifornire di legname l'Arsenale: da Valstagna i tronchi scendono lungo il Brenta, sull'acqua, fino a Venezia.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Calà del Sasso»",
+        "url": "https://it.wikipedia.org/wiki/Cal%C3%A0_del_Sasso"
+      }
+    },
+    {
+      "anno": "Al tempo delle zattere",
+      "titolo": "Zattere lunghe trenta metri",
+      "testo": "Sul fiume navigano zattere cariche di legname: larghe non più di 3 metri, lunghe da 4 a 30, con quattro o cinque uomini a bordo. Arrivano al porto padovano del Bassanello e, se serve, proseguono verso Monselice, Chioggia e Venezia. La fonte non dice a quali anni si riferiscano queste misure e cita una testimonianza del 1623.",
+      "fonte": {
+        "titolo": "Consorzio di Bonifica Brenta, pannello «Il butà»",
+        "url": "https://www.consorziobrenta.it/download/52d027f_9ilbuta.pdf"
+      }
+    },
+    {
+      "anno": "1567 e 1748",
+      "titolo": "Le piene contro il ponte",
+      "testo": "Due volte il Brenta in piena distrugge il ponte di Bassano: nell'ottobre 1567, e da lì nasce il progetto di Palladio, e il 19 agosto 1748, quando a ricostruirlo è Bartolomeo Ferracina.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Ponte Vecchio (Bassano del Grappa)»",
+        "url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
+      }
+    },
+    {
+      "anno": "1797-1805",
+      "titolo": "Nasce il butà",
+      "testo": "Sotto la prima dominazione austriaca una norma impone di chiudere le rogge il mercoledì e il sabato, per alzare il livello del fiume e far passare il legname: è il «butà». La regola, ribadita tra il 1815 e il 1866, apre lunghe liti con chi usa l'acqua per irrigare e per far lavorare gli opifici.",
+      "fonte": {
+        "titolo": "Consorzio di Bonifica Brenta, pannello «Il butà»",
+        "url": "https://www.consorziobrenta.it/download/52d027f_9ilbuta.pdf"
+      }
+    },
+    {
+      "anno": "1893",
+      "titolo": "Gli zattieri non partono",
+      "testo": "Il 2 luglio il segretario del Consorzio Rosta Rosà telegrafa al suo presidente: a Bassano ci sono molti zattieri fermi, che protestano e non vogliono partire senza la garanzia del butà fino al tramonto.",
+      "fonte": {
+        "titolo": "Consorzio di Bonifica Brenta, pannello «Il butà»",
+        "url": "https://www.consorziobrenta.it/download/52d027f_9ilbuta.pdf"
+      }
+    },
+    {
+      "anno": "Anni Venti",
+      "titolo": "Il butà scompare",
+      "testo": "Con la Prima guerra mondiale il butà viene sospeso. Dagli anni Venti, con i nuovi mezzi di trasporto, scompare del tutto.",
+      "fonte": {
+        "titolo": "Consorzio di Bonifica Brenta, pannello «Il butà»",
+        "url": "https://www.consorziobrenta.it/download/52d027f_9ilbuta.pdf"
+      }
+    },
+    {
+      "anno": "1966",
+      "titolo": "L'alluvione di novembre",
+      "testo": "L'alluvione del 1966 sconvolge quasi tutto il bacino del Brenta e dei suoi affluenti.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Brenta»",
+        "url": "https://it.wikipedia.org/wiki/Brenta"
+      }
+    },
+    {
+      "anno": "2011",
+      "titolo": "Un fiume di legno",
+      "testo": "Dal 9 aprile al 22 maggio Palazzo Bonaguro ospita la mostra «Un fiume di legno», sul viaggio del legname dai boschi del Primiero alla laguna di Venezia. Il pieghevole ricorda che Ponte Vecchio, Portici Lunghi e porto di Brenta raccontano ancora il legame della città con il fiume.",
+      "fonte": {
+        "titolo": "Pieghevole della mostra «Un fiume di legno» (Palazzo Bonaguro, 2011)",
+        "url": "https://www.parcopan.org/wp-content/uploads/2019/03/depl-fluitazione-bassano.pdf.pdf"
+      }
+    }
+  ],
+  "media": [
+    {
+      "tipo": "immagine",
+      "titolo": "Il Brenta verso nord visto dal Ponte Vecchio (2012)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Brenta_north_from_Ponte_Vecchio_Bassani_di_Grappa.jpeg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Brenta_north_from_Ponte_Vecchio_Bassani_di_Grappa.jpeg",
+      "autore": "oursana",
+      "licenza": "CC0",
+      "alt": "Il fiume largo e verde-azzurro scorre tra due file di case colorate affacciate sull'acqua; in fondo i monti sotto un cielo coperto."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il Brenta a Bassano del Grappa (13 giugno 2021)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Brenta_Bassano_del_Grappa.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Brenta_Bassano_del_Grappa.jpg",
+      "autore": "Wikipedian Spy",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Il greto del fiume con ciottoli bianchi e ciuffi d'erba in primo piano, l'acqua che corre tra i sassi, una riva alberata e i monti sullo sfondo."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Bassano lungo il Brenta (1 ottobre 2019)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_entlang_der_Brenta_01.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_entlang_der_Brenta_01.jpg",
+      "autore": "Zairon",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Il fiume calmo con una traversa di pietra in primo piano; sull'altra riva una lunga fila di case chiare e, in alto, i tetti e le torri della città."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il Brenta a Bassano (9 agosto 2011)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Il_Brenta_(6073221500).jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Il_Brenta_(6073221500).jpg",
+      "autore": "Rino Porrovecchio",
+      "licenza": "CC BY-SA 2.0",
+      "alt": "Il fiume verde sotto un cielo azzurro con nuvole bianche, case color ocra sulla riva destra e i monti in lontananza."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Valstagna, la Riviera Garibaldi sul Brenta (11 agosto 2018)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Valstangna%2C_Riviera_Garibaldi.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Valstangna%2C_Riviera_Garibaldi.jpg",
+      "autore": "Dedaperli",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Il paese di Valstagna con le case colorate in fila lungo il fiume, un ponte decorato di rosa e, dietro, le pareti boscose e rocciose della valle."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Gara di zattere sul Brenta a Valstagna (Palio delle Zattere)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Out%26About_-_Raft_Race_in_Valstagna_(Veneto)_(4571358).jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Out%26About_-_Raft_Race_in_Valstagna_(Veneto)_(4571358).jpg",
+      "autore": "U.S. Army USAG-V, Anna Terracino",
+      "licenza": "Pubblico dominio",
+      "alt": "Squadre in costumi colorati, gialli e rossi, in piedi su zattere di tronchi: spingono con lunghe pertiche in mezzo alla corrente."
+    },
+    {
+      "tipo": "video",
+      "titolo": "Bassano del Grappa: il Ponte degli Alpini e il fiume Brenta",
+      "url": "https://www.youtube-nocookie.com/embed/n1AMWOF650s",
+      "pagina": "https://www.youtube.com/watch?v=n1AMWOF650s",
+      "autore": "MagicoVeneto ~ MV Gianni Pasquale ~",
+      "licenza": "Licenza standard YouTube (solo incorporato)"
+    }
+  ],
+  "live": [
+    {
+      "tipo": "brenta",
+      "nota": "Il livello è misurato dall'idrometro ARPAV di Ca' Barzizza, circa 1 km a monte del Ponte Vecchio: non è il livello sotto il ponte. I dati non sono validati. Non risulta nessuna webcam verificata che inquadri il fiume a Bassano."
+    }
+  ],
+  "incertezze": [
+    "Porto di Brenta: che Bassano avesse un porto fluviale sulla sponda sinistra, poco a valle del ponte, dove con le zattere arrivavano anche altre merci, poggia su una sola fonte, un pannello divulgativo del Consorzio di Bonifica Brenta senza data né bibliografia. Il pieghevole della mostra del 2011 cita il porto senza dire dov'era.",
+    "Bocchiero: lo stesso pannello dice che sulla diga di derivazione del canale Medoaco, a valle del ponte, si vede ancora la bocca per il passaggio del legname. Non è stato verificato sul posto.",
+    "Palio delle Zattere di Valstagna: «dal 1986, l'ultima domenica di luglio» viene da una riga senza nota di Wikipedia, e non è verificato che si tenga ancora in quella data. Per questo non compare tra le tappe; la fotografia della gara non è datata con certezza.",
+    "Il punto sulla mappa è una scelta redazionale: il fiume non è un luogo preciso."
+  ]
+}

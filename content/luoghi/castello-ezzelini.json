@@ -1,0 +1,191 @@
+{
+  "id": "castello-ezzelini",
+  "nome": "Castello degli Ezzelini e Duomo",
+  "sottotitolo": "Il colle da cui è cominciata la città",
+  "genere": "luogo",
+  "lat": 45.76912,
+  "lon": 11.73291,
+  "intro": "Sul colle a nord del centro stanno insieme una fortezza e una chiesa: il Castello Superiore e, dentro la sua prima cinta, il Duomo di Santa Maria in Colle. La notizia scritta più antica risale a più di mille anni fa. Oggi tra queste mura, d'estate, si va a teatro.",
+  "tappe": [
+    {
+      "anno": "998",
+      "titolo": "La prima notizia scritta",
+      "testo": "Un documento cita per la prima volta la pieve di Santa Maria in Colle. È la più antica notizia scritta sul colle del castello.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Duomo di Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Duomo_di_Bassano_del_Grappa"
+      },
+      "media": 4
+    },
+    {
+      "anno": "XII-XIII secolo",
+      "titolo": "Le pietre più antiche",
+      "testo": "Le murature più antiche che si vedono ancora risalgono ai primi decenni del XII secolo. Tra XII e XIII secolo si costruiscono il muro di cinta a nord e la Torre dell'Ortazzo.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Castello degli Ezzelini (Bassano del Grappa)»",
+        "url": "https://it.wikipedia.org/wiki/Castello_degli_Ezzelini_(Bassano_del_Grappa)"
+      },
+      "media": 3
+    },
+    {
+      "anno": "1311-1404",
+      "titolo": "Scaligeri, Visconti, poi Venezia",
+      "testo": "Il castello è attivo sotto gli Scaligeri, dal 1311 al 1387, e poi sotto i Visconti, fino al 1404. Il 10 giugno 1404 Bassano si dà alla Repubblica di Venezia.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Castello degli Ezzelini (Bassano del Grappa)»",
+        "url": "https://it.wikipedia.org/wiki/Castello_degli_Ezzelini_(Bassano_del_Grappa)"
+      }
+    },
+    {
+      "anno": "1411",
+      "titolo": "Le mura reggono le bombarde",
+      "testo": "Durante la guerra tra Venezia e il Regno d'Ungheria le fortificazioni resistono alle prime bombarde delle truppe dell'imperatore Sigismondo di Lussemburgo.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Castello degli Ezzelini (Bassano del Grappa)»",
+        "url": "https://it.wikipedia.org/wiki/Castello_degli_Ezzelini_(Bassano_del_Grappa)"
+      }
+    },
+    {
+      "anno": "1460-1473",
+      "titolo": "Una chiesa da salvare",
+      "testo": "L'8 ottobre 1460 il visitatore pastorale Pietro Barno trova l'antica chiesa in abbandono e a rischio di crollo. Tra il 1465 e il 1473 viene riparata, riportata a una sola navata e coperta con un tetto nuovo.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Duomo di Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Duomo_di_Bassano_del_Grappa"
+      }
+    },
+    {
+      "anno": "1519",
+      "titolo": "Il terremoto e il campanile",
+      "testo": "Un terremoto fa crollare il campanile della chiesa.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Duomo di Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Duomo_di_Bassano_del_Grappa"
+      }
+    },
+    {
+      "anno": "1584-1588",
+      "titolo": "Un altare e un cantiere",
+      "testo": "Nel 1584 viene eretto l'altare della Madonna del Rosario, ricostruito nel secondo Seicento: oggi ospita la pala firmata da Leandro Bassano. Nel 1588 l'arciprete Giovanni Micheli avvia la demolizione dell'antico edificio ridotto a cripta e sistema il coro.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Duomo di Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Duomo_di_Bassano_del_Grappa"
+      }
+    },
+    {
+      "anno": "1688-1689",
+      "titolo": "Le tele di Volpato",
+      "testo": "Giovanni Battista Volpato dipinge per il Duomo l'Assunzione di Maria e due tele ottagonali con San Bassiano e San Clemente.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Duomo di Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Duomo_di_Bassano_del_Grappa"
+      }
+    },
+    {
+      "anno": "1908-1930",
+      "titolo": "Il Duomo resta sul colle",
+      "testo": "L'arciprete Giovanni Battista Gobbi avvia un nuovo duomo in località Bastion. Il cantiere si ferma con la Grande Guerra, riprende nel dopoguerra e nel 1930 l'edificio viene destinato a tempio-ossario. Il Duomo rimane qui.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Duomo di Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Duomo_di_Bassano_del_Grappa"
+      }
+    },
+    {
+      "anno": "anni 1990",
+      "titolo": "Le torri tornano aperte",
+      "testo": "I restauri degli anni Novanta rendono visitabili la Torre dell'Ortazzo, la Torre di Ser Ivano e il Corpo di Guardia, che ospitano mostre e spettacoli di Operaestate.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Castello degli Ezzelini (Bassano del Grappa)»",
+        "url": "https://it.wikipedia.org/wiki/Castello_degli_Ezzelini_(Bassano_del_Grappa)"
+      },
+      "media": 1
+    }
+  ],
+  "media": [
+    {
+      "tipo": "immagine",
+      "titolo": "Il castello in una xilografia (datata 1901 su Commons)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa%2C_Castello_degli_Ezzelini_%28xilografia%29.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa%2C_Castello_degli_Ezzelini_%28xilografia%29.jpg",
+      "autore": "Autore sconosciuto",
+      "licenza": "Pubblico dominio",
+      "alt": "Xilografia in bianco e nero: le mura merlate e le torri del castello in cima al colle, sopra le case della città."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il Castello degli Ezzelini, 13 settembre 2023",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_-_Castello_degli_Ezzelini_-_2023-09-13_19-58-47_001.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Castello_degli_Ezzelini_-_2023-09-13_19-58-47_001.jpg",
+      "autore": "Bruschi alberto",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Il complesso del castello in mattoni e pietra, con una torre quadrata e un cipresso, sotto un cielo azzurro."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il camminamento fra le due mura",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Camminamento_fra_le_due_mura_del_castello_degli_Ezzelini.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Camminamento_fra_le_due_mura_del_castello_degli_Ezzelini.jpg",
+      "autore": "Ezio1937",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Un sentiero stretto tra l'erba corre fra due alte mura di pietra del castello."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "La parte alta della Torre dell'Ortazzo",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Parte_superiore_della_Torre_dell%27Ortazzo.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Parte_superiore_della_Torre_dell%27Ortazzo.jpg",
+      "autore": "Ezio1937",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "La sommità di una torre quadrata in pietra e mattoni, con una piccola finestra ad arco, vista dal basso."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il Duomo di Santa Maria in Colle",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Duomo_di_Santa_Maria_Assunta_in_Colle.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Duomo_di_Santa_Maria_Assunta_in_Colle.jpg",
+      "autore": "Gito Trevisan",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Il campanile in mattoni del Duomo tra gli alberi, al tramonto, con i colli sullo sfondo."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "L'interno del Duomo",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Vista_particolare_Interno_Duomo_S.M._in_Colle.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Vista_particolare_Interno_Duomo_S.M._in_Colle.jpg",
+      "autore": "Gito Trevisan",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "L'interno della chiesa visto verso l'alto: il soffitto con dipinti in cornici ovali e, in basso, candelieri e fiori."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il campanile del Duomo",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Duomo_campanile_bassano.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Duomo_campanile_bassano.jpg",
+      "autore": "Ezio1937",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Il campanile in mattoni del Duomo accanto a un alto cipresso, visto dal cortile."
+    },
+    {
+      "tipo": "video",
+      "titolo": "Castello degli Ezzelini: riaperto il camminamento tra le mura e il Corpo di Guardia (servizio del 3 marzo 2023)",
+      "url": "https://www.youtube-nocookie.com/embed/61rteLifD18",
+      "pagina": "https://www.youtube.com/watch?v=61rteLifD18",
+      "autore": "Rete Veneta",
+      "licenza": "Licenza standard YouTube (solo incorporato)"
+    },
+    {
+      "tipo": "video",
+      "titolo": "Via al restauro della Torre di Ser Ivano e della Porta delle Campanelle (servizio del 7 novembre 2024)",
+      "url": "https://www.youtube-nocookie.com/embed/bmJv2sGn704",
+      "pagina": "https://www.youtube.com/watch?v=bmJv2sGn704",
+      "autore": "Rete Veneta",
+      "licenza": "Licenza standard YouTube (solo incorporato)"
+    }
+  ],
+  "live": [],
+  "incertezze": [
+    "Sul nome «degli Ezzelini» due voci di Wikipedia si contraddicono: per una il castello non appartenne mai agli Ezzelini, per l'altra il vescovo di Vicenza lo donò a Ezzelino I nella seconda metà del XII secolo; nessuna delle due cita una fonte precisa.",
+    "La resa delle fortificazioni agli eserciti di Massimiliano I d'Asburgo, dopo la quale il castello perse la funzione militare, è datata 1508 dalla voce di Wikipedia sul castello, ma la guerra della Lega di Cambrai si combatté dal 1509: l'anno è da verificare."
+  ],
+  "landmark": "castello-ezzelini"
+}

@@ -1,0 +1,132 @@
+[
+  {
+    "id": "ponte-vecchio",
+    "file": "ponte-vecchio.svg",
+    "lat": 45.767517,
+    "lon": 11.731115,
+    "larghezzaMetri": 59.5,
+    "ancora": [
+      0.521,
+      0.5912
+    ],
+    "storia": "ponte-vecchio",
+    "nome": "Ponte Vecchio"
+  },
+  {
+    "id": "castello-ezzelini",
+    "file": "castello-ezzelini.svg",
+    "lat": 45.769077,
+    "lon": 11.732826,
+    "larghezzaMetri": 111.3,
+    "ancora": [
+      0.5191,
+      0.5091
+    ],
+    "storia": "castello-ezzelini",
+    "nome": "Castello degli Ezzelini e Duomo"
+  },
+  {
+    "id": "torre-civica",
+    "file": "torre-civica.svg",
+    "lat": 45.767163,
+    "lon": 11.735194,
+    "larghezzaMetri": 22.8,
+    "ancora": [
+      0.6484,
+      0.8862
+    ],
+    "storia": "torre-civica-piazze",
+    "nome": "Torre Civica"
+  },
+  {
+    "id": "museo-civico",
+    "file": "museo-civico.svg",
+    "lat": 45.766484,
+    "lon": 11.735459,
+    "larghezzaMetri": 83,
+    "ancora": [
+      0.4518,
+      0.7544
+    ],
+    "storia": "museo-civico",
+    "nome": "Museo Civico"
+  },
+  {
+    "id": "palazzo-sturm",
+    "file": "palazzo-sturm.svg",
+    "lat": 45.766187,
+    "lon": 11.731488,
+    "larghezzaMetri": 33.5,
+    "ancora": [
+      0.6119,
+      0.7281
+    ],
+    "storia": "palazzo-sturm",
+    "nome": "Palazzo Sturm"
+  },
+  {
+    "id": "king-kong-rhino",
+    "file": "king-kong-rhino.svg",
+    "lat": 45.766405,
+    "lon": 11.731351,
+    "larghezzaMetri": 13.8,
+    "ancora": [
+      0.5455,
+      0.825
+    ],
+    "storia": "king-kong-rhino",
+    "nome": "King Kong Rhino"
+  },
+  {
+    "id": "nardini-basso",
+    "file": "nardini-basso.svg",
+    "lat": 45.767441,
+    "lon": 11.731669,
+    "larghezzaMetri": 26.3,
+    "ancora": [
+      0.6762,
+      0.7692
+    ],
+    "storia": "nardini-basso",
+    "nome": "Grapperia Nardini al Ponte"
+  },
+  {
+    "id": "tempio-ossario",
+    "file": "tempio-ossario.svg",
+    "lat": 45.76339,
+    "lon": 11.733527,
+    "larghezzaMetri": 78.8,
+    "ancora": [
+      0.5333,
+      0.6904
+    ],
+    "storia": "tempio-ossario",
+    "nome": "Tempio Ossario"
+  },
+  {
+    "id": "porta-dieda",
+    "file": "porta-dieda.svg",
+    "lat": 45.764928,
+    "lon": 11.735988,
+    "larghezzaMetri": 18.8,
+    "ancora": [
+      0.6133,
+      0.6797
+    ],
+    "storia": "mura-porte",
+    "nome": "Porta Dieda"
+  },
+  {
+    "id": "bolle-nardini",
+    "file": "bolle-nardini.svg",
+    "lat": 45.740129,
+    "lon": 11.754051,
+    "larghezzaMetri": 53,
+    "ancora": [
+      0.5,
+      0.512
+    ],
+    "storia": "bolle-nardini",
+    "nome": "Bolle di Nardini"
+  }
+]

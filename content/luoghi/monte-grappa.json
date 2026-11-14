@@ -1,0 +1,180 @@
+{
+  "id": "monte-grappa",
+  "nome": "Monte Grappa e Sacrario militare",
+  "sottotitolo": "La montagna che ha dato il nome alla città",
+  "genere": "luogo",
+  "lat": 45.87056,
+  "lon": 11.79972,
+  "intro": "Dal Belvedere accanto a Porta delle Grazie il Massiccio del Grappa si vede sulla destra. Non è territorio di Bassano, ma la città ne porta il nome dal 1928: lassù, nel 1917, si era fermato il fronte, a pochi chilometri dalla città.",
+  "tappe": [
+    {
+      "anno": "4 agosto 1901",
+      "titolo": "Una Madonna sulla vetta",
+      "testo": "Sulla cima viene posta la statua della Madonna del Grappa. A collocarla è il patriarca di Venezia Giuseppe Sarto, il futuro papa Pio X.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Sacrario militare del monte Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Sacrario_militare_del_monte_Grappa"
+      }
+    },
+    {
+      "anno": "7 ottobre 1917",
+      "titolo": "La Strada Cadorna",
+      "testo": "Viene ultimata la strada voluta dal generale Luigi Cadorna per rifornire le linee difensive. È ancora la via d'accesso al Sacrario.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Sacrario militare del monte Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Sacrario_militare_del_monte_Grappa"
+      }
+    },
+    {
+      "anno": "1917",
+      "titolo": "Bassano in prima linea",
+      "testo": "Dopo Caporetto il fronte si ferma sul Grappa, a pochi chilometri dalla città. Più di 7.000 persone vengono evacuate da Bassano.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+      }
+    },
+    {
+      "anno": "novembre 1917",
+      "titolo": "La battaglia d'arresto",
+      "testo": "Gli attacchi austro-tedeschi sul massiccio vengono contenuti. Il 26 novembre fallisce l'assalto di 15 battaglioni a Col della Berretta.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Prima battaglia del Piave»",
+        "url": "https://it.wikipedia.org/wiki/Prima_battaglia_del_Piave"
+      }
+    },
+    {
+      "anno": "24 ottobre - 3 novembre 1918",
+      "titolo": "La seconda battaglia del Grappa",
+      "testo": "Durante l'offensiva di Vittorio Veneto la 4ª Armata del generale Gaetano Giardino attacca per giorni, finché gli austro-ungarici si ritirano. Gli italiani contano 5.200 morti, 18.500 feriti e oltre 600 dispersi.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Seconda battaglia del monte Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Seconda_battaglia_del_monte_Grappa"
+      },
+      "media": 5
+    },
+    {
+      "anno": "dopo il 1918",
+      "titolo": "Città di prima linea",
+      "testo": "Il Comune si fregia della Croce di guerra concessa alla «Città di prima linea» per il conflitto 1915-1918.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+      }
+    },
+    {
+      "anno": "1928",
+      "titolo": "Bassano prende il nome",
+      "testo": "La città prende il nome di Bassano del Grappa.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+      }
+    },
+    {
+      "anno": "1932-1935",
+      "titolo": "Il Sacrario sulla cima",
+      "testo": "Sulla vetta si costruisce il Sacrario, progettato dall'architetto Giovanni Greppi con lo scultore Giannino Castiglioni. Viene inaugurato il 22 settembre 1935.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Sacrario militare del monte Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Sacrario_militare_del_monte_Grappa"
+      },
+      "media": 0
+    },
+    {
+      "anno": "settembre 1944",
+      "titolo": "Di nuovo la guerra",
+      "testo": "Lo stesso massiccio è teatro del rastrellamento contro i partigiani che culmina nelle impiccagioni di Bassano.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Operazione Piave»",
+        "url": "https://it.wikipedia.org/wiki/Operazione_Piave"
+      }
+    },
+    {
+      "anno": "oggi",
+      "titolo": "La Via Eroica",
+      "testo": "Il Sacrario custodisce i resti di soldati italiani e austro-ungarici. Tra i due ossari corre la Via Eroica: 300 metri, con 14 cippi che portano i nomi delle cime dei combattimenti.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Sacrario militare del monte Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Sacrario_militare_del_monte_Grappa"
+      },
+      "media": 1
+    }
+  ],
+  "media": [
+    {
+      "tipo": "immagine",
+      "titolo": "Il Sacrario militare del monte Grappa",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sacrario_militare_del_monte_Grappa.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Sacrario_militare_del_monte_Grappa.jpg",
+      "autore": "Syrio",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "La cima erbosa del monte con i gradoni di pietra del Sacrario, una strada bianca che sale e un cielo coperto di nuvole."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "La Via Eroica",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sacrario_militare_del_monte_Grappa_-_Via_Eroica_01.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Sacrario_militare_del_monte_Grappa_-_Via_Eroica_01.jpg",
+      "autore": "Syrio",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Un largo viale lastricato in pietra che corre dritto sulla cresta verso le costruzioni del Sacrario, sotto le nuvole."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il Portale Roma",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sacrario_militare_del_monte_Grappa_-_Portale_Roma.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Sacrario_militare_del_monte_Grappa_-_Portale_Roma.jpg",
+      "autore": "Syrio",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Un edificio monumentale in pietra grigia, squadrato, con un portone scuro al centro e gradinate ai lati."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "La Via Eroica sotto la neve",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sacrario_militare_del_monte_Grappa%2C_innevato_-_Via_Eroica_02.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Sacrario_militare_del_monte_Grappa%2C_innevato_-_Via_Eroica_02.jpg",
+      "autore": "Syrio",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Il pendio della cima coperto di neve, con una costruzione in pietra sulla destra e il cielo sereno."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "L'ossario di Cima Grappa innevato",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ossario_di_cima_Grappa.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Ossario_di_cima_Grappa.jpg",
+      "autore": "Favarin Matteo",
+      "licenza": "Pubblico dominio",
+      "alt": "Una distesa di neve sulla cima, una costruzione in pietra sulla destra e grandi nuvole bianche all'orizzonte."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il Monte Grappa visto da Col Moschino, sopra la valle di Santa Felicita, dipinto di Giulio Aristide Sartorio (1918)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Mount_Grappa_as_seen_from_Col_Moschino_over_the_Santa_Felicita_valley_%281918%29%2C_by_Giulio_Aristide_Sartorio.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Mount_Grappa_as_seen_from_Col_Moschino_over_the_Santa_Felicita_valley_%281918%29%2C_by_Giulio_Aristide_Sartorio.jpg",
+      "autore": "Giulio Aristide Sartorio",
+      "licenza": "Pubblico dominio",
+      "alt": "Dipinto dai toni scuri: il profilo massiccio della montagna sotto un cielo blu cupo."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Trincee austriache sull'Asolone, fotografia aerea della Grande Guerra",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/WWI_-_Battle_of_the_Piave_River_-_Monte_Grappa_area_-_Austrian_trenches_on_the_Asolone.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:WWI_-_Battle_of_the_Piave_River_-_Monte_Grappa_area_-_Austrian_trenches_on_the_Asolone.jpg",
+      "autore": "Fotografi dell'Esercito Italiano 1915-1918 (da esercito.difesa.it)",
+      "licenza": "CC BY 2.5",
+      "alt": "Fotografia aerea in bianco e nero: le linee chiare delle trincee segnano i crinali e i pendii della montagna."
+    }
+  ],
+  "live": [
+    {
+      "tipo": "link",
+      "etichetta": "Webcam e meteo di Cima Grappa",
+      "url": "https://www.cimagrappa.it/meteo.php",
+      "nota": "Sito esterno (Rifugio Bassano, Meteo Cima Grappa): immagini delle webcam e meteo in tempo reale dalla vetta."
+    }
+  ],
+  "incertezze": [
+    "Sul nome della città prima del 1928 la voce di Wikipedia su Bassano dice in un punto «Bassano Veneto» e in un altro «Bassano»."
+  ]
+}

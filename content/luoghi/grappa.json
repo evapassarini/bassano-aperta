@@ -1,0 +1,130 @@
+{
+  "id": "grappa",
+  "nome": "La grappa a Bassano",
+  "sottotitolo": "Un distillato, un ponte e un nome che inganna",
+  "genere": "tema",
+  "intro": "Bassano del Grappa, la grappa: sembra ovvio che una parola venga dall'altra, e invece no. Il nome del distillato non c'entra con il monte né con la città. Però è qui, all'imbocco del Ponte Vecchio, che la grappa ha trovato casa. Molti dei fatti che seguono vengono dalle aziende stesse, e lo diciamo ogni volta.",
+  "tappe": [
+    {
+      "anno": "Il nome",
+      "titolo": "Una parola lombarda",
+      "testo": "«Grappa» viene dal termine lombardo «grapa», che in origine indica il raspo dell'uva. Con il Monte Grappa l'etimologia non ha niente a che fare.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Grappa"
+      }
+    },
+    {
+      "anno": "Dal 1000",
+      "titolo": "L'arte arriva da Salerno",
+      "testo": "Secondo il Museo Poli, dall'anno Mille in poi la Scuola Medica Salernitana diffonde lungo la penisola la cultura della distillazione.",
+      "fonte": {
+        "titolo": "Poli Museo della Grappa (grappa.com), «Chi ha inventato la grappa?»",
+        "url": "https://grappa.com/en/news/who-invented-grappa"
+      }
+    },
+    {
+      "anno": "1532",
+      "titolo": "Il libro di un medico padovano",
+      "testo": "Viene pubblicato il «De arte conficendi aquam vitae» di Michele Savonarola, medico padovano vissuto nel Quattrocento: spiega come ottenere l'acquavite dal vino e dalle vinacce. Lo racconta il Museo Poli.",
+      "fonte": {
+        "titolo": "Poli Museo della Grappa (grappa.com), «Chi ha inventato la grappa?»",
+        "url": "https://grappa.com/en/news/who-invented-grappa"
+      }
+    },
+    {
+      "anno": "1779",
+      "titolo": "Una distilleria che sta ferma",
+      "testo": "Bortolo Nardini apre all'imbocco del Ponte Vecchio una distilleria stabile, invece di girare con l'alambicco mobile di cascina in cascina.",
+      "fonte": {
+        "titolo": "Linkiesta, articolo su Nardini (luglio 2026)",
+        "url": "https://www.linkiesta.it/2026/07/nardini-piu-antica-distilleria-italia-futuro-tempo/"
+      }
+    },
+    {
+      "anno": "1860",
+      "titolo": "La grappa a vapore",
+      "testo": "A Bassano il nipote di Bortolo Nardini è tra i primi a introdurre la distillazione a vapore nella produzione della grappa.",
+      "fonte": {
+        "titolo": "Difford's Guide, storia della distilleria Nardini",
+        "url": "https://www.diffordsguide.com/producers/642/nardini-distillery/history"
+      }
+    },
+    {
+      "anno": "1898",
+      "titolo": "Fine degli alambicchi ambulanti",
+      "testo": "La distillazione ambulante viene abolita per ragioni fiscali, e anche GioBatta Poli passa a un alambicco fisso.",
+      "fonte": {
+        "titolo": "Poli Museo della Grappa, racconto su Google Arts & Culture",
+        "url": "https://artsandculture.google.com/story/1gVhNEaZ-ZJuJA"
+      }
+    },
+    {
+      "anno": "1928",
+      "titolo": "Bassano «del Grappa»",
+      "testo": "La città cambia nome e diventa Bassano del Grappa, in ricordo dei combattimenti della Grande Guerra sul Monte Grappa. Il nome c'entra con la montagna, non con il distillato.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+      }
+    },
+    {
+      "anno": "1989",
+      "titolo": "Un nome solo per l'Italia",
+      "testo": "Il regolamento CEE n. 1576/89 del 29 maggio 1989 riserva il nome «grappa» all'acquavite di vinaccia prodotta in Italia.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Grappa"
+      }
+    },
+    {
+      "anno": "1993",
+      "titolo": "Un museo di fronte al ponte",
+      "testo": "Di fronte al ponte apre il Poli Museo della Grappa, a pochi metri dalla storica Grapperia Nardini.",
+      "fonte": {
+        "titolo": "Museimpresa, scheda «Poli Museo della Grappa»",
+        "url": "https://museimpresa.com/?p=31780"
+      }
+    },
+    {
+      "anno": "2008",
+      "titolo": "Grappa, indicazione geografica italiana",
+      "testo": "Il regolamento (CE) n. 110/2008 sostituisce quello del 1989 e fa di «grappa» un'indicazione geografica della sola Italia.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Grappa"
+      }
+    }
+  ],
+  "media": [
+    {
+      "tipo": "immagine",
+      "titolo": "L'alambicco artigianale delle Distillerie Poli a Schiavon, non a Bassano (2000)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Poli_Distillerie_Alambic_2000_ok.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Poli_Distillerie_Alambic_2000_ok.jpg",
+      "autore": "GrappaCom",
+      "licenza": "CC BY-SA 3.0",
+      "alt": "Interno di una distilleria: alte colonne e caldaie di rame lucido, un fornello in mattoni e una fila di recipienti scuri lungo la parete, sopra un pavimento rosso."
+    },
+    {
+      "tipo": "video",
+      "titolo": "Chi ha inventato la Grappa?",
+      "url": "https://www.youtube-nocookie.com/embed/1jFbsPYYgBo",
+      "pagina": "https://www.youtube.com/watch?v=1jFbsPYYgBo",
+      "autore": "PoliDistillerie",
+      "licenza": "Licenza standard YouTube (solo incorporato)"
+    },
+    {
+      "tipo": "video",
+      "titolo": "La vinaccia, la materia prima della Grappa",
+      "url": "https://www.youtube-nocookie.com/embed/-RP6F2RqYCo",
+      "pagina": "https://www.youtube.com/watch?v=-RP6F2RqYCo",
+      "autore": "PoliDistillerie",
+      "licenza": "Licenza standard YouTube (solo incorporato)"
+    }
+  ],
+  "live": [],
+  "incertezze": [
+    "Gran parte dei fatti storici sulla grappa viene da fonti aziendali (Nardini, Poli) e non è verificata in modo indipendente: per esempio il primato di «più antica distilleria d'Italia», dichiarato da Nardini."
+  ]
+}

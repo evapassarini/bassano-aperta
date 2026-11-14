@@ -1,0 +1,99 @@
+{
+  "id": "bolle-nardini",
+  "nome": "Bolle di Nardini",
+  "sottotitolo": "Due bolle di vetro sospese, firmate Fuksas",
+  "genere": "luogo",
+  "lat": 45.7401,
+  "lon": 11.75409,
+  "intro": "A circa tre chilometri dal centro, nella sede produttiva di Nardini, due bolle di vetro stanno sospese sopra uno specchio d'acqua. Dentro ci sono i laboratori del centro ricerche; sotto, scavato nel terreno, un auditorium. Non sono né il Nardini Alto né il Nardini Basso: sono un'altra cosa, un centro ricerche con auditorium.",
+  "tappe": [
+    {
+      "anno": "1964",
+      "titolo": "La distilleria si sposta",
+      "testo": "Secondo Difford's Guide, la famiglia Nardini trasferisce la distilleria nella sede attuale, appena fuori Bassano.",
+      "fonte": {
+        "titolo": "Difford's Guide, storia della distilleria Nardini",
+        "url": "https://www.diffordsguide.com/producers/642/nardini-distillery/history"
+      }
+    },
+    {
+      "anno": "Primi anni Ottanta",
+      "titolo": "Un parco di Porcinai",
+      "testo": "Intorno allo stabilimento viene realizzato un parco progettato dal paesaggista Pietro Porcinai, come racconta l'azienda.",
+      "fonte": {
+        "titolo": "Nardini, pagina «I luoghi» del sito aziendale",
+        "url": "https://www.nardini.it/places?lang=en_US"
+      }
+    },
+    {
+      "anno": "2001",
+      "titolo": "Il progetto dello Studio Fuksas",
+      "testo": "Il progetto delle Bolle porta la data 2001. A commissionarlo sono Giuseppe e Cristina Nardini.",
+      "fonte": {
+        "titolo": "Divisare, «Le Bolle Nardini» (Studio Fuksas)",
+        "url": "https://divisare.com/projects/1995-studio-fuksas-gabriele-basilico-le-bolle-nardini"
+      }
+    },
+    {
+      "anno": "2002-2004",
+      "titolo": "I numeri dell'opera",
+      "testo": "Lo Studio Fuksas indica come periodo dell'opera il 2002-2004, con un costo di 6 milioni di euro e una superficie di 2.496 metri quadrati.",
+      "fonte": {
+        "titolo": "Studio Fuksas, scheda «Nardini Research Centre and Auditorium»",
+        "url": "https://fuksas.com/?p=697"
+      }
+    },
+    {
+      "anno": "2004",
+      "titolo": "L'apertura a ottobre",
+      "testo": "L'edificio apre nell'ottobre 2004.",
+      "fonte": {
+        "titolo": "Divisare, «Le Bolle Nardini» (Studio Fuksas)",
+        "url": "https://divisare.com/projects/1995-studio-fuksas-gabriele-basilico-le-bolle-nardini"
+      }
+    },
+    {
+      "anno": "2004",
+      "titolo": "Per i 225 anni",
+      "testo": "Secondo l'azienda, le Bolle vengono presentate al pubblico per i 225 anni di Nardini.",
+      "fonte": {
+        "titolo": "Nardini, pagina «I luoghi» del sito aziendale",
+        "url": "https://www.nardini.it/places?lang=en_US"
+      }
+    },
+    {
+      "anno": "2004",
+      "titolo": "Un mondo sospeso, uno sommerso",
+      "testo": "Il progetto ha due «mondi». Quello sospeso: due bolle ellissoidali trasparenti con i laboratori del centro ricerche. Quello sommerso, scavato nel terreno «come un canyon naturale»: un auditorium da 100 posti e una rampa che può fare da palco all'aperto.",
+      "fonte": {
+        "titolo": "Studio Fuksas, scheda «Nardini Research Centre and Auditorium»",
+        "url": "https://fuksas.com/?p=697"
+      }
+    },
+    {
+      "anno": "2004",
+      "titolo": "Sospese sopra l'acqua",
+      "testo": "Le bolle sono sollevate su sostegni sopra uno specchio d'acqua, che si riflette nell'involucro di vetro e acciaio.",
+      "fonte": {
+        "titolo": "ArchDaily, «Nardini Grappa Distillery \"Bolle\"» (2012)",
+        "url": "https://www.archdaily.com/233532/nardini-grappa-distillery-bolle-massimiliano-and-doriana-fuksas"
+      }
+    },
+    {
+      "anno": "2010",
+      "titolo": "Un convegno sul 2050",
+      "testo": "Nel novembre 2010 le Bolle ospitano il convegno internazionale «Benvenuti al Capodanno 2050», dedicato a come cambierà la popolazione nei decenni a venire.",
+      "fonte": {
+        "titolo": "ItalyTraveller, «Bassano e la sua grappa»",
+        "url": "https://www.italytraveller.com/it/e/bassano-e-la-sua-grappa"
+      }
+    }
+  ],
+  "media": [],
+  "live": [],
+  "incertezze": [
+    "Autori: ArchDaily attribuisce il progetto a Massimiliano e Doriana Fuksas; Wikipedia in italiano accredita solo Massimiliano Fuksas.",
+    "Trasferimento della distilleria: il 1964 viene da Difford's Guide e non è confermato dall'azienda."
+  ],
+  "landmark": "bolle-nardini"
+}

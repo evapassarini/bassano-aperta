@@ -1,0 +1,253 @@
+{
+  "id": "ponte-vecchio",
+  "nome": "Ponte Vecchio",
+  "sottotitolo": "Il ponte di legno di Palladio, detto anche Ponte degli Alpini",
+  "genere": "luogo",
+  "lat": 45.76751,
+  "lon": 11.73111,
+  "intro": "Ponte Vecchio, Ponte di Bassano, Ponte degli Alpini: tre nomi per lo stesso ponte coperto di legno sul Brenta. Piene, incendi e guerre lo hanno abbattuto più volte, e ogni volta la città lo ha rifatto com'era, seguendo il disegno che Andrea Palladio consegnò nel 1569.",
+  "tappe": [
+    {
+      "anno": "1209",
+      "titolo": "La prima traccia scritta",
+      "testo": "Il ponte compare per la prima volta nelle pagine del cronista Gerardo Maurisio. Nel 1259 gli statuti di Bassano parlano della sua manutenzione e dei furti di legname: era già di legno e apparteneva alla città, che pagava le riparazioni e riscuoteva il pedaggio.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Ponte Vecchio (Bassano del Grappa)»",
+        "url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
+      }
+    },
+    {
+      "anno": "1511",
+      "titolo": "Bruciato per coprire la fuga",
+      "testo": "Durante la guerra della Lega di Cambrai le truppe francesi di Jacques de La Palice danno fuoco al ponte per sfuggire all'esercito imperiale.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Ponte Vecchio (Bassano del Grappa)»",
+        "url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
+      }
+    },
+    {
+      "anno": "1567-1569",
+      "titolo": "Palladio e il no alla pietra",
+      "testo": "Nell'ottobre 1567 una piena del Brenta porta via il ponte. Palladio propone tre arcate in pietra, come i ponti romani, ma il Consiglio cittadino boccia l'idea e gli chiede di restare fedele alla struttura di sempre. Nell'estate del 1569 arriva il progetto definitivo: un ponte di legno con colonne tuscaniche a reggere il tetto, che l'anno dopo Palladio pubblica nei Quattro libri dell'architettura.",
+      "fonte": {
+        "titolo": "Palladio Museum (CISA), scheda del ponte di Bassano",
+        "url": "https://mediateca.palladiomuseum.org/palladio/opera.php?id=29"
+      },
+      "media": 0
+    },
+    {
+      "anno": "1748-1821",
+      "titolo": "Due volte rifatto uguale",
+      "testo": "Il 19 agosto 1748 una piena fa crollare il ponte palladiano, dopo quasi duecento anni: lo ricostruisce Bartolomeo Ferracina, rispettando la struttura di Palladio. Nel 1813 il viceré Eugenio di Beauharnais lo fa incendiare, e nel 1821 Angelo Casarotti lo rifà nelle stesse forme.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Ponte Vecchio (Bassano del Grappa)»",
+        "url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
+      },
+      "media": 3
+    },
+    {
+      "anno": "1915-1918",
+      "titolo": "La strada per l'Altopiano",
+      "testo": "Durante la Grande Guerra le truppe italiane attraversano il ponte per salire all'Altopiano dei Sette Comuni.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Ponte Vecchio (Bassano del Grappa)»",
+        "url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
+      }
+    },
+    {
+      "anno": "Prima guerra mondiale",
+      "titolo": "Un canto con bandiera nera",
+      "testo": "Tra gli Alpini si canta «Sul ponte di Bassano, bandiera nera». Nel 1940-41 testo e melodia saranno ripresi per «Sul ponte di Perati», il canto della brigata Julia. Le fonti non indicano l'autore.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Sul ponte di Perati»",
+        "url": "https://it.wikipedia.org/wiki/Sul_ponte_di_Perati"
+      },
+      "media": 9
+    },
+    {
+      "anno": "1945",
+      "titolo": "Il ponte distrutto",
+      "testo": "Negli ultimi mesi della guerra il ponte viene distrutto. Su quando, come e per mano di chi le fonti raccontano cose diverse: lo spieghiamo più sotto, in «Le fonti non concordano».",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Ponte Vecchio (Bassano del Grappa)»",
+        "url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
+      }
+    },
+    {
+      "anno": "1948",
+      "titolo": "Di nuovo in piedi",
+      "testo": "Il 3 ottobre il ponte, ricostruito secondo il disegno di Palladio, viene inaugurato alla presenza di Alcide De Gasperi. Su chi lo abbia materialmente ricostruito e pagato le fonti non concordano.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Ponte Vecchio (Bassano del Grappa)»",
+        "url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
+      }
+    },
+    {
+      "anno": "1966-2019",
+      "titolo": "La piena e la legge",
+      "testo": "Il 4 novembre 1966 una piena eccezionale danneggia gravemente il ponte, che viene poi restaurato nelle strutture; altri interventi straordinari seguono nel 1990-1993 e nel 2003-2006. Con la legge n. 65 del 5 luglio 2019 il Ponte Vecchio diventa monumento nazionale.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Ponte Vecchio (Bassano del Grappa)»",
+        "url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
+      }
+    },
+    {
+      "anno": "2015-2021",
+      "titolo": "Il grande restauro",
+      "testo": "A fine 2015 parte il cantiere: il ponte viene sollevato di circa 45 centimetri nel punto in cui aveva ceduto, e le fondazioni in legno, ormai degradate, sono sostituite con travi reticolari e pilastri in acciaio. La ditta Inco di Pergine Valsugana lo riconsegna alla città il 14 maggio 2021; l'inaugurazione ufficiale è il 3 ottobre 2021.",
+      "fonte": {
+        "titolo": "il Dolomiti, «Dopo sei anni il Ponte degli Alpini di Bassano del Grappa è rinato» (2021)",
+        "url": "https://www.ildolomiti.it/societa/2021/dopo-sei-anni-il-ponte-degli-alpini-di-bassano-del-grappa-e-rinato-grazie-anche-a-una-ditta-trentina"
+      },
+      "media": 6
+    }
+  ],
+  "media": [
+    {
+      "tipo": "immagine",
+      "titolo": "Palladio, I quattro libri dell'architettura (1570), Libro III: la tavola del ponte di Bassano",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pallarch3-2.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Pallarch3-2.jpg",
+      "autore": "Andrea Palladio",
+      "licenza": "Pubblico dominio",
+      "alt": "Pagina a stampa con il disegno tecnico del ponte: in alto il fianco con la copertura sorretta da colonnine e i piloni di pali, in basso la pianta e la sezione con il tetto a due falde."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Palladio, I quattro libri dell'architettura (1570), Libro III: la pagina sul ponte di Bassano",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pallarch3-1.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Pallarch3-1.jpg",
+      "autore": "Andrea Palladio",
+      "licenza": "Pubblico dominio",
+      "alt": "Pagina a stampa fitta di testo, intitolata «Del ponte di Bassano», con un capolettera decorato e in fondo la legenda delle lettere usate nel disegno."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il ponte di Bassano nel disegno di Ottavio Bertotti Scamozzi (1773)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ponte_Vecchio_Bassano_Bertotti_Scamozzi_1773.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Ponte_Vecchio_Bassano_Bertotti_Scamozzi_1773.jpg",
+      "autore": "Ottavio Bertotti Scamozzi",
+      "licenza": "Pubblico dominio",
+      "alt": "Disegno tecnico in bianco e nero: il fianco del ponte coperto con cinque campate, sotto la pianta con le quattro file di pali e la sezione trasversale."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Ponte di Bassano, incisione di Francesco Corsi (1845)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ponte_di_Bassano_(incisione).jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Ponte_di_Bassano_(incisione).jpg",
+      "autore": "Francesco Corsi (incisore)",
+      "licenza": "CC BY 4.0",
+      "alt": "Incisione ottocentesca: il ponte coperto attraversa il Brenta sopra una traversa d'acqua bassa, con le case, le torri della città e i monti sullo sfondo."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il ponte coperto e il castello, xilografia (1901)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa%2C_il_ponte_coperto_ed_il_castello_(xilografia).jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa%2C_il_ponte_coperto_ed_il_castello_(xilografia).jpg",
+      "autore": "Autore sconosciuto",
+      "licenza": "Pubblico dominio",
+      "alt": "Xilografia in bianco e nero: il ponte coperto visto dal fiume, con le case che salgono sulla riva e in alto le torri della città."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il ponte coperto sul Brenta e il castello, xilografia di Giuseppe Barberis (1903)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_ponte_coperto_sul_Brenta_e_Castello.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_ponte_coperto_sul_Brenta_e_Castello.jpg",
+      "autore": "Giuseppe Barberis",
+      "licenza": "Pubblico dominio",
+      "alt": "Xilografia in bianco e nero: il ponte coperto sul Brenta visto da valle, due piccole figure in mezzo all'acqua bassa, le case sulla riva e le torri in alto."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il cantiere del Ponte Vecchio visto dall'alto (28 dicembre 2018)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Lavori_Ponte_Vecchio.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Lavori_Ponte_Vecchio.jpg",
+      "autore": "Slapmysalami",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Veduta aerea di Bassano: il Brenta attraversa i tetti rossi della città e al centro si vede il ponte in cantiere, con il letto del fiume in parte all'asciutto."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il Ponte Vecchio dopo il restauro (31 ottobre 2022)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ponte_Vecchio_(Bassano_del_Grappa)_01.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Ponte_Vecchio_(Bassano_del_Grappa)_01.jpg",
+      "autore": "Superchilum",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Il ponte coperto, rosso scuro, si specchia nel Brenta calmo; ai lati le case affacciate sull'acqua, sullo sfondo i monti."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il Ponte degli Alpini da vicino (settembre 2007)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_z01.JPG?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_z01.JPG",
+      "autore": "Zyance",
+      "licenza": "CC BY 3.0",
+      "alt": "Il ponte visto da vicino dal livello del fiume: i piloni di legno a forma di prua, il parapetto, la copertura sorretta da colonnine e dietro le case e le torri della città."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Targa sul Ponte degli Alpini dedicata ai canti (fotografia del 2025)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_-_Targa_sul_ponte_degli_Alpini_01.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Targa_sul_ponte_degli_Alpini_01.jpg",
+      "autore": "Syrio",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Lapide di marmo murata su una parete gialla: un'iscrizione in lettere maiuscole ricorda i canti che risuonarono sul vecchio ponte, con le date 1915, 1924 e 1918 incise in basso."
+    },
+    {
+      "tipo": "audio",
+      "titolo": "Registrazione storica di \"Sul ponte di Bassano\" (Coro ICAM, etichetta Vedette)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/ICBSA_Coro_ICAM_-_Sul_ponte_di_Bassano.oga",
+      "pagina": "https://commons.wikimedia.org/wiki/File:ICBSA_Coro_ICAM_-_Sul_ponte_di_Bassano.oga",
+      "autore": "Coro ICAM, etichetta Vedette (fondo ICBSA)",
+      "licenza": "CC BY-SA 4.0"
+    },
+    {
+      "tipo": "audio",
+      "titolo": "Registrazione storica di \"Sul ponte di Bassano\" (Coro ex combattenti, etichetta Columbia)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/ICBSA_Coro_ex_combattenti_-_Sul_ponte_di_Bassano.oga",
+      "pagina": "https://commons.wikimedia.org/wiki/File:ICBSA_Coro_ex_combattenti_-_Sul_ponte_di_Bassano.oga",
+      "autore": "Coro ex combattenti, etichetta Columbia (fondo ICBSA)",
+      "licenza": "CC BY-SA 4.0"
+    },
+    {
+      "tipo": "video",
+      "titolo": "Cinegiornale: «Bassano del Grappa: ricostruito lo storico ponte»",
+      "url": "https://www.youtube-nocookie.com/embed/w3DLmXwMgE0",
+      "pagina": "https://www.youtube.com/watch?v=w3DLmXwMgE0",
+      "autore": "Archivio Luce Cinecittà",
+      "licenza": "Licenza standard YouTube (solo incorporato)"
+    },
+    {
+      "tipo": "video",
+      "titolo": "TG Bassano del 13 febbraio 2019: dentro il cantiere del Ponte Vecchio",
+      "url": "https://www.youtube-nocookie.com/embed/TWa0GW8GG90",
+      "pagina": "https://www.youtube.com/watch?v=TWa0GW8GG90",
+      "autore": "Rete Veneta",
+      "licenza": "Licenza standard YouTube (solo incorporato)"
+    },
+    {
+      "tipo": "video",
+      "titolo": "Servizio del 3 ottobre 2020 per i 72 anni dalla ricostruzione del ponte",
+      "url": "https://www.youtube-nocookie.com/embed/SPREnPFTbnQ",
+      "pagina": "https://www.youtube.com/watch?v=SPREnPFTbnQ",
+      "autore": "Rete Veneta",
+      "licenza": "Licenza standard YouTube (solo incorporato)"
+    }
+  ],
+  "live": [
+    {
+      "tipo": "brenta",
+      "nota": "Il livello del Brenta è misurato dall'idrometro ARPAV di Ca' Barzizza, circa 1 km a monte del ponte: non è il livello sotto il ponte. I dati non sono validati. Sul Ponte Vecchio non esiste una webcam funzionante: per questo qui non trovi immagini in diretta."
+    }
+  ],
+  "incertezze": [
+    "Distruzione del 1945: Wikipedia, che cita l'Enciclopedia dell'Antifascismo e la targa sul ponte, parla di un sabotaggio partigiano il 17 febbraio 1945; il Dolomiti e la scheda del Palladio Museum attribuiscono la distruzione alle truppe tedesche in ritirata, il primo con la data del 29 aprile 1945; un altro articolo cita bombardamenti alleati. Potrebbero essere due episodi distinti, ma non è confermato.",
+    "Wikipedia riporta anche che, dopo l'esplosione di febbraio, tre partigiani furono fucilati sul ponte per rappresaglia: la voce in italiano la attribuisce ai fascisti, quella in inglese ai nazisti.",
+    "Ricostruzione del 1948: secondo Wikipedia i lavori furono dell'impresa Giulio Tessarolo & Figli di Rosà, con molti operai reduci alpini, e il ponte «rifatto dagli Alpini» è una leggenda; il Dolomiti scrive invece che fu ricostruito e pagato dagli Alpini.",
+    "Nome «degli Alpini»: la dedica del 1928 alla memoria dei soldati, e in particolare degli Alpini, è riportata da Wikipedia senza nota e ripresa da il Dolomiti; manca una fonte primaria. Che il nome venga anche dalla ricostruzione del 1948 è una lettura corrente, non un dato documentato.",
+    "«Sul ponte di Bassano»: esistono due canzoni con questo titolo, un lamento alpino e una canzone d'amore. Autore e data del canto alpino non sono verificati (le fonti dicono «durante» o «alla fine» della Prima guerra mondiale, una indica il 1916). Delle due registrazioni storiche qui sotto non è stato accertato quale delle due canzoni contengano, né la data.",
+    "Restauro 2015-2021: durata e costo cambiano da un articolo all'altro (sei o sette anni). Non c'è una fonte del Comune, quindi qui il costo non è indicato.",
+    "Cinegiornale dell'Archivio Luce: la pagina del video non indica la data originale del filmato."
+  ],
+  "landmark": "ponte-vecchio"
+}

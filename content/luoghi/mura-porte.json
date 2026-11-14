@@ -1,0 +1,156 @@
+{
+  "id": "mura-porte",
+  "nome": "Mura e porte della città",
+  "sottotitolo": "Porta Dieda, Porta delle Grazie e le cinte che crescevano con i borghi",
+  "genere": "luogo",
+  "lat": 45.764928,
+  "lon": 11.736005,
+  "intro": "Bassano è cresciuta a cerchi: ogni volta che i borghi uscivano dalle mura, se ne costruivano di nuove. Di quelle cinte restano tratti di muro e due porte del Cinquecento, una affrescata e una con le colonne.",
+  "tappe": [
+    {
+      "anno": "XIII secolo",
+      "titolo": "Una cinta per i borghi",
+      "testo": "Una nuova cinta di mura protegge i borghi cresciuti fuori dal primo nucleo, quello attorno al castello.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+      }
+    },
+    {
+      "anno": "XIV secolo",
+      "titolo": "Il castello dei Berri",
+      "testo": "A sud i padovani costruiscono il Castello Inferiore, detto «dei Berri», per proteggere i nuovi borghi sorti fuori le mura.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+      }
+    },
+    {
+      "anno": "1389",
+      "titolo": "La cinta dei Visconti",
+      "testo": "Gian Galeazzo Visconti fa erigere una nuova cinta, che ingloba il Castello Inferiore. Il castello poi cade in rovina e al suo posto sorgono case.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+      }
+    },
+    {
+      "anno": "fine XIV secolo",
+      "titolo": "L'ultimo giro di mura",
+      "testo": "L'ultimo ampliamento delle mura è di fine Trecento. Se ne vedono ancora dei tratti in Viale delle Fosse.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+      }
+    },
+    {
+      "anno": "1541",
+      "titolo": "La porta del podestà Diedo",
+      "testo": "Il podestà Domenico Diedo fa aprire la porta che porta ancora il suo nome.",
+      "fonte": {
+        "titolo": "Regione del Veneto, Veneto Around Me, scheda di Porta Dieda",
+        "url": "https://venetoaroundme.regione.veneto.it/en/node/92967"
+      },
+      "media": 1
+    },
+    {
+      "anno": "1541",
+      "titolo": "Un cavaliere sulla porta",
+      "testo": "Jacopo dal Ponte affresca su Porta Dieda Marco Curzio a cavallo che si getta nella voragine; più in alto, l'aquila imperiale e il leone di Venezia. Oggi ne restano poche tracce.",
+      "fonte": {
+        "titolo": "Regione del Veneto, Veneto Around Me, scheda di Porta Dieda",
+        "url": "https://venetoaroundme.regione.veneto.it/en/node/92967"
+      },
+      "media": 0
+    },
+    {
+      "anno": "1561",
+      "titolo": "Colonne e timpano",
+      "testo": "Il podestà veneto commissiona Porta delle Grazie a un architetto locale contemporaneo di Palladio: linee classicheggianti, con colonne, architrave, fregio e timpano. È la porta meglio conservata.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+      },
+      "media": 2
+    },
+    {
+      "anno": "1886",
+      "titolo": "Giù le mura, per la vista",
+      "testo": "Le mura medievali sul lato nord dell'attuale Viale dei Martiri vengono demolite, per aprire la vista sul paesaggio ai palazzi delle famiglie bassanesi.",
+      "fonte": {
+        "titolo": "Regione del Veneto, Veneto Around Me, scheda di Viale dei Martiri",
+        "url": "https://venetoaroundme.regione.veneto.it/en/node/96247"
+      }
+    },
+    {
+      "anno": "oggi",
+      "titolo": "Il Belvedere sulle montagne",
+      "testo": "Accanto a Porta delle Grazie si apre il Belvedere: a sinistra l'Altopiano di Asiago, a destra il Massiccio del Grappa.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+      }
+    }
+  ],
+  "media": [
+    {
+      "tipo": "immagine",
+      "titolo": "Porta Dieda",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_-_Porta_Dieda.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Porta_Dieda.jpg",
+      "autore": "Syrio",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Porta Dieda: una torre con un arco al piano terra e, sulla facciata chiara, i resti sbiaditi di un affresco e di alcuni stemmi."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Via Principe Amedeo e Porta Dieda in un'incisione (datata 1903 su Commons)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_via_Principe_Amedeo_e_Porta_Dieda.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_via_Principe_Amedeo_e_Porta_Dieda.jpg",
+      "autore": "Giuseppe Barberis",
+      "licenza": "Pubblico dominio",
+      "alt": "Incisione in bianco e nero: una via in salita con una statua su un piedistallo e, in fondo, la torre di Porta Dieda con i merli."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Porta delle Grazie",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_-_Porta_delle_Grazie.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Porta_delle_Grazie.jpg",
+      "autore": "Syrio",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Porta delle Grazie: un portale in pietra chiara con colonne e timpano, aperto in un muro di mattoni; attraverso l'arco si vede la strada."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il timpano di Porta delle Grazie",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_-_Porta_delle_Grazie_-_Timpano.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Porta_delle_Grazie_-_Timpano.jpg",
+      "autore": "Syrio",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Particolare del timpano triangolare in pietra della porta, con il fregio sottostante e il muro di mattoni alle spalle."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Le mura presso Porta delle Grazie",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_-_Mura_presso_la_Porta_delle_Grazie.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Mura_presso_la_Porta_delle_Grazie.jpg",
+      "autore": "Syrio",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Un lungo tratto di mura merlate in ciottoli e mattoni, con un piccolo balcone, lungo una strada in salita."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Porta delle Grazie e la torre nord-est",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_-_Porta_delle_Grazie_e_torre_nord-est.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Porta_delle_Grazie_e_torre_nord-est.jpg",
+      "autore": "Syrio",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Il portale in pietra di Porta delle Grazie ai piedi di una torre in mattoni e pietra, più alta, con merli."
+    }
+  ],
+  "live": [],
+  "incertezze": [
+    "Per il Castello Inferiore Wikipedia indica l'anno 1315, mentre la Regione del Veneto dice in modo generico «XIV secolo, durante la dominazione padovana»."
+  ],
+  "landmark": "porta-dieda"
+}

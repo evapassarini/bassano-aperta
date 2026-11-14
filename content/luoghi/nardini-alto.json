@@ -1,0 +1,81 @@
+{
+  "id": "nardini-alto",
+  "nome": "Garage Nardini",
+  "sottotitolo": "L'ex «Nardini Alto», appena fuori le mura",
+  "genere": "luogo",
+  "lat": 45.7692,
+  "lon": 11.7383,
+  "intro": "Se al ponte c'è il Nardini Basso, quassù c'era il Nardini Alto: il «Nardini di sopra», nato come spaccio della distilleria quando questa lasciò il ponte per lo spazio fuori dalle mura. Oggi nello stesso piazzale c'è Garage Nardini, osteria e cocktail bar.",
+  "tappe": [
+    {
+      "anno": "1929",
+      "titolo": "La distilleria sale in piazzale",
+      "testo": "Dopo la Grande Guerra la domanda cresce e la famiglia Nardini sposta e amplia la distilleria appena fuori dalle mura della città vecchia. Difford's Guide la colloca in Piazzale Generale Giardino.",
+      "fonte": {
+        "titolo": "Difford's Guide, storia della distilleria Nardini",
+        "url": "https://www.diffordsguide.com/producers/642/nardini-distillery/history"
+      }
+    },
+    {
+      "anno": "1964",
+      "titolo": "Resta il Nardini di sopra",
+      "testo": "Secondo Difford's Guide la distilleria si trasferisce nella sede attuale, alla periferia di Bassano. Nel piazzale rimane il «Nardini Alto», cioè il Nardini di sopra: grapperia e caffè, nato come spaccio della distilleria.",
+      "fonte": {
+        "titolo": "Difford's Guide, storia della distilleria Nardini",
+        "url": "https://www.diffordsguide.com/producers/642/nardini-distillery/history"
+      }
+    },
+    {
+      "anno": "Un tempo",
+      "titolo": "Due grapperie alla buona",
+      "testo": "Le grapperie Nardini in città erano due, il Nardini Basso e il Nardini Alto: «entrambe molto alla buona», le ricorda un blog di viaggi.",
+      "fonte": {
+        "titolo": "Viaggia di più, «Bassano del Grappa: i migliori locali del centro storico» (aprile 2021)",
+        "url": "https://viaggiadipiu.it/2021/04/22/bassano-del-grappa-i-migliori-locali-del-centro-storico/"
+      }
+    },
+    {
+      "anno": "2021",
+      "titolo": "L'Alto cambia nome",
+      "testo": "Nell'aprile 2021 lo stesso blog racconta che il Nardini Alto è nel frattempo diventato Garage Nardini Osteria & Cocktail, un locale «chic e ricercato».",
+      "fonte": {
+        "titolo": "Viaggia di più, «Bassano del Grappa: i migliori locali del centro storico» (aprile 2021)",
+        "url": "https://viaggiadipiu.it/2021/04/22/bassano-del-grappa-i-migliori-locali-del-centro-storico/"
+      }
+    },
+    {
+      "anno": "2025",
+      "titolo": "Un gin chiamato Garage",
+      "testo": "Nel giugno 2025 Nardini entra nel mondo del gin con «Garage Gin», un London Dry nato da Garage Nardini, descritto come il laboratorio sperimentale della distilleria. Sull'etichetta c'è la mappa di Bassano.",
+      "fonte": {
+        "titolo": "Beverfood, articolo su Garage Gin della Distilleria Nardini",
+        "url": "https://www.beverfood.com/garage-gin-distilleria-nardini-storia-autentica/"
+      }
+    },
+    {
+      "anno": "2026",
+      "titolo": "Un omaggio al piazzale",
+      "testo": "Milano Finanza scrive che il nome del gin rende omaggio all'osteria e cocktail bar aperta dal marchio in piazzale Generale Giardino, e la descrive come un polo d'attrazione anche per i turisti.",
+      "fonte": {
+        "titolo": "Milano Finanza, articolo sulla Distilleria Nardini (giugno 2026)",
+        "url": "https://www.milanofinanza.it/news/la-piu-antica-distilleria-italiana-e-anche-agile-e-versatile-cosi-dopo-acqua-di-cedro-e-garage-gin-grappa-202606151507234589"
+      }
+    },
+    {
+      "anno": "Oggi",
+      "titolo": "Cortile, pouf e tavoli",
+      "testo": "Il locale, appena fuori le mura lungo il viale dei Martiri, è arioso e luminoso: un cortile interno con pouf e tavoli in stile industriale e, al piano di sopra, la zona ristorante.",
+      "fonte": {
+        "titolo": "Italy Segreta, «Una giornata e mezza a Bassano»",
+        "url": "https://italysegreta.com/it/una-giornata-e-mezza-a-bassano/"
+      }
+    }
+  ],
+  "media": [],
+  "live": [],
+  "incertezze": [
+    "Date: l'anno in cui il Nardini Alto ha chiuso e quello in cui ha aperto Garage Nardini non sono verificati. Una scheda di progetto autopubblicata data al 2017 i lavori di recupero del vecchio edificio della distilleria; nell'aprile 2021 il locale risulta già trasformato.",
+    "Indirizzo e posizione: Difford's Guide indica il numero 9 di Piazzale Generale Giardino, ma la pagina è datata; Milano Finanza conferma solo il piazzale. Il punto sulla mappa è una stima.",
+    "Trasferimento della distilleria: Difford's Guide lo data al 1964; un'altra fonte lega al 1963 un evento diverso, la distillazione sottovuoto. L'anno del trasferimento non è confermato dall'azienda."
+  ]
+}

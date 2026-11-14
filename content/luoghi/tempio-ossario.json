@@ -1,0 +1,148 @@
+{
+  "id": "tempio-ossario",
+  "nome": "Tempio Ossario",
+  "sottotitolo": "Doveva essere il nuovo duomo, custodisce i caduti del Grappa",
+  "genere": "luogo",
+  "lat": 45.763668,
+  "lon": 11.733443,
+  "intro": "La grande chiesa in mattoni con i due campanili era nata per essere il nuovo duomo di Bassano. La guerra ne ha fermato il cantiere e poi ne ha cambiato il destino: dal 1934 è il luogo dove riposano i soldati che combatterono sul Grappa.",
+  "tappe": [
+    {
+      "anno": "1908",
+      "titolo": "Un nuovo duomo",
+      "testo": "A settembre comincia la costruzione di una grande chiesa: doveva essere il nuovo duomo della città.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Tempio ossario di Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Tempio_ossario_di_Bassano_del_Grappa"
+      }
+    },
+    {
+      "anno": "1908",
+      "titolo": "Troppo cara, troppo lontana",
+      "testo": "A volerla è l'arciprete Giovanni Battista Gobbi, tra le resistenze di chi la giudica troppo costosa e troppo lontana dal centro.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Duomo di Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Duomo_di_Bassano_del_Grappa"
+      }
+    },
+    {
+      "anno": "1915-1918",
+      "titolo": "La guerra ferma il cantiere",
+      "testo": "La Grande Guerra ferma i lavori. Riprendono nel dopoguerra, con modifiche al progetto, ma la chiesa resta incompiuta.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Duomo di Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Duomo_di_Bassano_del_Grappa"
+      }
+    },
+    {
+      "anno": "1930",
+      "titolo": "Da chiesa a sacrario",
+      "testo": "La chiesa mai finita viene destinata anche a sacrario militare, con un accordo tra la parrocchia e lo Stato. Vi vengono riuniti i caduti riesumati dai cimiteri della fascia pedemontana.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Tempio ossario di Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Tempio_ossario_di_Bassano_del_Grappa"
+      }
+    },
+    {
+      "anno": "1930-1934",
+      "titolo": "Due campanili di 60 metri",
+      "testo": "L'edificio viene completato: 75 metri di lunghezza, due campanili di 60 metri, un rosone di circa 10 metri di diametro.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Tempio ossario di Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Tempio_ossario_di_Bassano_del_Grappa"
+      },
+      "media": 2
+    },
+    {
+      "anno": "maggio 1934",
+      "titolo": "L'inaugurazione del Tempio",
+      "testo": "Il Tempio Ossario viene inaugurato.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Tempio ossario di Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Tempio_ossario_di_Bassano_del_Grappa"
+      },
+      "media": 0
+    },
+    {
+      "anno": "oggi",
+      "titolo": "Tutti con nome e cognome",
+      "testo": "I soldati che riposano qui combatterono sul Grappa nell'ultimo anno di guerra, tra il 1917 e il 1918. Hanno tutti nome e cognome, perché morirono negli ospedali da campo. Molti erano «ragazzi del '99».",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Tempio ossario di Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Tempio_ossario_di_Bassano_del_Grappa"
+      }
+    },
+    {
+      "anno": "oggi",
+      "titolo": "Un principe tra i soldati",
+      "testo": "Tra loro ci sono quattro ufficiali medaglia d'oro e il principe Umberto di Savoia-Aosta, conte di Salemi.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Tempio ossario di Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Tempio_ossario_di_Bassano_del_Grappa"
+      },
+      "media": 3
+    },
+    {
+      "anno": "oggi",
+      "titolo": "Anche l'altra guerra",
+      "testo": "Vi riposano anche 87 persone trasferite dal cimitero di Santa Croce: militari morti in Germania e in Russia e civili uccisi nei bombardamenti di Bassano.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Tempio ossario di Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Tempio_ossario_di_Bassano_del_Grappa"
+      }
+    }
+  ],
+  "media": [
+    {
+      "tipo": "immagine",
+      "titolo": "La facciata del Tempio Ossario",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa%2C_tempio_ossario_01.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa%2C_tempio_ossario_01.jpg",
+      "autore": "Syrio",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "La facciata in mattoni rossi del Tempio Ossario, con il grande rosone al centro, tre portali e una croce in cima."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il Tempio Ossario visto di lato",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa%2C_tempio_ossario_02.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa%2C_tempio_ossario_02.jpg",
+      "autore": "Syrio",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Il fianco e la facciata della chiesa in mattoni rossi visti di scorcio, con le finestre ad arco acuto e un campanile sul fondo."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il Tempio Ossario con i due campanili",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Tempio_Ossario_Bassano_del_Grappa.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Tempio_Ossario_Bassano_del_Grappa.jpg",
+      "autore": "Gabrielino 86",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "La chiesa in mattoni rossi vista dal lato dell'abside, con i due alti campanili, le finestre rotonde e la strada in primo piano."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "La tomba di Umberto di Savoia-Aosta, conte di Salemi",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Umberto_di_Savoia-Aosta_Conte_di_Salemi_%281889-1918%29._Sacrario_di_Bassano_del_Grappa.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Umberto_di_Savoia-Aosta_Conte_di_Salemi_%281889-1918%29._Sacrario_di_Bassano_del_Grappa.jpg",
+      "autore": "Avemundi",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Una lapide in marmo chiaro incorniciata di marmo scuro, con la scritta «S.A.R. Umberto di Savoia-Aosta conte di Salemi»."
+    },
+    {
+      "tipo": "video",
+      "titolo": "Inaugurazione del Tempio-Ossario dei caduti del Grappa (cinegiornale)",
+      "url": "https://www.youtube-nocookie.com/embed/JrTxc6y6QiM",
+      "pagina": "https://www.youtube.com/watch?v=JrTxc6y6QiM",
+      "autore": "Archivio Luce Cinecittà",
+      "licenza": "Licenza standard YouTube (solo incorporato)"
+    }
+  ],
+  "live": [],
+  "incertezze": [
+    "Sul numero dei caduti le voci di Wikipedia non concordano: «oltre 5.000 soldati» con oltre duecento decorati, «5.405 caduti tra cui 236 decorati», oppure «6.000 salme».",
+    "Sull'architetto: la voce dedicata al Tempio indica Pietro Del Fabbro di Treviso per il completamento, la voce su Bassano nomina un «architetto Rinaldo di Venezia».",
+    "Sullo stile: «gotico veneziano con tracce di romanico» per la voce dedicata, «neogotico in mattoni rossi» per la voce su Bassano."
+  ],
+  "landmark": "tempio-ossario"
+}

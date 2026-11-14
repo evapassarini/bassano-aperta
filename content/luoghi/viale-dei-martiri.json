@@ -1,0 +1,129 @@
+{
+  "id": "viale-dei-martiri",
+  "nome": "Viale dei Martiri",
+  "sottotitolo": "Il 26 settembre 1944",
+  "genere": "luogo",
+  "lat": 45.768871,
+  "lon": 11.736044,
+  "intro": "Un viale alberato che va dal Castello Superiore a Porta delle Grazie, con la vista aperta sul paesaggio. Nel 1944 si chiamava Viale XX Settembre. Il nome che porta oggi ricorda i trentuno giovani impiccati a Bassano il 26 settembre di quell'anno.",
+  "tappe": [
+    {
+      "anno": "1886",
+      "titolo": "Un viale aperto sul paesaggio",
+      "testo": "Sul lato nord del viale vengono demolite le mura medievali, per aprire la vista sul paesaggio.",
+      "fonte": {
+        "titolo": "Regione del Veneto, Veneto Around Me, scheda di Viale dei Martiri",
+        "url": "https://venetoaroundme.regione.veneto.it/en/node/96247"
+      }
+    },
+    {
+      "anno": "inizio settembre 1944",
+      "titolo": "Si prepara il rastrellamento",
+      "testo": "A Castello di Godego vengono radunati reparti tedeschi e fascisti, agli ordini del colonnello Zimmermann, per accerchiare i partigiani del Grappa.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Operazione Piave»",
+        "url": "https://it.wikipedia.org/wiki/Operazione_Piave"
+      }
+    },
+    {
+      "anno": "20 settembre 1944",
+      "titolo": "L'attacco al Grappa",
+      "testo": "Alle 6.30 del mattino comincia l'attacco. Parte dal versante est del massiccio, da Quero e Alano di Piave.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Operazione Piave»",
+        "url": "https://it.wikipedia.org/wiki/Operazione_Piave"
+      }
+    },
+    {
+      "anno": "21 settembre 1944",
+      "titolo": "Si salvi chi può",
+      "testo": "Alle 13.30 il capitano Angelo Pasini, comandante della brigata Matteotti, dà l'ordine del «si salvi chi può».",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Operazione Piave»",
+        "url": "https://it.wikipedia.org/wiki/Operazione_Piave"
+      }
+    },
+    {
+      "anno": "settembre 1944",
+      "titolo": "Gli avvisi nei paesi",
+      "testo": "Avvisi affissi nei paesi promettono un lavoro nell'Organizzazione Todt o nella contraerea a chi si presenta spontaneamente. Molti giovani, spinti anche dalle famiglie, si consegnano.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Operazione Piave»",
+        "url": "https://it.wikipedia.org/wiki/Operazione_Piave"
+      }
+    },
+    {
+      "anno": "26 settembre 1944",
+      "titolo": "Trentuno giovani a Bassano",
+      "testo": "A Bassano trentuno giovani vengono impiccati. Il viale si chiamava allora XX Settembre.",
+      "fonte": {
+        "titolo": "Regione del Veneto, Veneto Around Me, scheda di Viale dei Martiri",
+        "url": "https://venetoaroundme.regione.veneto.it/en/node/96247"
+      }
+    },
+    {
+      "anno": "28 aprile 1945",
+      "titolo": "La Liberazione di Bassano",
+      "testo": "Bassano viene liberata.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+      }
+    },
+    {
+      "anno": "9 ottobre 1946",
+      "titolo": "La Medaglia d'oro",
+      "testo": "La città riceve la Medaglia d'oro al valor militare per la Resistenza. La motivazione ricorda gli impiccati, i fucilati, i deportati, i prigionieri e le case incendiate tra la città e il territorio del Grappa.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+      }
+    },
+    {
+      "anno": "2008",
+      "titolo": "Molti anni dopo",
+      "testo": "Karl Franz Tausch, il vicebrigadiere delle SS indicato come esecutore materiale delle impiccagioni e rintracciato in Germania, muore il 25 settembre, alla vigilia dell'anniversario.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Karl Franz Tausch»",
+        "url": "https://it.wikipedia.org/wiki/Karl_Franz_Tausch"
+      }
+    },
+    {
+      "anno": "oggi",
+      "titolo": "Un nome per ogni albero",
+      "testo": "Il viale porta il nome dei Martiri. Ogni albero ha il nome e la fotografia di uno dei giovani.",
+      "fonte": {
+        "titolo": "Regione del Veneto, Veneto Around Me, scheda di Viale dei Martiri",
+        "url": "https://venetoaroundme.regione.veneto.it/en/node/96247"
+      },
+      "media": 0
+    }
+  ],
+  "media": [
+    {
+      "tipo": "immagine",
+      "titolo": "Viale dei Martiri",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Viale_dei_martiri_%286072730923%29.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Viale_dei_martiri_%286072730923%29.jpg",
+      "autore": "Rino Porrovecchio",
+      "licenza": "CC BY-SA 2.0",
+      "alt": "Il viale in una giornata di sole: una striscia di prato, alberi dalla chioma tonda, un lampione e la fila dei palazzi sul lato della strada."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Viale dei Martiri, il filare degli alberi",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Viale_dei_martiri-2_%286072730933%29.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Viale_dei_martiri-2_%286072730933%29.jpg",
+      "autore": "Rino Porrovecchio",
+      "licenza": "CC BY-SA 2.0",
+      "alt": "Il filare degli alberi del viale lungo un prato e un vialetto in mattoni, con i palazzi e le auto parcheggiate sul lato opposto."
+    }
+  ],
+  "live": [],
+  "incertezze": [
+    "Sul luogo delle impiccagioni: per la Regione del Veneto la maggior parte dei trentuno fu impiccata agli alberi di questo viale, mentre la voce di Wikipedia su Bassano parla dei «viali cittadini».",
+    "Sulle date del rastrellamento del Grappa: la Regione del Veneto indica il 20-23 settembre 1944, la voce di Wikipedia «Operazione Piave» lo fa terminare il 28 settembre.",
+    "Sul bilancio del rastrellamento: 264 morti secondo la voce «Operazione Piave», più di 500 morti e 400 deportati secondo la voce di Wikipedia su Bassano.",
+    "Su chi fossero i trentuno: la Regione del Veneto li chiama «giovani partigiani», mentre la voce «Operazione Piave» racconta che molti giovani si erano presentati spontaneamente, ingannati dagli avvisi."
+  ]
+}

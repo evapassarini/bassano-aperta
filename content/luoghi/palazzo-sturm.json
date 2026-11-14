@@ -1,0 +1,177 @@
+{
+  "id": "palazzo-sturm",
+  "nome": "Palazzo Sturm",
+  "sottotitolo": "Il palazzo sul Brenta, la ceramica e gli stampatori Remondini",
+  "genere": "luogo",
+  "lat": 45.76633,
+  "lon": 11.73167,
+  "intro": "Affacciato sul Brenta, Palazzo Sturm è la casa che un mercante di seta si fece costruire nel Settecento: sette livelli e più di settanta stanze. Oggi ospita due musei, quello della Ceramica e quello dedicato ai Remondini, la famiglia di stampatori che da una bottega in piazza arrivò a dare lavoro a più di mille operai.",
+  "tappe": [
+    {
+      "anno": "1657",
+      "titolo": "Una bottega in piazza",
+      "testo": "Giovanni Antonio Remondini, nato a Padova nel 1634, prende casa sulla piazza principale di Bassano e apre una bottega di panni, lana, seta e attrezzi di ferro. Più tardi vi aggiunge le xilografie di santi e soggetti popolari.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Remondini»",
+        "url": "https://it.wikipedia.org/wiki/Remondini"
+      }
+    },
+    {
+      "anno": "1738-1750",
+      "titolo": "Stampe vendute dagli ambulanti",
+      "testo": "Nel 1738 Giuseppe Remondini, figlio del fondatore, ottiene dai magistrati veneziani il privilegio esclusivo di vendere senza dazi le sue stampe sacre. Nel 1750 la famiglia apre una libreria a Venezia. A vendere le stampe sono compagnie di ambulanti tesini e schiavoni.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Remondini»",
+        "url": "https://it.wikipedia.org/wiki/Remondini"
+      }
+    },
+    {
+      "anno": "Metà XVIII secolo",
+      "titolo": "Il palazzo del mercante",
+      "testo": "Vincenzo Ferrari, mercante e industriale della seta, fa costruire il palazzo sul Brenta su progetto di Daniello Bernardi: sette livelli e oltre settanta stanze.",
+      "fonte": {
+        "titolo": "Musei Civici di Bassano del Grappa, pagina «Palazzo Sturm»",
+        "url": "https://www.museibassano.it/it/pagina/palazzo-sturm"
+      },
+      "media": 0
+    },
+    {
+      "anno": "1765-1766",
+      "titolo": "Giganti, stucchi e stagioni",
+      "testo": "Nel 1765 il pittore Giorgio Anselmi affresca il salone d’ingresso con la Caduta dei giganti e figure allegoriche. L’anno dopo un artista non identificato con certezza realizza gli stucchi con il Carro del Sole e le Stagioni.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Palazzo Sturm»",
+        "url": "https://it.wikipedia.org/wiki/Palazzo_Sturm"
+      },
+      "media": 1
+    },
+    {
+      "anno": "Inizio XIX secolo",
+      "titolo": "Mille operai al torchio",
+      "testo": "All’inizio dell’Ottocento la stamperia Remondini conta 18 torchi tipografici e xilografici, 24 torchi calcografici, 4 cartiere e una fonderia di caratteri, con oltre 1.000 operai.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Remondini»",
+        "url": "https://it.wikipedia.org/wiki/Remondini"
+      }
+    },
+    {
+      "anno": "XIX secolo",
+      "titolo": "Un piano in più",
+      "testo": "Sotto i proprietari Vanzo Mercante il corpo principale del palazzo viene sopraelevato. Il nuovo tetto viene raccordato alla loggia-belvedere, che in origine era aperta su tre lati.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Palazzo Sturm»",
+        "url": "https://it.wikipedia.org/wiki/Palazzo_Sturm"
+      }
+    },
+    {
+      "anno": "1840-1861",
+      "titolo": "La stamperia chiude",
+      "testo": "Nel 1840 la produzione dei Remondini è ancora ampia ma l’invenduto si accumula; nel 1848 comincia il declino e nel 1861 l’azienda chiude. La raccolta remondiniana di 8.522 incisioni di vari artisti è conservata al Museo Civico.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Remondini»",
+        "url": "https://it.wikipedia.org/wiki/Remondini"
+      }
+    },
+    {
+      "anno": "1943",
+      "titolo": "Il nome del barone",
+      "testo": "Il palazzo arriva al Comune di Bassano del Grappa per volontà del barone Giovanni Battista Sturm von Hirschfeld: da lui viene il nome di oggi. Il sito dei Musei indica il 1943 come anno della donazione.",
+      "fonte": {
+        "titolo": "Musei Civici di Bassano del Grappa, pagina «Palazzo Sturm»",
+        "url": "https://www.museibassano.it/it/pagina/palazzo-sturm"
+      }
+    },
+    {
+      "anno": "1992-2007",
+      "titolo": "Due musei, un palazzo",
+      "testo": "Dal 1992 le collezioni di ceramica sono esposte al piano nobile, nel Museo della Ceramica Giuseppe Roi. Nel 2007 apre al piano terra il Museo della Stampa Remondini, dedicato alla famiglia di stampatori.",
+      "fonte": {
+        "titolo": "Musei Civici di Bassano del Grappa, pagina «Palazzo Sturm»",
+        "url": "https://www.museibassano.it/it/pagina/palazzo-sturm"
+      },
+      "media": 2
+    },
+    {
+      "anno": "2017-2018",
+      "titolo": "Il restauro e la riapertura",
+      "testo": "Dopo un restauro avviato nell’aprile 2017, con un progetto da 1.450.000 euro, il palazzo viene inaugurato il 15 dicembre 2018.",
+      "fonte": {
+        "titolo": "Bassanonet, articolo sull’inaugurazione di Palazzo Sturm restaurato (2018)",
+        "url": "https://www.bassanonet.it/news/27571-sturmtruppen.html"
+      }
+    }
+  ],
+  "media": [
+    {
+      "tipo": "immagine",
+      "titolo": "Palazzo Sturm, una sala interna",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Palazzo_Sturm_int%C3%A9rieur_01.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Palazzo_Sturm_int%C3%A9rieur_01.jpg",
+      "autore": "Peccadille",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Una sala del palazzo con pareti e soffitto decorati a stucco bianco su fondo verde chiaro, specchiere dalle cornici mosse, una vetrina in legno scuro con porcellane e una porta aperta sulla sala accanto."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Palazzo Sturm, soffitto a stucco",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Palazzo_Sturm_int%C3%A9rieur_plafond.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Palazzo_Sturm_int%C3%A9rieur_plafond.jpg",
+      "autore": "Peccadille",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Un soffitto visto dal basso: stucchi bianchi a volute e graticci su fondo verde chiaro, con un medaglione rotondo al centro e altri più piccoli attorno, ornati da figure in rilievo."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Palazzo Sturm, una sala del Museo della Ceramica",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Palazzo_Sturm_mus%C3%A9e_c%C3%A9ramique.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Palazzo_Sturm_mus%C3%A9e_c%C3%A9ramique.jpg",
+      "autore": "Peccadille",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Una sala del museo con grandi vetrine illuminate piene di ceramiche bianche e blu, tra pareti decorate e una specchiera dalla cornice chiara."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Museo della Stampa Remondini, la sala dei tesori",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Musee_Remondini_04.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Musee_Remondini_04.jpg",
+      "autore": "Peccadille",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Una sala rivestita di pannelli di legno scuro, con un lungo banco chiaro al centro e libri e stampe esposti sotto teche di vetro."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Museo della Stampa Remondini, la sala dedicata alla carta decorata",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Musee_Remondini_20.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Musee_Remondini_20.jpg",
+      "autore": "Peccadille",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Una sala con il pavimento in legno: a sinistra una struttura curva coperta di matrici scure, al centro teche basse e illuminate con fogli di carta decorata."
+    },
+    {
+      "tipo": "video",
+      "titolo": "Rinascimento in bianco e nero. L’arte dell’incisione a Venezia (1494 - 1615)",
+      "url": "https://www.youtube-nocookie.com/embed/4XlHujvWO_c",
+      "pagina": "https://www.youtube.com/watch?v=4XlHujvWO_c",
+      "autore": "Musei Civici Bassano del Grappa",
+      "licenza": "Licenza standard YouTube (solo incorporato)"
+    }
+  ],
+  "live": [
+    {
+      "tipo": "link",
+      "etichetta": "Orari e avvisi di oggi",
+      "url": "https://www.museibassano.it/it/pagina/palazzo-sturm",
+      "nota": "La pagina ufficiale indica se oggi il palazzo è aperto e segnala gli avvisi di sala, per esempio una sala chiusa durante un evento. Lo stato di apertura è mostrato uguale su tutto il sito dei Musei: leggi anche gli avvisi."
+    },
+    {
+      "tipo": "link",
+      "etichetta": "Eventi in programma",
+      "url": "https://www.museibassano.it/it/eventi",
+      "nota": "Il calendario ufficiale di Musei, Biblioteca e Archivio. Mescola eventi di sedi diverse e non sempre indica dove si tengono."
+    }
+  ],
+  "incertezze": [
+    "Passaggio del palazzo al Comune: per il sito dei Musei «fu donato» nel 1943; la voce italiana di Wikipedia parla di un lascito del barone Sturm von Hirschfeld (1895-1943) e non dà la data del passaggio."
+  ],
+  "landmark": "palazzo-sturm"
+}

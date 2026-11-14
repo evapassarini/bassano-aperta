@@ -1,0 +1,113 @@
+{
+  "id": "palazzo-bonaguro",
+  "nome": "Palazzo Bonaguro",
+  "sottotitolo": "Affreschi, mostre e animali vicino al Ponte Vecchio",
+  "genere": "luogo",
+  "lat": 45.76743,
+  "lon": 11.72833,
+  "intro": "A due passi dal Ponte Vecchio, nel quartiere Angarano, c’è un palazzo affrescato che ha cambiato molte famiglie prima di diventare di tutti. Oggi è una delle sedi dei Musei Civici: ospita mostre e, all’ultimo piano, una collezione di animali che non ti aspetti.",
+  "tappe": [
+    {
+      "anno": "XV secolo",
+      "titolo": "Un palazzo tutto affrescato",
+      "testo": "Il palazzo sorge a partire dal Quattrocento nel quartiere Angarano, vicino al Ponte Vecchio. È ampiamente affrescato fin dalle origini.",
+      "fonte": {
+        "titolo": "Musei Civici di Bassano del Grappa, pagina «Palazzo Bonaguro»",
+        "url": "https://www.museibassano.it/it/pagina/palazzo-bonaguro"
+      },
+      "media": 0
+    },
+    {
+      "anno": "XVI secolo",
+      "titolo": "Banchetti dipinti e giardino",
+      "testo": "Nel Cinquecento si aggiungono nuove decorazioni, tra cui un Banchetto di dame e gentiluomini, un tema reso popolare in quegli anni da Paolo Veronese. Il palazzo ha un giardino monumentale con statue allegoriche, fontane e viali prospettici.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Palazzo Bonaguro»",
+        "url": "https://it.wikipedia.org/wiki/Palazzo_Bonaguro"
+      }
+    },
+    {
+      "anno": "Inizio XVII secolo",
+      "titolo": "I Veggia, veneziani",
+      "testo": "Fino ai primi del Seicento il palazzo appartiene alla famiglia veneziana dei Veggia.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Palazzo Bonaguro»",
+        "url": "https://it.wikipedia.org/wiki/Palazzo_Bonaguro"
+      }
+    },
+    {
+      "anno": "XVII-XX secolo",
+      "titolo": "Di famiglia in famiglia",
+      "testo": "Si succedono come proprietari i Querini, i Correr, gli Albertoni e i Giaconi Bonaguro, che contribuiscono ad abbellire l’edificio. Una sala del secondo piano ha un soffitto ottocentesco a medaglioni con teste maschili e femminili.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Palazzo Bonaguro»",
+        "url": "https://it.wikipedia.org/wiki/Palazzo_Bonaguro"
+      }
+    },
+    {
+      "anno": "1969",
+      "titolo": "Il palazzo diventa di tutti",
+      "testo": "Nel 1969 il palazzo passa al Comune di Bassano del Grappa e diventa sede di mostre ed eventi culturali.",
+      "fonte": {
+        "titolo": "Musei Civici di Bassano del Grappa, pagina «Palazzo Bonaguro»",
+        "url": "https://www.museibassano.it/it/pagina/palazzo-bonaguro"
+      },
+      "media": 1
+    },
+    {
+      "anno": "2006",
+      "titolo": "Arriva «Mondo Animale»",
+      "testo": "All’ultimo piano apre al pubblico «Mondo Animale», una collezione zoologica affidata ai Musei Civici in deposito permanente dal servizio CITES.",
+      "fonte": {
+        "titolo": "Musei Civici di Bassano del Grappa, pagina «Palazzo Bonaguro»",
+        "url": "https://www.museibassano.it/it/pagina/palazzo-bonaguro"
+      }
+    }
+  ],
+  "media": [
+    {
+      "tipo": "immagine",
+      "titolo": "Palazzo Bonaguro, la facciata (settembre 2025)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_-_Palazzo_Bonaguro_-_Marcok_2025-09-13_20-55-15_002.jpeg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Palazzo_Bonaguro_-_Marcok_2025-09-13_20-55-15_002.jpeg",
+      "autore": "Marco Chemello (WMIT)",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "La facciata di Palazzo Bonaguro: tre piani di intonaco giallo segnato dal tempo, due balconi con balaustra in pietra, un frontone in cima e il portone ad arco con ai lati i manifesti di una mostra fotografica."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Palazzo Bonaguro, il portone d’ingresso (settembre 2025)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_-_Palazzo_Bonaguro_-_Marcok_2025-09-13_20-55-15_001.jpeg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Palazzo_Bonaguro_-_Marcok_2025-09-13_20-55-15_001.jpeg",
+      "autore": "Marco Chemello (WMIT)",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Il portone ad arco in pietra del palazzo, con le ante di legno socchiuse e due grandi manifesti di una mostra fotografica appesi ai lati."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Palazzo Bonaguro, una statua sul muro di cinta (settembre 2025)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_-_Palazzo_Bonaguro_-_Marcok_2025-09-13_20-55-15_005.jpeg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Palazzo_Bonaguro_-_Marcok_2025-09-13_20-55-15_005.jpeg",
+      "autore": "Marco Chemello (WMIT)",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Una statua in pietra di figura femminile in cima a un pilastro del muro di cinta; dietro, un prato e grandi alberi, e sul muretto un gatto bianco seduto."
+    }
+  ],
+  "live": [
+    {
+      "tipo": "link",
+      "etichetta": "Orari e avvisi di oggi",
+      "url": "https://www.museibassano.it/it/pagina/palazzo-bonaguro",
+      "nota": "La pagina ufficiale di Palazzo Bonaguro sul sito dei Musei. Prima di andare controlla lì se il palazzo e «Mondo Animale» sono aperti: lo stato di apertura è mostrato uguale su tutto il sito."
+    },
+    {
+      "tipo": "link",
+      "etichetta": "Eventi in programma",
+      "url": "https://www.museibassano.it/it/eventi",
+      "nota": "Il calendario ufficiale di Musei, Biblioteca e Archivio. Mescola eventi di sedi diverse e non sempre indica dove si tengono."
+    }
+  ],
+  "incertezze": [
+    "Passaggio del palazzo al Comune nel 1969: per il sito dei Musei «fu donato», per la voce italiana di Wikipedia il Comune lo «acquisì»."
+  ]
+}

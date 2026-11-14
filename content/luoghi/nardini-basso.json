@@ -1,0 +1,110 @@
+{
+  "id": "nardini-basso",
+  "nome": "Grapperia Nardini al Ponte",
+  "sottotitolo": "Il «Nardini Basso», all'imbocco del Ponte Vecchio",
+  "genere": "luogo",
+  "lat": 45.76746,
+  "lon": 11.73172,
+  "intro": "All'imbocco del Ponte Vecchio c'è una grapperia che in città chiamano «Nardini Basso». È qui che nel 1779 Bortolo Nardini, arrivato dal Trentino, mise il suo alambicco e smise di spostarlo. Da allora il ponte e la grapperia hanno attraversato insieme parecchia storia.",
+  "tappe": [
+    {
+      "anno": "1739",
+      "titolo": "Un trentino di Segonzano",
+      "testo": "Bortolo Nardini nasce a Segonzano, in Val di Cembra, in Trentino.",
+      "fonte": {
+        "titolo": "Visit Italy, «Distilleria Nardini» (contenuto in collaborazione con l'azienda)",
+        "url": "https://www.visititaly.eu/it/luoghi-e-itinerari/distilleria-nardini-grappa-italiana"
+      }
+    },
+    {
+      "anno": "1779",
+      "titolo": "L'osteria in capo al ponte",
+      "testo": "Bortolo Nardini compra l'Osteria al Ponte, all'ingresso del ponte sul Brenta, e vi sistema in modo stabile il suo alambicco. Secondo l'azienda è la più antica distilleria d'Italia.",
+      "fonte": {
+        "titolo": "Visit Italy, «Distilleria Nardini» (contenuto in collaborazione con l'azienda)",
+        "url": "https://www.visititaly.eu/it/luoghi-e-itinerari/distilleria-nardini-grappa-italiana"
+      }
+    },
+    {
+      "anno": "1779",
+      "titolo": "L'alambicco smette di viaggiare",
+      "testo": "Invece di spostarsi con un alambicco mobile da una cascina all'altra, Nardini apre una distilleria fissa all'imbocco del Ponte Vecchio. Da allora è chi ha le vinacce a portarle in distilleria.",
+      "fonte": {
+        "titolo": "Linkiesta, articolo su Nardini (luglio 2026)",
+        "url": "https://www.linkiesta.it/2026/07/nardini-piu-antica-distilleria-italia-futuro-tempo/"
+      }
+    },
+    {
+      "anno": "1779",
+      "titolo": "Un'etichetta dei Remondini",
+      "testo": "Secondo Difford's Guide l'etichetta della grappa Nardini fu disegnata nel 1779 dai Remondini, gli stampatori di Bassano, ed è rimasta quasi uguale fino a oggi.",
+      "fonte": {
+        "titolo": "Difford's Guide, storia della distilleria Nardini",
+        "url": "https://www.diffordsguide.com/producers/642/nardini-distillery/history"
+      }
+    },
+    {
+      "anno": "1860",
+      "titolo": "Arriva il vapore",
+      "testo": "La famiglia lascia gli alambicchi a fuoco diretto e passa alla distillazione a vapore. Il nipote del fondatore è tra i primi a usarla per la grappa.",
+      "fonte": {
+        "titolo": "Visit Italy, «Distilleria Nardini» (contenuto in collaborazione con l'azienda)",
+        "url": "https://www.visititaly.eu/it/luoghi-e-itinerari/distilleria-nardini-grappa-italiana"
+      }
+    },
+    {
+      "anno": "1929",
+      "titolo": "La distilleria esce dalle mura",
+      "testo": "La distilleria viene trasferita e ampliata appena fuori dalle mura della città vecchia. Sotto la grapperia del ponte si continua a imbottigliare fino agli anni Sessanta.",
+      "fonte": {
+        "titolo": "Difford's Guide, storia della distilleria Nardini",
+        "url": "https://www.diffordsguide.com/producers/642/nardini-distillery/history"
+      }
+    },
+    {
+      "anno": "1945",
+      "titolo": "Il ponte distrutto accanto",
+      "testo": "Il Ponte Vecchio viene distrutto, e su come sia andata le fonti non concordano. Secondo Difford's Guide la grapperia e il reparto produttivo annesso ne escono senza danni gravi.",
+      "fonte": {
+        "titolo": "Difford's Guide, storia della distilleria Nardini",
+        "url": "https://www.diffordsguide.com/producers/642/nardini-distillery/history"
+      }
+    },
+    {
+      "anno": "Anni Settanta",
+      "titolo": "Nasce il Mezzo e Mezzo",
+      "testo": "Secondo i Locali Storici d'Italia, un cliente chiede di provare il Rosso Nardini con un po' di Rabarbaro. Col tempo le due parti diventano uguali, allungate con soda fredda e una scorza di limone.",
+      "fonte": {
+        "titolo": "Locali Storici d'Italia, pagina sul «Mezzo e Mezzo»",
+        "url": "https://old.localistorici.it/en/?p=1914"
+      }
+    },
+    {
+      "anno": "Oggi",
+      "titolo": "Tra i Locali Storici d'Italia",
+      "testo": "La grapperia sul ponte, casa storica di Nardini, è iscritta tra i Locali Storici d'Italia, all'indirizzo Ponte Vecchio 2.",
+      "fonte": {
+        "titolo": "Locali Storici d'Italia, scheda «Grapperia Nardini»",
+        "url": "https://old.localistorici.it/en/listing-item/grapperia-nardini/"
+      }
+    },
+    {
+      "anno": "Oggi",
+      "titolo": "Perché lo chiamano «Basso»",
+      "testo": "In città la chiamano «Nardini Basso». Un tempo le grapperie Nardini erano due: questa, giù al ponte, e il Nardini Alto.",
+      "fonte": {
+        "titolo": "Viaggia di più, «Bassano del Grappa: i migliori locali del centro storico» (aprile 2021)",
+        "url": "https://viaggiadipiu.it/2021/04/22/bassano-del-grappa-i-migliori-locali-del-centro-storico/"
+      }
+    }
+  ],
+  "media": [],
+  "live": [],
+  "incertezze": [
+    "Distruzione del ponte nel 1945: Wikipedia parla di un sabotaggio partigiano il 17 febbraio 1945; Difford's Guide attribuisce la distruzione ai tedeschi, senza data, e la ricostruzione agli Alpini.",
+    "«La più antica distilleria d'Italia» è un primato dichiarato dall'azienda, non verificato in modo indipendente.",
+    "L'etichetta disegnata dai Remondini nel 1779 è riportata da una sola fonte, Difford's Guide.",
+    "Mezzo e Mezzo: i Locali Storici d'Italia ne collocano la nascita negli anni Settanta; un'altra fonte parla del Rosso con soda già negli anni Venti."
+  ],
+  "landmark": "nardini-basso"
+}

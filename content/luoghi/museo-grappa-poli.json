@@ -1,0 +1,133 @@
+{
+  "id": "museo-grappa-poli",
+  "nome": "Poli Museo della Grappa",
+  "sottotitolo": "Alambicchi, libri antichi e mignon di fronte al ponte",
+  "genere": "luogo",
+  "lat": 45.76763,
+  "lon": 11.73221,
+  "intro": "Di fronte al Ponte Vecchio, in un palazzo del Quattrocento, la famiglia Poli ha messo in mostra tutto quello che serve per capire la grappa: alambicchi, libri antichi, più di mille bottigliette. È un museo d'impresa: la distilleria è a Schiavon, dove dal 2011 c'è una seconda sede.",
+  "tappe": [
+    {
+      "anno": "XV secolo",
+      "titolo": "Il Palazzo delle Teste",
+      "testo": "Il museo ha sede nel quattrocentesco Palazzo delle Teste, di fronte al Ponte Vecchio.",
+      "fonte": {
+        "titolo": "Poli Distillerie, cronaca aziendale sul sito poligrappa.com",
+        "url": "https://www.poligrappa.com/eng/chronicle/on-the-threshold-of-the-third-millennium.php"
+      }
+    },
+    {
+      "anno": "1500",
+      "titolo": "Il libro più antico",
+      "testo": "Il volume più antico della collezione è il «Liber de arte distillandi» di Hieronymus Brunschwig, datato 8 maggio 1500. Il museo lo presenta come il primo libro della storia dedicato alla distillazione.",
+      "fonte": {
+        "titolo": "Poli Museo della Grappa, racconto su Google Arts & Culture",
+        "url": "https://artsandculture.google.com/story/1gVhNEaZ-ZJuJA"
+      }
+    },
+    {
+      "anno": "1850 circa",
+      "titolo": "L'alambicco che viaggiava",
+      "testo": "Nella sede di Schiavon è esposto un raro alambicco mobile di metà Ottocento, del tipo usato per la distillazione ambulante.",
+      "fonte": {
+        "titolo": "Museimpresa, scheda «Poli Museo della Grappa»",
+        "url": "https://museimpresa.com/?p=31780"
+      }
+    },
+    {
+      "anno": "1898",
+      "titolo": "L'alambicco si ferma",
+      "testo": "Abolita per ragioni fiscali la distillazione ambulante, GioBatta Poli installa un alambicco fisso: è l'inizio della distilleria Poli di Schiavon.",
+      "fonte": {
+        "titolo": "Poli Museo della Grappa, racconto su Google Arts & Culture",
+        "url": "https://artsandculture.google.com/story/1gVhNEaZ-ZJuJA"
+      }
+    },
+    {
+      "anno": "1993",
+      "titolo": "Apre il museo",
+      "testo": "Il 4 luglio 1993 Jacopo e Cristina Poli inaugurano il Museo della Grappa a Bassano.",
+      "fonte": {
+        "titolo": "Museimpresa, scheda «Poli Museo della Grappa»",
+        "url": "https://museimpresa.com/?p=31780"
+      }
+    },
+    {
+      "anno": "2011",
+      "titolo": "Una seconda sede a Schiavon",
+      "testo": "Accanto alla distilleria apre la seconda sede del museo, con la Grappateca: circa 2.000 bottiglie di 440 distillerie, prodotte tra gli anni Trenta e gli anni Ottanta.",
+      "fonte": {
+        "titolo": "Poli Museo della Grappa, racconto su Google Arts & Culture",
+        "url": "https://artsandculture.google.com/story/1gVhNEaZ-ZJuJA"
+      }
+    },
+    {
+      "anno": "Oggi",
+      "titolo": "La Biblioteca dello Spirito",
+      "testo": "La «Biblioteca dello Spirito» del museo raccoglie circa 1.600 volumi antichi e moderni sulla grappa e sulla distillazione.",
+      "fonte": {
+        "titolo": "Poli Museo della Grappa, racconto su Google Arts & Culture",
+        "url": "https://artsandculture.google.com/story/1gVhNEaZ-ZJuJA"
+      }
+    },
+    {
+      "anno": "Oggi",
+      "titolo": "Cinque sale da annusare",
+      "testo": "Il percorso ha cinque sale: le origini della distillazione, la vinaccia e gli alambicchi, un video sulla produzione, la collezione di mignon con due «olfattometri» per annusare venti distillati e infine la sala di degustazione e vendita.",
+      "fonte": {
+        "titolo": "Poli Distillerie, pagina del museo di Bassano",
+        "url": "https://m.poligrappa.com/eng/geography/poli-grappa-museum-bassano.php"
+      },
+      "media": 0
+    },
+    {
+      "anno": "Oggi",
+      "titolo": "Millecinquecento bottigliette mignon",
+      "testo": "In mostra ci sono circa 1.500 bottigliette mignon di grappa di 323 distillerie. Il museo la definisce la raccolta più ampia e completa d'Italia.",
+      "fonte": {
+        "titolo": "Poli Museo della Grappa, racconto su Google Arts & Culture",
+        "url": "https://artsandculture.google.com/story/1gVhNEaZ-ZJuJA"
+      }
+    },
+    {
+      "anno": "Oggi",
+      "titolo": "Quanti passano di qui",
+      "testo": "Secondo il museo, le due sedi insieme superano i 150.000 visitatori l'anno. Per orari e modalità di visita vale la pagina ufficiale.",
+      "fonte": {
+        "titolo": "Museimpresa, scheda «Poli Museo della Grappa»",
+        "url": "https://museimpresa.com/?p=31780"
+      }
+    }
+  ],
+  "media": [
+    {
+      "tipo": "immagine",
+      "titolo": "Una sala del Poli Museo della Grappa (31 ottobre 2022)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Poli_Museo_della_Grappa_01.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Poli_Museo_della_Grappa_01.jpg",
+      "autore": "Superchilum",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Una sala dal pavimento lucido con pannelli illustrati lungo le pareti, vetrine e, al centro, un piccolo alambicco scuro su un basamento di mattoni; sui muri affiorano tratti di intonaco e mattoni antichi."
+    },
+    {
+      "tipo": "video",
+      "titolo": "Chi ha inventato la Grappa?",
+      "url": "https://www.youtube-nocookie.com/embed/1jFbsPYYgBo",
+      "pagina": "https://www.youtube.com/watch?v=1jFbsPYYgBo",
+      "autore": "PoliDistillerie",
+      "licenza": "Licenza standard YouTube (solo incorporato)"
+    },
+    {
+      "tipo": "video",
+      "titolo": "Come si fa la Grappa?",
+      "url": "https://www.youtube-nocookie.com/embed/6y01iX07xpg",
+      "pagina": "https://www.youtube.com/watch?v=6y01iX07xpg",
+      "autore": "PoliDistillerie",
+      "licenza": "Licenza standard YouTube (solo incorporato)"
+    }
+  ],
+  "live": [],
+  "incertezze": [
+    "«Il primo libro della storia sulla distillazione», «la raccolta di mignon più completa d'Italia» e i 150.000 visitatori l'anno sono affermazioni del museo, non verificate in modo indipendente."
+  ]
+}

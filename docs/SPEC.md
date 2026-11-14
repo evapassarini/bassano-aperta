@@ -131,6 +131,27 @@ export function leggiBrenta(): Promise<LetturaBrenta>;   // rifiuta se la rete f
 export function leggiAria(): Promise<DatiAria>;           // legge public/data/aria.json
 ```
 
+### Avvio (`index.html`, `src/main.ts`)
+
+- La pagina contiene `<canvas id="mappa">`, `<div id="ui">` e un avviso di caricamento
+  (`#avvio`, classe `.avviso-pagina`) che `main.ts` toglie quando tutto è pronto o trasforma in
+  un messaggio di errore con il tasto «Riprova».
+- `main.ts` scarica `data/base.json`, `data/strati.json` e `landmarks/indice.json` da
+  `import.meta.env.BASE_URL` e importa le storie con `import.meta.glob`. Vite usa `base: './'`.
+- Clic sulla mappa: `{storia}` apre il racconto, `{punto}` la scheda, `null` non fa nulla.
+- Fuori dall'interfaccia `UI`: a ogni `apriStoria` l'interfaccia lancia su `radice` l'evento
+  `ba:storia` (`detail: { id }`); `main.ts` lo usa per chiamare `mappa.evidenzia(id)`, così il
+  luogo si accende anche quando lo si sceglie dall'elenco. `allaChiusura` spegne l'evidenza.
+- Attributi facoltativi su `radice`, letti da `creaUI` per «Fonti e licenze»:
+  `data-base-generato` (lo imposta `main.ts` da `base.generato`), `data-codice`,
+  `data-segnalazioni`.
+- `alVaiA` riporta le coordinate dentro `RIQUADRO`. Unica eccezione documentata al riquadro:
+  la storia `monte-grappa` tiene le coordinate vere della cima (fuori mappa) e sulla mappa ha
+  un segnaposto sul margine nord-est.
+- Una storia con un disegno ha `landmark` uguale all'`id` in `public/landmarks/indice.json`.
+- `tests/contenuti.test.ts` controlla storie, strati, luoghi simbolo, base e aria contro
+  `src/types.ts`.
+
 ## Aspetto
 
 Una cartolina illustrata, non una dashboard. Carta color crema, tetti in cotto, intonaci

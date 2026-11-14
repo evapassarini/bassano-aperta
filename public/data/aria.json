@@ -1,0 +1,23 @@
+{
+  "generato": "2026-11-14T22:54:54.138Z",
+  "stazione": "Bassano (ARPAV, codice 500000106)",
+  "fonte": {
+    "nome": "ARPAV, qualità dell'aria: dati in diretta, non validati",
+    "url": "https://www2.arpa.veneto.it/aria-json/exported/aria/data.json",
+    "licenza": "CC BY 4.0 (come indicato nella pagina open data di ARPAV)"
+  },
+  "misure": [
+    {
+      "inquinante": "Ozono (media oraria)",
+      "valore": 36.4,
+      "unita": "µg/m³",
+      "quando": "2026-11-14T22:42:01Z"
+    },
+    {
+      "inquinante": "PM10 (media giornaliera)",
+      "valore": 13.7,
+      "unita": "µg/m³",
+      "quando": "2026-11-13"
+    }
+  ]
+}

@@ -1,0 +1,199 @@
+{
+  "id": "torre-civica-piazze",
+  "nome": "Torre Civica, Piazza Garibaldi e Piazza Libertà",
+  "sottotitolo": "Le due piazze e la torre che le guarda",
+  "genere": "luogo",
+  "lat": 45.76702,
+  "lon": 11.73436,
+  "intro": "Due piazze una accanto all'altra, una torre, una loggia con un orologio. Qui Bassano ha tenuto il mercato degli ortaggi, ha cambiato più volte nome alle piazze e ha portato l'acqua in centro.",
+  "tappe": [
+    {
+      "anno": "1308",
+      "titolo": "La chiesa che dà il nome",
+      "testo": "Sorge la chiesa di San Giovanni Battista, voluta dalla famiglia Blasi. La piazza, ricavata riempiendo il fossato della seconda cerchia di mura, all'inizio prende il nome della chiesa.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+      }
+    },
+    {
+      "anno": "1349",
+      "titolo": "Una campana di 500 chili",
+      "testo": "È la prima notizia documentata della torre: vi viene collocata una campana di 500 chili. Da allora la torre risulta intestata al Comune, che ne paga manutenzione e custodi. Su quando sia stata costruita, le fonti non concordano.",
+      "fonte": {
+        "titolo": "Ministero della Cultura, scheda «Torre Civica»",
+        "url": "https://cultura.gov.it/luogo/torre-civica"
+      },
+      "media": 0
+    },
+    {
+      "anno": "1430",
+      "titolo": "L'orologio dal quadrante azzurro",
+      "testo": "Sulla Loggia entra in funzione un orologio dal quadrante azzurro, opera di Mastro Corrado da Feltre.",
+      "fonte": {
+        "titolo": "Regione del Veneto, Veneto Around Me, scheda della Loggia dei Podestà",
+        "url": "https://venetoaroundme.regione.veneto.it/en/node/94076"
+      }
+    },
+    {
+      "anno": "1494",
+      "titolo": "Lo stemma sopra la porta",
+      "testo": "Alla base della torre si apre una porta in pietra, con sopra dipinto lo stemma della città. Da qui viene il nome «Torre Civica».",
+      "fonte": {
+        "titolo": "Ministero della Cultura, scheda «Torre Civica»",
+        "url": "https://cultura.gov.it/luogo/torre-civica"
+      }
+    },
+    {
+      "anno": "1682",
+      "titolo": "L'incendio nella Loggia",
+      "testo": "Un incendio distrugge gli affreschi di Jacopo dal Ponte nella Loggia. Restano i 120 stemmi affrescati dei primi podestà veneti e, sulla parete sud, il San Cristoforo di Francesco Bassano il Vecchio.",
+      "fonte": {
+        "titolo": "Regione del Veneto, Veneto Around Me, scheda della Loggia dei Podestà",
+        "url": "https://venetoaroundme.regione.veneto.it/en/node/94076"
+      },
+      "media": 3
+    },
+    {
+      "anno": "1747",
+      "titolo": "Il meccanismo di Ferracina",
+      "testo": "L'ingegnere Bartolomeo Ferracina costruisce il meccanismo dell'orologio della Loggia.",
+      "fonte": {
+        "titolo": "Regione del Veneto, Veneto Around Me, scheda della Loggia dei Podestà",
+        "url": "https://venetoaroundme.regione.veneto.it/en/node/94076"
+      }
+    },
+    {
+      "anno": "1776",
+      "titolo": "La piazza delle Erbe",
+      "testo": "Piazza Garibaldi, per secoli «piazza delle Erbe» per il mercato degli ortaggi, riceve la sistemazione definitiva da Antonio Gaidon.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+      },
+      "media": 2
+    },
+    {
+      "anno": "Settecento - prima metà dell'Ottocento",
+      "titolo": "Orologio e merli",
+      "testo": "Nel Settecento anche la torre riceve il suo orologio. I merli in cima sono più recenti: risalgono a un restauro della prima metà dell'Ottocento.",
+      "fonte": {
+        "titolo": "Musei Civici di Bassano del Grappa, pagina «Torre Civica»",
+        "url": "https://www.museibassano.it/it/pagina/torre-civica"
+      },
+      "media": 1
+    },
+    {
+      "anno": "1867",
+      "titolo": "Una piazza, quattro nomi",
+      "testo": "Piazza Libertà, già «piazza dei Signori», viene dedicata a Vittorio Emanuele II. Durante la seconda guerra mondiale diventa «piazza del Popolo» e infine «piazza Libertà».",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+      },
+      "media": 6
+    },
+    {
+      "anno": "1898",
+      "titolo": "L'acqua arriva in centro",
+      "testo": "Una conduttura porta in centro l'acqua delle sorgenti dei Fontanazzi. In Piazza Garibaldi viene costruita la Fontana Bonaguro, opera dello scultore Carlo Spazzi, donata dal sindaco Antonio Bonaguro.",
+      "fonte": {
+        "titolo": "Wikipedia, voce «Bassano del Grappa»",
+        "url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
+      }
+    }
+  ],
+  "media": [
+    {
+      "tipo": "immagine",
+      "titolo": "La Torre Civica",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_-_Torre_civica_01.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Torre_civica_01.jpg",
+      "autore": "Syrio",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "La torre in mattoni, alta e stretta, con l'orologio a metà e i merli in cima, contro il cielo azzurro."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "L'orologio e i merli della Torre Civica",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Torre_civica%2C_Bassano_del_Grappa_01.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Torre_civica%2C_Bassano_del_Grappa_01.jpg",
+      "autore": "Superchilum",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "La parte alta della torre vista dal basso: il quadrante bianco dell'orologio e la corona di merli."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Piazza Garibaldi",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_-_Piazza_Garibaldi.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Piazza_Garibaldi.jpg",
+      "autore": "Syrio",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Piazza Garibaldi con i palazzi porticati, gli ombrelloni bianchi di un caffè e la Torre Civica sullo sfondo."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "La Loggia dei Podestà, sotto il Palazzo Municipale",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Loggia_del_Podesta_sotto_Palazzo_Municipale.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Loggia_del_Podesta_sotto_Palazzo_Municipale.jpg",
+      "autore": "Oursana",
+      "licenza": "CC0",
+      "alt": "Una parete della loggia coperta di stemmi affrescati, sotto un soffitto di travi in legno."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Piazza Libertà",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Piazza_Libert%C3%A0_%28Bassano_del_Grappa%29_01.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Piazza_Libert%C3%A0_%28Bassano_del_Grappa%29_01.jpg",
+      "autore": "Superchilum",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Piazza Libertà vuota: i palazzi con i portici a sinistra, la facciata di una chiesa a destra e la Torre Civica in fondo."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "La colonna con il leone alato in Piazza Libertà",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Piazza_Liberta%2C_colonna_con_leone_alato.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Piazza_Liberta%2C_colonna_con_leone_alato.jpg",
+      "autore": "Oursana",
+      "licenza": "CC0",
+      "alt": "Il leone alato in pietra in cima alla colonna, davanti a un palazzo affrescato con finestre ad arco."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Piazza Vittorio Emanuele, oggi Piazza Libertà, in una xilografia (datata 1901 su Commons)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa%2C_Piazza_Vittorio_Emanuele_%28xilografia%29.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa%2C_Piazza_Vittorio_Emanuele_%28xilografia%29.jpg",
+      "autore": "Autore sconosciuto",
+      "licenza": "Pubblico dominio",
+      "alt": "Xilografia in bianco e nero della piazza con la torre al centro, i palazzi porticati e alcune figure a passeggio."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Piazza Vittorio Emanuele II in una cartolina del 1903",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/VI-Bassano-del-Grappa-1903-Piazza-Vittorio-Emanuele-II.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:VI-Bassano-del-Grappa-1903-Piazza-Vittorio-Emanuele-II.jpg",
+      "autore": "Autore sconosciuto",
+      "licenza": "Pubblico dominio",
+      "alt": "Cartolina colorata della piazza: la torre, i palazzi, la facciata della chiesa a destra e alcune persone, con una scritta a mano in basso."
+    }
+  ],
+  "live": [
+    {
+      "tipo": "link",
+      "etichetta": "Piazza Libertà nel timelapse di Windy",
+      "url": "https://www.windy.com/webcams/1304014898",
+      "nota": "Sito esterno. Non è un video in diretta: è un timelapse con un fotogramma circa ogni 50 minuti."
+    },
+    {
+      "tipo": "link",
+      "etichetta": "Periodi di apertura della Torre Civica",
+      "url": "https://www.museibassano.it/it/pagina/torre-civica",
+      "nota": "Pagina ufficiale dei Musei Civici. La torre apre solo in alcuni periodi dell'anno: date e orari aggiornati si leggono lì."
+    }
+  ],
+  "incertezze": [
+    "Sull'origine della torre le fonti divergono: per i Musei Civici la tradizione la attribuisce a Ezzelino da Romano, a metà del Duecento; per il Ministero della Cultura la data più probabile è il 1312, quando viene allungata la seconda cinta muraria.",
+    "L'altezza della torre è di 43 metri per il Ministero della Cultura e per Wikipedia, di 42 metri per un altro sito che non è stato ricontrollato."
+  ],
+  "landmark": "torre-civica"
+}
