@@ -1,3 +1,5 @@
 node_modules
 dist
 .DS_Store
+# segnaposto personali, mai pubblicati
+personale.local.json

@@ -2,8 +2,9 @@
 
 import './stile.css';
 import { creaMappa } from './map/index';
+import { lonLatInMetri } from './map/proiezione';
 import { RIQUADRO } from './types';
-import type { DatiBase, DatiStrati, Landmark, LonLat, Storia } from './types';
+import type { DatiBase, DatiStrati, Landmark, LonLat, Punto, Storia } from './types';
 import { creaUI } from './ui/index';
 
 const BASE = import.meta.env.BASE_URL;
@@ -34,6 +35,29 @@ function dentroIlRiquadro(ll: LonLat): LonLat {
     lon: Math.min(RIQUADRO.est - margine, Math.max(RIQUADRO.ovest + margine, ll.lon)),
     lat: Math.min(RIQUADRO.nord - margine, Math.max(RIQUADRO.sud + margine, ll.lat)),
   };
+}
+
+/**
+ * Segnaposto personali, solo in locale: stanno in personale.local.json nella cartella del
+ * progetto, che git ignora e che la build non copia. Non finiscono mai nel sito pubblicato.
+ */
+async function puntiPersonali(): Promise<Punto[]> {
+  if (!import.meta.env.DEV) return [];
+  try {
+    const risposta = await fetch('/personale.local.json');
+    if (!risposta.ok) return [];
+    const voci = (await risposta.json()) as { nome: string; lat: number; lon: number; nota?: string }[];
+    return voci.map((v, i) => ({
+      id: `personale-${i}`,
+      strato: 'cultura',
+      tipo: 'luogo-storico',
+      nome: v.nome,
+      nota: v.nota ?? 'Segnaposto personale, visibile solo su questo computer.',
+      ...lonLatInMetri({ lon: v.lon, lat: v.lat }),
+    }));
+  } catch {
+    return [];
+  }
 }
 
 /** Per quanto il luogo resta evidenziato dopo la chiusura del suo racconto. */
@@ -72,6 +96,8 @@ async function avvia(): Promise<void> {
       scarica<DatiStrati>('data/strati.json', 'gli strati della mappa'),
       scarica<Landmark[]>('landmarks/indice.json', "l'elenco dei luoghi simbolo"),
     ]);
+
+    strati.punti.push(...(await puntiPersonali()));
 
     const conosciute = new Set(storie.map((s) => s.id));
 
