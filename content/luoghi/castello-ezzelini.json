@@ -91,7 +91,7 @@
       }
     },
     {
-      "anno": "anni 1990",
+      "anno": "Anni 1990",
       "titolo": "Le torri tornano aperte",
       "testo": "I restauri degli anni Novanta rendono visitabili la Torre dell'Ortazzo, la Torre di Ser Ivano e il Corpo di Guardia, che ospitano mostre e spettacoli di Operaestate.",
       "fonte": {
@@ -113,7 +113,7 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "Il Castello degli Ezzelini, 13 settembre 2023",
+      "titolo": "Il Castello degli Ezzelini",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_-_Castello_degli_Ezzelini_-_2023-09-13_19-58-47_001.jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Castello_degli_Ezzelini_-_2023-09-13_19-58-47_001.jpg",
       "autore": "Bruschi alberto",
@@ -171,7 +171,7 @@
       "url": "https://www.youtube-nocookie.com/embed/61rteLifD18",
       "pagina": "https://www.youtube.com/watch?v=61rteLifD18",
       "autore": "Rete Veneta",
-      "licenza": "Licenza standard YouTube (solo incorporato)"
+      "licenza": "Licenza non indicata: video solo incorporato da YouTube"
     },
     {
       "tipo": "video",
@@ -179,7 +179,7 @@
       "url": "https://www.youtube-nocookie.com/embed/bmJv2sGn704",
       "pagina": "https://www.youtube.com/watch?v=bmJv2sGn704",
       "autore": "Rete Veneta",
-      "licenza": "Licenza standard YouTube (solo incorporato)"
+      "licenza": "Licenza non indicata: video solo incorporato da YouTube"
     }
   ],
   "live": [],

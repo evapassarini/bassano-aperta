@@ -35,7 +35,7 @@
     {
       "anno": "1779",
       "titolo": "Una distilleria che sta ferma",
-      "testo": "Bortolo Nardini apre all'imbocco del Ponte Vecchio una distilleria stabile, invece di girare con l'alambicco mobile di cascina in cascina.",
+      "testo": "Secondo Linkiesta, Bortolo Nardini apre all'imbocco del Ponte Vecchio una distilleria stabile, invece di girare con l'alambicco mobile di cascina in cascina.",
       "fonte": {
         "titolo": "Linkiesta, articolo su Nardini (luglio 2026)",
         "url": "https://www.linkiesta.it/2026/07/nardini-piu-antica-distilleria-italia-futuro-tempo/"
@@ -44,7 +44,7 @@
     {
       "anno": "1860",
       "titolo": "La grappa a vapore",
-      "testo": "A Bassano il nipote di Bortolo Nardini è tra i primi a introdurre la distillazione a vapore nella produzione della grappa.",
+      "testo": "Secondo Difford's Guide, a Bassano il nipote di Bortolo Nardini è tra i primi a introdurre la distillazione a vapore nella produzione della grappa.",
       "fonte": {
         "titolo": "Difford's Guide, storia della distilleria Nardini",
         "url": "https://www.diffordsguide.com/producers/642/nardini-distillery/history"
@@ -53,7 +53,7 @@
     {
       "anno": "1898",
       "titolo": "Fine degli alambicchi ambulanti",
-      "testo": "La distillazione ambulante viene abolita per ragioni fiscali, e anche GioBatta Poli passa a un alambicco fisso.",
+      "testo": "Secondo il Museo Poli, la distillazione ambulante viene abolita per ragioni fiscali, e anche GioBatta Poli passa a un alambicco fisso.",
       "fonte": {
         "titolo": "Poli Museo della Grappa, racconto su Google Arts & Culture",
         "url": "https://artsandculture.google.com/story/1gVhNEaZ-ZJuJA"
@@ -112,7 +112,7 @@
       "url": "https://www.youtube-nocookie.com/embed/1jFbsPYYgBo",
       "pagina": "https://www.youtube.com/watch?v=1jFbsPYYgBo",
       "autore": "PoliDistillerie",
-      "licenza": "Licenza standard YouTube (solo incorporato)"
+      "licenza": "Licenza non indicata: video solo incorporato da YouTube"
     },
     {
       "tipo": "video",
@@ -120,7 +120,7 @@
       "url": "https://www.youtube-nocookie.com/embed/-RP6F2RqYCo",
       "pagina": "https://www.youtube.com/watch?v=-RP6F2RqYCo",
       "autore": "PoliDistillerie",
-      "licenza": "Licenza standard YouTube (solo incorporato)"
+      "licenza": "Licenza non indicata: video solo incorporato da YouTube"
     }
   ],
   "live": [],

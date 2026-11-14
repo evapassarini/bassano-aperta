@@ -97,6 +97,7 @@ export interface OpzioniMappa {
 export interface Mappa {
   mostraStrato(id: IdStrato, visibile: boolean): void;
   vaiA(lonlat: LonLat, zoom?: number): void;
+  zooma(fattore: number): void;   // > 1 avvicina, < 1 allontana, attorno al centro
   evidenzia(storia: string | null): void;
   distruggi(): void;
 }
@@ -112,6 +113,7 @@ export interface OpzioniUI {
   strati: DatiStrati;
   alCambioStrato: (id: IdStrato, visibile: boolean) => void;
   alVaiA: (lonlat: LonLat) => void;
+  alloZoom?: (fattore: number) => void;  // bottoni «Avvicina» e «Allontana»
   allaChiusura: () => void;
 }
 export interface UI {
@@ -125,8 +127,9 @@ export function creaUI(opzioni: OpzioniUI): UI;
 ### Interfaccia del modulo live (`src/live/index.ts`)
 
 ```ts
-export interface LetturaBrenta { livello: number; portata: number | null; quando: string;
-  serie: { quando: string; livello: number }[] }
+export interface LetturaBrenta { livello: number; portata: number | null;
+  quandoPortata: string | null; // spesso un passo prima del livello: se è diversa si mostra
+  quando: string; serie: { quando: string; livello: number }[] }
 export function leggiBrenta(): Promise<LetturaBrenta>;   // rifiuta se la rete fallisce
 export function leggiAria(): Promise<DatiAria>;           // legge public/data/aria.json
 ```
@@ -141,7 +144,14 @@ export function leggiAria(): Promise<DatiAria>;           // legge public/data/a
 - Clic sulla mappa: `{storia}` apre il racconto, `{punto}` la scheda, `null` non fa nulla.
 - Fuori dall'interfaccia `UI`: a ogni `apriStoria` l'interfaccia lancia su `radice` l'evento
   `ba:storia` (`detail: { id }`); `main.ts` lo usa per chiamare `mappa.evidenzia(id)`, così il
-  luogo si accende anche quando lo si sceglie dall'elenco. `allaChiusura` spegne l'evidenza.
+  luogo si accende anche quando lo si sceglie dall'elenco. A ogni `apriPunto` lancia `ba:punto`
+  (`detail: { id }`) e l'evidenza si spegne subito. Dopo `allaChiusura` l'evidenza resta accesa
+  ancora qualche secondo, o fino al primo gesto sulla mappa, così si riconosce il luogo appena
+  letto.
+- Tutto ciò che si apre con un clic sulla mappa si apre anche dall'elenco «Luoghi»: i racconti,
+  il gruppo «Dati e servizi» (aria, idrometro, webcam, stazione) e, cercando, ogni altro punto
+  degli strati. Lo zoom ha due bottoni e il doppio clic o doppio tocco, oltre a rotella, due
+  dita e tasti + e -.
 - Attributi facoltativi su `radice`, letti da `creaUI` per «Fonti e licenze»:
   `data-base-generato` (lo imposta `main.ts` da `base.generato`), `data-codice`,
   `data-segnalazioni`.
@@ -149,6 +159,12 @@ export function leggiAria(): Promise<DatiAria>;           // legge public/data/a
   la storia `monte-grappa` tiene le coordinate vere della cima (fuori mappa) e sulla mappa ha
   un segnaposto sul margine nord-est.
 - Una storia con un disegno ha `landmark` uguale all'`id` in `public/landmarks/indice.json`.
+- In `indice.json`, `larghezzaMetri` è la larghezza dell'SVG sul piano isometrico (la larghezza
+  sullo schermo a zoom 1), non quella reale dell'edificio: `((x2 - y2) - (x1 - y1)) * 0.7071`
+  tra il punto più a ovest e quello più a est del disegno. `copre` (facoltativo) è il raggio in
+  metri entro cui le case generiche attorno al luogo vengono nascoste.
+- Dove un luogo simbolo è disegnato, il segnaposto della sua storia non si disegna: al suo
+  posto c'è il nome del luogo, sempre visibile.
 - `tests/contenuti.test.ts` controlla storie, strati, luoghi simbolo, base e aria contro
   `src/types.ts`.
 

@@ -3,7 +3,7 @@
 
 import { ORIGINE } from '../types';
 import type { DatiBase, DatiStrati, IdStrato, Landmark, LonLat, Punto } from '../types';
-import { marcatoriInVista, trovaBersaglio } from './bersagli';
+import { trovaBersaglio, ZOOM_NOMI } from './bersagli';
 import type { Colpito } from './bersagli';
 import { Disegnatore } from './disegno';
 import { Illustrazioni } from './immagini';
@@ -31,6 +31,8 @@ export interface OpzioniMappa {
 export interface Mappa {
   mostraStrato(id: IdStrato, visibile: boolean): void;
   vaiA(lonlat: LonLat, zoom?: number): void;
+  /** Avvicina (fattore > 1) o allontana (fattore < 1) attorno al centro della vista. */
+  zooma(fattore: number): void;
   evidenzia(storia: string | null): void;
   distruggi(): void;
 }
@@ -42,6 +44,13 @@ const DENSITA_MASSIMA = 2;
 /** Quanto si può muovere il puntatore perché sia ancora un clic, in pixel. */
 const SOGLIA_CLIC = { mouse: 4, tocco: 10 };
 const DURATA_VOLO = 750;
+const DURATA_ZOOM = 260;
+/** Due clic o due tocchi nello stesso punto entro questo tempo avvicinano la mappa. */
+const DOPPIO_CLIC = { millisecondi: 350, pixel: 30, fattore: 1.8 };
+/** Passo dei tasti + e - e dei bottoni «Avvicina» e «Allontana». */
+export const PASSO_ZOOM = 1.5;
+/** Zoom a cui si arriva scegliendo un luogo dall'elenco: i nomi dei segnaposto si leggono. */
+const ZOOM_ARRIVO = Math.max(2.4, ZOOM_NOMI + 0.2);
 const ATTESA_HASH = 300;
 
 export function creaMappa(opzioni: OpzioniMappa): Mappa {
@@ -80,7 +89,7 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
   if (!canvas.hasAttribute('aria-label')) {
     canvas.setAttribute(
       'aria-label',
-      'Mappa isometrica di Bassano del Grappa. Trascina per spostarti; con la tastiera usa le frecce per muoverti, più e meno per lo zoom.',
+      'Mappa isometrica di Bassano del Grappa. Trascina per spostarti; con la tastiera usa le frecce per muoverti, più e meno per lo zoom. I luoghi e i punti della mappa si aprono anche dal bottone Luoghi.',
     );
   }
   const azionePrecedente = canvas.style.touchAction;
@@ -130,6 +139,7 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
     da: Camera;
     a: Camera;
     inizio: number;
+    durata: number;
   }
   let volo: Volo | null = null;
 
@@ -137,7 +147,7 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
     fotogramma = 0;
     if (!vivo) return;
     if (volo) {
-      const t = Math.min(1, (ora - volo.inizio) / DURATA_VOLO);
+      const t = Math.min(1, (ora - volo.inizio) / volo.durata);
       const e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
       // Lo zoom si interpola in scala logaritmica: il movimento sembra uniforme.
       const zoom = Math.exp(
@@ -178,7 +188,6 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
   // --- indirizzo --------------------------------------------------------------
 
   let timerHash = 0;
-  let ultimoHash = '';
 
   function pianificaHash(): void {
     window.clearTimeout(timerHash);
@@ -196,7 +205,6 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
     const resto = leggiHash(attuale)?.resto ?? '';
     const nuovo = formattaHash(camera, resto);
     if (nuovo === attuale) return;
-    ultimoHash = nuovo;
     try {
       history.replaceState(history.state, '', nuovo);
     } catch {
@@ -205,25 +213,30 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
   }
 
   const alCambioHash = (): void => {
+    // Si confronta con la camera, non con l'ultimo hash scritto: tornando indietro nella
+    // cronologia l'indirizzo può essere quello di prima mentre la mappa è altrove.
     const attuale = window.location.hash;
-    if (attuale === ultimoHash) return;
     const letto = leggiHash(attuale);
-    if (!letto) return;
+    if (!letto || formattaHash(camera, letto.resto) === attuale) return;
     volo = null;
     imposta(letto.camera, false);
   };
 
   // --- che cosa c'è sotto il puntatore ----------------------------------------
 
-  const sotto = (x: number, y: number, tolleranza: number): Colpito | null =>
-    trovaBersaglio(
+  const sotto = (x: number, y: number, tolleranza: number): Colpito | null => {
+    // Con il dito si concede una casella di tolleranza, con il mouse vale il punto esatto.
+    const intorno = tolleranza > 5 ? 1 : 0;
+    return trovaBersaglio(
       x,
       y,
-      marcatoriInVista(scena.punti, visibili, camera, vista),
+      disegnatore.marcatori(visibili, camera, vista),
       disegnatore.spriteInVista(camera, vista),
       tolleranza,
-      (indice, u, v) => illustrazioni.opaco(indice, u, v),
+      (indice, u, v) => illustrazioni.opaco(indice, u, v, intorno),
+      (indice) => disegnatore.copertaDaEdifici(indice, x, y, camera, vista),
     );
+  };
 
   const posizione = (e: { clientX: number; clientY: number }): { x: number; y: number } => {
     const r = canvas.getBoundingClientRect();
@@ -248,6 +261,8 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
   /** Gesto in corso: da dove è partito e se è ancora un possibile clic. */
   let gesto: { x: number; y: number; clic: boolean; tocco: boolean } | null = null;
   let pizzico: { distanza: number; cx: number; cy: number } | null = null;
+  /** Ultimo clic caduto nel vuoto: serve a riconoscere il doppio clic e il doppio tocco. */
+  let clicNelVuoto: { x: number; y: number; quando: number } | null = null;
 
   const misuraPizzico = (): { distanza: number; cx: number; cy: number } => {
     const [a, b] = [...puntatori.values()];
@@ -339,8 +354,23 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
     trascinando = false;
     if (eraClic) {
       const colpito = sotto(p.x, p.y, tocco ? 10 : 3);
-      if (!colpito) alClic(null);
-      else if (colpito.genere === 'landmark') {
+      if (!colpito) {
+        const adesso = performance.now();
+        const prima = clicNelVuoto;
+        if (
+          prima &&
+          adesso - prima.quando <= DOPPIO_CLIC.millisecondi &&
+          Math.hypot(p.x - prima.x, p.y - prima.y) <= DOPPIO_CLIC.pixel
+        ) {
+          // Doppio clic o doppio tocco: ci si avvicina a quel punto, con un dito solo.
+          clicNelVuoto = null;
+          const zoom = Math.min(ZOOM_MASSIMO, camera.zoom * DOPPIO_CLIC.fattore);
+          vola(zoomAttorno(camera, vista, p.x, p.y, zoom), DURATA_ZOOM);
+        } else {
+          clicNelVuoto = { x: p.x, y: p.y, quando: adesso };
+          alClic(null);
+        }
+      } else if (colpito.genere === 'landmark') {
         alClic({ storia: scena.landmark[colpito.indice].dati.storia });
       } else {
         const punto = scena.punti[colpito.indice].dati;
@@ -376,15 +406,23 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
 
   const menoMovimento = window.matchMedia?.('(prefers-reduced-motion: reduce)') ?? null;
 
-  const vola = (a: Camera): void => {
+  function vola(a: Camera, durata = DURATA_VOLO): void {
     const meta = limitaCamera(a, area, zoomMinimo, ZOOM_MASSIMO);
     if (menoMovimento?.matches) {
       volo = null;
       imposta(meta);
       return;
     }
-    volo = { da: camera, a: meta, inizio: performance.now() };
+    volo = { da: camera, a: meta, inizio: performance.now(), durata };
     richiedi();
+  }
+
+  /** Zoom attorno al centro della vista; se è già in corso un volo, parte dalla sua meta. */
+  const zooma = (fattore: number): void => {
+    if (!(fattore > 0) || !Number.isFinite(fattore)) return;
+    const da = volo ? volo.a : camera;
+    const zoom = Math.min(ZOOM_MASSIMO, Math.max(zoomMinimo, da.zoom * fattore));
+    vola(zoomAttorno(da, vista, vista.larghezza / 2, vista.altezza / 2, zoom), DURATA_ZOOM);
   };
 
   const tasto = (e: KeyboardEvent): void => {
@@ -408,18 +446,12 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
       case '+':
       case '=':
         e.preventDefault();
-        volo = null;
-        imposta(
-          zoomAttorno(camera, vista, vista.larghezza / 2, vista.altezza / 2, camera.zoom * 1.3),
-        );
+        zooma(PASSO_ZOOM);
         return;
       case '-':
       case '_':
         e.preventDefault();
-        volo = null;
-        imposta(
-          zoomAttorno(camera, vista, vista.larghezza / 2, vista.altezza / 2, camera.zoom / 1.3),
-        );
+        zooma(1 / PASSO_ZOOM);
         return;
       case 'Home':
         e.preventDefault();
@@ -482,8 +514,10 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
     vaiA(lonlat, zoom) {
       const m = lonLatInMetri(lonlat);
       // Senza zoom indicato ci si avvicina almeno quanto basta per riconoscere il luogo.
-      vola({ x: m.x, y: m.y, zoom: zoom ?? Math.max(camera.zoom, 2) });
+      // (e per leggere i nomi dei segnaposto, che compaiono da ZOOM_NOMI in su).
+      vola({ x: m.x, y: m.y, zoom: zoom ?? Math.max(camera.zoom, ZOOM_ARRIVO) });
     },
+    zooma,
     evidenzia(storia) {
       if (storia === evidenziata) return;
       evidenziata = storia;

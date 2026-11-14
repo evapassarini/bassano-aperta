@@ -36,6 +36,9 @@ function dentroIlRiquadro(ll: LonLat): LonLat {
   };
 }
 
+/** Per quanto il luogo resta evidenziato dopo la chiusura del suo racconto. */
+const DURATA_EVIDENZA_MS = 8000;
+
 function mostraErrore(avviso: HTMLElement | null, errore: unknown): void {
   console.error(errore);
   const testo = errore instanceof Error ? errore.message : 'Errore sconosciuto.';
@@ -72,6 +75,14 @@ async function avvia(): Promise<void> {
 
     const conosciute = new Set(storie.map((s) => s.id));
 
+    let timerEvidenza = 0;
+    let evidenzaInUscita = false;
+    const spegniEvidenza = (): void => {
+      window.clearTimeout(timerEvidenza);
+      evidenzaInUscita = false;
+      mappa.evidenzia(null);
+    };
+
     const mappa = creaMappa({
       canvas,
       base,
@@ -93,14 +104,32 @@ async function avvia(): Promise<void> {
       strati,
       alCambioStrato: (id, visibile) => mappa.mostraStrato(id, visibile),
       alVaiA: (ll) => mappa.vaiA(dentroIlRiquadro(ll)),
-      allaChiusura: () => mappa.evidenzia(null),
+      alloZoom: (fattore) => mappa.zooma(fattore),
+      // Chiuso il racconto, il luogo resta acceso ancora un po': su telefono la finestra
+      // copriva la mappa, e così si capisce quale luogo si è appena letto.
+      allaChiusura: () => {
+        window.clearTimeout(timerEvidenza);
+        evidenzaInUscita = true;
+        timerEvidenza = window.setTimeout(spegniEvidenza, DURATA_EVIDENZA_MS);
+      },
     });
 
     // Ogni volta che si apre una storia (dalla mappa o dall'elenco) il luogo si accende.
     radice.addEventListener('ba:storia', (evento) => {
       const id = (evento as CustomEvent<{ id?: string }>).detail?.id;
+      window.clearTimeout(timerEvidenza);
+      evidenzaInUscita = false;
       mappa.evidenzia(typeof id === 'string' ? id : null);
     });
+    // La scheda di un punto senza racconto prende il posto del racconto: l'alone si spegne.
+    radice.addEventListener('ba:punto', spegniEvidenza);
+    // Dopo la chiusura, il primo gesto sulla mappa spegne l'alone.
+    const alGesto = (): void => {
+      if (evidenzaInUscita) spegniEvidenza();
+    };
+    canvas.addEventListener('pointerdown', alGesto);
+    canvas.addEventListener('wheel', alGesto, { passive: true });
+    canvas.addEventListener('keydown', alGesto);
 
     // Stesso stato iniziale degli interruttori dell'interfaccia.
     mappa.mostraStrato('cultura', true);

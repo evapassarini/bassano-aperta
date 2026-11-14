@@ -4,14 +4,14 @@
   "fonte": {
     "nome": "ARPAV, qualità dell'aria: dati in diretta, non validati",
     "url": "https://www2.arpa.veneto.it/aria-json/exported/aria/data.json",
-    "licenza": "CC BY 4.0 (come indicato nella pagina open data di ARPAV)"
+    "licenza": "CC BY 4.0 dichiarata da ARPAV per i file XML; i file JSON dell'aria sono elencati nella stessa pagina open data"
   },
   "misure": [
     {
       "inquinante": "Ozono (media oraria)",
       "valore": 36.4,
       "unita": "µg/m³",
-      "quando": "2026-11-14T22:42:01Z"
+      "quando": "2026-11-14T22:00:00"
     },
     {
       "inquinante": "PM10 (media giornaliera)",

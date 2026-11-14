@@ -189,8 +189,20 @@ export interface Landmark {
   file: string;
   lat: number;
   lon: number;
-  /** Larghezza reale coperta dall'intero SVG, in metri: serve per la scala. */
+  /**
+   * Larghezza dell'intero SVG sul piano isometrico, cioè la sua larghezza sullo schermo a
+   * zoom 1. NON è la larghezza reale dell'edificio: per un disegno che va dal punto più a
+   * ovest (x1, y1) al punto più a est (x2, y2), in metri locali, vale
+   * ((x2 - y2) - (x1 - y1)) * 0.7071. Il Ponte Vecchio, lungo 74 m, ha 59.5.
+   */
   larghezzaMetri: number;
+  /**
+   * Facoltativo: raggio in metri attorno al punto d'appoggio entro cui gli edifici generici
+   * vengono nascosti. Serve ai luoghi piccoli stretti tra le case, che altrimenti restano
+   * coperti da chi sta loro davanti. Senza questo campo si nasconde solo ciò che sta nel
+   * rombo di terreno del disegno.
+   */
+  copre?: number;
   /** Punto dell'SVG che poggia sulle coordinate, in frazioni 0..1 di larghezza e altezza. */
   ancora: [number, number];
   /** Storia da aprire al clic. */

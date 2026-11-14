@@ -61,8 +61,7 @@
       "fonte": {
         "titolo": "Wikipedia, voce «Sul ponte di Perati»",
         "url": "https://it.wikipedia.org/wiki/Sul_ponte_di_Perati"
-      },
-      "media": 9
+      }
     },
     {
       "anno": "1945",
@@ -195,7 +194,7 @@
     },
     {
       "tipo": "audio",
-      "titolo": "Registrazione storica di \"Sul ponte di Bassano\" (Coro ICAM, etichetta Vedette)",
+      "titolo": "Registrazione storica di «Sul ponte di Bassano» (Coro ICAM, etichetta Vedette)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/ICBSA_Coro_ICAM_-_Sul_ponte_di_Bassano.oga",
       "pagina": "https://commons.wikimedia.org/wiki/File:ICBSA_Coro_ICAM_-_Sul_ponte_di_Bassano.oga",
       "autore": "Coro ICAM, etichetta Vedette (fondo ICBSA)",
@@ -203,7 +202,7 @@
     },
     {
       "tipo": "audio",
-      "titolo": "Registrazione storica di \"Sul ponte di Bassano\" (Coro ex combattenti, etichetta Columbia)",
+      "titolo": "Registrazione storica di «Sul ponte di Bassano» (Coro ex combattenti, etichetta Columbia)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/ICBSA_Coro_ex_combattenti_-_Sul_ponte_di_Bassano.oga",
       "pagina": "https://commons.wikimedia.org/wiki/File:ICBSA_Coro_ex_combattenti_-_Sul_ponte_di_Bassano.oga",
       "autore": "Coro ex combattenti, etichetta Columbia (fondo ICBSA)",
@@ -215,7 +214,7 @@
       "url": "https://www.youtube-nocookie.com/embed/w3DLmXwMgE0",
       "pagina": "https://www.youtube.com/watch?v=w3DLmXwMgE0",
       "autore": "Archivio Luce Cinecittà",
-      "licenza": "Licenza standard YouTube (solo incorporato)"
+      "licenza": "Licenza non indicata: video solo incorporato da YouTube"
     },
     {
       "tipo": "video",
@@ -223,7 +222,7 @@
       "url": "https://www.youtube-nocookie.com/embed/TWa0GW8GG90",
       "pagina": "https://www.youtube.com/watch?v=TWa0GW8GG90",
       "autore": "Rete Veneta",
-      "licenza": "Licenza standard YouTube (solo incorporato)"
+      "licenza": "Licenza non indicata: video solo incorporato da YouTube"
     },
     {
       "tipo": "video",
@@ -231,13 +230,13 @@
       "url": "https://www.youtube-nocookie.com/embed/SPREnPFTbnQ",
       "pagina": "https://www.youtube.com/watch?v=SPREnPFTbnQ",
       "autore": "Rete Veneta",
-      "licenza": "Licenza standard YouTube (solo incorporato)"
+      "licenza": "Licenza non indicata: video solo incorporato da YouTube"
     }
   ],
   "live": [
     {
       "tipo": "brenta",
-      "nota": "Il livello del Brenta è misurato dall'idrometro ARPAV di Ca' Barzizza, circa 1 km a monte del ponte: non è il livello sotto il ponte. I dati non sono validati. Sul Ponte Vecchio non esiste una webcam funzionante: per questo qui non trovi immagini in diretta."
+      "nota": "Il livello del Brenta è misurato dall'idrometro ARPAV «Brenta a Barzizza», circa 1 km a monte del ponte: non è il livello sotto il ponte. I dati non sono validati. Sul Ponte Vecchio non esiste una webcam funzionante: per questo qui non trovi immagini in diretta."
     }
   ],
   "incertezze": [

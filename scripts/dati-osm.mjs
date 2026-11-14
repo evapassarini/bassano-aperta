@@ -11,6 +11,7 @@
 // tocca il file esistente: mai un base.json a metà.
 
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
+import { togliDoppioni } from './lib/doppioni.mjs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
@@ -261,7 +262,7 @@ function altezzaEdificio(tags, tipo, superficie, inCentro, id) {
 
 function costruisciEdifici(elementi, zoneIndustriali) {
   const edifici = [];
-  const scartati = { piccoli: 0, fuori: 0, degeneri: 0, sotterranei: 0 };
+  const scartati = { piccoli: 0, fuori: 0, degeneri: 0, sotterranei: 0, doppioni: 0 };
   const conAltezzaVera = { n: 0 };
   for (const e of elementi) {
     const tags = e.tags || {};
@@ -296,11 +297,18 @@ function costruisciEdifici(elementi, zoneIndustriali) {
       if (numero(tags.height) !== null || numero(tags['building:levels']) !== null) conAltezzaVera.n++;
       const edificio = { p, h, t };
       if (tags.name) edificio.n = tags.name.trim();
-      edifici.push({ id: e.id, edificio });
+      const altezzaVera = numero(tags.height) !== null || numero(tags['building:levels']) !== null;
+      edifici.push({ id: e.id, edificio, altezzaVera });
     }
   }
   edifici.sort((a, b) => a.id - b.id);
-  return { edifici: edifici.map((x) => x.edificio), scartati, conAltezzaVera: conAltezzaVera.n };
+  // Lo stesso edificio rilevato due volte: resta quello con il nome o con l'altezza vera.
+  const senzaDoppi = togliDoppioni(
+    edifici.map((x) => x.edificio),
+    (i) => edifici[i].altezzaVera,
+  );
+  scartati.doppioni = senzaDoppi.tolti;
+  return { edifici: senzaDoppi.edifici, scartati, conAltezzaVera: conAltezzaVera.n };
 }
 
 const dentroLimiti = ([x, y], l) => x >= l.minX && x <= l.maxX && y >= l.minY && y <= l.maxY;
@@ -677,7 +685,7 @@ async function principale() {
   const e = costruisciEdifici(grezzi.edifici, a.zoneIndustriali);
   console.log(`  ${e.edifici.length} edifici: ${conta(e.edifici)}`);
   console.log(`  altezza da OSM per ${e.conAltezzaVera}, stimata per ${e.edifici.length - e.conAltezzaVera}; con nome ${e.edifici.filter((x) => x.n).length}`);
-  console.log(`  scartati: ${e.scartati.piccoli} sotto ${AREA_MINIMA_EDIFICIO} m², ${e.scartati.fuori} fuori riquadro, ${e.scartati.degeneri} degeneri, ${e.scartati.sotterranei} sotterranei`);
+  console.log(`  scartati: ${e.scartati.piccoli} sotto ${AREA_MINIMA_EDIFICIO} m², ${e.scartati.fuori} fuori riquadro, ${e.scartati.degeneri} degeneri, ${e.scartati.sotterranei} sotterranei, ${e.scartati.doppioni} doppioni`);
 
   console.log('\n4. Strade');
   const s = costruisciStrade(grezzi.strade);

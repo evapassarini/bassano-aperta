@@ -4,7 +4,9 @@
 import type { IdStrato, TipoArea, TipoStrada } from '../types';
 import {
   marcatoriInVista,
+  puntoSuEdificio,
   rettangoloSprite,
+  SPRITE_SOGLIA,
   ZOOM_NOMI,
 } from './bersagli';
 import type { Marcatore, Sprite } from './bersagli';
@@ -24,7 +26,7 @@ import {
   raggruppaInTessere,
   siToccano,
 } from './scena';
-import type { EdificioPronto, Scena, StratiVisibili } from './scena';
+import type { EdificioPronto, PuntoPronto, Scena, StratiVisibili } from './scena';
 
 export interface StatoDisegno {
   camera: Camera;
@@ -102,13 +104,18 @@ export class Disegnatore {
   private readonly larghezzeTesto = new Map<string, number>();
   /** Indici dei luoghi simbolo nell'ordine di disegno (dal più lontano). */
   private readonly ordineLandmark: number[] = [];
+  /** Per ogni luogo simbolo, la sua posizione tra gli elementi in piedi. */
+  private readonly postoLandmark: number[] = [];
 
   constructor(scena: Scena, illustrazioni: Illustrazioni) {
     this.scena = scena;
     this.illustrazioni = illustrazioni;
     const el = scena.elementi;
     for (let i = 0; i < el.n; i++) {
-      if (el.tipo[i] === EL_LANDMARK) this.ordineLandmark.push(el.rif[i]);
+      if (el.tipo[i] === EL_LANDMARK) {
+        this.ordineLandmark.push(el.rif[i]);
+        this.postoLandmark[el.rif[i]] = i;
+      }
     }
 
     // --- aree
@@ -236,12 +243,58 @@ export class Disegnatore {
     return e.sotto >= 0 && this.illustrazioni.elenco[e.sotto].pronta;
   }
 
-  /** I rettangoli sullo schermo delle illustrazioni pronte, in ordine di disegno. */
+  /**
+   * true se l'illustrazione del luogo si disegna a questo zoom: deve essere pronta e,
+   * nella vista da lontano, non ridotta a pochi pixel (lì resta il segnaposto).
+   */
+  illustrazioneMostrata(indice: number, camera: Camera, vista: Vista): boolean {
+    const ill = this.illustrazioni.elenco[indice];
+    if (!ill || !ill.pronta) return false;
+    if (livelloDettaglio(camera.zoom, vista) !== 'piatto') return true;
+    return this.scena.landmark[indice].larghezza * camera.zoom >= SPRITE_SOGLIA;
+  }
+
+  /**
+   * I segnaposto da disegnare e da cliccare: quelli degli strati accesi, meno quelli che
+   * stanno su un'illustrazione in vista (lì c'è già il disegno, con il suo nome).
+   */
+  marcatori(visibili: StratiVisibili, camera: Camera, vista: Vista): Marcatore[] {
+    const salta = (p: PuntoPronto): boolean =>
+      p.landmark >= 0 && this.illustrazioneMostrata(p.landmark, camera, vista);
+    return marcatoriInVista(this.scena.punti, visibili, camera, vista, salta);
+  }
+
+  /**
+   * true se nel punto (px, py) dello schermo l'illustrazione è coperta da un edificio
+   * disegnato dopo di lei, cioè più vicino a chi guarda. Da lontano le illustrazioni
+   * stanno sopra a tutto e non sono mai coperte.
+   */
+  copertaDaEdifici(indice: number, px: number, py: number, camera: Camera, vista: Vista): boolean {
+    if (livelloDettaglio(camera.zoom, vista) !== 'pieno') return false;
+    const posto = this.postoLandmark[indice];
+    if (posto === undefined) return false;
+    const centro = metriInIso(camera.x, camera.y);
+    const x = (px - vista.larghezza / 2) / camera.zoom + centro.sx;
+    const y = (py - vista.altezza / 2) / camera.zoom + centro.sy;
+    const el = this.scena.elementi;
+    const vicini = el.griglia.interroga({ minX: x - 1, minY: y - 1, maxX: x + 1, maxY: y + 1 });
+    for (let j = vicini.length - 1; j >= 0; j--) {
+      const i = vicini[j];
+      if (i <= posto) break;
+      if (el.tipo[i] !== EL_EDIFICIO) continue;
+      const e = this.scena.edifici[el.rif[i]];
+      if (this.coperto(e)) continue;
+      if (puntoSuEdificio(x, y, e.anello, e.alt, e.lati)) return true;
+    }
+    return false;
+  }
+
+  /** I rettangoli sullo schermo delle illustrazioni in vista, in ordine di disegno. */
   spriteInVista(camera: Camera, vista: Vista): Sprite[] {
     const u: Sprite[] = [];
     for (const indice of this.ordineLandmark) {
       const ill = this.illustrazioni.elenco[indice];
-      if (!ill.pronta) continue;
+      if (!this.illustrazioneMostrata(indice, camera, vista)) continue;
       const s = rettangoloSprite(this.scena.landmark[indice], indice, ill.proporzione, camera, vista);
       if (s.x > vista.larghezza || s.y > vista.altezza || s.x + s.larghezza < 0 || s.y + s.altezza < 0) {
         continue;
@@ -513,9 +566,9 @@ export class Disegnatore {
         let pezzo = this.pezziPiatti[t];
         if (!pezzo) {
           pezzo = new Path2D();
-          for (const i of tessera.indici) {
-            if (!this.coperto(edifici[i])) tracciaAnello(pezzo, edifici[i].anello);
-          }
+          // Qui le impronte sono a terra e le illustrazioni vengono disegnate sopra:
+          // non serve togliere quelle coperte (e sotto un luogo non disegnato non resta un buco).
+          for (const i of tessera.indici) tracciaAnello(pezzo, edifici[i].anello);
           this.pezziPiatti[t] = pezzo;
         }
         ctx.fillStyle = PALETTE.edificiLontani;
@@ -601,7 +654,22 @@ export class Disegnatore {
     const muro = this.tinteMuro[this.iMuro[indice]];
     const tetto = this.tinteTetto[this.iTetto[indice]];
 
-    if (h > 0.2) {
+    if (h > 0.2 && e.ordineMuri) {
+      // Impronta con rientranze: un muro alla volta, dal più lontano al più vicino.
+      for (let k = 0; k < e.ordineMuri.length; k++) {
+        const i = e.ordineMuri[k];
+        const j = (i + 1) % n;
+        ctx.beginPath();
+        ctx.moveTo(a[i * 2], a[i * 2 + 1]);
+        ctx.lineTo(a[j * 2], a[j * 2 + 1]);
+        ctx.lineTo(a[j * 2], a[j * 2 + 1] - h);
+        ctx.lineTo(a[i * 2], a[i * 2 + 1] - h);
+        ctx.closePath();
+        ctx.fillStyle = e.lati[i] === MURO_SINISTRO ? muro.chiaro : muro.scuro;
+        ctx.fill();
+        ctx.stroke();
+      }
+    } else if (h > 0.2) {
       for (let classe = MURO_SINISTRO; classe <= MURO_DESTRO; classe++) {
         let qualcosa = false;
         ctx.beginPath();
@@ -703,14 +771,16 @@ export class Disegnatore {
 
   private segnaposto(ctx: CanvasRenderingContext2D, s: StatoDisegno, sprite: Sprite[]): void {
     const P = PALETTE;
-    const marcatori = marcatoriInVista(this.scena.punti, s.visibili, s.camera, s.vista);
+    const marcatori = this.marcatori(s.visibili, s.camera, s.vista);
     // Un luogo senza illustrazione si evidenzia sul suo segnaposto, anche a strato spento:
     // l'alone va sopra gli edifici, altrimenti resterebbe nascosto.
+    const evidenziati: { nome: string; px: number; py: number }[] = [];
     if (s.evidenziata && !this.evidenzaSuLandmark(s.evidenziata)) {
       for (const p of this.scena.punti) {
         if (p.dati.storia !== s.evidenziata) continue;
         const c = isoInSchermo(p.sx, p.sy, s.camera, s.vista);
         this.alone(ctx, c.px, c.py, 22);
+        evidenziati.push({ nome: p.dati.nome, px: c.px, py: c.py });
       }
     }
     for (const m of marcatori) {
@@ -759,6 +829,26 @@ export class Disegnatore {
         const nome = this.scena.landmark[sp.indice].dati.nome;
         scrivi(nome, sp.x + sp.larghezza / 2, Math.max(18, sp.y - 6), true, true);
       }
+    }
+    // Il luogo evidenziato dice sempre il suo nome, anche da lontano e a strato spento.
+    for (const e of evidenziati) {
+      const m = marcatori.find((v) => v.px === e.px && v.py === e.py);
+      if (m && m.indice === s.puntoSopra) continue;
+      scrivi(e.nome, e.px, (m ? m.ty - m.raggio : e.py - 14) - 7, true, false);
+    }
+    // I luoghi simbolo hanno sempre il nome scritto sopra il disegno, a ogni zoom: è lui
+    // a dire che cosa si sta guardando, al posto del segnaposto. Prima quello evidenziato.
+    const conNome = sprite
+      .filter((sp) => sp.indice !== s.landmarkSopra || sopraMarcatore !== undefined)
+      .sort((a, b) => {
+        const ea = this.scena.landmark[a.indice].dati.storia === s.evidenziata ? 0 : 1;
+        const eb = this.scena.landmark[b.indice].dati.storia === s.evidenziata ? 0 : 1;
+        return ea - eb || a.indice - b.indice;
+      });
+    for (const sp of conNome) {
+      if (sp.x + sp.larghezza < 0 || sp.x > s.vista.larghezza || sp.y > s.vista.altezza) continue;
+      const nome = this.scena.landmark[sp.indice].dati.nome;
+      scrivi(nome, sp.x + sp.larghezza / 2, Math.max(18, sp.y - 6), true, false);
     }
     if (s.camera.zoom >= ZOOM_NOMI) {
       const resto = marcatori.filter((m) => m.indice !== s.puntoSopra);

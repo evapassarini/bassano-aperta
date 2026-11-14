@@ -74,6 +74,12 @@ body {
   touch-action: none;
 }
 
+/* Il fuoco da tastiera sulla mappa si deve vedere: da qui frecce e +/- la muovono. */
+#mappa:focus-visible {
+  outline: 3px solid var(--fuoco);
+  outline-offset: -3px;
+}
+
 /* Messaggio a tutta pagina per chi avvia: caricamento, errore, niente JavaScript. */
 .avviso-pagina {
   position: fixed;
@@ -420,6 +426,57 @@ body {
 }
 
 /* ---------------------------------------------------------------------------
+   Zoom e aiuto per la tastiera
+--------------------------------------------------------------------------- */
+
+.zoom {
+  position: absolute;
+  left: var(--margine);
+  bottom: var(--margine);
+  z-index: var(--piano-controlli);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bottone-zoom {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  padding: 0;
+  box-shadow: var(--ombra-foglio);
+}
+
+.aiuto-tasti {
+  position: absolute;
+  left: 50%;
+  bottom: var(--margine);
+  z-index: var(--piano-controlli);
+  display: none;
+  max-width: calc(100% - 140px);
+  margin: 0;
+  padding: 8px 14px;
+  border: 1px solid var(--bordo-forte);
+  border-radius: 6px;
+  background: var(--foglio);
+  box-shadow: var(--ombra-foglio);
+  font-size: 0.875rem;
+  line-height: 1.35;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+#mappa:focus-visible ~ #ui .aiuto-tasti {
+  display: block;
+}
+
+.elenco-nota {
+  padding: 4px 12px 0;
+  color: var(--seppia);
+  font-size: 0.8125rem;
+}
+
+/* ---------------------------------------------------------------------------
    Elenco dei luoghi
 --------------------------------------------------------------------------- */
 
@@ -610,11 +667,13 @@ body {
 
 /* --- Apertura del racconto --- */
 
+/* Altezza fissa: lo spazio è riservato prima che il disegno arrivi, così il testo non salta. */
 .racconto-disegno {
   display: block;
   width: auto;
   max-width: 100%;
-  max-height: 168px;
+  height: 168px;
+  object-fit: contain;
   margin: 0 auto 18px;
 }
 
@@ -1034,8 +1093,20 @@ body {
 
 .galleria {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 14px 10px;
+  align-items: start;
+}
+
+.galleria-figura {
+  margin: 0;
+}
+
+.ba .galleria-figura figcaption {
+  margin-top: 5px;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 
 .galleria-voce {
@@ -1526,6 +1597,19 @@ body {
     position: fixed;
     left: var(--margine);
     bottom: calc(var(--margine) + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Lo zoom sta a destra, sopra il pollice dell'altra mano. */
+  .zoom {
+    position: fixed;
+    left: auto;
+    right: var(--margine);
+    bottom: calc(var(--margine) + env(safe-area-inset-bottom, 0px));
+  }
+
+  .aiuto-tasti {
+    bottom: calc(var(--margine) + 56px + env(safe-area-inset-bottom, 0px));
+    max-width: calc(100% - 2 * var(--margine));
   }
 
   .elenco {

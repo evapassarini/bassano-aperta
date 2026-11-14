@@ -1,12 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import type { Storia } from '../src/types';
+import type { Punto, Storia } from '../src/types';
 import {
   chiaveOrdine,
   contaRisultati,
+  decidiTappe,
   descriviDurata,
   descriviStrato,
   dividiStorie,
   etichettaTipo,
+  filtraPunti,
   filtraStorie,
   fontiUniche,
   formattaData,
@@ -23,6 +25,7 @@ import {
   mediaResidui,
   normalizza,
   parolaTendenza,
+  testoPortata,
   tracciaSerie,
   urlIncorporamento,
   urlMiniatura,
@@ -337,5 +340,104 @@ describe('etichette', () => {
     expect(descriviStrato('cultura', elementi)).toBe('musei, chiese');
     expect(descriviStrato('mobilita', elementi)).toBe('piste ciclabili');
     expect(descriviStrato('ambiente', elementi)).toBe("qualità dell'aria, livello del Brenta");
+  });
+});
+
+describe('testoPortata', () => {
+  it("non aggiunge l'ora se portata e livello sono della stessa lettura", () => {
+    expect(testoPortata(51.79, '2026-11-15T00:00:00', '2026-11-15T00:00:00')).toBe('portata 51,8 m³/s');
+    expect(testoPortata(51.79, null, '2026-11-15T00:00:00')).toBe('portata 51,8 m³/s');
+  });
+
+  it("dice l'ora della portata quando è di una lettura precedente", () => {
+    expect(testoPortata(51.79, '2026-11-14T23:50:00', '2026-11-15T00:00:00')).toBe(
+      'portata 51,8 m³/s (alle 23:50)',
+    );
+  });
+});
+
+describe('decidiTappe', () => {
+  const a = { nome: 'a' };
+  const b = { nome: 'b' };
+
+  it('nasconde solo le tappe ancora sotto il bordo', () => {
+    const rivelate = new WeakSet<object>();
+    expect(
+      decidiTappe(
+        [
+          { bersaglio: a, visibile: true, sottoIlBordo: false },
+          { bersaglio: b, visibile: false, sottoIlBordo: true },
+        ],
+        rivelate,
+      ),
+    ).toEqual([
+      { bersaglio: a, azione: 'mostra' },
+      { bersaglio: b, azione: 'nascondi' },
+    ]);
+    expect(rivelate.has(a)).toBe(true);
+    expect(rivelate.has(b)).toBe(false);
+  });
+
+  it('non rinasconde una tappa già mostrata, nemmeno nello stesso lotto', () => {
+    const rivelate = new WeakSet<object>();
+    // Il caso vero: visibile, poi spinta sotto il bordo dal disegno che si carica sopra.
+    const azioni = decidiTappe(
+      [
+        { bersaglio: a, visibile: true, sottoIlBordo: false },
+        { bersaglio: a, visibile: false, sottoIlBordo: true },
+      ],
+      rivelate,
+    );
+    expect(azioni).toEqual([{ bersaglio: a, azione: 'mostra' }]);
+    expect(decidiTappe([{ bersaglio: a, visibile: false, sottoIlBordo: true }], rivelate)).toEqual([]);
+  });
+
+  it('mostra una tappa già passata sopra il bordo alto', () => {
+    expect(decidiTappe([{ bersaglio: a, visibile: false, sottoIlBordo: false }], new WeakSet())).toEqual([
+      { bersaglio: a, azione: 'mostra' },
+    ]);
+  });
+});
+
+describe('filtraPunti', () => {
+  const punto = (id: string, tipo: Punto['tipo'], nome: string, altro: Partial<Punto> = {}): Punto => ({
+    id,
+    strato: tipo === 'fermata-bus' || tipo === 'stazione' ? 'mobilita' : tipo === 'chiesa' ? 'cultura' : 'ambiente',
+    tipo,
+    nome,
+    x: 0,
+    y: 0,
+    ...altro,
+  });
+  const punti: Punto[] = [
+    punto('aria', 'aria', 'Stazione ARPAV «Bassano»'),
+    punto('idro', 'idrometro', 'Idrometro ARPAV', { storia: 'brenta' }),
+    punto('cam', 'webcam', 'Webcam di Piazza Libertà'),
+    punto('treno', 'stazione', 'Bassano del Grappa'),
+    punto('bus1', 'fermata-bus', 'Viale delle Fosse'),
+    punto('bus2', 'fermata-bus', 'Via Roma'),
+    punto('chiesa', 'chiesa', 'San Donato'),
+    punto('duomo', 'chiesa', 'Duomo', { storia: 'castello-ezzelini' }),
+  ];
+
+  it('senza ricerca elenca solo dati e servizi: aria, idrometro, webcam, stazione', () => {
+    const r = filtraPunti(punti, '');
+    expect(r.servizi.map((p) => p.id).sort()).toEqual(['aria', 'cam', 'idro', 'treno']);
+    expect(r.altri).toEqual([]);
+  });
+
+  it('cercando trova anche gli altri punti senza racconto, per nome o per tipo', () => {
+    expect(filtraPunti(punti, 'fermata').altri.map((p) => p.id)).toEqual(['bus2', 'bus1']);
+    expect(filtraPunti(punti, 'donato').altri.map((p) => p.id)).toEqual(['chiesa']);
+    // Il Duomo ha un racconto: si apre da lì, non compare due volte.
+    expect(filtraPunti(punti, 'duomo').altri).toEqual([]);
+    expect(filtraPunti(punti, 'aria').servizi.map((p) => p.id)).toEqual(['aria']);
+  });
+
+  it('limita gli altri punti e dice quanti sono in tutto', () => {
+    const tanti = Array.from({ length: 60 }, (_, i) => punto(`f${i}`, 'fermata-bus', `Fermata ${i}`));
+    const r = filtraPunti(tanti, 'fermata');
+    expect(r.altri.length).toBeLessThan(60);
+    expect(r.altriInTutto).toBe(60);
   });
 });

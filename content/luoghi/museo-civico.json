@@ -1,28 +1,28 @@
 {
   "id": "museo-civico",
   "nome": "Museo Civico",
-  "sottotitolo": "L’ex convento di San Francesco, tra Canova e la storia della città",
+  "sottotitolo": "L'ex convento di San Francesco, tra Canova e la storia della città",
   "genere": "luogo",
   "lat": 45.76642,
   "lon": 11.7352,
-  "intro": "In Piazza Garibaldi, dentro l’ex convento di San Francesco, Bassano custodisce da quasi due secoli quadri, libri, reperti e le carte di Antonio Canova. Tra queste sale c’è anche la storia di un cavallo di gesso gigantesco: fatto a pezzi negli anni Sessanta, sta per tornare in piedi.",
+  "intro": "In Piazza Garibaldi, dentro l'ex convento di San Francesco, Bassano custodisce da quasi due secoli quadri, libri, reperti e le carte di Antonio Canova. Tra queste sale c'è anche la storia di un cavallo di gesso gigantesco: fatto a pezzi negli anni Sessanta, sta per tornare in piedi.",
   "tappe": [
     {
       "anno": "1819-1822",
       "titolo": "Il cavallo colossale di Canova",
-      "testo": "Tra il 1819 e il 1821 Antonio Canova modella in gesso il Cavallo colossale, pensato per un monumento equestre in bronzo voluto da Ferdinando I di Borbone. Lo scultore muore nell’ottobre 1822 e l’opera resta incompiuta.",
+      "testo": "Tra il 1819 e il 1821 Antonio Canova modella in gesso il Cavallo colossale, pensato per un monumento equestre in bronzo voluto da Ferdinando I di Borbone. Lo scultore muore nell'ottobre 1822 e l'opera resta incompiuta.",
       "fonte": {
-        "titolo": "Finestre sull’Arte, articolo sul ritorno del Cavallo colossale di Canova",
+        "titolo": "Finestre sull'Arte, articolo sul ritorno del Cavallo colossale di Canova",
         "url": "https://www.finestresullarte.info/en/ancient-art/canova-s-colossal-horse-will-return-to-display-after-50-years"
       }
     },
     {
       "anno": "1828",
       "titolo": "Nasce il museo",
-      "testo": "Nasce il Museo Civico di Bassano. Molti dei libri vengono dal lascito del naturalista Giambattista Brocchi.",
+      "testo": "Secondo il sito dei Musei Civici, il Museo Civico di Bassano nasce nel 1828. Altre fonti indicano il 1840: lo spieghiamo più sotto, in «Le fonti non concordano». La voce di Wikipedia sul museo aggiunge che molti dei libri vengono dal lascito del naturalista Giambattista Brocchi.",
       "fonte": {
-        "titolo": "Wikipedia, voce «Museo civico di Bassano del Grappa»",
-        "url": "https://it.wikipedia.org/wiki/Museo_civico_di_Bassano_del_Grappa"
+        "titolo": "Musei Civici di Bassano del Grappa, pagina del Museo Civico",
+        "url": "https://www.museibassano.it/it/pagina/museo-civico"
       }
     },
     {
@@ -38,7 +38,7 @@
     {
       "anno": "1840",
       "titolo": "La casa di San Francesco",
-      "testo": "La voce italiana di Wikipedia colloca in quest’anno il trasferimento del museo nell’ex convento di San Francesco, dove si trova ancora oggi. Da allora vi trovano posto anche le collezioni naturalistiche.",
+      "testo": "La voce italiana di Wikipedia colloca in quest'anno il trasferimento del museo nell'ex convento di San Francesco, dove si trova ancora oggi. Da allora vi trovano posto anche le collezioni naturalistiche.",
       "fonte": {
         "titolo": "Wikipedia, voce «Museo civico di Bassano del Grappa»",
         "url": "https://it.wikipedia.org/wiki/Museo_civico_di_Bassano_del_Grappa"
@@ -50,7 +50,7 @@
       "titolo": "Le carte di Canova",
       "testo": "Giovanni Battista Sartori Canova, fratellastro dello scultore, dona a Bassano i manoscritti di Canova: 6.658 documenti, per oltre 40.000 pagine.",
       "fonte": {
-        "titolo": "Finestre sull’Arte, articolo sul fondo dei manoscritti di Canova",
+        "titolo": "Finestre sull'Arte, articolo sul fondo dei manoscritti di Canova",
         "url": "https://www.finestresullarte.info/arte-antica/impresa-biblioteca-bassano-online-fondo-manoscritti-canova"
       },
       "media": 2
@@ -58,18 +58,18 @@
     {
       "anno": "1945",
       "titolo": "I bombardamenti del 1945",
-      "testo": "I bombardamenti distruggono quasi del tutto un’altra opera di Canova, il modello equestre di Carlo III di Borbone.",
+      "testo": "I bombardamenti distruggono quasi del tutto un'altra opera di Canova, il modello equestre di Carlo III di Borbone.",
       "fonte": {
-        "titolo": "Finestre sull’Arte, articolo sul ritorno del Cavallo colossale di Canova",
+        "titolo": "Finestre sull'Arte, articolo sul ritorno del Cavallo colossale di Canova",
         "url": "https://www.finestresullarte.info/en/ancient-art/canova-s-colossal-horse-will-return-to-display-after-50-years"
       }
     },
     {
-      "anno": "Fine anni ’60",
+      "anno": "Fine anni '60",
       "titolo": "Il cavallo finisce in deposito",
       "testo": "Durante alcuni lavori strutturali il Cavallo colossale viene tolto dalla sala, sezionato in più parti e messo in deposito. Nel percorso di visita resta solo la testa.",
       "fonte": {
-        "titolo": "Finestre sull’Arte, articolo sul ritorno del Cavallo colossale di Canova",
+        "titolo": "Finestre sull'Arte, articolo sul ritorno del Cavallo colossale di Canova",
         "url": "https://www.finestresullarte.info/en/ancient-art/canova-s-colossal-horse-will-return-to-display-after-50-years"
       }
     },
@@ -87,7 +87,7 @@
       "titolo": "Un restauro pezzo per pezzo",
       "testo": "Nel febbraio 2025 viene annunciato il restauro del Cavallo colossale: un investimento di 340.500 euro, con la scansione 3D di ogni frammento per ricostruirlo prima al computer. I lavori sono affidati a Passarella Restauri di Padova con R.S. Ingegneria.",
       "fonte": {
-        "titolo": "Finestre sull’Arte, articolo sul ritorno del Cavallo colossale di Canova",
+        "titolo": "Finestre sull'Arte, articolo sul ritorno del Cavallo colossale di Canova",
         "url": "https://www.finestresullarte.info/en/ancient-art/canova-s-colossal-horse-will-return-to-display-after-50-years"
       }
     },
@@ -118,11 +118,11 @@
       "pagina": "https://commons.wikimedia.org/wiki/File:Museo_civico_%28Bassano_del_Grappa%29_01.jpg",
       "autore": "Superchilum",
       "licenza": "CC BY-SA 4.0",
-      "alt": "Il chiostro dell’ex convento di San Francesco: due ali di edificio intonacate di chiaro con portico ad archi al piano terra, finestre con scuri rossi e una torre cilindrica all’angolo."
+      "alt": "Il chiostro dell'ex convento di San Francesco: due ali di edificio intonacate di chiaro con portico ad archi al piano terra, finestre con scuri rossi e una torre cilindrica all'angolo."
     },
     {
       "tipo": "immagine",
-      "titolo": "Le opere di Canova al Museo Civico, in una xilografia d’epoca",
+      "titolo": "Le opere di Canova al Museo Civico, in una xilografia d'epoca",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa%2C_Museo_Civico_opere_di_Canova_%28xilografia%29.jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa%2C_Museo_Civico_opere_di_Canova_%28xilografia%29.jpg",
       "autore": "Autore sconosciuto",
@@ -136,7 +136,7 @@
       "pagina": "https://commons.wikimedia.org/wiki/File:Testa_del_genio_di_Antonio_Canova%2C_Museo_Civico_di_Bassano_del_Grappa.JPG",
       "autore": "Dispe",
       "licenza": "CC BY-SA 3.0",
-      "alt": "Una testa in gesso bianco con i capelli ricci raccolti sopra la fronte e lo sguardo rivolto verso l’alto, appoggiata su una base rotonda contro una parete chiara."
+      "alt": "Una testa in gesso bianco con i capelli ricci raccolti sopra la fronte e lo sguardo rivolto verso l'alto, appoggiata su una base rotonda contro una parete chiara."
     },
     {
       "tipo": "video",
@@ -144,7 +144,7 @@
       "url": "https://www.youtube-nocookie.com/embed/VXzb7pBxWF0",
       "pagina": "https://www.youtube.com/watch?v=VXzb7pBxWF0",
       "autore": "Musei Civici Bassano del Grappa",
-      "licenza": "Licenza standard YouTube (solo incorporato)"
+      "licenza": "Licenza non indicata: video solo incorporato da YouTube"
     },
     {
       "tipo": "video",
@@ -152,7 +152,7 @@
       "url": "https://www.youtube-nocookie.com/embed/34_b8Qr3a0w",
       "pagina": "https://www.youtube.com/watch?v=34_b8Qr3a0w",
       "autore": "Musei Civici Bassano del Grappa",
-      "licenza": "Licenza standard YouTube (solo incorporato)"
+      "licenza": "Licenza non indicata: video solo incorporato da YouTube"
     },
     {
       "tipo": "video",
@@ -160,7 +160,7 @@
       "url": "https://www.youtube-nocookie.com/embed/Me8DQZsct4k",
       "pagina": "https://www.youtube.com/watch?v=Me8DQZsct4k",
       "autore": "Musei Civici Bassano del Grappa",
-      "licenza": "Licenza standard YouTube (solo incorporato)"
+      "licenza": "Licenza non indicata: video solo incorporato da YouTube"
     },
     {
       "tipo": "video",
@@ -168,7 +168,7 @@
       "url": "https://www.youtube-nocookie.com/embed/58DvRP8JcXg",
       "pagina": "https://www.youtube.com/watch?v=58DvRP8JcXg",
       "autore": "Musei Civici Bassano del Grappa",
-      "licenza": "Licenza standard YouTube (solo incorporato)"
+      "licenza": "Licenza non indicata: video solo incorporato da YouTube"
     },
     {
       "tipo": "video",
@@ -176,7 +176,7 @@
       "url": "https://www.youtube-nocookie.com/embed/vZqdnmC8_lI",
       "pagina": "https://www.youtube.com/watch?v=vZqdnmC8_lI",
       "autore": "Itinerarinellarte",
-      "licenza": "Licenza standard YouTube (solo incorporato)"
+      "licenza": "Licenza non indicata: video solo incorporato da YouTube"
     }
   ],
   "live": [
@@ -195,8 +195,8 @@
   ],
   "incertezze": [
     "Anno di nascita del museo: il sito dei Musei e il testo della voce italiana di Wikipedia dicono 1828; il riquadro della stessa voce e la Wikipedia in inglese riportano il 1840.",
-    "Il trasferimento nell’ex convento di San Francesco nel 1840 è indicato solo dalla voce italiana di Wikipedia.",
-    "Disegni di Canova conservati al museo: 1.756 secondo Finestre sull’Arte, «tremila disegni autografi» secondo la voce italiana di Wikipedia."
+    "Il trasferimento nell'ex convento di San Francesco nel 1840 è indicato solo dalla voce italiana di Wikipedia.",
+    "Disegni di Canova conservati al museo: 1.756 secondo Finestre sull'Arte, «tremila disegni autografi» secondo la voce italiana di Wikipedia."
   ],
   "landmark": "museo-civico"
 }

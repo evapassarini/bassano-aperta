@@ -1,7 +1,7 @@
 // Aiuti puri dell'interfaccia: ricerca, date e numeri in italiano, parole per la
 // tendenza del fiume, indirizzi dei video. Nessun DOM qui dentro: si provano con vitest.
 
-import type { Fonte, IdStrato, Storia, TipoPunto } from '../types';
+import type { Fonte, IdStrato, Punto, Storia, TipoPunto } from '../types';
 
 // ---------------------------------------------------------------------------
 // Ricerca nei luoghi
@@ -39,6 +39,37 @@ export function filtraStorie(storie: Storia[], domanda: string): Storia[] {
     else if (parole.every((p) => tutto.includes(p))) altrove.push(s);
   }
   return [...nelNome, ...altrove];
+}
+
+/** Tipi di punto che danno un dato o un servizio: stanno sempre nell'elenco «Luoghi». */
+const TIPI_SERVIZIO: TipoPunto[] = ['aria', 'idrometro', 'webcam', 'stazione'];
+/** Quanti altri punti della mappa mostrare al massimo tra i risultati di una ricerca. */
+export const MASSIMO_ALTRI_PUNTI = 40;
+
+/**
+ * I punti della mappa per l'elenco «Luoghi», così le loro schede si aprono anche senza
+ * toccare la mappa (tastiera, lettore di schermo). `servizi`: aria, idrometro, webcam e
+ * stazione, sempre presenti (filtrati se si cerca). `altri`: tutti gli altri punti senza
+ * racconto (monumenti, chiese, fermate, bici), solo quando si cerca qualcosa; `altriInTutto`
+ * dice quanti sarebbero senza il limite.
+ */
+export function filtraPunti(
+  punti: Punto[],
+  domanda: string,
+): { servizi: Punto[]; altri: Punto[]; altriInTutto: number } {
+  const parole = normalizza(domanda).split(' ').filter(Boolean);
+  const perNome = (a: Punto, b: Punto): number =>
+    chiaveOrdine(a.nome).localeCompare(chiaveOrdine(b.nome), 'it') || a.id.localeCompare(b.id);
+  const contiene = (p: Punto): boolean => {
+    const testo = normalizza(`${p.nome} ${NOME_TIPO[p.tipo] ?? ''}`);
+    return parole.every((parola) => testo.includes(parola));
+  };
+  const servizi = punti.filter((p) => TIPI_SERVIZIO.includes(p.tipo) && contiene(p)).sort(perNome);
+  if (parole.length === 0) return { servizi, altri: [], altriInTutto: 0 };
+  const tutti = punti
+    .filter((p) => !TIPI_SERVIZIO.includes(p.tipo) && p.storia === undefined && contiene(p))
+    .sort(perNome);
+  return { servizi, altri: tutti.slice(0, MASSIMO_ALTRI_PUNTI), altriInTutto: tutti.length };
 }
 
 /** Separa i luoghi dai temi. */
@@ -156,6 +187,17 @@ export function formattaDataOraLunga(iso: string): string {
   if (!d) return iso;
   if (d.soloData) return formattaData(iso);
   return `${formattaData(iso)}, ore ${formattaOra(iso)}`;
+}
+
+/**
+ * "portata 51,8 m³/s", con l'ora se la portata non è della stessa lettura del livello
+ * (ARPAV la pubblica spesso con un passo di ritardo).
+ */
+export function testoPortata(portata: number, quandoPortata: string | null, quandoLivello: string): string {
+  const base = `portata ${formattaPortata(portata)}`;
+  if (!quandoPortata || quandoPortata === quandoLivello) return base;
+  const ora = formattaOra(quandoPortata);
+  return ora ? `${base} (alle ${ora})` : base;
 }
 
 /** Durata coperta da una serie: "Ultimi 3 giorni", "Ultime 8 ore", "Ultimo giorno". */
@@ -355,6 +397,38 @@ export function mediaResidui(storia: Storia, tipo: 'immagine' | 'video' | 'audio
     if (m.tipo === tipo && !usate.has(i)) indici.push(i);
   });
   return indici;
+}
+
+/** Una voce dell'osservatore delle tappe, ridotta a ciò che serve per decidere. */
+export interface VoceTappa<T extends object> {
+  bersaglio: T;
+  visibile: boolean;
+  /** true se la tappa sta ancora sotto il bordo inferiore dell'area che scorre. */
+  sottoIlBordo: boolean;
+}
+
+/**
+ * Decide che cosa fare delle tappe di un lotto dell'osservatore. Una tappa si nasconde
+ * («in arrivo») solo se sta sotto il bordo e non è mai stata mostrata; appena è visibile, o
+ * è già passata sopra, si mostra e non si osserva più. Una tappa mostrata una volta resta
+ * mostrata, qualunque cosa dicano le voci successive (anche nello stesso lotto).
+ * `rivelate` ricorda le tappe già mostrate e viene aggiornato qui.
+ */
+export function decidiTappe<T extends object>(
+  voci: VoceTappa<T>[],
+  rivelate: WeakSet<T>,
+): { bersaglio: T; azione: 'mostra' | 'nascondi' }[] {
+  const azioni: { bersaglio: T; azione: 'mostra' | 'nascondi' }[] = [];
+  for (const v of voci) {
+    if (rivelate.has(v.bersaglio)) continue;
+    if (!v.visibile && v.sottoIlBordo) {
+      azioni.push({ bersaglio: v.bersaglio, azione: 'nascondi' });
+    } else {
+      rivelate.add(v.bersaglio);
+      azioni.push({ bersaglio: v.bersaglio, azione: 'mostra' });
+    }
+  }
+  return azioni;
 }
 
 // ---------------------------------------------------------------------------

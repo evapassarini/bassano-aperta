@@ -313,6 +313,12 @@ export interface EdificioPronto {
   colmo: number;
   /** Per ogni lato dell'anello: MURO_DIETRO, MURO_SINISTRO o MURO_DESTRO. */
   lati: Uint8Array;
+  /**
+   * Solo per le impronte con rientranze: i lati in vista, dal più lontano al più vicino.
+   * Disegnati in quest'ordine, i muri dentro una rientranza non coprono la facciata davanti.
+   * null per le impronte convesse, dove l'ordine non conta.
+   */
+  ordineMuri: Uint16Array | null;
   tipo: TipoEdificio;
   /** Numero stabile ricavato dalla geometria: decide le piccole variazioni di colore. */
   seme: number;
@@ -338,6 +344,45 @@ export function classificaLati(p: ArrayLike<number>): Uint8Array {
     else lati[i] = -dy > dx ? MURO_SINISTRO : MURO_DESTRO;
   }
   return lati;
+}
+
+/**
+ * true se l'anello (antiorario, in metri) è convesso. I punti quasi allineati, frequenti
+ * nei dati veri, non contano come rientranze.
+ */
+export function eConvesso(p: ArrayLike<number>): boolean {
+  const n = p.length >> 1;
+  if (n < 3) return false;
+  for (let i = 0; i < n; i++) {
+    const j = (i + 1) % n;
+    const k = (i + 2) % n;
+    const ax = p[j * 2] - p[i * 2];
+    const ay = p[j * 2 + 1] - p[i * 2 + 1];
+    const bx = p[k * 2] - p[j * 2];
+    const by = p[k * 2 + 1] - p[j * 2 + 1];
+    const giro = ax * by - ay * bx;
+    // Una svolta a destra più marcata di qualche grado è una rientranza.
+    if (giro < -0.05 * Math.hypot(ax, ay) * Math.hypot(bx, by)) return false;
+  }
+  return true;
+}
+
+/**
+ * I lati in vista di un anello (in metri), dal più lontano al più vicino a chi guarda:
+ * conta la profondità (x + y) del punto medio del lato.
+ */
+export function ordinaMuri(p: ArrayLike<number>, lati: Uint8Array): Uint16Array {
+  const n = lati.length;
+  const visibili: number[] = [];
+  const chiave = new Float64Array(n);
+  for (let i = 0; i < n; i++) {
+    if (lati[i] === MURO_DIETRO) continue;
+    const j = (i + 1) % n;
+    chiave[i] = (profondita(p[i * 2], p[i * 2 + 1]) + profondita(p[j * 2], p[j * 2 + 1])) / 2;
+    visibili.push(i);
+  }
+  visibili.sort((a, b) => chiave[b] - chiave[a] || a - b);
+  return Uint16Array.from(visibili);
 }
 
 /** Numero stabile a 32 bit ricavato dall'impronta. */
@@ -373,14 +418,22 @@ export function preparaEdificio(e: Edificio): EdificioPronto {
     if (p[i * 2 + 1] > maxY) maxY = p[i * 2 + 1];
   }
   const corto = n > 0 ? Math.min(maxX - minX, maxY - minY) : 0;
+  const convesso = eConvesso(p);
+  const lati = classificaLati(p);
+  // Il tetto a punta è un ventaglio di falde dal centro: regge solo sulle impronte
+  // convesse. Su una pianta con rientranze (quasi tutte le chiese vere) le falde
+  // uscirebbero dai muri, quindi lì il tetto resta piano.
   let colmo = 0;
-  if (e.t === 'torre') colmo = Math.min(7, Math.max(2, corto * 0.7)) * ISO_Z;
-  else if (e.t === 'chiesa') colmo = Math.min(5, Math.max(1.5, corto * 0.3)) * ISO_Z;
+  if (convesso) {
+    if (e.t === 'torre') colmo = Math.min(7, Math.max(2, corto * 0.7)) * ISO_Z;
+    else if (e.t === 'chiesa') colmo = Math.min(5, Math.max(1.5, corto * 0.3)) * ISO_Z;
+  }
   return {
     anello,
     alt: Math.max(0, e.h) * ISO_Z,
     colmo,
-    lati: classificaLati(p),
+    lati,
+    ordineMuri: convesso || n > 65535 ? null : ordinaMuri(p, lati),
     tipo: e.t,
     seme: semeDi(e.p),
     cx: n > 0 ? sx / n : 0,
@@ -404,6 +457,8 @@ export interface LandmarkPronto {
   /** Semiassi del rombo di terreno che l'illustrazione occupa. */
   semiL: number;
   semiA: number;
+  /** Raggio in metri entro cui nasconde gli edifici generici (0 se non indicato). */
+  copre: number;
 }
 
 export function preparaLandmark(l: Landmark): LandmarkPronto {
@@ -420,12 +475,66 @@ export function preparaLandmark(l: Landmark): LandmarkPronto {
     larghezza: l.larghezzaMetri,
     semiL,
     semiA: semiL / 2,
+    copre: typeof l.copre === 'number' && l.copre > 0 ? l.copre : 0,
   };
 }
 
 /** true se il punto (sul piano isometrico) cade nel rombo di terreno del luogo simbolo. */
 export function nelRomboDi(l: LandmarkPronto, sx: number, sy: number): boolean {
   return Math.abs(sx - l.sx) / l.semiL + Math.abs(sy - l.sy) / l.semiA <= 1;
+}
+
+/** Punto dentro un anello dato come array piatto [x0, y0, x1, y1, ...], in metri. */
+function dentroAnello(x: number, y: number, anello: ArrayLike<number>): boolean {
+  const n = anello.length >> 1;
+  let dentro = false;
+  for (let i = 0, j = n - 1; i < n; j = i++) {
+    const xi = anello[i * 2];
+    const yi = anello[i * 2 + 1];
+    const xj = anello[j * 2];
+    const yj = anello[j * 2 + 1];
+    if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) dentro = !dentro;
+  }
+  return dentro;
+}
+
+/** Entro quanti metri un edificio con lo stesso nome è lo stesso luogo del disegno. */
+const RAGGIO_OMONIMI = 60;
+
+function nomeSemplice(nome: string): string {
+  return nome
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+}
+
+/**
+ * true se il luogo simbolo prende il posto dell'edificio, che quindi non va disegnato:
+ * il centro dell'impronta cade nel rombo di terreno del disegno, oppure entro il raggio
+ * `copre`, oppure l'edificio ha in OpenStreetMap lo stesso nome del luogo e gli sta
+ * accanto (altrimenti il luogo comparirebbe due volte: disegnato e come casa generica).
+ * `cx`, `cy` sono il centro dell'impronta in metri.
+ */
+export function sostituisce(l: LandmarkPronto, cx: number, cy: number, nome?: string): boolean {
+  if (nelRomboDi(l, (cx - cy) * ISO_X, -(cx + cy) * ISO_Y)) return true;
+  const distanza = Math.hypot(cx - l.x, cy - l.y);
+  if (l.copre > 0 && distanza <= l.copre) return true;
+  return (
+    nome !== undefined &&
+    distanza <= RAGGIO_OMONIMI &&
+    nomeSemplice(nome) !== '' &&
+    nomeSemplice(nome) === nomeSemplice(l.dati.nome)
+  );
+}
+
+/**
+ * Di quanto un segnaposto può distare dal punto d'appoggio di un luogo simbolo (in metri)
+ * per essere considerato il segnaposto di quel disegno.
+ */
+export function raggioSegnaposto(l: LandmarkPronto): number {
+  return Math.max(30, l.semiL * 1.3);
 }
 
 // --- elementi in piedi -------------------------------------------------------------
@@ -467,6 +576,11 @@ export interface PuntoPronto {
   dati: Punto;
   sx: number;
   sy: number;
+  /**
+   * Indice del luogo simbolo che racconta la stessa storia e sta nello stesso posto,
+   * oppure -1. Quando quel disegno è in vista, il segnaposto non serve: c'è il nome.
+   */
+  landmark: number;
 }
 
 export interface Scena {
@@ -495,17 +609,51 @@ export function costruisciScena(base: DatiBase, strati: DatiStrati, landmark: La
 
   const edifici: EdificioPronto[] = [];
   const impronte: number[][] = [];
+  /** Centri delle impronte in metri: [x0, y0, x1, y1, ...]. */
+  const centri: number[] = [];
   for (const e of base.edifici) {
     if (!e.p || e.p.length < 6) continue;
     const pronto = preparaEdificio(e);
+    // Centro dell'impronta in metri (la media dei vertici, come cx e cy sul piano).
+    let mx = 0;
+    let my = 0;
+    const vertici = e.p.length >> 1;
+    for (let i = 0; i < vertici; i++) {
+      mx += e.p[i * 2];
+      my += e.p[i * 2 + 1];
+    }
+    mx /= vertici;
+    my /= vertici;
     for (let l = 0; l < luoghi.length; l++) {
-      if (nelRomboDi(luoghi[l], pronto.cx, pronto.cy)) {
+      if (sostituisce(luoghi[l], mx, my, e.n)) {
         pronto.sotto = l;
         break;
       }
     }
     edifici.push(pronto);
     impronte.push(e.p);
+    centri.push(mx, my);
+  }
+  // In OpenStreetMap un edificio può avere parti disegnate dentro la sua impronta (torri,
+  // corpi più alti). Se il luogo simbolo prende il posto dell'edificio, prende anche il
+  // posto delle parti il cui centro cade dentro di lui: altrimenti spunterebbero dal disegno.
+  const nascosti: number[] = [];
+  for (let i = 0; i < edifici.length; i++) if (edifici[i].sotto >= 0) nascosti.push(i);
+  if (nascosti.length > 0) {
+    const limiti = new Float32Array(nascosti.length * 4);
+    nascosti.forEach((i, k) => scriviRiquadro(impronte[i], limiti, k * 4));
+    for (let i = 0; i < edifici.length; i++) {
+      if (edifici[i].sotto >= 0) continue;
+      const x = centri[i * 2];
+      const y = centri[i * 2 + 1];
+      for (let k = 0; k < nascosti.length; k++) {
+        if (x < limiti[k * 4] || y < limiti[k * 4 + 1] || x > limiti[k * 4 + 2] || y > limiti[k * 4 + 3]) continue;
+        if (dentroAnello(x, y, impronte[nascosti[k]])) {
+          edifici[i].sotto = edifici[nascosti[k]].sotto;
+          break;
+        }
+      }
+    }
   }
   const riquadriEdifici = new Float32Array(edifici.length * 4);
   for (let i = 0; i < edifici.length; i++) scriviRiquadro(edifici[i].anello, riquadriEdifici, i * 4);
@@ -601,7 +749,18 @@ export function costruisciScena(base: DatiBase, strati: DatiStrati, landmark: La
   const punti: PuntoPronto[] = [];
   for (const i of ordinePerProfondita(chiaviPunti)) {
     const p = strati.punti[i];
-    punti.push({ dati: p, sx: (p.x - p.y) * ISO_X, sy: -(p.x + p.y) * ISO_Y });
+    let sulLuogo = -1;
+    if (p.storia !== undefined) {
+      for (let l = 0; l < luoghi.length; l++) {
+        const luogo = luoghi[l];
+        if (luogo.dati.storia !== p.storia) continue;
+        if (Math.hypot(p.x - luogo.x, p.y - luogo.y) <= raggioSegnaposto(luogo)) {
+          sulLuogo = l;
+          break;
+        }
+      }
+    }
+    punti.push({ dati: p, sx: (p.x - p.y) * ISO_X, sy: -(p.x + p.y) * ISO_Y, landmark: sulLuogo });
   }
 
   return {

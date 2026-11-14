@@ -15,6 +15,9 @@ describe('interpretaBrenta, sul campione vero', () => {
 
   it('prende la portata più recente, anche se è di dieci minuti prima', () => {
     expect(lettura.portata).toBe(51.79);
+    // ARPAV pubblica la portata un passo dopo il livello: l'ora della portata va detta.
+    expect(lettura.quandoPortata).toBe('2026-11-14T23:30:00');
+    expect(lettura.quandoPortata).not.toBe(lettura.quando);
   });
 
   it('costruisce la serie dei soli livelli, dal più vecchio al più recente', () => {
@@ -65,6 +68,7 @@ describe('interpretaBrenta, casi limite', () => {
   it('lascia la portata a null se manca o se è troppo vecchia', () => {
     const senza = interpretaBrenta({ success: true, data: [riga('LIDRO', '2026-11-14T10:00:00', '0.70')] });
     expect(senza.portata).toBeNull();
+    expect(senza.quandoPortata).toBeNull();
     const vecchia = interpretaBrenta({
       success: true,
       data: [riga('LIDRO', '2026-11-14T10:00:00', '0.70'), riga('PORT', '2026-11-14T07:00:00', '40.1')],

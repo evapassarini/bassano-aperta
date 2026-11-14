@@ -6,7 +6,11 @@ import {
   marcatoriInVista,
   misureSegnaposto,
   puntoInPoligono,
+  larghezzaSprite,
+  puntoSuEdificio,
   rettangoloSprite,
+  SPRITE_INGRANDIMENTO_MASSIMO,
+  SPRITE_MINIMO,
   trovaBersaglio,
   ZOOM_SEGNAPOSTO,
 } from '../src/map/bersagli';
@@ -21,6 +25,7 @@ import {
   areaConSegno,
   classificaLati,
   costruisciScena,
+  eConvesso,
   EL_ALBERO,
   EL_EDIFICIO,
   EL_LANDMARK,
@@ -30,6 +35,7 @@ import {
   MURO_DIETRO,
   MURO_SINISTRO,
   nelRomboDi,
+  ordinaMuri,
   ordinePerProfondita,
   preparaEdificio,
   preparaLandmark,
@@ -37,8 +43,11 @@ import {
   raggruppaInTessere,
   semeDi,
   soglieDettaglio,
+  sostituisce,
 } from '../src/map/scena';
 import { creaCittaFinta } from './fixtures/citta-finta';
+// @ts-expect-error modulo JavaScript degli script, senza tipi
+import { togliDoppioni } from '../scripts/lib/doppioni.mjs';
 
 const vista: Vista = { larghezza: 1000, altezza: 700 };
 const tutti = { cultura: true, ambiente: true, mobilita: true };
@@ -149,6 +158,79 @@ describe('edifici', () => {
     const scena = costruisciScena(base, c.strati, c.landmark);
     expect(scena.edifici[0].sotto).toBe(1);
     expect(scena.edifici[1].sotto).toBe(-1);
+  });
+
+  it('nasconde anche l\'edificio con lo stesso nome del luogo e quelli entro il raggio «copre»', () => {
+    const c = creaCittaFinta(300);
+    const casa = (x: number, y: number, n?: string) => ({
+      p: [x - 3, y - 3, x + 3, y - 3, x + 3, y + 3, x - 3, y + 3],
+      h: 8,
+      t: 'casa' as const,
+      ...(n ? { n } : {}),
+    });
+    // La torre sta nell'origine; il suo rombo arriva a circa 27 unità.
+    const edifici = [casa(40, 40, 'Torre civica'), casa(40, -40), casa(40, 50, 'Altra cosa'), casa(300, 300, 'Torre Civica')];
+    const senza = costruisciScena({ ...c.base, edifici }, c.strati, c.landmark);
+    // Stesso nome (maiuscole a parte) e vicino: è lo stesso luogo, non va disegnato due volte.
+    expect(senza.edifici.map((e) => e.sotto)).toEqual([1, -1, -1, -1]);
+    const conRaggio = c.landmark.map((l, i) => (i === 1 ? { ...l, copre: 70 } : l));
+    const con = costruisciScena({ ...c.base, edifici }, c.strati, conRaggio);
+    expect(con.edifici.map((e) => e.sotto)).toEqual([1, 1, 1, -1]);
+    const torre = preparaLandmark(conRaggio[1]);
+    expect(sostituisce(torre, 0, 69)).toBe(true);
+    expect(sostituisce(torre, 0, 71)).toBe(false);
+  });
+
+  it('nasconde anche le parti disegnate dentro un edificio nascosto', () => {
+    const c = creaCittaFinta(300);
+    const edifici = [
+      // Una chiesa grande con il centro nel rombo della torre (nell'origine).
+      { p: [-20, -10, 40, -10, 40, 10, -20, 10], h: 12, t: 'chiesa' as const },
+      // Il suo campanile: dentro l'impronta della chiesa ma fuori dal rombo.
+      { p: [30, -4, 36, -4, 36, 4, 30, 4], h: 30, t: 'torre' as const },
+      // Una casa accanto, fuori da tutto.
+      { p: [80, -4, 90, -4, 90, 4, 80, 4], h: 8, t: 'casa' as const },
+    ];
+    const scena = costruisciScena({ ...c.base, edifici }, c.strati, c.landmark);
+    expect(scena.edifici.map((e) => e.sotto)).toEqual([1, 1, -1]);
+  });
+
+  it('il tetto a punta va solo sulle impronte convesse', () => {
+    const quadrato = [0, 0, 10, 0, 10, 10, 0, 10];
+    // Pianta a L: una rientranza.
+    const aElle = [0, 0, 20, 0, 20, 8, 8, 8, 8, 20, 0, 20];
+    // Un punto quasi allineato su un lato non è una rientranza.
+    const quasi = [0, 0, 5, 0.05, 10, 0, 10, 10, 0, 10];
+    expect(eConvesso(quadrato)).toBe(true);
+    expect(eConvesso(aElle)).toBe(false);
+    expect(eConvesso(quasi)).toBe(true);
+    expect(preparaEdificio({ p: quadrato, h: 15, t: 'chiesa' }).colmo).toBeGreaterThan(0);
+    expect(preparaEdificio({ p: aElle, h: 15, t: 'chiesa' }).colmo).toBe(0);
+    expect(preparaEdificio({ p: aElle, h: 15, t: 'torre' }).colmo).toBe(0);
+  });
+
+  it('nelle impronte con rientranze i muri vanno dal più lontano al più vicino', () => {
+    const quadrato = preparaEdificio({ p: [0, 0, 10, 0, 10, 10, 0, 10], h: 10, t: 'casa' });
+    expect(quadrato.ordineMuri).toBeNull();
+    // Pianta a L con la rientranza verso nord-est: lati sud (0), est basso (1), nord basso (2),
+    // est alto (3), nord alto (4), ovest (5).
+    const p = [0, 0, 20, 0, 20, 8, 8, 8, 8, 20, 0, 20];
+    const e = preparaEdificio({ p, h: 10, t: 'casa' });
+    expect(e.ordineMuri).not.toBeNull();
+    const ordine = [...(e.ordineMuri as Uint16Array)];
+    // Si vedono solo le pareti a sud e a ovest; nessuna parete che dà le spalle.
+    expect(ordine.every((i) => e.lati[i] !== MURO_DIETRO)).toBe(true);
+    expect(ordine.sort()).toEqual([0, 5]);
+    // Pianta a C aperta verso sud-ovest: il muro interno, più lontano, viene prima.
+    const aC = [0, 0, 30, 0, 30, 30, 0, 30, 0, 20, 20, 20, 20, 10, 0, 10];
+    const lati = classificaLati(aC);
+    const muri = [...ordinaMuri(aC, lati)];
+    const media = (i: number): number => {
+      const j = (i + 1) % (aC.length / 2);
+      return (aC[i * 2] + aC[i * 2 + 1] + aC[j * 2] + aC[j * 2 + 1]) / 2;
+    };
+    for (let k = 1; k < muri.length; k++) expect(media(muri[k - 1])).toBeGreaterThanOrEqual(media(muri[k]));
+    expect(muri.length).toBeGreaterThan(2);
   });
 });
 
@@ -315,8 +397,66 @@ describe('segnaposto e clic', () => {
     expect(uv?.u).toBeCloseTo(0.5, 6);
     expect(uv?.v).toBeCloseTo(0.85, 6);
     expect(dentroSprite(s.x - 1, 350, s)).toBeNull();
-    // Da lontanissimo non scende sotto la larghezza minima.
-    expect(rettangoloSprite(l, 1, 1.5, { x: 0, y: 0, zoom: 0.05 }, vista).larghezza).toBe(20);
+  });
+
+  it('un luogo piccolo si ingrandisce un poco, mai fino a perdere le proporzioni', () => {
+    // Abbastanza grande: scala vera.
+    expect(larghezzaSprite(60, 2.5)).toBe(150);
+    // Appena sotto il minimo: si porta a SPRITE_MINIMO.
+    expect(larghezzaSprite(60, 0.3)).toBeCloseTo(SPRITE_MINIMO, 9);
+    // Molto piccolo: l'ingrandimento si ferma al massimo, non arriva a 20 pixel.
+    expect(larghezzaSprite(13.8, 0.3)).toBeCloseTo(13.8 * 0.3 * SPRITE_INGRANDIMENTO_MASSIMO, 9);
+    expect(larghezzaSprite(13.8, 0.3)).toBeLessThan(SPRITE_MINIMO);
+    // Le proporzioni tra luoghi restano: il rinoceronte non diventa largo come il ponte.
+    expect(larghezzaSprite(59.5, 0.3) / larghezzaSprite(13.8, 0.3)).toBeGreaterThan(2.5);
+    const l = preparaLandmark(c.landmark[1]);
+    expect(rettangoloSprite(l, 1, 1.5, { x: 0, y: 0, zoom: 0.05 }, vista).larghezza).toBeCloseTo(4.5, 9);
+  });
+
+  it('il segnaposto che sta sul disegno della sua storia si può saltare', () => {
+    const conLuogo = costruisciScena(
+      {
+        ...c.base,
+        edifici: [],
+      },
+      {
+        ...c.strati,
+        punti: [
+          { id: 'sulla-torre', strato: 'cultura', tipo: 'monumento', nome: 'Torre', x: 5, y: -4, storia: 'torre-civica-piazze' },
+          { id: 'lontano', strato: 'cultura', tipo: 'monumento', nome: 'Porta', x: 300, y: 300, storia: 'torre-civica-piazze' },
+          { id: 'altra-storia', strato: 'cultura', tipo: 'museo', nome: 'Museo', x: 6, y: 2, storia: 'museo-civico' },
+          { id: 'senza', strato: 'cultura', tipo: 'chiesa', nome: 'Chiesa', x: 2, y: 2 },
+        ],
+      },
+      c.landmark,
+    );
+    const perId = new Map(conLuogo.punti.map((p) => [p.dati.id, p.landmark]));
+    expect(perId.get('sulla-torre')).toBe(1);
+    expect(perId.get('lontano')).toBe(-1);
+    expect(perId.get('altra-storia')).toBe(-1);
+    expect(perId.get('senza')).toBe(-1);
+    const tutte = marcatoriInVista(conLuogo.punti, tutti, camera, vista);
+    const senzaDoppi = marcatoriInVista(conLuogo.punti, tutti, camera, vista, (p) => p.landmark >= 0);
+    expect(tutte.length - senzaDoppi.length).toBe(1);
+    expect(senzaDoppi.some((m) => conLuogo.punti[m.indice].dati.id === 'sulla-torre')).toBe(false);
+  });
+
+  it("un edificio davanti copre il clic sull'illustrazione", () => {
+    // Quadrato di 10 m alto 8 unità, sul piano isometrico.
+    const p = [0, 0, 10, 0, 10, 10, 0, 10];
+    const e = preparaEdificio({ p, h: 10, t: 'casa' });
+    const centroTetto = metriInIso(5, 5);
+    expect(puntoSuEdificio(centroTetto.sx, centroTetto.sy - e.alt, e.anello, e.alt, e.lati)).toBe(true);
+    // A metà della parete sud (quella di destra), a mezza altezza.
+    const piede = metriInIso(5, 0);
+    expect(puntoSuEdificio(piede.sx, piede.sy - e.alt / 2, e.anello, e.alt, e.lati)).toBe(true);
+    // Appena sotto il piede della parete: terreno.
+    expect(puntoSuEdificio(piede.sx, piede.sy + 1, e.anello, e.alt, e.lati)).toBe(false);
+    // Lontano.
+    expect(puntoSuEdificio(piede.sx + 100, piede.sy, e.anello, e.alt, e.lati)).toBe(false);
+    const sprite: Sprite[] = [{ indice: 0, x: 100, y: 100, larghezza: 200, altezza: 200 }];
+    expect(trovaBersaglio(150, 150, [], sprite, 0, undefined, () => true)).toBeNull();
+    expect(trovaBersaglio(150, 150, [], sprite, 0, undefined, () => false)).toEqual({ genere: 'landmark', indice: 0 });
   });
 
   it('priorità: prima i segnaposto, poi le illustrazioni, poi niente', () => {
@@ -410,5 +550,38 @@ describe('contorno', () => {
     expect(b?.testo).toContain('width="1024" height="512"');
     expect(b?.testo).not.toContain('width="200"');
     expect(normalizzaSvg('<div/>')).toBeNull();
+  });
+});
+
+describe('doppioni tra gli edifici (scripts/lib/doppioni.mjs)', () => {
+  const quadrato = (x: number, y: number, lato: number): number[] => [x, y, x + lato, y, x + lato, y + lato, x, y + lato];
+
+  it('toglie lo stesso edificio rilevato due volte e tiene quello con il nome', () => {
+    const edifici = [
+      { p: quadrato(0, 0, 20), h: 8, t: 'casa' },
+      { p: quadrato(0.5, 0.3, 20), h: 11, t: 'industria', n: 'Officina' },
+      { p: quadrato(100, 100, 20), h: 8, t: 'casa' },
+    ];
+    const r = togliDoppioni(edifici);
+    expect(r.tolti).toBe(1);
+    expect(r.edifici.map((e: { n?: string }) => e.n)).toEqual(['Officina', undefined]);
+  });
+
+  it('a parità di nome tiene il preferito, altrimenti il primo', () => {
+    const edifici = [
+      { p: quadrato(0, 0, 20), h: 8, t: 'casa' },
+      { p: quadrato(0.5, 0.3, 20), h: 11, t: 'casa' },
+    ];
+    expect(togliDoppioni(edifici).edifici[0].h).toBe(8);
+    expect(togliDoppioni(edifici, (i: number) => i === 1).edifici[0].h).toBe(11);
+  });
+
+  it('non tocca i volumi più piccoli dentro un edificio più grande, né i vicini', () => {
+    const edifici = [
+      { p: quadrato(0, 0, 40), h: 12, t: 'chiesa' },
+      { p: quadrato(5, 5, 6), h: 30, t: 'torre' }, // il campanile
+      { p: quadrato(40, 0, 40), h: 9, t: 'casa' }, // muro in comune
+    ];
+    expect(togliDoppioni(edifici).tolti).toBe(0);
   });
 });

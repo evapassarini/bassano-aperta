@@ -12,8 +12,8 @@ import {
   formattaLivello,
   formattaMisura,
   formattaNumero,
-  formattaPortata,
   parolaTendenza,
+  testoPortata,
   tracciaSerie,
 } from './aiuti';
 import { el, icona, linkEsterno, soli, svg } from './dom';
@@ -23,7 +23,7 @@ const PAGINA_ARPAV_IDRO =
 const ATTRIBUZIONE = 'Fonte: ARPAV, dati non validati';
 
 export const NOTA_BRENTA_BASE =
-  "Il livello è misurato dall'idrometro ARPAV di Barzizza, circa 1 km a monte del Ponte Vecchio: non è il livello sotto il ponte. I dati non sono validati.";
+  "Il livello è misurato dall'idrometro ARPAV «Brenta a Barzizza», circa 1 km a monte del Ponte Vecchio: non è il livello sotto il ponte. I dati non sono validati.";
 export const NOTA_ARIA_BASE =
   "Le misure vengono dalla centralina ARPAV di Bassano. Non sono in diretta: è una fotografia scaricata di tanto in tanto.";
 
@@ -93,7 +93,7 @@ function mostraBrenta(stato: HTMLElement, lettura: LetturaBrenta): void {
       el('span', { class: 'lettura-valore' }, formattaNumero(lettura.livello, 2)),
       el('span', { class: 'lettura-unita' }, ' m'),
       lettura.portata !== null
-        ? el('span', { class: 'lettura-portata' }, `portata ${formattaPortata(lettura.portata)}`)
+        ? el('span', { class: 'lettura-portata' }, testoPortata(lettura.portata, lettura.quandoPortata, lettura.quando))
         : null,
     ),
     el('p', { class: 'lettura-quando' }, `Lettura di ${formattaDataOra(lettura.quando)}`),
@@ -160,7 +160,7 @@ function mostraAria(stato: HTMLElement, dove: HTMLElement, fonte: HTMLElement, d
   const quandoFoto = el(
     'p',
     { class: 'lettura-quando' },
-    `Fotografia scaricata il ${formattaDataOraLunga(dati.generato)}: non è un dato in diretta.`,
+    `Fotografia scaricata il ${formattaDataOraLunga(dati.generato)}: non è un dato in diretta. Giorno e ora di ogni misura sono quelli scritti da ARPAV, che non indica il fuso orario.`,
   );
   if (dati.misure.length === 0) {
     stato.replaceChildren(el('p', { class: 'adesso-errore' }, 'La fotografia non contiene misure.'), quandoFoto);

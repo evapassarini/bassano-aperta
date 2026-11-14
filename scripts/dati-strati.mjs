@@ -61,12 +61,12 @@ const FONTI = [
   {
     nome: "ARPAV, coordinate delle stazioni della qualità dell'aria",
     url: URL_ARIA_COORD,
-    licenza: 'CC BY 4.0 (come indicato nella pagina open data di ARPAV)',
+    licenza: "CC BY 4.0 dichiarata da ARPAV per i file XML; i file JSON dell'aria sono elencati nella stessa pagina open data",
   },
   {
     nome: 'ARPAV, stazione idrometrica "Brenta a Barzizza" (coordinate dalla API dei dati in diretta)',
     url: 'https://api.arpa.veneto.it/REST/v1/meteo_meteogrammi?rete=MGRAMMI&coordcd=20005&orario=0',
-    licenza: 'CC BY 4.0 (come indicato nella pagina open data di ARPAV)',
+    licenza: 'Licenza non dichiarata in modo esplicito da ARPAV per questi dati: in attesa di conferma',
   },
   {
     nome: 'ARPAV, pagina open data con la licenza dei dati',

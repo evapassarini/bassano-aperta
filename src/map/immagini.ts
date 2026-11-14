@@ -6,6 +6,11 @@ import type { Landmark } from '../types';
 
 /** Lato della maschera di opacità usata per i clic. */
 const MASCHERA = 48;
+/**
+ * Opacità (0-255) sopra la quale un punto del disegno conta come «pieno». Sta sopra
+ * quella dell'ombra a terra degli SVG (opacità 0.2, cioè 51): l'ombra non si clicca.
+ */
+export const SOGLIA_OPACO = 96;
 /** Larghezza massima, in pixel reali, della copia già disegnata. */
 const COPIA_MASSIMA = 2048;
 
@@ -132,7 +137,7 @@ export class Illustrazioni {
       let pieni = 0;
       for (let k = 0; k < m.length; k++) {
         m[k] = dati[k * 4 + 3];
-        if (m[k] > 24) pieni++;
+        if (m[k] > SOGLIA_OPACO) pieni++;
       }
       // Una maschera vuota vuol dire che il browser non ha disegnato: meglio non usarla.
       return pieni > 0 ? m : null;
@@ -141,20 +146,23 @@ export class Illustrazioni {
     }
   }
 
-  /** true se nel punto (u, v) del disegno c'è qualcosa (con un po' di tolleranza). */
-  opaco(indice: number, u: number, v: number): boolean {
+  /**
+   * true se nel punto (u, v) del disegno c'è qualcosa. `intorno` è la tolleranza in
+   * caselle della maschera: 0 per il mouse (il punto esatto), 1 per il dito.
+   */
+  opaco(indice: number, u: number, v: number, intorno = 0): boolean {
     const voce = this.elenco[indice];
     if (!voce || !voce.pronta) return false;
     const m = voce.maschera;
     if (!m) return true;
     const cx = Math.min(MASCHERA - 1, Math.max(0, Math.floor(u * MASCHERA)));
     const cy = Math.min(MASCHERA - 1, Math.max(0, Math.floor(v * MASCHERA)));
-    for (let dy = -1; dy <= 1; dy++) {
-      for (let dx = -1; dx <= 1; dx++) {
+    for (let dy = -intorno; dy <= intorno; dy++) {
+      for (let dx = -intorno; dx <= intorno; dx++) {
         const x = cx + dx;
         const y = cy + dy;
         if (x < 0 || y < 0 || x >= MASCHERA || y >= MASCHERA) continue;
-        if (m[y * MASCHERA + x] > 24) return true;
+        if (m[y * MASCHERA + x] > SOGLIA_OPACO) return true;
       }
     }
     return false;

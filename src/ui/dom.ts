@@ -44,6 +44,8 @@ const DISEGNI: Record<string, string> = {
   su: 'M12 19V6M6 12l6-6l6 6',
   giu: 'M12 5v13M6 12l6 6l6-6',
   pari: 'M5 9h14M5 15h14',
+  piu: 'M12 5v14M5 12h14',
+  meno: 'M5 12h14',
 };
 
 /** Icona al tratto, decorativa (nascosta ai lettori di schermo). */

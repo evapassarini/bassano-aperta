@@ -4,6 +4,7 @@
 import type { Media, Storia } from '../types';
 import { creaAdesso } from './adesso';
 import {
+  decidiTappe,
   fontiUniche,
   immagineDellaTappa,
   mediaResidui,
@@ -216,12 +217,13 @@ export function creaRacconto(storia: Storia, opzioni: OpzioniRacconto): Racconto
         const m = storia.media[i];
         const url = urlSicuro(m.url);
         if (!url) continue;
-        const voce: HTMLElement = el('li', null);
+        const voce: HTMLElement = el('li', { class: 'galleria-elemento' });
         const bottone = el('button', { type: 'button', class: 'galleria-voce' });
         bottone.setAttribute('aria-label', `Ingrandisci: ${m.titolo}`);
         bottone.append(immagine(m, urlMiniatura(url), () => voce));
         bottone.addEventListener('click', () => opzioni.apriLente(m, bottone));
-        voce.append(bottone);
+        // Autore, licenza e link stanno sotto la miniatura, non solo dentro la lente.
+        voce.append(el('figure', { class: 'galleria-figura' }, bottone, didascalia(m)));
         griglia.append(voce);
       }
       sezione.append(griglia);
@@ -290,8 +292,13 @@ export function creaRacconto(storia: Storia, opzioni: OpzioniRacconto): Racconto
         const traguardo = cornice.top + cornice.height * 0.66;
         const quota = Math.max(0, Math.min(1, (traguardo - r.top) / r.height));
         barra.style.transform = `scaleY(${quota.toFixed(4)})`;
+        // Rete di sicurezza: una tappa ormai ben dentro l'area visibile non resta mai
+        // nascosta, anche se l'osservatore qui sotto ha perso il passaggio.
+        const dentro = cornice.top + cornice.height * 0.85;
         for (const t of tappe) {
-          t.classList.toggle('raggiunta', t.getBoundingClientRect().top <= traguardo);
+          const alto = t.getBoundingClientRect().top;
+          t.classList.toggle('raggiunta', alto <= traguardo);
+          if (alto <= dentro) t.classList.remove('in-arrivo');
         }
       };
       const alloScorrere = (): void => {
@@ -311,16 +318,26 @@ export function creaRacconto(storia: Storia, opzioni: OpzioniRacconto): Racconto
     if (tappe.length > 0 && !menoMovimento() && typeof IntersectionObserver === 'function') {
       // Le tappe sono visibili in partenza. È l'osservatore stesso, al primo giro, a
       // nascondere quelle ancora sotto il bordo: se non parte, non sparisce niente.
+      // Una tappa già mostrata non si nasconde più: nello stesso lotto possono arrivare
+      // due voci per la stessa tappa (visibile, poi di nuovo sotto il bordo perché il
+      // contenuto sopra è cresciuto) e la seconda la lascerebbe invisibile per sempre.
+      const rivelate = new WeakSet<Element>();
       const osservatore = new IntersectionObserver(
         (voci) => {
-          for (const v of voci) {
-            const tappa = v.target as HTMLElement;
-            if (v.isIntersecting) {
-              tappa.classList.remove('in-arrivo');
-              osservatore.unobserve(tappa);
-            } else if (v.rootBounds && v.boundingClientRect.top >= v.rootBounds.bottom) {
+          const azioni = decidiTappe(
+            voci.map((v) => ({
+              bersaglio: v.target,
+              visibile: v.isIntersecting,
+              sottoIlBordo: v.rootBounds !== null && v.boundingClientRect.top >= v.rootBounds.bottom,
+            })),
+            rivelate,
+          );
+          for (const a of azioni) {
+            const tappa = a.bersaglio as HTMLElement;
+            if (a.azione === 'nascondi') {
               tappa.classList.add('in-arrivo');
             } else {
+              tappa.classList.remove('in-arrivo');
               osservatore.unobserve(tappa);
             }
           }

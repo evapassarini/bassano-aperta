@@ -2,8 +2,18 @@
 // scheda dei punti, fonti e licenze. DOM a mano, nessun framework.
 
 import type { DatiStrati, IdStrato, LonLat, Media, Punto, Storia } from '../types';
-import { NOME_STRATO, contaRisultati, descriviStrato, dividiStorie, filtraStorie, urlSicuro } from './aiuti';
-import { el, icona, idUnico, linkEsterno, segnoStrato } from './dom';
+import { metriInLonLat } from '../map/proiezione';
+import {
+  NOME_STRATO,
+  contaRisultati,
+  descriviStrato,
+  dividiStorie,
+  etichettaTipo,
+  filtraPunti,
+  filtraStorie,
+  urlSicuro,
+} from './aiuti';
+import { el, icona, idUnico, linkEsterno, segnoStrato, soli } from './dom';
 import { creaFonti } from './fonti';
 import { creaRacconto } from './racconto';
 import type { Racconto } from './racconto';
@@ -15,6 +25,8 @@ export interface OpzioniUI {
   strati: DatiStrati;
   alCambioStrato: (id: IdStrato, visibile: boolean) => void;
   alVaiA: (lonlat: LonLat) => void;
+  /** Avvicina (fattore > 1) o allontana (fattore < 1) la mappa. Senza, i bottoni non ci sono. */
+  alloZoom?: (fattore: number) => void;
   allaChiusura: () => void;
 }
 
@@ -46,6 +58,12 @@ export function creaUI(opzioni: OpzioniUI): UI {
   // =========================================================================
   const elementiStrati = [...strati.punti, ...strati.linee];
   const gruppoStrati = el('div', { class: 'strati', role: 'group', 'aria-label': 'Strati della mappa' });
+  const interruttori = new Map<IdStrato, HTMLElement>();
+  /** Accende uno strato, se è spento: serve quando si apre un suo punto dall'elenco. */
+  const accendiStrato = (id: IdStrato): void => {
+    const interruttore = interruttori.get(id);
+    if (interruttore && interruttore.getAttribute('aria-checked') !== 'true') interruttore.click();
+  };
   for (const id of STRATI) {
     const idDescrizione = idUnico('strato');
     const interruttore = el(
@@ -71,8 +89,28 @@ export function creaUI(opzioni: OpzioniUI): UI {
       interruttore.setAttribute('aria-checked', String(acceso));
       opzioni.alCambioStrato(id, acceso);
     });
+    interruttori.set(id, interruttore);
     gruppoStrati.append(interruttore);
   }
+
+  // =========================================================================
+  // Zoom: due bottoni, per chi non ha rotella né due dita
+  // =========================================================================
+  let gruppoZoom: HTMLElement | null = null;
+  if (opzioni.alloZoom) {
+    const alloZoom = opzioni.alloZoom;
+    const avvicina = el('button', { type: 'button', class: 'bottone bottone-zoom', 'aria-label': 'Avvicina la mappa', title: 'Avvicina' }, icona('piu', 20));
+    const allontana = el('button', { type: 'button', class: 'bottone bottone-zoom', 'aria-label': 'Allontana la mappa', title: 'Allontana' }, icona('meno', 20));
+    avvicina.addEventListener('click', () => alloZoom(1.5));
+    allontana.addEventListener('click', () => alloZoom(1 / 1.5));
+    gruppoZoom = el('div', { class: 'zoom', role: 'group', 'aria-label': 'Zoom della mappa' }, avvicina, allontana);
+  }
+  // Compare solo quando la mappa ha il fuoco da tastiera (lo decide il CSS).
+  const aiutoTasti = el(
+    'p',
+    { class: 'aiuto-tasti', 'aria-hidden': 'true' },
+    'La mappa ascolta la tastiera: frecce per muoverti, + e - per lo zoom.',
+  );
 
   // =========================================================================
   // Elenco dei luoghi
@@ -110,7 +148,7 @@ export function creaUI(opzioni: OpzioniUI): UI {
     el(
       'div',
       { class: 'cerca' },
-      el('label', { for: idCerca, class: 'cerca-etichetta' }, 'Cerca un luogo'),
+      el('label', { for: idCerca, class: 'cerca-etichetta' }, 'Cerca un luogo o un punto della mappa'),
       el('div', { class: 'cerca-riga' }, icona('cerca', 18), campo),
     ),
     conteggio,
@@ -134,32 +172,68 @@ export function creaUI(opzioni: OpzioniUI): UI {
     return el('li', null, bottone);
   };
 
-  const gruppo = (titolo: string, voci: Storia[]): HTMLElement | null => {
+  /** Un punto senza racconto: la mappa ci va, lo strato si accende, si apre la scheda. */
+  const vocePunto = (p: Punto): HTMLElement => {
+    const bottone = el(
+      'button',
+      { type: 'button', class: 'elenco-voce' },
+      el('span', { class: 'elenco-voce-nome' }, p.nome),
+      el('span', { class: 'elenco-voce-sotto' }, `${etichettaTipo(p.tipo)} · strato ${NOME_STRATO[p.strato] ?? p.strato}`),
+    );
+    bottone.addEventListener('click', () => {
+      chiudiElenco(false);
+      accendiStrato(p.strato);
+      opzioni.alVaiA(metriInLonLat({ x: p.x, y: p.y }));
+      apriPunto(p);
+    });
+    return el('li', null, bottone);
+  };
+
+  const gruppo = (titolo: string, voci: HTMLElement[], nota?: string): HTMLElement | null => {
     if (voci.length === 0) return null;
     const idTitolo = idUnico('gruppo');
     const lista = el('ul', { class: 'elenco-lista', 'aria-labelledby': idTitolo });
-    for (const s of voci) lista.append(voceElenco(s));
-    return el('section', { class: 'elenco-gruppo' }, el('h3', { id: idTitolo }, titolo), lista);
+    lista.append(...voci);
+    return el(
+      'section',
+      { class: 'elenco-gruppo' },
+      el('h3', { id: idTitolo }, titolo),
+      lista,
+      nota ? el('p', { class: 'elenco-nota' }, nota) : null,
+    );
   };
 
   const aggiornaElenco = (annuncia: boolean): void => {
     const trovate = filtraStorie(storie, campo.value);
     const { luoghi, temi } = dividiStorie(trovate);
-    if (trovate.length === 0) {
+    const punti = filtraPunti(strati.punti, campo.value);
+    const quanti = trovate.length + punti.servizi.length + punti.altri.length;
+    if (quanti === 0) {
       risultati.replaceChildren(
         el(
           'p',
           { class: 'elenco-vuoto' },
           storie.length === 0
             ? 'I racconti non sono ancora stati caricati.'
-            : 'Nessun luogo con queste parole. Prova con una parola sola, per esempio «ponte» o «museo».',
+            : 'Nessun luogo con queste parole. Prova con una parola sola, per esempio «ponte», «museo» o «fermata».',
         ),
       );
     } else {
-      const blocchi = [gruppo('Luoghi', luoghi), gruppo('Temi', temi)].filter((b): b is HTMLElement => b !== null);
+      const blocchi = [
+        gruppo('Luoghi', luoghi.map(voceElenco)),
+        gruppo('Temi', temi.map(voceElenco)),
+        gruppo('Dati e servizi', punti.servizi.map(vocePunto)),
+        gruppo(
+          'Altri punti sulla mappa',
+          punti.altri.map(vocePunto),
+          punti.altriInTutto > punti.altri.length
+            ? `Ne mostriamo ${punti.altri.length} su ${punti.altriInTutto}: aggiungi una parola per restringere.`
+            : undefined,
+        ),
+      ].filter((b): b is HTMLElement => b !== null);
       risultati.replaceChildren(...blocchi);
     }
-    if (annuncia) conteggio.textContent = contaRisultati(trovate.length);
+    if (annuncia) conteggio.textContent = contaRisultati(quanti);
   };
   campo.addEventListener('input', () => aggiornaElenco(true));
   aggiornaElenco(false);
@@ -299,6 +373,8 @@ export function creaUI(opzioni: OpzioniUI): UI {
     const haStoria = punto.storia !== undefined && storie.some((s) => s.id === punto.storia);
     const scheda = creaScheda(punto, haStoria ? () => apriStoria(punto.storia!) : undefined);
     mostraFinestra('punto', scheda.nodo, scheda.titolo, `Chiudi la scheda: ${punto.nome}`);
+    // Chi avvia spegne l'evidenza del racconto che c'era prima: ora si guarda un altro punto.
+    radice.dispatchEvent(new CustomEvent('ba:punto', { detail: { id: punto.id } }));
   }
 
   function chiudi(): void {
@@ -340,7 +416,7 @@ export function creaUI(opzioni: OpzioniUI): UI {
     gruppoStrati,
     el('div', { class: 'controlli-azioni' }, bottoneLuoghi, bottoneFonti),
   );
-  radice.append(controlli, elenco, finestra, fonti.nodo, lente);
+  radice.append(...soli(controlli, gruppoZoom, aiutoTasti, elenco, finestra, fonti.nodo, lente));
 
   return { apriStoria, apriPunto, chiudi };
 }

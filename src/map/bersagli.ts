@@ -36,18 +36,24 @@ export function misureSegnaposto(
   return { raggio, gambo: raggio * 1.75, pallino: false };
 }
 
-/** I segnaposto degli strati accesi che cadono nella vista, dal più lontano al più vicino. */
+/**
+ * I segnaposto degli strati accesi che cadono nella vista, dal più lontano al più vicino.
+ * `salta` toglie quelli che non vanno disegnati (per esempio perché al loro posto c'è
+ * l'illustrazione del luogo, con il suo nome).
+ */
 export function marcatoriInVista(
   punti: PuntoPronto[],
   visibili: StratiVisibili,
   camera: Camera,
   vista: Vista,
+  salta?: (p: PuntoPronto) => boolean,
 ): Marcatore[] {
   const u: Marcatore[] = [];
   const margine = 40;
   for (let i = 0; i < punti.length; i++) {
     const p = punti[i];
     if (!visibili[p.dati.strato]) continue;
+    if (salta && salta(p)) continue;
     const s = isoInSchermo(p.sx, p.sy, camera, vista);
     if (
       s.px < -margine ||
@@ -97,8 +103,26 @@ export function colpisceMarcatore(x: number, y: number, m: Marcatore, tolleranza
 
 // --- illustrazioni ---------------------------------------------------------------
 
-/** Larghezza minima sullo schermo di un luogo simbolo, in pixel. */
+/** Larghezza a cui si cerca di portare un luogo simbolo piccolo, in pixel. */
 export const SPRITE_MINIMO = 20;
+/**
+ * Di quanto, al massimo, un luogo simbolo può essere ingrandito rispetto alla scala vera
+ * per restare leggibile. Oltre, diventerebbe sproporzionato rispetto alle case e agli
+ * altri luoghi (il rinoceronte largo quanto il ponte).
+ */
+export const SPRITE_INGRANDIMENTO_MASSIMO = 1.5;
+/**
+ * Sotto questa larghezza vera (in pixel) e nella vista da lontano, l'illustrazione non si
+ * disegna: resta il segnaposto.
+ */
+export const SPRITE_SOGLIA = 8;
+
+/** Larghezza sullo schermo di un luogo simbolo largo `larghezza` unità isometriche. */
+export function larghezzaSprite(larghezza: number, zoom: number): number {
+  const vera = larghezza * zoom;
+  if (!(vera > 0)) return 0;
+  return vera * Math.min(SPRITE_INGRANDIMENTO_MASSIMO, Math.max(1, SPRITE_MINIMO / vera));
+}
 
 export interface Sprite {
   /** Indice dentro Scena.landmark. */
@@ -121,7 +145,7 @@ export function rettangoloSprite(
   vista: Vista,
 ): Sprite {
   const s = isoInSchermo(l.sx, l.sy, camera, vista);
-  const larghezza = Math.max(l.larghezza * camera.zoom, SPRITE_MINIMO);
+  const larghezza = larghezzaSprite(l.larghezza, camera.zoom);
   const altezza = larghezza * proporzione;
   return {
     indice,
@@ -157,6 +181,35 @@ export function puntoInPoligono(x: number, y: number, anello: ArrayLike<number>)
   return dentro;
 }
 
+/**
+ * true se il punto (x, y), sul piano isometrico, cade sul disegno di un edificio: sul
+ * tetto (l'impronta alzata di `alt`) o su una delle pareti in vista. `lati` usa 0 per le
+ * pareti che danno le spalle a chi guarda.
+ */
+export function puntoSuEdificio(
+  x: number,
+  y: number,
+  anello: ArrayLike<number>,
+  alt: number,
+  lati: ArrayLike<number>,
+): boolean {
+  if (puntoInPoligono(x, y + alt, anello)) return true;
+  if (!(alt > 0)) return false;
+  const n = anello.length >> 1;
+  for (let i = 0; i < n; i++) {
+    if (lati[i] === 0) continue;
+    const j = (i + 1) % n;
+    const ax = anello[i * 2];
+    const bx = anello[j * 2];
+    if (ax === bx) continue;
+    const t = (x - ax) / (bx - ax);
+    if (t < 0 || t > 1) continue;
+    const piede = anello[i * 2 + 1] + t * (anello[j * 2 + 1] - anello[i * 2 + 1]);
+    if (y <= piede && y >= piede - alt) return true;
+  }
+  return false;
+}
+
 // --- che cosa c'è sotto il dito ------------------------------------------------------
 
 export type Colpito = { genere: 'punto'; indice: number } | { genere: 'landmark'; indice: number };
@@ -165,7 +218,8 @@ export type Colpito = { genere: 'punto'; indice: number } | { genere: 'landmark'
  * Cerca che cosa c'è sotto (x, y). Prima i segnaposto (vince il più vicino a chi
  * guarda, cioè l'ultimo disegnato), poi le illustrazioni. `marcatori` e `sprite`
  * sono in ordine di disegno. `opaco` dice se in quel punto l'illustrazione è
- * davvero disegnata; se manca, vale tutto il rettangolo.
+ * davvero disegnata; se manca, vale tutto il rettangolo. `nascosto` dice se in quel
+ * punto l'illustrazione è coperta da un edificio disegnato davanti: allora non si clicca.
  */
 export function trovaBersaglio(
   x: number,
@@ -174,6 +228,7 @@ export function trovaBersaglio(
   sprite: Sprite[],
   tolleranza: number,
   opaco?: (indice: number, u: number, v: number) => boolean,
+  nascosto?: (indice: number) => boolean,
 ): Colpito | null {
   for (let i = marcatori.length - 1; i >= 0; i--) {
     if (colpisceMarcatore(x, y, marcatori[i], tolleranza)) {
@@ -182,7 +237,7 @@ export function trovaBersaglio(
   }
   for (let i = sprite.length - 1; i >= 0; i--) {
     const uv = dentroSprite(x, y, sprite[i]);
-    if (uv && (!opaco || opaco(sprite[i].indice, uv.u, uv.v))) {
+    if (uv && (!opaco || opaco(sprite[i].indice, uv.u, uv.v)) && !(nascosto && nascosto(sprite[i].indice))) {
       return { genere: 'landmark', indice: sprite[i].indice };
     }
   }

@@ -112,9 +112,10 @@ Le regole complete e i contratti tra le parti stanno in `docs/SPEC.md`.
 - **Codice**: licenza MIT, vedi `LICENSE`.
 - **Mappa di base e punti**: © OpenStreetMap contributors, licenza ODbL 1.0, scaricati con
   Overpass API.
-- **Brenta e aria**: ARPAV, dati non validati. La licenza CC BY 4.0 è quella indicata nella
-  pagina open data di ARPAV per i file XML; che valga anche per l'API in diretta e per i file
-  dell'aria è una nostra lettura, da confermare.
+- **Brenta e aria**: ARPAV, dati non validati. La pagina open data di ARPAV dichiara la licenza
+  CC BY 4.0 per i file XML ed elenca lì anche i file JSON dell'aria: che valga anche per quelli
+  è una nostra lettura, da confermare. Per i dati dell'idrometro ARPAV non dichiara una licenza
+  in modo esplicito: il sito lo dice e aspettiamo una conferma scritta.
 - **Immagini e audio**: Wikimedia Commons, ognuno con la propria licenza e il proprio autore,
   scritti nel racconto e mostrati sotto il file.
 - **Video**: incorporati da YouTube, restano dei rispettivi canali.
@@ -131,7 +132,10 @@ Fatti storici (oggi sono tra le incertezze, non affermati):
 - il ruolo degli Alpini nella ricostruzione del 1948;
 - luogo, date e numeri del 26 settembre 1944; la tappa su Karl Franz Tausch poggia su una sola
   fonte: da rivedere con ANPI o ISTREVI;
-- l'origine del nome «degli Ezzelini».
+- l'origine del nome «degli Ezzelini»;
+- il nome del titolo: il link del logo del sito ufficiale della candidatura riporta una dicitura
+  sbagliata («europea»). È un refuso, non un disaccordo tra fonti: nei racconti non lo citiamo e
+  scriviamo sempre «candidata a Capitale italiana della Cultura 2029».
 
 Permessi e licenze:
 

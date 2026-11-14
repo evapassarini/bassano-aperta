@@ -16,6 +16,11 @@ export interface LetturaBrenta {
   livello: number;
   /** Ultima portata in m³/s, se la stazione la pubblica vicino all'ultima lettura. */
   portata: number | null;
+  /**
+   * Data e ora della portata, come le scrive ARPAV. Spesso è la lettura prima di quella del
+   * livello: ARPAV pubblica la portata con un passo di ritardo. null se la portata manca.
+   */
+  quandoPortata: string | null;
   /** Data e ora dell'ultimo livello, come le scrive ARPAV (senza fuso orario). */
   quando: string;
   /** Tutti i livelli ricevuti, dal più vecchio al più recente. */
@@ -94,16 +99,21 @@ export function interpretaBrenta(risposta: unknown): LetturaBrenta {
   const portate = righeDi(r.data, TIPO_PORTATA);
 
   let portata: number | null = null;
+  let quandoPortata: string | null = null;
   for (let i = portate.length - 1; i >= 0; i--) {
     const p = portate[i];
     if (p.ms > ultimo.ms) continue;
-    if (ultimo.ms - p.ms <= MASSIMO_SCARTO_PORTATA_MS) portata = p.valore;
+    if (ultimo.ms - p.ms <= MASSIMO_SCARTO_PORTATA_MS) {
+      portata = p.valore;
+      quandoPortata = p.quando;
+    }
     break;
   }
 
   return {
     livello: ultimo.valore,
     portata,
+    quandoPortata,
     quando: ultimo.quando,
     serie: livelli.map((l) => ({ quando: l.quando, livello: l.valore })),
   };
