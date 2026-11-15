@@ -1,5 +1,5 @@
 {
-  "generato": "2026-11-15T10:51:39.408Z",
+  "generato": "2026-11-15T21:46:02.723Z",
   "stazione": "Bassano (ARPAV, codice 500000106)",
   "fonte": {
     "nome": "ARPAV, qualità dell'aria: dati in diretta, non validati",
@@ -9,9 +9,9 @@
   "misure": [
     {
       "inquinante": "Ozono (media oraria)",
-      "valore": 42.8,
+      "valore": 9.6,
       "unita": "µg/m³",
-      "quando": "2026-11-15T11:00:00"
+      "quando": "2026-11-15T22:00:00"
     },
     {
       "inquinante": "PM10 (media giornaliera)",
@@ -22,50 +22,6 @@
   ],
   "serie": {
     "ozonoOrario": [
-      {
-        "quando": "2026-11-13T11:00:00",
-        "valore": 12.4
-      },
-      {
-        "quando": "2026-11-13T12:00:00",
-        "valore": 4
-      },
-      {
-        "quando": "2026-11-13T13:00:00",
-        "valore": 3.2
-      },
-      {
-        "quando": "2026-11-13T14:00:00",
-        "valore": 17.2
-      },
-      {
-        "quando": "2026-11-13T15:00:00",
-        "valore": 27.8
-      },
-      {
-        "quando": "2026-11-13T16:00:00",
-        "valore": 33.2
-      },
-      {
-        "quando": "2026-11-13T17:00:00",
-        "valore": 34.2
-      },
-      {
-        "quando": "2026-11-13T18:00:00",
-        "valore": 36.4
-      },
-      {
-        "quando": "2026-11-13T19:00:00",
-        "valore": 48.2
-      },
-      {
-        "quando": "2026-11-13T20:00:00",
-        "valore": 44.6
-      },
-      {
-        "quando": "2026-11-13T21:00:00",
-        "valore": 20
-      },
       {
         "quando": "2026-11-13T22:00:00",
         "valore": 10.4
@@ -217,6 +173,50 @@
       {
         "quando": "2026-11-15T11:00:00",
         "valore": 42.8
+      },
+      {
+        "quando": "2026-11-15T12:00:00",
+        "valore": 47.4
+      },
+      {
+        "quando": "2026-11-15T13:00:00",
+        "valore": 49.4
+      },
+      {
+        "quando": "2026-11-15T14:00:00",
+        "valore": 51.8
+      },
+      {
+        "quando": "2026-11-15T15:00:00",
+        "valore": 53.2
+      },
+      {
+        "quando": "2026-11-15T16:00:00",
+        "valore": 49.6
+      },
+      {
+        "quando": "2026-11-15T17:00:00",
+        "valore": 45.8
+      },
+      {
+        "quando": "2026-11-15T18:00:00",
+        "valore": 22.2
+      },
+      {
+        "quando": "2026-11-15T19:00:00",
+        "valore": 6.4
+      },
+      {
+        "quando": "2026-11-15T20:00:00",
+        "valore": 6
+      },
+      {
+        "quando": "2026-11-15T21:00:00",
+        "valore": 3.6
+      },
+      {
+        "quando": "2026-11-15T22:00:00",
+        "valore": 9.6
       }
     ],
     "pm10Giornaliero": [
