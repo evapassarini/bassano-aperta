@@ -135,7 +135,7 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
   };
 
   const imposta = (nuova: Camera, scriviHash = true): void => {
-    const c = limitaCamera(nuova, area, zoomMinimo, ZOOM_MASSIMO);
+    const c = limitaCamera(nuova, area, zoomMinimo, ZOOM_MASSIMO, vista);
     if (c.x === camera.x && c.y === camera.y && c.zoom === camera.zoom) return;
     camera = c;
     // La vecchia immagine non combacia più con la mappa spostata: la dissolvenza finisce qui.
@@ -220,6 +220,7 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
         area,
         zoomMinimo,
         ZOOM_MASSIMO,
+        vista,
       );
       daDisegnare = true;
       if (t >= 1) {
@@ -482,7 +483,7 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
   const menoMovimento = window.matchMedia?.('(prefers-reduced-motion: reduce)') ?? null;
 
   function vola(a: Camera, durata = DURATA_VOLO): void {
-    const meta = limitaCamera(a, area, zoomMinimo, ZOOM_MASSIMO);
+    const meta = limitaCamera(a, area, zoomMinimo, ZOOM_MASSIMO, vista);
     if (menoMovimento?.matches) {
       volo = null;
       imposta(meta);
@@ -549,7 +550,7 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
 
   misura();
   const daHash = leggiHash(window.location.hash);
-  camera = limitaCamera(daHash ? daHash.camera : cameraIniziale(), area, zoomMinimo, ZOOM_MASSIMO);
+  camera = limitaCamera(daHash ? daHash.camera : cameraIniziale(), area, zoomMinimo, ZOOM_MASSIMO, vista);
   /** Finché il canvas non ha una misura vera, la vista iniziale va ricalcolata. */
   let inAttesaDiMisura = !daHash && (vista.larghezza <= 1 || vista.altezza <= 1);
 
@@ -558,9 +559,9 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
     const cambiato = misura();
     if (inAttesaDiMisura && vista.larghezza > 1 && vista.altezza > 1) {
       inAttesaDiMisura = false;
-      camera = limitaCamera(cameraIniziale(), area, zoomMinimo, ZOOM_MASSIMO);
+      camera = limitaCamera(cameraIniziale(), area, zoomMinimo, ZOOM_MASSIMO, vista);
     } else {
-      camera = limitaCamera(camera, area, zoomMinimo, ZOOM_MASSIMO);
+      camera = limitaCamera(camera, area, zoomMinimo, ZOOM_MASSIMO, vista);
     }
     if (cambiato) richiedi();
   };

@@ -1,6 +1,7 @@
 // Disegno della mappa su canvas 2D. Ordine: carta, aree, strade, linee tematiche,
 // poi tutto ciò che sta in piedi dal più lontano al più vicino, infine i segnaposto.
 
+import { creaNuvola, nuvoleInVista } from './nuvole';
 import type { Tasselli } from './tasselli';
 import type { IdStrato, Luce, TipoArea, TipoStrada } from '../types';
 import {
@@ -455,6 +456,8 @@ export class Disegnatore {
    * non c'era tempo di prepararli: chi disegna chiede un altro fotogramma.
    */
   incompleto = false;
+  private spriteNuvola: HTMLCanvasElement | null = null;
+  private chiaveNuvola = '';
   /** Tasselli dipinti facoltativi, stesi sopra gli edifici di giorno. */
   tasselli: Tasselli | null = null;
   /** Presenza degli strati di dettaglio nel fotogramma in corso (vedi DETTAGLI). */
@@ -832,6 +835,10 @@ export class Disegnatore {
       for (const sp of sprite) this.illustrazione(ctx, sp, densita);
     }
 
+    // Oltre il bordo dei dati non c'è il vuoto: un banco di nuvole copre il margine.
+    inIso();
+    this.nuvole(ctx, s, visibile, z);
+
     // I tasselli dipinti coprono la loro zona, sotto etichette e segnaposto. Solo di giorno.
     if (this.tasselli && this.luceAttiva === 'giorno') {
       inIso();
@@ -840,6 +847,29 @@ export class Disegnatore {
 
     inPixel();
     this.segnaposto(ctx, s, sprite);
+  }
+
+  // --- nuvole --------------------------------------------------------------------
+
+  private nuvole(ctx: CanvasRenderingContext2D, s: StatoDisegno, visibile: Rettangolo, z: number): void {
+    const N = this.P.nuvole;
+    const chiave = N.colore + N.ombra;
+    if (chiave !== this.chiaveNuvola) {
+      this.chiaveNuvola = chiave;
+      this.spriteNuvola = creaNuvola(N.colore, N.ombra);
+    }
+    const sprite = this.spriteNuvola;
+    if (!sprite) return;
+    const elenco = nuvoleInVista(s.area, visibile, z);
+    if (elenco.length === 0) return;
+    // Un velo del colore delle nuvole dove sono fitte, così tra una e l'altra non si vede il fondo.
+    const proporzione = sprite.height / sprite.width;
+    for (const n of elenco) {
+      const l = n.larghezza;
+      ctx.globalAlpha = n.alfa * N.alfa;
+      ctx.drawImage(sprite, n.sx - l / 2, n.sy - (l * proporzione) / 2, l, l * proporzione);
+    }
+    ctx.globalAlpha = 1;
   }
 
   // --- carta ---------------------------------------------------------------------

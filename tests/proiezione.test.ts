@@ -221,3 +221,37 @@ describe('camera', () => {
     }
   });
 });
+
+import { margineCamera } from '../src/map/proiezione';
+import { fuoriDi, nuvoleInVista } from '../src/map/nuvole';
+
+describe('bordo della mappa', () => {
+  const area = { minX: -2000, minY: -3000, maxX: 2000, maxY: 3000 };
+  const vista = { larghezza: 1200, altezza: 800 };
+
+  it('con la vista il centro della camera resta lontano dal bordo', () => {
+    const m = margineCamera(area, 2, vista);
+    expect(m).toBeGreaterThan(100);
+    const c = limitaCamera({ x: 99999, y: -99999, zoom: 2 }, area, 0.2, 8, vista);
+    expect(c.x).toBeCloseTo(area.maxX - m, 6);
+    expect(c.y).toBeCloseTo(area.minY + m, 6);
+    // Da vicino il margine si stringe; da lontano non supera il 45% del lato corto.
+    expect(margineCamera(area, 8, vista)).toBeLessThan(m);
+    expect(margineCamera(area, 0.01, vista)).toBeCloseTo(0.45 * 4000, 6);
+    // Un punto ben dentro non viene toccato.
+    expect(limitaCamera({ x: 10, y: 20, zoom: 2 }, area, 0.2, 8, vista)).toEqual({ x: 10, y: 20, zoom: 2 });
+  });
+
+  it('le nuvole stanno solo attorno e oltre il bordo, sempre le stesse', () => {
+    expect(fuoriDi(area, 0, 0)).toBeLessThan(0);
+    expect(fuoriDi(area, 2500, 0)).toBe(500);
+    const centro = { minX: -300, minY: -300, maxX: 300, maxY: 300 };
+    expect(nuvoleInVista(area, centro, 2)).toEqual([]);
+    const largo = { minX: -9000, minY: -6000, maxX: 9000, maxY: 6000 };
+    const a = nuvoleInVista(area, largo, 0.1);
+    expect(a.length).toBeGreaterThan(10);
+    expect(a.length).toBeLessThan(3000);
+    expect(nuvoleInVista(area, largo, 0.1)).toEqual(a);
+    for (const n of a) expect(n.alfa > 0 && n.alfa <= 1).toBe(true);
+  });
+});

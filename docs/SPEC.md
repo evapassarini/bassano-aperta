@@ -561,6 +561,14 @@ porte, portici. Nessuna dipendenza in più. I dieci luoghi simbolo restano SVG a
   portici hanno una luce calda. I luoghi simbolo di notte prendono un velo blu-viola chiaro,
   vicino a quello dei muri.
 
+### Bordo della mappa
+
+Dove i dati finiscono non resta il vuoto: `src/map/nuvole.ts` stende un banco di nuvole sopra
+il margine e oltre (posizioni da una griglia e da un seme, sempre uguali; colori per ogni
+luce in `palette.nuvole`). `limitaCamera`, con la vista, tiene il centro della camera lontano
+dal bordo quanto basta perché il bordo arrivi al più vicino al margine dello schermo: oltre
+non ci si può trascinare.
+
 ### Tasselli dipinti (prova)
 
 Facoltativi: se esiste `public/tasselli/indice.json`, `src/map/tasselli.ts` stende sopra gli

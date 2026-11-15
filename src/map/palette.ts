@@ -45,6 +45,8 @@ export interface Palette {
   etichettaAlone: string;
   /** Colore steso sotto la mappa, fin dove la carta sfuma. */
   sfondo: string;
+  /** Nuvole oltre il bordo dei dati: colore e quanto coprono (0..1). */
+  nuvole: { colore: string; ombra: string; alfa: number };
   /** Di quanto si schiarisce la parete in luce e si scurisce quella in ombra (vedi sfuma). */
   muri: { chiaro: number; scuro: number };
   /** Quanto si allunga l'ombra a terra degli alberi: 1 a mezzogiorno, di più col sole basso. */
@@ -150,6 +152,7 @@ export const PALETTE: Palette = {
   etichetta: '#3d2c20',
   etichettaAlone: '#fbf4e3',
   sfondo: '#f6ecd6',
+  nuvole: { colore: '#fffdf8', ombra: '#d3c4a8', alfa: 0.97 },
   muri: { chiaro: 0.1, scuro: -0.17 },
   ombraLunga: 1,
   lampioni: { accesi: false, palo: '#6b5a4c', lampada: '#f3e7c8', alone: '#ffc67a' },
@@ -275,6 +278,7 @@ export const PALETTE_NOTTE: Palette = {
   etichetta: '#fbf4e3',
   etichettaAlone: '#141a30',
   sfondo: '#1b2238',
+  nuvole: { colore: '#56608f', ombra: '#2a3358', alfa: 0.9 },
   muri: { chiaro: 0.08, scuro: -0.22 },
   ombraLunga: 1,
   lampioni: { accesi: true, palo: '#0f1426', lampada: '#fff1c9', alone: '#ffc67a' },

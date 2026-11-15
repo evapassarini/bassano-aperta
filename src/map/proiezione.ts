@@ -170,17 +170,37 @@ export function angoliInIso(r: Rettangolo): Iso[] {
   ];
 }
 
-/** Tiene il centro della camera dentro l'area dei dati e lo zoom tra i limiti. */
+/**
+ * Di quanti metri il centro della camera deve restare dentro il bordo dei dati, perché
+ * oltre il bordo non c'è nulla da vedere: il bordo può arrivare quasi al margine più
+ * vicino dello schermo, non oltre. Mai più del 45%
+ * del lato corto dell'area, così a zoom basso ci si può ancora muovere.
+ */
+export function margineCamera(area: Rettangolo, zoom: number, vista: Vista): number {
+  const mezzo = Math.min(vista.larghezza, vista.altezza) / 2;
+  // Un metro verso est o verso nord sono circa 0,79 unità sullo schermo a zoom 1.
+  const metri = (0.9 * mezzo) / (Math.hypot(ISO_X, ISO_Y) * Math.max(zoom, 1e-6));
+  const tetto = 0.45 * Math.min(area.maxX - area.minX, area.maxY - area.minY);
+  return Math.max(0, Math.min(tetto, metri));
+}
+
+/**
+ * Tiene il centro della camera dentro l'area dei dati e lo zoom tra i limiti. Con `vista`
+ * il centro resta anche lontano dal bordo quanto basta a non riempire lo schermo di vuoto.
+ */
 export function limitaCamera(
   camera: Camera,
   area: Rettangolo,
   zoomMin: number,
   zoomMax: number,
+  vista?: Vista,
 ): Camera {
+  const zoom = Math.min(zoomMax, Math.max(zoomMin, camera.zoom));
+  const m = vista ? margineCamera(area, zoom, vista) : 0;
   return {
-    x: Math.min(area.maxX, Math.max(area.minX, camera.x)),
-    y: Math.min(area.maxY, Math.max(area.minY, camera.y)),
-    zoom: Math.min(zoomMax, Math.max(zoomMin, camera.zoom)),
+    x: Math.min(area.maxX - m, Math.max(area.minX + m, camera.x)),
+    y: Math.min(area.maxY - m, Math.max(area.minY + m, camera.y)),
+    zoom,
   };
 }
 
