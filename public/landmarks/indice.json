@@ -32,6 +32,7 @@
     "lat": 45.767164,
     "lon": 11.735195,
     "larghezzaMetri": 29.75,
+    "davanti": 14,
     "ancora": [
       0.7311,
       0.8586
@@ -59,6 +60,7 @@
     "lon": 11.731422,
     "larghezzaMetri": 39.5,
     "copre": 9,
+    "davanti": 13,
     "ancora": [
       0.538,
       0.4891
@@ -100,6 +102,7 @@
     "lon": 11.733534,
     "larghezzaMetri": 80.5,
     "copre": 33,
+    "davanti": 40,
     "ancora": [
       0.5901,
       0.7083

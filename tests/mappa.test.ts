@@ -181,6 +181,21 @@ describe('edifici', () => {
     expect(sostituisce(torre, 0, 71)).toBe(false);
   });
 
+  it('con «davanti» nasconde solo gli edifici più vicini a chi guarda, dentro la larghezza del disegno', () => {
+    const c = creaCittaFinta(300);
+    const torre = preparaLandmark({ ...c.landmark[1], davanti: 40 });
+    // A sud-ovest, cioè davanti: 35 m di profondità, oltre il rombo di terreno.
+    expect(sostituisce(torre, -25, -25)).toBe(true);
+    // Stessa distanza ma dietro (nord-est): resta.
+    expect(sostituisce(torre, 25, 25)).toBe(false);
+    // Davanti ma oltre la fascia.
+    expect(sostituisce(torre, -35, -35)).toBe(false);
+    // Davanti ma fuori dalla larghezza dell'illustrazione (60 m, ancora a metà).
+    expect(sostituisce(torre, -50, 0)).toBe(false);
+    // Senza il campo non cambia nulla.
+    expect(sostituisce(preparaLandmark(c.landmark[1]), -25, -25)).toBe(false);
+  });
+
   it('nasconde anche le parti disegnate dentro un edificio nascosto', () => {
     const c = creaCittaFinta(300);
     const edifici = [

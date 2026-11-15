@@ -459,6 +459,11 @@ export interface LandmarkPronto {
   semiA: number;
   /** Raggio in metri entro cui nasconde gli edifici generici (0 se non indicato). */
   copre: number;
+  /** Profondità in metri della fascia davanti al disegno liberata dagli edifici (0 se non indicata). */
+  davanti: number;
+  /** Bordi sinistro e destro dell'illustrazione sul piano isometrico. */
+  bordoSx: number;
+  bordoDx: number;
 }
 
 export function preparaLandmark(l: Landmark): LandmarkPronto {
@@ -476,6 +481,9 @@ export function preparaLandmark(l: Landmark): LandmarkPronto {
     semiL,
     semiA: semiL / 2,
     copre: typeof l.copre === 'number' && l.copre > 0 ? l.copre : 0,
+    davanti: typeof l.davanti === 'number' && l.davanti > 0 ? l.davanti : 0,
+    bordoSx: (m.x - m.y) * ISO_X - u * l.larghezzaMetri,
+    bordoDx: (m.x - m.y) * ISO_X + (1 - u) * l.larghezzaMetri,
   };
 }
 
@@ -513,7 +521,8 @@ function nomeSemplice(nome: string): string {
 /**
  * true se il luogo simbolo prende il posto dell'edificio, che quindi non va disegnato:
  * il centro dell'impronta cade nel rombo di terreno del disegno, oppure entro il raggio
- * `copre`, oppure l'edificio ha in OpenStreetMap lo stesso nome del luogo e gli sta
+ * `copre`, oppure sta nella fascia `davanti` (più vicino a chi guarda, dentro la larghezza
+ * del disegno), oppure l'edificio ha in OpenStreetMap lo stesso nome del luogo e gli sta
  * accanto (altrimenti il luogo comparirebbe due volte: disegnato e come casa generica).
  * `cx`, `cy` sono il centro dell'impronta in metri.
  */
@@ -521,6 +530,12 @@ export function sostituisce(l: LandmarkPronto, cx: number, cy: number, nome?: st
   if (nelRomboDi(l, (cx - cy) * ISO_X, -(cx + cy) * ISO_Y)) return true;
   const distanza = Math.hypot(cx - l.x, cy - l.y);
   if (l.copre > 0 && distanza <= l.copre) return true;
+  if (l.davanti > 0) {
+    // Profondità verso chi guarda (sud-ovest), in metri, e posizione orizzontale sullo schermo.
+    const profondita = (l.x + l.y - (cx + cy)) * ISO_X;
+    const sx = (cx - cy) * ISO_X;
+    if (profondita > 0 && profondita <= l.davanti && sx >= l.bordoSx && sx <= l.bordoDx) return true;
+  }
   return (
     nome !== undefined &&
     distanza <= RAGGIO_OMONIMI &&

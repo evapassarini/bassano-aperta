@@ -162,7 +162,9 @@ export function leggiAria(): Promise<DatiAria>;           // legge public/data/a
 - In `indice.json`, `larghezzaMetri` è la larghezza dell'SVG sul piano isometrico (la larghezza
   sullo schermo a zoom 1), non quella reale dell'edificio: `((x2 - y2) - (x1 - y1)) * 0.7071`
   tra il punto più a ovest e quello più a est del disegno. `copre` (facoltativo) è il raggio in
-  metri entro cui le case generiche attorno al luogo vengono nascoste.
+  metri entro cui le case generiche attorno al luogo vengono nascoste. `davanti` (facoltativo) è
+  la profondità in metri della fascia verso chi guarda in cui si nascondono solo le case che
+  stanno davanti al disegno, dentro la sua larghezza.
 - Dove un luogo simbolo è disegnato, il segnaposto della sua storia non si disegna: al suo
   posto c'è il nome del luogo, sempre visibile.
 - `tests/contenuti.test.ts` controlla storie, strati, luoghi simbolo, base e aria contro
