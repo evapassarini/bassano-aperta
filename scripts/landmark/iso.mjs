@@ -1,6 +1,16 @@
 // Piccolo motore per disegnare solidi in isometria 2:1 (stessa proiezione di docs/SPEC.md)
 // e scriverli come SVG. Coordinate: metri locali rispetto all'ancora, x est, y nord, z su.
-import { hull } from './geo.mjs';
+// Inviluppo convesso (serve alle ombre a terra).
+export function hull(pp) {
+  const p = [...pp].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  const cr = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const lo = [];
+  for (const q of p) { while (lo.length > 1 && cr(lo[lo.length - 2], lo[lo.length - 1], q) <= 0) lo.pop(); lo.push(q); }
+  const up = [];
+  for (const q of p.reverse()) { while (up.length > 1 && cr(up[up.length - 2], up[up.length - 1], q) <= 0) up.pop(); up.push(q); }
+  lo.pop(); up.pop();
+  return lo.concat(up);
+}
 
 export const S = 4; // unita' SVG per metro isometrico
 export const SEP = '#5b4636';

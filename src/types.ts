@@ -193,7 +193,7 @@ export interface Landmark {
    * Larghezza dell'intero SVG sul piano isometrico, cioè la sua larghezza sullo schermo a
    * zoom 1. NON è la larghezza reale dell'edificio: per un disegno che va dal punto più a
    * ovest (x1, y1) al punto più a est (x2, y2), in metri locali, vale
-   * ((x2 - y2) - (x1 - y1)) * 0.7071. Il Ponte Vecchio, lungo 74 m, ha 59.5.
+   * ((x2 - y2) - (x1 - y1)) * 0.7071. Il Ponte Vecchio, lungo 74 m, ha 66.3 (ombra e margini compresi).
    */
   larghezzaMetri: number;
   /**

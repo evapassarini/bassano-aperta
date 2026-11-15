@@ -87,6 +87,38 @@ Per un racconto nuovo:
 Eccezione nota: il Monte Grappa è circa 12 km fuori dalla mappa. Il racconto tiene le coordinate
 vere della cima; sulla mappa c'è un segnaposto sul margine nord-est.
 
+## Come ridisegnare un luogo simbolo
+
+Le dieci illustrazioni non sono disegnate a mano: ognuna esce da un piccolo programma,
+`scripts/landmark/luoghi/<id>.mjs`, che scrive `public/landmarks/<id>.svg`.
+
+```sh
+npm run illustrazioni                 # rigenera tutti gli SVG
+npm run illustrazioni -- porta-dieda  # solo uno (o più id di seguito)
+```
+
+Per cambiare un disegno:
+
+1. modifica il suo generatore. Le misure sono in metri locali rispetto al punto d'appoggio
+   (x verso est, y verso nord, z in alto) e la proiezione è quella di `docs/SPEC.md`; 4 unità
+   SVG valgono un metro sul piano isometrico. `scripts/landmark/iso.mjs` è il motore condiviso
+   (oggi lo usa il Tempio Ossario; gli altri generatori hanno dentro la parte che serve loro).
+   In `scripts/landmark/plan/` ci sono le piante di OpenStreetMap usate come base;
+2. rilancia `npm run illustrazioni`: stampa peso e `viewBox` di ogni file;
+3. se il `viewBox` è cambiato, aggiorna la voce in `public/landmarks/indice.json`. Con
+   `viewBox="x0 y0 L A"` e il punto d'appoggio disegnato in (0, 0): `larghezzaMetri = L / 4`,
+   `ancora = [-x0 / L, -y0 / A]`. `lat` e `lon` sono quelli del punto d'appoggio. `copre`
+   (facoltativo) è il raggio in metri entro cui spariscono le case generiche: serve ai luoghi
+   stretti tra gli edifici, e va tenuto piccolo perché toglie case vere dalla mappa;
+4. guarda il risultato nella mappa, non solo il file: `npm run dev` e poi l'indirizzo
+   `#@x,y,zoom` del luogo. Dimensione, case davanti e nomi si giudicano solo lì;
+5. `npm test`.
+
+Regole del disegno: tinte piatte, una parete in luce e una in ombra, contorni seppia sottili,
+sfondo trasparente, niente testo, script, immagini o riferimenti esterni, meno di 30 KB circa.
+Le licenze prese rispetto al vero (un portico girato, un edificio non disegnato) si scrivono
+nel commento in testa al generatore.
+
 ## Regole editoriali, in breve
 
 - Ogni fatto ha una fonte letta davvero. La base è `ricerca/ricerca-verificata-2026-11-14.json`:
