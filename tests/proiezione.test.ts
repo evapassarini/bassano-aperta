@@ -242,15 +242,17 @@ describe('bordo della mappa', () => {
     expect(limitaCamera({ x: 10, y: 20, zoom: 2 }, area, 0.2, 8, vista)).toEqual({ x: 10, y: 20, zoom: 2 });
   });
 
-  it('le nuvole stanno solo attorno e oltre il bordo, sempre le stesse', () => {
-    expect(fuoriDi(area, 0, 0)).toBeLessThan(0);
-    expect(fuoriDi(area, 2500, 0)).toBe(500);
+  it('le nuvole stanno attorno alla città e oltre, sempre le stesse', () => {
+    // Il centro è dentro, un punto ben oltre il riquadro è fuori, gli angoli sono arrotondati.
+    expect(fuoriDi(area, 0, 0)).toBeLessThan(-1000);
+    expect(fuoriDi(area, 3500, 0)).toBeGreaterThan(500);
+    expect(fuoriDi(area, 1950, 2950)).toBeGreaterThan(fuoriDi(area, 1950, 0));
     const centro = { minX: -300, minY: -300, maxX: 300, maxY: 300 };
     expect(nuvoleInVista(area, centro, 2)).toEqual([]);
     const largo = { minX: -9000, minY: -6000, maxX: 9000, maxY: 6000 };
     const a = nuvoleInVista(area, largo, 0.1);
     expect(a.length).toBeGreaterThan(10);
-    expect(a.length).toBeLessThan(3000);
+    expect(a.length).toBeLessThan(4000);
     expect(nuvoleInVista(area, largo, 0.1)).toEqual(a);
     for (const n of a) expect(n.alfa > 0 && n.alfa <= 1).toBe(true);
   });

@@ -563,18 +563,23 @@ porte, portici. Nessuna dipendenza in più. I dieci luoghi simbolo restano SVG a
 
 ### Bordo della mappa
 
-Dove i dati finiscono non resta il vuoto: `src/map/nuvole.ts` stende un banco di nuvole sopra
-il margine e oltre (posizioni da una griglia e da un seme, sempre uguali; colori per ogni
-luce in `palette.nuvole`). `limitaCamera`, con la vista, tiene il centro della camera lontano
-dal bordo quanto basta perché il bordo arrivi al più vicino al margine dello schermo: oltre
-non ci si può trascinare.
+La città non finisce con un bordo dritto: `src/map/nuvole.ts` la fa sfumare in un banco di
+nuvole. Il contorno delle nuvole sta in media 240 m dentro il bordo dei dati, ha gli angoli
+tondi e ondeggia, così nemmeno da lontano si legge la forma del riquadro. Un velo di sbuffi
+piccoli copre le ultime case, poi nuvole piene coprono tutto ciò che sta oltre (posizioni da
+una griglia e da un seme, sempre uguali; colori per ogni luce in `palette.nuvole`).
+`limitaCamera`, con la vista, tiene il centro della camera lontano dal bordo: oltre le nuvole
+non ci si può trascinare. Lo zoom minimo non lascia rimpicciolire la città fino a farne
+un'isola in mezzo alle nuvole.
 
 ### Tasselli dipinti (prova)
 
 Facoltativi: se esiste `public/tasselli/indice.json`, `src/map/tasselli.ts` stende sopra gli
 edifici, sotto etichette e segnaposto, le immagini elencate (centro in metri locali, lati sul
 piano isometrico, zoom da cui compaiono), con i bordi sfumati. Sono versioni dipinte dello
-stesso scorcio disegnato dal codice e si mostrano solo con la luce di giorno. La cartella è
+stesso scorcio disegnato dal codice e si mostrano solo con la luce di giorno. Oggi non ce n'è
+nessuno: la prova sul centro è stata tolta perché accanto alle case disegnate dal codice la
+differenza di stile si vedeva troppo (o tutta la città dipinta, o niente). La cartella è
 fuori da git finché non è chiarita la licenza delle immagini generate: senza tasselli la mappa
 è quella disegnata dal codice.
 

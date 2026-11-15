@@ -158,7 +158,8 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
     const a = Math.round(altezza * d);
     if (canvas.width !== l) canvas.width = l;
     if (canvas.height !== a) canvas.height = a;
-    zoomMinimo = Math.min(1, Math.max(0.04, zoomPerContenere(area, vista) * 0.85));
+    // Da più lontano di così la città diventerebbe un'isola piccola in mezzo alle nuvole.
+    zoomMinimo = Math.min(1, Math.max(0.04, zoomPerContenere(area, vista) * 1.12));
     return cambiato;
   };
 
