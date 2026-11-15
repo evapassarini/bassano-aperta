@@ -8,6 +8,9 @@ Cosa trovi nel sito:
 
 - tutta la città in vista isometrica, costruita dai dati di OpenStreetMap: si trascina, si zooma,
   la posizione resta nell'indirizzo (`#@x,y,zoom`);
+- ogni edificio dipinto dal codice, senza immagini: tetti in cotto a falde, intonaci veneti,
+  finestre, persiane e portici che compaiono avvicinandosi (le regole sono in `docs/SPEC.md`,
+  «Edifici dipinti dal codice»);
 - dieci luoghi simbolo disegnati a parte (Ponte Vecchio, Castello degli Ezzelini, Torre Civica,
   Museo Civico, Palazzo Sturm, King Kong Rhino, Grapperia Nardini, Tempio Ossario, Porta Dieda,
   Bolle di Nardini);

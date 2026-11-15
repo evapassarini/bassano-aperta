@@ -245,7 +245,7 @@ soglie, con le fonti nel commento.
   memoria la pagina funziona lo stesso). Alla prima visita, o con un valore sconosciuto, vale
   «Adesso».
 - **Giorno** è l'aspetto di sempre. **Pomeriggio**: luce calda e bassa, toni dorati, pareti in
-  ombra più marcate, ombre degli alberi più lunghe, Brenta più caldo. **Notte**: carta blu
+  ombra più marcate e più fredde, ombre degli alberi e delle case più lunghe, Brenta più caldo. **Notte**: carta blu
   scuro, case e strade ancora distinguibili, Brenta scuro, lampioni accesi con un alone caldo,
   qualche finestra illuminata, nomi chiari con alone scuro. I luoghi simbolo si scuriscono
   insieme alla mappa e prendono una luce calda dal basso. Segnaposto ed evidenza non cambiano.
@@ -298,7 +298,7 @@ stanno in `src/types.ts`.
 | Dati stazioni | `scripts/dati-stazioni.mjs` (+ `scripts/lib/stazioni.mjs`) → `public/data/stazioni-treni.json` | Tabella codice → nome delle stazioni dei treni. Fuori da `npm run dati`: si rilancia a mano |
 | Proiezione | `src/map/proiezione.ts` | Gradi ↔ metri locali ↔ schermo. Funzioni pure, con test |
 | Luce | `src/luce.ts` | Altezza del sole a Bassano e luce di un dato momento. Funzioni pure, con test |
-| Mappa | `src/map/*.ts` | Camera, disegno su canvas nelle tre luci, lampioni, ordinamento, clic sugli oggetti |
+| Mappa | `src/map/*.ts` | Camera, disegno su canvas nelle tre luci, edifici dipinti (tetti in `tetti.ts`), lampioni, ordinamento, clic sugli oggetti |
 | Storie | `content/luoghi/*.json` | Un file per luogo, tipo `Storia` |
 | Luoghi simbolo | `public/landmarks/*.svg` + `indice.json` | Illustrazioni isometriche |
 | Interfaccia | `src/ui/*.ts`, `src/stile.css` | Strati, luce della mappa, aria in breve, finestra-racconto, scheda avvisi, fonti |
@@ -484,12 +484,111 @@ telefono (la finestra-racconto diventa un foglio dal basso) e da tastiera; rispe
 `prefers-reduced-motion`. Di notte la cartolina resta una cartolina: blu notte e luci calde,
 non uno schermo nero. I pannelli restano di carta crema.
 
+### Edifici dipinti dal codice
+
+Tutti gli edifici sono dipinti dal codice, senza immagini: tetti a falde, finestre, persiane,
+porte, portici. Nessuna dipendenza in più. I dieci luoghi simbolo restano SVG a parte.
+
+- **Tutto deciso dal seme.** Ogni edificio ha un numero stabile ricavato dalla sua impronta
+  (`semeDi`). Forma del tetto, pendenza, tinte, passo delle finestre, persiane, porta, portico,
+  comignoli, finestre accese di notte: tutto viene da lì e dalla posizione. Stesso edificio,
+  stesso aspetto a ogni fotogramma e a ogni avvio. Nessun numero a caso.
+- **Tetti** (`src/map/tetti.ts`, funzioni pure con test in `tests/edifici.test.ts`). La forma
+  segue il tipo: capannoni piani e grigi con le fasce dei lucernari; condomini grandi e alti
+  fuori dal centro con il tetto piano e il parapetto; torri a punta; tutto il resto in cotto, a
+  falde. Una casa con più di 1500 m² di impronta a più di 700 m dal centro (supermercati,
+  magazzini, fabbriche senza etichetta nei dati) si dipinge da capannone, tetto e muri: non un
+  padiglione di cotto lungo cento metri. Sui rettangoli due falde con il colmo lungo il lato lungo e i timpani sui lati corti,
+  oppure padiglione. Sulle impronte senza rientranze il padiglione è esatto (ogni lato ha la
+  sua falda). Sulle impronte con rientranze il tetto sale a gradoni: l'impronta si rientra
+  finché regge, le strozzature si tagliano, ciò che resta senza rientranze si chiude a
+  padiglione; dove non si può più salire resta un piano in cima. Un piano in cotto non resta
+  mai una lastra liscia: si divide in due lungo il suo asse più lungo e le due metà si
+  dipingono come due falde molto basse, con il colmo in mezzo, i due toni e i coppi che
+  scendono dal colmo («colmo finto»: le facce restano piane, quindi dentro i muri). Se le falde
+  coprono meno del 90% dell'impronta si buttano e tutto il tetto diventa un piano con il colmo
+  finto. Regola che vale sempre: nessuna falda esce dai muri (tolleranza 25 cm) e sotto le
+  falde c'è sempre l'impronta alzata alla gronda, quindi il tetto non ha buchi.
+- **Altezze.** Il tetto a falde prende una parte dell'altezza del dato: la gronda scende di
+  metà del rialzo, il colmo sale dell'altra metà. Gli edifici davanti a un luogo simbolo
+  restano a 3,5 m colmo compreso, anche quelli che nei dati sono già più bassi (il loro colmo
+  non supera l'altezza del dato). Sotto i 3 m di altezza (tettoie, garage) il tetto non sale
+  più di 0,6 volte l'altezza.
+- **Luce sui tetti.** Come sui muri: chiare le falde a ovest, scure quelle a sud e a est, a
+  mezza tinta quelle a nord. I toni di cotto cambiano da casa a casa. Le parti in ombra (muri
+  e falde) virano verso una tinta fredda scelta per ogni luce (`ombraTinta`): appena di
+  giorno, di più nel pomeriggio.
+- **Ombre a terra.** Di giorno e nel pomeriggio ogni casa stende un'ombra sul terreno, verso
+  sud-est (sullo schermo: a destra), lunga in proporzione all'altezza e più lunga nel
+  pomeriggio. Si disegna prima di tutto ciò che sta in piedi, una forma sola per tessera, e
+  compare sfumando da zoom 1,5. Di notte non c'è.
+- **Facciate.** Finestre allineate per piano (un piano ogni 3 metri circa), con il passo tra
+  le finestre scelto dal seme; persiane verdi o marroni su parte delle case, di più in centro,
+  qualcuna chiusa; una porta al piano terra sul muro più lungo e una su ogni altra facciata
+  lunga, portone ad arco nei palazzi del centro e negli edifici pubblici; portico ad archi su
+  alcuni edifici lunghi del centro storico; zoccolo, marcapiano e ombra sotto la gronda. Tra
+  un piano e l'altro le finestre cambiano: finestrelle di sottotetto all'ultimo piano, più
+  alte al piano nobile, vetrine con la tenda al piano terra in alcune case del centro; da
+  molto vicino il telaio a croce. I lati consecutivi quasi allineati (meno di 18 gradi)
+  contano come una facciata sola e le finestre si distribuiscono sulla sua lunghezza con un
+  passo solo: un muro curvo non si riempie di finestre strette, una finestra può stare a
+  cavallo del giunto tra due lati e lo spigolo verticale tra loro non si traccia. Un muro di
+  scorcio (nel centro storico una strada su due è vista così) ha finestre più rade, senza
+  persiane, porte né vetrine; visto proprio di taglio, stretto o con un piano troppo basso
+  resta liscio. Dove un'ala dello stesso edificio
+  nasconde il piede di un muro (un cortile visto da sopra), le finestre stanno solo sui piani
+  che si vedono. Chiese con intonaco chiaro e caldo, lesene, monofore ad arco grandi in
+  proporzione, portale ad arco sul lato corto e rosone sopra se la facciata è alta. Capannoni
+  con una fascia di vetri e un portone.
+- **Intonaci.** Entro 480 m dal centro tinte calde e cariche (ocra, giallo, rosa e rosso
+  veneziano, crema, qualche pietra); fino a 950 m intonaci caldi con qualche tinta chiara;
+  oltre, tinte chiare e moderne con qualche casa colorata.
+- **Livelli di dettaglio** (`DETTAGLI` in `src/map/disegno.ts`). Da molto lontano sagome
+  unite; poi tetti stesi a tessere, con le falde in ombra; da zoom 1 circa muri e tetti a
+  falde edificio per edificio. Avvicinandosi compaiono, in quest'ordine: il terzo tono delle
+  falde (da 1,45), le ombre a terra (1,5), colmi e displuvi a penna (1,7), una fascia tenue
+  per ogni fila di finestre (1,9: sta al posto delle finestre finché sarebbero puntini, e se
+  ne va tra 2,9 e 3,6; pesa meno sugli intonaci scuri, dove rigava la facciata), finestre,
+  porte e archi (2,6), righe dei coppi una sì e una no (2,8), persiane, zoccolo e marcapiano
+  (3,3), le altre righe dei coppi e le cornici (3,5), comignoli e abbaini (3,9), coppi più
+  fitti e telai delle finestre (5,5). Ogni strato entra sfumando tra
+  due valori di zoom: mai uno scatto.
+- **Luci.** Le tre tavolozze hanno le stesse chiavi anche per gli edifici (intonaci carichi e
+  chiari, tetti piani, toni delle falde, coppi, vetro, cornice, telaio, persiane, porte, ombra
+  di facciata, portico, tinta fredda delle ombre, ombra a terra delle case). Di notte le finestre accese sono un sottoinsieme fisso delle finestre
+  dipinte, le altre restano scure; compaiono sfumando tra zoom 1,9 e 2,3 (più da lontano
+  restano le luci dei lampioni: servirebbe la facciata di migliaia di case per dei puntini). I
+  portici hanno una luce calda. I luoghi simbolo di notte prendono un velo blu-viola chiaro,
+  vicino a quello dei muri.
+
 ## Prestazioni
 
 Gli edifici sono migliaia: disegnare solo ciò che è nel riquadro visibile, ordinare una volta
 sola, a zoom basso disegnare sagome semplificate. I lampioni sono migliaia: solo quelli in
 vista, un'immagine sola per l'alone, nessun gradiente creato a ogni fotogramma. Obiettivo:
 trascinamento fluido su un portatile normale.
+
+Edifici dipinti: la geometria dei tetti si calcola una volta sola, quando si costruisce la
+scena (`preparaEdificio`); costa qualche decimo di secondo all'avvio. Le forme da riempire
+(muri, falde, finestre, coppi) si preparano la prima volta che un edificio entra in vista a
+quel livello di dettaglio e poi si riusano: nel fotogramma restano solo riempimenti e tratti
+di forme già pronte, senza calcoli. La preparazione ha un bilancio di tempo, non un numero
+fisso: circa 5 millisecondi per fotogramma (più un minimo di 48 forme, perché il disegno
+arrivi sempre in fondo), e vale per tutto, volumi compresi. Chi resta senza forme si vede lo
+stesso, come volume semplice (muri piatti nelle due tinte e tetto piano alla gronda, tracciati
+direttamente, senza forme da tenere); il disegno lo dice (`incompleto`) e la mappa chiede un
+altro fotogramma. Oltre 9000 dettagli pronti (facciate e tetti fini), oppure oltre 9000 volumi
+pronti, si dimenticano le forme degli edifici che non sono stati dipinti nell'ultimo
+fotogramma: quelli in vista restano, quindi niente sparisce mentre si guarda. I dettagli si disegnano solo per
+gli edifici in vista e solo sopra la loro soglia di zoom. Dove i tetti si stendono a tessere
+(da lontano) le falde in ombra sono un solo velo per tessera.
+
+Poche chiamate per edificio: se nessun muro ne copre un altro (tutte le impronte senza
+rientranze e molte delle altre) i muri sono due riempimenti, uno per lato, e tutti i tratti a
+penna (muri, gronda, colmi, timpano) un solo tratto; il terzo tono delle falde entra
+mescolando i colori, senza trasparenze. I tratti degli edifici hanno capi e giunti semplici
+(`butt`, `bevel`): a quello spessore non si distinguono da quelli tondi e costano molto meno,
+soprattutto sulle righe dei coppi.
 
 ## Licenze
 

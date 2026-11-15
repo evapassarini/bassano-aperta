@@ -241,6 +241,8 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
       landmarkSopra,
       area,
     });
+    // I dettagli degli edifici si preparano un poco per fotogramma: finché ne mancano, si ridisegna.
+    if (disegnatore.incompleto) richiedi();
     if (dissolvenza && telaDissolvenza) {
       const t = (ora - dissolvenza.inizio) / DURATA_DISSOLVENZA;
       if (t >= 1 || telaDissolvenza.width !== canvas.width || telaDissolvenza.height !== canvas.height) {

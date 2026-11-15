@@ -60,6 +60,39 @@ export interface Palette {
   };
   /** Finestre illuminate sulle facciate; stringa vuota quando non se ne disegnano. */
   finestra: string;
+  /** Intonaci carichi del centro storico: rosso veneziano, giallo, ocra, rosa. */
+  intonaciForti: string[];
+  /** Intonaci chiari e moderni, per la periferia. */
+  intonaciChiari: string[];
+  /** Tetti piani dei condomini moderni. */
+  tettoPiano: string[];
+  /** Di quanto si schiarisce la falda in luce e si scurisce quella in ombra (vedi sfuma). */
+  falde: { luce: number; ombra: number };
+  /** L'ombra delle falde come velo, per la vista da lontano dove i tetti si stendono a tessere. */
+  faldaVeloOmbra: string;
+  /** Righe dei coppi lungo la pendenza. */
+  coppi: string;
+  /** Vetro delle finestre spente. */
+  vetro: string;
+  /** Cornice chiara attorno a finestre e porte. */
+  cornice: string;
+  /** Persiane alla veneta: verdi e marroni. */
+  persiane: string[];
+  /** Porte e portoni. */
+  porte: string[];
+  /** Velo scuro per zoccolo, marcapiano e ombra sotto la gronda. */
+  facciataOmbra: string;
+  /** L'ombra dentro gli archi dei portici (di notte, la loro luce). */
+  portico: string;
+  /** Telaio delle finestre, da molto vicino. */
+  telaio: string;
+  /**
+   * Il colore verso cui virano le parti in ombra (muri e falde) e di quanto, tra 0 e 1:
+   * con il sole basso l'ombra si fa fredda e violacea.
+   */
+  ombraTinta: { colore: string; quanto: number };
+  /** Ombra che le case stendono a terra, come rgba(); stringa vuota per non disegnarla. */
+  ombraCase: string;
   /** Come si intonano i disegni dei luoghi simbolo; null per lasciarli come sono. */
   illustrazioni: TintaIllustrazioni | null;
 }
@@ -100,7 +133,7 @@ export const PALETTE: Palette = {
   tettoIndustria: ['#b7b0a3', '#a9a79d', '#c2b8a6'],
   intonaci: ['#f1dcae', '#e8c98c', '#eec0a0', '#f3e4c4', '#e7b592', '#f0d49a', '#f5e9d2', '#e4c8a0'],
   intonacoIndustria: ['#e3dccb', '#d9d3c4'],
-  pietra: ['#efe3c8', '#e8dcc2'],
+  pietra: ['#f3e3c0', '#ecd9b4'],
   mattone: ['#cf9c78', '#c48f6c'],
   edificiLontani: '#cf8a66',
   chiome: ['#8fb074', '#7fa56c', '#9dba7a', '#86aa62'],
@@ -121,6 +154,21 @@ export const PALETTE: Palette = {
   ombraLunga: 1,
   lampioni: { accesi: false, palo: '#6b5a4c', lampada: '#f3e7c8', alone: '#ffc67a' },
   finestra: '',
+  intonaciForti: ['#d9825f', '#e3b25c', '#d99a5b', '#e09a8a', '#c9694e', '#ebc674'],
+  intonaciChiari: ['#f7f0df', '#f3ead0', '#efe9dc', '#f6e7cf', '#e9e6dc', '#f4edc9'],
+  tettoPiano: ['#dcd2bd', '#d3c9b6', '#e0d5bb'],
+  falde: { luce: 0.13, ombra: -0.13 },
+  faldaVeloOmbra: 'rgba(92, 40, 24, 0.2)',
+  coppi: 'rgba(110, 48, 28, 0.34)',
+  vetro: '#6a5d54',
+  cornice: '#fbf3df',
+  persiane: ['#55705a', '#7a5a40', '#3f5e4b', '#8a6748', '#6b7f5c', '#6e4a36', '#4f6b6a', '#93714e'],
+  porte: ['#6f4a32', '#4d5f47', '#7d3f2f', '#5b4636'],
+  facciataOmbra: 'rgba(84, 56, 36, 0.2)',
+  portico: '#5a4638',
+  telaio: '#e9dfc8',
+  ombraTinta: { colore: '#7c6470', quanto: 0.07 },
+  ombraCase: 'rgba(96, 70, 48, 0.17)',
   illustrazioni: null,
 };
 
@@ -173,6 +221,12 @@ export const PALETTE_POMERIGGIO: Palette = {
   ombraLunga: 2.1,
   lampioni: { accesi: false, palo: '#66503f', lampada: '#f6e2b4', alone: '#ffc67a' },
   finestra: '',
+  falde: { luce: 0.19, ombra: -0.21 },
+  faldaVeloOmbra: 'rgba(96, 36, 20, 0.3)',
+  coppi: 'rgba(104, 40, 22, 0.38)',
+  facciataOmbra: 'rgba(96, 52, 24, 0.26)',
+  ombraTinta: { colore: '#5b3f66', quanto: 0.24 },
+  ombraCase: 'rgba(98, 50, 40, 0.24)',
   illustrazioni: { velo: '#ffe9c4', luce: '', acqua: '#86b09a' },
 };
 
@@ -225,7 +279,22 @@ export const PALETTE_NOTTE: Palette = {
   ombraLunga: 1,
   lampioni: { accesi: true, palo: '#0f1426', lampada: '#fff1c9', alone: '#ffc67a' },
   finestra: '#ffd58a',
-  illustrazioni: { velo: '#3c4673', luce: 'rgba(255, 190, 112, 0.28)', acqua: '#15223f' },
+  intonaciForti: PALETTE.intonaciForti.map(muroDiNotte),
+  intonaciChiari: PALETTE.intonaciChiari.map(muroDiNotte),
+  tettoPiano: PALETTE.tettoPiano.map(muroDiNotte),
+  falde: { luce: 0.1, ombra: -0.2 },
+  faldaVeloOmbra: 'rgba(6, 9, 24, 0.26)',
+  coppi: 'rgba(8, 10, 26, 0.36)',
+  vetro: '#151b33',
+  cornice: '#5d6689',
+  persiane: PALETTE.persiane.map(muroDiNotte),
+  porte: PALETTE.porte.map(muroDiNotte),
+  facciataOmbra: 'rgba(6, 9, 22, 0.3)',
+  portico: '#8f6a3c',
+  telaio: '#3a4263',
+  ombraTinta: { colore: '#0e1430', quanto: 0.08 },
+  ombraCase: '',
+  illustrazioni: { velo: '#5d6698', luce: 'rgba(255, 190, 112, 0.3)', acqua: '#15223f' },
 };
 
 export const PALETTE_PER_LUCE: Record<Luce, Palette> = {
@@ -251,6 +320,18 @@ export function sfuma(esadecimale: string, f: number): string {
   const g = canale((n >> 8) & 255);
   const b = canale(n & 255);
   return '#' + ((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1);
+}
+
+/** Il colore a `t` della strada tra `a` e `b` (esadecimali): 0 dà `a`, 1 dà `b`. */
+export function mescolaColori(a: string, b: string, t: number): string {
+  const x = parseInt(a.slice(1), 16);
+  const y = parseInt(b.slice(1), 16);
+  const canale = (sposta: number): number => {
+    const u = (x >> sposta) & 255;
+    const w = (y >> sposta) & 255;
+    return Math.max(0, Math.min(255, Math.round(u + (w - u) * t)));
+  };
+  return '#' + ((1 << 24) | (canale(16) << 16) | (canale(8) << 8) | canale(0)).toString(16).slice(1);
 }
 
 /** Un colore esadecimale con trasparenza, come rgba(). */

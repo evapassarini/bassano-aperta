@@ -17,6 +17,7 @@ import type {
 } from '../types';
 import { ISO_X, ISO_Y, ISO_Z, lonLatInMetri, profondita } from './proiezione';
 import type { Rettangolo, Vista } from './proiezione';
+import { TIMPANO, TIMPANO_DESTRO, TIMPANO_SINISTRO, tettoInMetri } from './tetti';
 
 // --- geometria di base --------------------------------------------------------
 
@@ -307,10 +308,26 @@ export const MURO_DESTRO = 2;
 export interface EdificioPronto {
   /** Impronta sul piano isometrico, senso antiorario, z = 0. */
   anello: Float32Array;
-  /** Di quanto il tetto sta sopra l'impronta, in unità isometriche. */
+  /** Di quanto la gronda (la cima dei muri) sta sopra l'impronta, in unità isometriche. */
   alt: number;
-  /** Altezza in più del colmo (tetto a punta); 0 per i tetti piani. */
+  /** Di quanto il punto più alto del tetto sta sopra la gronda; 0 per i tetti piani. */
   colmo: number;
+  /** Forma del tetto: TETTO_PIANO, TETTO_FALDE, TETTO_CAPANNONE o TETTO_TERRAZZA (vedi tetti.ts). */
+  forma: number;
+  /**
+   * Le facce del tetto già sul piano isometrico, altezza compresa, una dopo l'altra:
+   * [x0, y0, x1, y1, ...]. Dalla più lontana alla più vicina. null se il tetto è solo piano.
+   */
+  facce: Float32Array | null;
+  /** Per ogni faccia due numeri: quanti vertici ha e la sua classe (FALDA_*, TIMPANO_*, ...). */
+  facceInfo: Uint16Array | null;
+  /**
+   * Per ogni faccia la direzione in cui la falda sale, sul piano isometrico (due numeri, per
+   * un metro di pianta). Zero per le facce che non sono falde. Serve a tirare le righe dei coppi.
+   */
+  pendenze: Float32Array | null;
+  /** Distanza del centro dell'impronta dal centro della città, in metri. */
+  dist: number;
   /** Per ogni lato dell'anello: MURO_DIETRO, MURO_SINISTRO o MURO_DESTRO. */
   lati: Uint8Array;
   /**
@@ -399,43 +416,135 @@ export function semeDi(p: ArrayLike<number>): number {
   return h >>> 0;
 }
 
-export function preparaEdificio(e: Edificio): EdificioPronto {
+/** Quanto può salire, al massimo, il tetto di un edificio tenuto basso davanti a un luogo simbolo. */
+const RIALZO_BASSO = 0.9;
+
+/**
+ * Prepara un edificio per il disegno: impronta proiettata, muri in vista, tetto. Il tetto si
+ * calcola qui, una volta sola. `basso` vale per gli edifici davanti a un luogo simbolo: il
+ * colmo non supera l'altezza data.
+ */
+export function preparaEdificio(e: Edificio, basso = false): EdificioPronto {
   const p = antiorario(e.p);
   const anello = proiettaPiatto(p);
   const n = p.length >> 1;
   let sx = 0;
   let sy = 0;
-  let minX = Infinity;
-  let maxX = -Infinity;
-  let minY = Infinity;
-  let maxY = -Infinity;
+  let mx = 0;
+  let my = 0;
   for (let i = 0; i < n; i++) {
     sx += anello[i * 2];
     sy += anello[i * 2 + 1];
-    if (p[i * 2] < minX) minX = p[i * 2];
-    if (p[i * 2] > maxX) maxX = p[i * 2];
-    if (p[i * 2 + 1] < minY) minY = p[i * 2 + 1];
-    if (p[i * 2 + 1] > maxY) maxY = p[i * 2 + 1];
+    mx += p[i * 2];
+    my += p[i * 2 + 1];
   }
-  const corto = n > 0 ? Math.min(maxX - minX, maxY - minY) : 0;
   const convesso = eConvesso(p);
   const lati = classificaLati(p);
-  // Il tetto a punta è un ventaglio di falde dal centro: regge solo sulle impronte
-  // convesse. Su una pianta con rientranze (quasi tutte le chiese vere) le falde
-  // uscirebbero dai muri, quindi lì il tetto resta piano.
-  let colmo = 0;
-  if (convesso) {
-    if (e.t === 'torre') colmo = Math.min(7, Math.max(2, corto * 0.7)) * ISO_Z;
-    else if (e.t === 'chiesa') colmo = Math.min(5, Math.max(1.5, corto * 0.3)) * ISO_Z;
+  const seme = semeDi(e.p);
+  const altezza = Math.max(0, e.h);
+  const dist = n > 0 ? Math.hypot(mx / n, my / n) : 0;
+  const tetto = tettoInMetri(p, {
+    tipo: e.t,
+    seme,
+    altezza,
+    distanza: dist,
+    // Davanti a un luogo simbolo il colmo non supera l'altezza data. Tettoie, garage e casette
+    // sotto i tre metri non portano un tetto più alto dei loro muri.
+    rialzoMassimo: basso
+      ? Math.min(RIALZO_BASSO, altezza * 0.4)
+      : altezza < 3
+        ? Math.max(0.5, altezza * 0.6)
+        : undefined,
+  });
+  // Il tetto a falde prende una parte dell'altezza: la gronda scende un poco, il colmo sale.
+  // Le torri tengono i muri alti quanto dice il dato; gli edifici bassi non superano l'altezza.
+  let gronda = altezza;
+  if (tetto.rialzo > 0 && e.t !== 'torre') {
+    gronda = basso
+      ? Math.max(altezza - tetto.rialzo, altezza * 0.6)
+      : Math.max(Math.min(altezza, 2.4), altezza - tetto.rialzo * 0.5);
+  }
+  const alt = gronda * ISO_Z;
+
+  // Facce in vista, dalla più lontana alla più vicina (conta il centro della faccia).
+  let facce: Float32Array | null = null;
+  let facceInfo: Uint16Array | null = null;
+  let pendenze: Float32Array | null = null;
+  if (tetto.facce.length > 0) {
+    const tenute: number[] = [];
+    const classi: number[] = [];
+    const chiavi: number[] = [];
+    let vertici = 0;
+    for (let f = 0; f < tetto.facce.length; f++) {
+      const v = tetto.facce[f];
+      let classe = tetto.classi[f];
+      if (classe === TIMPANO) {
+        const dx = v[3] - v[0];
+        const dy = v[4] - v[1];
+        // Il timpano è un pezzo di muro: se dà le spalle a chi guarda non si disegna.
+        if (dx - dy <= 1e-9) continue;
+        classe = -dy > dx ? TIMPANO_SINISTRO : TIMPANO_DESTRO;
+      }
+      let fondo = 0;
+      for (let i = 0; i < v.length; i += 3) fondo += v[i] + v[i + 1];
+      tenute.push(f);
+      classi.push(classe);
+      chiavi.push(fondo / (v.length / 3));
+      vertici += v.length / 3;
+    }
+    const ordine = tenute.map((_, i) => i).sort((a, b) => chiavi[b] - chiavi[a] || a - b);
+    facce = new Float32Array(vertici * 2);
+    facceInfo = new Uint16Array(ordine.length * 2);
+    pendenze = new Float32Array(ordine.length * 2);
+    // Tutte le facce girano sullo schermo nello stesso verso dell'impronta: così, riempite
+    // insieme in un solo percorso, non si cancellano a vicenda dove si sovrappongono.
+    const versoImpronta = areaConSegno(anello) >= 0;
+    let k = 0;
+    ordine.forEach((o, posto) => {
+      const f = tenute[o];
+      const v = tetto.facce[f];
+      const inizio = k;
+      for (let i = 0; i < v.length; i += 3) {
+        facce![k++] = (v[i] - v[i + 1]) * ISO_X;
+        facce![k++] = -(v[i] + v[i + 1]) * ISO_Y - (gronda + v[i + 2]) * ISO_Z;
+      }
+      const sua = facce!.subarray(inizio, k);
+      if (areaConSegno(sua) >= 0 !== versoImpronta) {
+        // Rovesciata (falda ripida vista da dietro, o timpano): si inverte il giro tenendo il
+        // lato di gronda nei primi due vertici.
+        const copia = Array.from(sua);
+        const m = copia.length >> 1;
+        for (let i = 0; i < m; i++) {
+          const da = i < 2 ? 1 - i : m + 1 - i;
+          sua[i * 2] = copia[da * 2];
+          sua[i * 2 + 1] = copia[da * 2 + 1];
+        }
+      }
+      facceInfo![posto * 2] = v.length / 3;
+      facceInfo![posto * 2 + 1] = classi[o];
+      const nx = tetto.salite[f * 3];
+      const ny = tetto.salite[f * 3 + 1];
+      const pendenza = tetto.salite[f * 3 + 2];
+      if (nx !== 0 || ny !== 0) {
+        pendenze![posto * 2] = (nx - ny) * ISO_X;
+        pendenze![posto * 2 + 1] = -(nx + ny) * ISO_Y - pendenza * ISO_Z;
+      }
+    });
+    if (ordine.length === 0) facce = facceInfo = pendenze = null;
   }
   return {
     anello,
-    alt: Math.max(0, e.h) * ISO_Z,
-    colmo,
+    alt,
+    colmo: tetto.rialzo * ISO_Z,
+    forma: tetto.forma,
+    facce,
+    facceInfo,
+    pendenze,
+    dist,
     lati,
     ordineMuri: convesso || n > 65535 ? null : ordinaMuri(p, lati),
     tipo: e.t,
-    seme: semeDi(e.p),
+    seme,
     cx: n > 0 ? sx / n : 0,
     cy: n > 0 ? sy / n : 0,
     area: Math.abs(areaConSegno(p)),
@@ -697,9 +806,12 @@ export function costruisciScena(
       }
     }
     // Le case davanti a un luogo simbolo restano, ma basse: così il monumento si vede intero.
-    const basso =
-      sotto < 0 && e.h > ALTEZZA_DAVANTI && luoghi.some((l) => staDavanti(l, mx, my));
-    const pronto = preparaEdificio(basso ? { ...e, h: ALTEZZA_DAVANTI } : e);
+    // Vale anche per quelle già basse: il loro tetto non deve salire oltre.
+    const basso = sotto < 0 && luoghi.some((l) => staDavanti(l, mx, my));
+    const pronto = preparaEdificio(
+      basso && e.h > ALTEZZA_DAVANTI ? { ...e, h: ALTEZZA_DAVANTI } : e,
+      basso,
+    );
     pronto.sotto = sotto;
     edifici.push(pronto);
     impronte.push(e.p);

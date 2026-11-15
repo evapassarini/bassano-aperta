@@ -183,8 +183,8 @@ export function puntoInPoligono(x: number, y: number, anello: ArrayLike<number>)
 
 /**
  * true se il punto (x, y), sul piano isometrico, cade sul disegno di un edificio: sul
- * tetto (l'impronta alzata di `alt`) o su una delle pareti in vista. `lati` usa 0 per le
- * pareti che danno le spalle a chi guarda.
+ * tetto (l'impronta alzata di `alt`, più le facce del tetto a falde se ci sono) o su una
+ * delle pareti in vista. `lati` usa 0 per le pareti che danno le spalle a chi guarda.
  */
 export function puntoSuEdificio(
   x: number,
@@ -192,8 +192,19 @@ export function puntoSuEdificio(
   anello: ArrayLike<number>,
   alt: number,
   lati: ArrayLike<number>,
+  facce?: Float32Array | null,
+  facceInfo?: Uint16Array | null,
 ): boolean {
   if (puntoInPoligono(x, y + alt, anello)) return true;
+  // Il tetto a falde sale sopra la gronda: contano anche le sue facce, già proiettate.
+  if (facce && facceInfo) {
+    let k = 0;
+    for (let f = 0; f < facceInfo.length; f += 2) {
+      const lunga = facceInfo[f] * 2;
+      if (puntoInPoligono(x, y, facce.subarray(k, k + lunga))) return true;
+      k += lunga;
+    }
+  }
   if (!(alt > 0)) return false;
   const n = anello.length >> 1;
   for (let i = 0; i < n; i++) {

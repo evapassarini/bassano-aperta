@@ -4,6 +4,7 @@
 import type { IdStrato, Luce, TipoArea, TipoStrada } from '../types';
 import {
   marcatoriInVista,
+  puntoInPoligono,
   puntoSuEdificio,
   rettangoloSprite,
   SPRITE_SOGLIA,
@@ -11,9 +12,9 @@ import {
 } from './bersagli';
 import type { Marcatore, Sprite } from './bersagli';
 import type { Illustrazioni } from './immagini';
-import { conAlfa, PALETTE, PALETTE_PER_LUCE, sfuma } from './palette';
+import { conAlfa, luminanza, mescolaColori, PALETTE, PALETTE_PER_LUCE, sfuma } from './palette';
 import type { Palette } from './palette';
-import { angoliInIso, isoInSchermo, metriInIso, riquadroVisibile } from './proiezione';
+import { angoliInIso, ISO_X, ISO_Y, ISO_Z, isoInSchermo, metriInIso, riquadroVisibile } from './proiezione';
 import type { Camera, Rettangolo, Vista } from './proiezione';
 import {
   ALTEZZA_LAMPIONE,
@@ -30,6 +31,22 @@ import {
   siToccano,
 } from './scena';
 import type { EdificioPronto, PuntoPronto, Scena, StratiVisibili } from './scena';
+import {
+  CAPPELLO,
+  COLMO_FINTO,
+  FALDA_LUCE,
+  FALDA_OMBRA,
+  FASCIA,
+  GRADONE,
+  INTERNO,
+  MASCHERA_CLASSE,
+  TETTO_CAPANNONE,
+  TETTO_FALDE,
+  TETTO_PIANO,
+  TETTO_TERRAZZA,
+  TIMPANO_DESTRO,
+  TIMPANO_SINISTRO,
+} from './tetti';
 
 export interface StatoDisegno {
   camera: Camera;
@@ -70,8 +87,239 @@ const LARGHEZZE: Record<Exclude<TipoStrada, 'ferrovia'>, { metri: number; minimo
 const RAGGIO_ALONE = 16;
 /** Da questo zoom in su i lampioni si disegnano con il palo; sotto, di notte, restano gli aloni. */
 export const ZOOM_PALI = { giorno: 3, notte: 1.7 };
-/** Da questo zoom in su, di notte, si vedono le finestre accese. */
-const ZOOM_FINESTRE = 1.5;
+/**
+ * Di notte le finestre accese compaiono sfumando tra questi due zoom. Più da lontano sarebbero
+ * puntini, e per averle bisognerebbe preparare la facciata di migliaia di case.
+ */
+export const ZOOM_FINESTRE = { da: 1.9, a: 2.3 };
+
+/**
+ * Livelli di dettaglio degli edifici da vicino. Ogni strato di pittura compare sfumando tra
+ * `da` e `a`: mai uno scatto. Da lontano restano i volumi con i tetti a falde e le tinte.
+ */
+export const DETTAGLI = {
+  /** Ombre delle case a terra: più da lontano sarebbero un filo, e costano. */
+  ombre: { da: 1.5, a: 2.1 },
+  /** Terzo tono dei tetti: le falde in piena luce. Prima ci sono solo base e ombra. */
+  luce: { da: 1.45, a: 2.1 },
+  /** Colmi e displuvi tracciati a penna sopra le tinte delle falde. */
+  spigoli: { da: 1.7, a: 2.5 },
+  /** Fasce tenui al posto delle file di finestre, quando le finestre sarebbero puntini. */
+  fasce: { da: 1.9, a: 2.4 },
+  /** Le fasce se ne vanno mentre entrano le finestre vere. */
+  fasceVia: { da: 2.9, a: 3.6 },
+  /** Finestre, porte e archi dei portici: sagome scure. */
+  finestre: { da: 2.6, a: 3.4 },
+  /** Righe dei coppi sulle falde: prima una riga sì e una no. */
+  coppi: { da: 2.8, a: 3.7 },
+  /** Le righe dei coppi che mancavano. */
+  coppiPieni: { da: 3.5, a: 4.5 },
+  /** Comignoli, abbaini e torrini. */
+  comignoli: { da: 3.9, a: 4.9 },
+  /** Persiane, zoccolo, marcapiano, ombra della gronda. */
+  facciata: { da: 3.3, a: 4.3 },
+  /** Cornici chiare attorno a finestre e porte. */
+  cornici: { da: 3.5, a: 4.6 },
+  /** Seconda serie di righe dei coppi, in mezzo alle prime; telai a croce delle finestre. */
+  coppiFitti: { da: 5.5, a: 7.5 },
+};
+
+/** Quanto è presente uno strato a un certo zoom: 0 sotto `da`, 1 sopra `a`. */
+export function presenza(zoom: number, soglia: { da: number; a: number }): number {
+  const t = (zoom - soglia.da) / (soglia.a - soglia.da);
+  return t <= 0 ? 0 : t >= 1 ? 1 : t;
+}
+
+/** Entro questa distanza dal centro (metri) la città è il centro storico: tinte calde, portici. */
+const RAGGIO_CENTRO = 480;
+/** Fino a qui la prima cintura: ancora intonaci caldi, qualche tinta chiara. */
+const RAGGIO_CINTURA = 950;
+/** Oltre questo numero di dettagli pronti (facciate e tetti), quelli fuori vista si dimenticano. */
+export const DETTAGLI_IN_MEMORIA = 9000;
+/** Ombra a terra delle case: metri di spostamento per metro di altezza, e il massimo. */
+const OMBRA_PER_METRO = 0.24;
+const OMBRA_MASSIMA = 8;
+/** Quanto pesano al massimo le fasce che stanno al posto delle finestre. */
+const ALFA_FASCE = 0.26;
+/**
+ * Scorcio di un muro: quanto è largo sullo schermo un metro della sua lunghezza (da 0, visto
+ * di taglio, a 1,41). Sotto SCORCIO_MINIMO il muro è di scorcio: finestre più rade, senza
+ * persiane né porte. Sotto SCORCIO_LISCIO resta liscio.
+ */
+const SCORCIO_MINIMO = 0.5;
+const SCORCIO_LISCIO = 0.26;
+/** Passo delle finestre sui muri di scorcio, rispetto a quello della casa. */
+const PASSO_DI_SCORCIO = 1.5;
+/** Oltre questo numero di volumi pronti (muri e tetto), quelli fuori vista si dimenticano. */
+export const VOLUMI_IN_MEMORIA = 9000;
+
+/** La pittura di base di un edificio: muri e tetto. Solo forme, senza colori. */
+interface Volume {
+  /** Muri in vista, a gruppi dello stesso lato, dal più lontano al più vicino. */
+  muri: Path2D[];
+  latoMuri: number[];
+  /** true se ogni gruppo di muri va contornato subito: i muri si coprono tra loro. */
+  muriATratti: boolean;
+  /** Contorni dei muri da tracciare prima del tetto (impronte con rientranze), oppure null. */
+  lineeMuri: Path2D | null;
+  /** Tutto il tetto, da riempire con la tinta di base. */
+  fondo: Path2D;
+  /** I tratti a penna da fare dopo il tetto, in un colpo solo: gronda, timpano, muri se si può. */
+  linee: Path2D;
+  /** Gli stessi tratti con dentro anche colmi e displuvi. */
+  lineePiene: Path2D;
+  /** Colmi e displuvi, ognuno una volta sola. Compaiono avvicinandosi. */
+  spigoli: Path2D | null;
+  luce: Path2D | null;
+  ombra: Path2D | null;
+  /** Triangolo di muro sotto le due falde, se è in vista. */
+  timpano: Path2D | null;
+  latoTimpano: number;
+}
+
+/** La pittura delle facciate: finestre, persiane, porte, portici. */
+interface Facciata {
+  ombre: Path2D | null;
+  /** Una fascia per piano al posto delle finestre, per la vista di mezzo. */
+  fasce: Path2D | null;
+  archi: Path2D | null;
+  cornici: Path2D | null;
+  vetri: Path2D | null;
+  /** Telai a croce delle finestre, solo da molto vicino. */
+  telai: Path2D | null;
+  /** Le finestre che di notte sono accese: stanno anche tra i vetri, e la luce si stende sopra. */
+  accese: Path2D | null;
+  persiane: Path2D | null;
+  porte: Path2D | null;
+  iPersiana: number;
+  iPorta: number;
+}
+
+/** La pittura fine del tetto: coppi, comignoli, abbaini. */
+interface TettoFine {
+  /** Righe dei coppi: metà (una sì e una no), l'altra metà, e quelle fitte in mezzo. */
+  coppi: Path2D | null;
+  pieni: Path2D | null;
+  fitti: Path2D | null;
+  /** Comignoli, abbaini e torrini: faccia in luce, faccia in ombra, coperchio. */
+  camSx: Path2D | null;
+  camDx: Path2D | null;
+  camSopra: Path2D | null;
+  /** La finestrella degli abbaini. */
+  camVetri: Path2D | null;
+  /** Il contorno a penna di tutte le scatole, in un solo tratto. */
+  camBordo: Path2D | null;
+}
+
+interface PezzoTetti {
+  tinte: Map<number, Path2D>;
+  /** Le falde in ombra di tutta la tessera: un velo scuro sopra le tinte. */
+  ombra: Path2D;
+}
+
+const SENZA_FACCIATA: Facciata = {
+  ombre: null,
+  fasce: null,
+  archi: null,
+  cornici: null,
+  vetri: null,
+  telai: null,
+  accese: null,
+  persiane: null,
+  porte: null,
+  iPersiana: 0,
+  iPorta: 0,
+};
+const SENZA_TETTO_FINE: TettoFine = {
+  coppi: null,
+  pieni: null,
+  fitti: null,
+  camSx: null,
+  camDx: null,
+  camSopra: null,
+  camVetri: null,
+  camBordo: null,
+};
+
+/** Numero stabile a 32 bit da tre numeri: decide un dettaglio (una finestra accesa, una porta). */
+function mescola(a: number, b: number, c: number): number {
+  let h = Math.imul(a ^ Math.imul(b + 1, 0x9e3779b1), 0x85ebca6b);
+  h ^= h >>> 13;
+  h = Math.imul(h ^ Math.imul(c + 1, 0xc2b2ae35), 0x27d4eb2f);
+  return (h ^ (h >>> 15)) >>> 0;
+}
+
+function tracciaFaccia(percorso: Path2D, v: Float32Array, da: number, vertici: number): void {
+  percorso.moveTo(v[da], v[da + 1]);
+  for (let i = 1; i < vertici; i++) percorso.lineTo(v[da + i * 2], v[da + i * 2 + 1]);
+  percorso.closePath();
+}
+
+/** Memoria riusata per i tagli delle righe dentro una faccia. */
+const tagli: number[] = [];
+
+/**
+ * Aggiunge al percorso i tratti della retta (ox, oy) + t * (dx, dy) che cadono dentro il
+ * poligono `v` (da `da`, `vertici` vertici). Regge anche i poligoni con rientranze.
+ */
+function rigaNelPoligono(
+  percorso: Path2D,
+  v: ArrayLike<number>,
+  da: number,
+  vertici: number,
+  su: number,
+  ox: number,
+  oy: number,
+  dx: number,
+  dy: number,
+): void {
+  tagli.length = 0;
+  for (let i = 0; i < vertici; i++) {
+    const j = (i + 1) % vertici;
+    const px = v[da + i * 2];
+    const py = v[da + i * 2 + 1] - su;
+    const ex = v[da + j * 2] - px;
+    const ey = v[da + j * 2 + 1] - su - py;
+    const det = dx * ey - dy * ex;
+    if (Math.abs(det) < 1e-9) continue;
+    const m = ((px - ox) * dy - (py - oy) * dx) / det;
+    if (m < 0 || m >= 1) continue;
+    tagli.push(((px - ox) * ey - (py - oy) * ex) / det);
+  }
+  if (tagli.length < 2) return;
+  tagli.sort((a, b) => a - b);
+  for (let k = 0; k + 1 < tagli.length; k += 2) {
+    if (tagli[k + 1] - tagli[k] < 0.25) continue;
+    percorso.moveTo(ox + dx * tagli[k], oy + dy * tagli[k]);
+    percorso.lineTo(ox + dx * tagli[k + 1], oy + dy * tagli[k + 1]);
+  }
+}
+
+/**
+ * Righe leggere su una faccia piana (tetto piano in cotto), tutte da ovest a est della pianta,
+ * una ogni `passo` metri. `v` è il poligono sul piano isometrico, alzato di `su`.
+ */
+function righePiane(
+  percorso: Path2D,
+  v: ArrayLike<number>,
+  da: number,
+  vertici: number,
+  su: number,
+  passo: number,
+): void {
+  let min = Infinity;
+  let max = -Infinity;
+  for (let i = 0; i < vertici; i++) {
+    // Coordinata lungo l'asse nord-sud della pianta, in metri (a meno della quota, che è fissa).
+    const t = (-v[da + i * 2] / ISO_X - (v[da + i * 2 + 1] - su) / ISO_Y) / 2;
+    if (t < min) min = t;
+    if (t > max) max = t;
+  }
+  for (let t = Math.ceil(min / passo) * passo + 0.4; t < max; t += passo) {
+    rigaNelPoligono(percorso, v, da, vertici, su, -t * ISO_X, -t * ISO_Y, ISO_X, -ISO_Y);
+  }
+}
+
 /**
  * Da lontano non si accendono tutti i lampioni: sotto ZOOM_ALONI.pochi la metà, da
  * ZOOM_ALONI.tutti in su tutti, in mezzo la quota cresce un poco alla volta. Dipende solo
@@ -169,13 +417,75 @@ export class Disegnatore {
   /** Tessere di edifici per la vista da lontano. */
   private readonly tessereEdifici: (Rettangolo & { indici: number[] })[];
   private pezziPiatti: (Path2D | null)[] = [];
-  private pezziTetti: (Map<number, Path2D> | null)[] = [];
+  private pezziTetti: (PezzoTetti | null)[] = [];
+  /** Tessere più piccole per le ombre a terra delle case, e le ombre già pronte. */
+  private readonly tessereOmbre: (Rettangolo & { indici: number[] })[];
+  private pezziOmbre: (Path2D | null)[] = [];
+  /** Con quale lunghezza d'ombra sono stati fatti i pezzi pronti. */
+  private lungaNeiPezzi = 0;
+  /** Pittura degli edifici, preparata la prima volta che servono e poi riusata. */
+  private volumi: (Volume | undefined)[] = [];
+  private facciate: (Facciata | undefined)[] = [];
+  private tettiFini: (TettoFine | undefined)[] = [];
+  private dettagliPronti = 0;
+  private volumiPronti = 0;
+  /** Quanti edifici sono stati dipinti nel fotogramma in corso e in quello prima. */
+  private dipinti = 0;
+  private dipintiPrima = 0;
+  /** Per ogni edificio, l'ultimo fotogramma in cui i suoi dettagli sono serviti. */
+  private readonly ultimoUso: Int32Array;
+  private numeroFotogramma = 0;
+  /** Quanti dettagli sono serviti nel fotogramma in corso e in quello prima. */
+  private usati = 0;
+  private usatiPrima = 0;
+  /**
+   * Quanto tempo si può spendere in un fotogramma per preparare forme nuove (millisecondi), e
+   * quante se ne preparano comunque, anche a tempo finito: così il disegno arriva sempre in fondo.
+   * `inMemoria`: oltre quanti dettagli pronti si dimenticano quelli fuori vista.
+   */
+  bilancio = { millisecondi: 5, minimo: 48, inMemoria: DETTAGLI_IN_MEMORIA };
+  /** L'orologio con cui si misura il bilancio: le prove ne mettono uno finto. */
+  orologio: () => number = () => performance.now();
+  private scadenza = 0;
+  private preparati = 0;
+  private tempoFinito = false;
+  /**
+   * true se nell'ultimo fotogramma qualche edificio è rimasto senza i suoi dettagli perché
+   * non c'era tempo di prepararli: chi disegna chiede un altro fotogramma.
+   */
+  incompleto = false;
+  /** Presenza degli strati di dettaglio nel fotogramma in corso (vedi DETTAGLI). */
+  private pLuce = 0;
+  private pSpigoli = 0;
+  private pCornici = 0;
+  private pCoppi = 0;
+  private pPieni = 0;
+  private pFitti = 0;
+  private pFinestre = 0;
+  private pFasce = 0;
+  private pFacciata = 0;
+  private pComignoli = 0;
+  private finestreAccese = false;
+  /** Quanto si vedono le finestre accese a questo zoom, tra 0 e 1. */
+  private pAccese = 0;
+  private serveFacciata = false;
+  private serveTettoFine = false;
+  private tratto = '';
+  private spessoreTratto = 1;
+  private spessoreCoppi = 1;
   /** Quante illustrazioni erano pronte quando sono stati costruiti i pezzi. */
   private pronteNeiPezzi = -1;
 
   /** Colori per edificio, decisi una volta. */
   private tinteTetto: string[] = [];
+  private tinteTettoLuce: string[] = [];
+  /** Le falde in luce al punto giusto della loro comparsa: tra la tinta di base e quella piena. */
+  private tinteLuceOra: string[] = [];
+  private quantoLuce = -1;
+  private tinteTettoOmbra: string[] = [];
   private tinteMuro: { chiaro: string; scuro: string }[] = [];
+  /** Quanto pesano le fasce dei piani su ogni intonaco: meno su quelli scuri, dove rigano. */
+  private pesoFasce: number[] = [];
   private readonly iTetto: Uint8Array;
   private readonly iMuro: Uint8Array;
   private chiome: { base: string; luce: string }[] = [];
@@ -273,27 +583,46 @@ export class Disegnatore {
     const P = PALETTE;
     const tCotto = 0;
     const tIndustria = P.tetti.length;
+    const tPiano = tIndustria + P.tettoIndustria.length;
     const mIntonaci = 0;
     const mIndustria = mIntonaci + P.intonaci.length;
     const mPietra = mIndustria + P.intonacoIndustria.length;
     const mMattone = mPietra + P.pietra.length;
+    const mForti = mMattone + P.mattone.length;
+    const mChiari = mForti + P.intonaciForti.length;
+    this.ultimoUso = new Int32Array(scena.edifici.length).fill(-1);
     this.iTetto = new Uint8Array(scena.edifici.length);
     this.iMuro = new Uint8Array(scena.edifici.length);
     scena.edifici.forEach((e, i) => {
       const a = e.seme & 0xffff;
       const b = e.seme >>> 16;
-      if (e.tipo === 'industria') {
+      if (e.tipo === 'industria' || e.forma === TETTO_CAPANNONE) {
         this.iTetto[i] = tIndustria + (a % P.tettoIndustria.length);
-        this.iMuro[i] = mIndustria + (b % P.intonacoIndustria.length);
-      } else if (e.tipo === 'chiesa') {
-        this.iTetto[i] = tCotto + (a % P.tetti.length);
-        this.iMuro[i] = mPietra + (b % P.pietra.length);
-      } else if (e.tipo === 'torre') {
-        this.iTetto[i] = tCotto + (a % P.tetti.length);
-        this.iMuro[i] = mMattone + (b % P.mattone.length);
+      } else if (e.forma === TETTO_TERRAZZA) {
+        this.iTetto[i] = tPiano + (a % P.tettoPiano.length);
       } else {
         this.iTetto[i] = tCotto + (a % P.tetti.length);
-        this.iMuro[i] = mIntonaci + (b % P.intonaci.length);
+      }
+      if (e.tipo === 'industria' || e.forma === TETTO_CAPANNONE) {
+        this.iMuro[i] = mIndustria + (b % P.intonacoIndustria.length);
+      } else if (e.tipo === 'chiesa') {
+        this.iMuro[i] = mPietra + (b % P.pietra.length);
+      } else if (e.tipo === 'torre') {
+        this.iMuro[i] = mMattone + (b % P.mattone.length);
+      } else {
+        // Intonaci con criterio: caldi e carichi in centro, più chiari e moderni verso fuori.
+        const caso = b % 100;
+        const altro = b >>> 7;
+        const intonaco = mIntonaci + (altro % P.intonaci.length);
+        const forte = mForti + (altro % P.intonaciForti.length);
+        const chiaro = mChiari + (altro % P.intonaciChiari.length);
+        if (e.dist < RAGGIO_CENTRO) {
+          this.iMuro[i] = caso < 36 ? forte : caso < 93 ? intonaco : mPietra + (altro % P.pietra.length);
+        } else if (e.dist < RAGGIO_CINTURA) {
+          this.iMuro[i] = caso < 16 ? forte : caso < 74 ? intonaco : chiaro;
+        } else {
+          this.iMuro[i] = caso < 46 ? chiaro : caso < 92 ? intonaco : forte;
+        }
       }
     });
     this.calcolaTinte();
@@ -304,20 +633,39 @@ export class Disegnatore {
     // Il riquadro delle tessere deve comprendere l'altezza dei tetti.
     for (const t of this.tessereEdifici) {
       let su = 0;
-      for (const i of t.indici) su = Math.max(su, scena.edifici[i].alt);
+      for (const i of t.indici) su = Math.max(su, scena.edifici[i].alt + scena.edifici[i].colmo);
       t.minY -= su;
     }
+    this.tessereOmbre = raggruppaInTessere(scena.riquadriEdifici, tutti, LATO_TESSERA / 2);
+    for (const t of this.tessereOmbre) t.maxX += 2 * ISO_X * OMBRA_MASSIMA;
     this.azzeraPezzi();
   }
 
   /** Le tinte di tetti, muri e chiome nella luce attiva, nello stesso ordine in ogni luce. */
   private calcolaTinte(): void {
     const P = this.P;
-    this.tinteTetto = [...P.tetti, ...P.tettoIndustria];
-    this.tinteMuro = [...P.intonaci, ...P.intonacoIndustria, ...P.pietra, ...P.mattone].map((c) => ({
+    this.tinteTetto = [...P.tetti, ...P.tettoIndustria, ...P.tettoPiano];
+    this.tinteTettoLuce = this.tinteTetto.map((c) => sfuma(c, P.falde.luce));
+    const fredda = P.ombraTinta;
+    this.tinteTettoOmbra = this.tinteTetto.map((c) =>
+      mescolaColori(sfuma(c, P.falde.ombra), fredda.colore, fredda.quanto),
+    );
+    this.quantoLuce = -1;
+    this.tinteMuro = [
+      ...P.intonaci,
+      ...P.intonacoIndustria,
+      ...P.pietra,
+      ...P.mattone,
+      ...P.intonaciForti,
+      ...P.intonaciChiari,
+    ].map((c) => ({
       chiaro: sfuma(c, P.muri.chiaro),
-      scuro: sfuma(c, P.muri.scuro),
+      scuro: mescolaColori(sfuma(c, P.muri.scuro), fredda.colore, fredda.quanto),
     }));
+    this.pesoFasce = this.tinteMuro.map((m) => {
+      const l = (luminanza(m.chiaro) - 0.45) / 0.35;
+      return 0.4 + 0.6 * Math.max(0, Math.min(1, l));
+    });
     this.chiome = P.chiome.map((c) => ({ base: c, luce: sfuma(c, 0.18) }));
   }
 
@@ -333,8 +681,9 @@ export class Disegnatore {
 
   /**
    * Cambia la luce: tavolozza, tinte degli edifici e velo sui luoghi simbolo. Restituisce
-   * false se era già quella. Le tessere (pezziPiatti, pezziTetti) sono solo forme, senza
-   * colori: restano valide in ogni luce e non vanno rifatte. Le sole immagini in memoria
+   * false se era già quella. Le tessere (pezziPiatti, pezziTetti) e la pittura degli edifici
+   * (volumi, facciate, tetti) sono solo forme, senza colori: restano valide in ogni luce e non
+   * vanno rifatte. Le sole immagini in memoria
    * sono le copie dei luoghi simbolo, rifatte sulla stessa tela, e lo sprite dell'alone.
    */
   impostaLuce(luce: Luce): boolean {
@@ -358,6 +707,7 @@ export class Disegnatore {
   private azzeraPezzi(): void {
     this.pezziPiatti = this.tessereEdifici.map(() => null);
     this.pezziTetti = this.tessereEdifici.map(() => null);
+    this.pezziOmbre = this.tessereOmbre.map(() => null);
   }
 
   private coperto(e: EdificioPronto): boolean {
@@ -405,7 +755,7 @@ export class Disegnatore {
       if (el.tipo[i] !== EL_EDIFICIO) continue;
       const e = this.scena.edifici[el.rif[i]];
       if (this.coperto(e)) continue;
-      if (puntoSuEdificio(x, y, e.anello, e.alt, e.lati)) return true;
+      if (puntoSuEdificio(x, y, e.anello, e.alt, e.lati, e.facce, e.facceInfo)) return true;
     }
     return false;
   }
@@ -448,6 +798,7 @@ export class Disegnatore {
 
     const visibile = riquadroVisibile(camera, vista, 4 / z);
     const dettaglio = livelloDettaglio(z, vista);
+    this.incompleto = false;
 
     const pronte = this.illustrazioni.elenco.reduce((n, v) => n + (v.pronta ? 1 : 0), 0);
     if (pronte !== this.pronteNeiPezzi) {
@@ -459,6 +810,9 @@ export class Disegnatore {
     this.carta(ctx, s, z);
     this.terreno(ctx, visibile, z);
     this.rete(ctx, visibile, z);
+    if (dettaglio === 'pieno' && this.P.ombraCase !== '' && z > DETTAGLI.ombre.da) {
+      this.ombreATerra(ctx, visibile, presenza(z, DETTAGLI.ombre));
+    }
     if (this.P.lampioni.accesi) this.aloniATerra(ctx, camera, vista);
     this.tematiche(ctx, s, z);
 
@@ -738,6 +1092,68 @@ export class Disegnatore {
     ctx.globalAlpha = 1;
   }
 
+  // --- ombre delle case --------------------------------------------------------------
+
+  /**
+   * L'ombra che ogni casa stende a terra, verso sud-est (sullo schermo: a destra), lunga in
+   * proporzione all'altezza. Si stende prima di tutto ciò che sta in piedi, una forma sola per
+   * tessera: le strade prendono un lato in ombra e le case poggiano sul terreno.
+   */
+  private ombreATerra(ctx: CanvasRenderingContext2D, visibile: Rettangolo, quanto: number): void {
+    const lunga = this.P.ombraLunga;
+    if (lunga !== this.lungaNeiPezzi) {
+      this.lungaNeiPezzi = lunga;
+      this.pezziOmbre.fill(null);
+    }
+    const edifici = this.scena.edifici;
+    ctx.fillStyle = this.P.ombraCase;
+    ctx.globalAlpha = quanto;
+    for (let t = 0; t < this.tessereOmbre.length; t++) {
+      const tessera = this.tessereOmbre[t];
+      if (!siToccano(tessera, visibile)) continue;
+      let pezzo = this.pezziOmbre[t];
+      if (!pezzo) {
+        pezzo = new Path2D();
+        for (const i of tessera.indici) {
+          const e = edifici[i];
+          if (this.coperto(e)) continue;
+          const alta = (e.alt + e.colmo * 0.5) / ISO_Z;
+          if (alta < 1.5) continue;
+          // Spostamento in pianta (d, -d): sullo schermo è un passo in orizzontale.
+          const s = 2 * ISO_X * Math.min(OMBRA_MASSIMA, alta * OMBRA_PER_METRO * lunga);
+          const a = e.anello;
+          const n = a.length >> 1;
+          let giro = 0;
+          for (let k = 0; k < n; k++) {
+            const j = (k + 1) % n;
+            giro += a[k * 2] * a[j * 2 + 1] - a[j * 2] * a[k * 2 + 1];
+          }
+          pezzo.moveTo(a[0] + s, a[1]);
+          for (let k = 1; k < n; k++) pezzo.lineTo(a[k * 2] + s, a[k * 2 + 1]);
+          pezzo.closePath();
+          // La striscia che ogni lato spazza: tutte nello stesso verso dell'impronta, così
+          // riempite insieme non si cancellano.
+          for (let k = 0; k < n; k++) {
+            const j = (k + 1) % n;
+            const dy = a[j * 2 + 1] - a[k * 2 + 1];
+            if (Math.abs(dy) < 0.05) continue;
+            const dritto = -dy * giro > 0;
+            const k0 = dritto ? k : j;
+            const k1 = dritto ? j : k;
+            pezzo.moveTo(a[k0 * 2], a[k0 * 2 + 1]);
+            pezzo.lineTo(a[k1 * 2], a[k1 * 2 + 1]);
+            pezzo.lineTo(a[k1 * 2] + s, a[k1 * 2 + 1]);
+            pezzo.lineTo(a[k0 * 2] + s, a[k0 * 2 + 1]);
+            pezzo.closePath();
+          }
+        }
+        this.pezziOmbre[t] = pezzo;
+      }
+      ctx.fill(pezzo);
+    }
+    ctx.globalAlpha = 1;
+  }
+
   // --- edifici da lontano ------------------------------------------------------------
 
   private daLontano(
@@ -763,31 +1179,45 @@ export class Disegnatore {
         ctx.fill(pezzo);
         continue;
       }
-      let pezzi = this.pezziTetti[t];
-      if (!pezzi) {
-        pezzi = new Map<number, Path2D>();
+      let pezzo = this.pezziTetti[t];
+      if (!pezzo) {
+        pezzo = { tinte: new Map<number, Path2D>(), ombra: new Path2D() };
         for (const i of tessera.indici) {
           const e = edifici[i];
           if (this.coperto(e)) continue;
-          let p = pezzi.get(this.iTetto[i]);
+          let p = pezzo.tinte.get(this.iTetto[i]);
           if (!p) {
             p = new Path2D();
-            pezzi.set(this.iTetto[i], p);
+            pezzo.tinte.set(this.iTetto[i], p);
           }
           tracciaAnello(p, e.anello, e.alt);
+          if (!e.facce || !e.facceInfo) continue;
+          // Le falde in ombra: un velo scuro sopra la tinta di base. Da qui le falde stanno
+          // dentro la sagoma dell'impronta alzata: non serve altro.
+          let k = 0;
+          for (let f = 0; f < e.facceInfo.length; f += 2) {
+            const vertici = e.facceInfo[f];
+            const classe = e.facceInfo[f + 1] & MASCHERA_CLASSE;
+            if (classe === FALDA_OMBRA || classe === INTERNO) {
+              tracciaFaccia(pezzo.ombra, e.facce, k, vertici);
+            }
+            k += vertici * 2;
+          }
         }
-        this.pezziTetti[t] = pezzi;
+        this.pezziTetti[t] = pezzo;
       }
       const contorno = z > 0.6;
       if (contorno) {
         ctx.strokeStyle = conAlfa(this.P.seppia, 0.5);
         ctx.lineWidth = 0.6 / z;
       }
-      for (const [tinta, p] of pezzi) {
+      for (const [tinta, p] of pezzo.tinte) {
         ctx.fillStyle = this.tinteTetto[tinta];
         ctx.fill(p);
         if (contorno) ctx.stroke(p);
       }
+      ctx.fillStyle = this.P.faldaVeloOmbra;
+      ctx.fill(pezzo.ombra);
     }
   }
 
@@ -804,14 +1234,62 @@ export class Disegnatore {
     const el = this.scena.elementi;
     const trovati = el.griglia.interroga(visibile);
     const fine = z >= 2;
-    const finestre = this.P.finestra !== '' && z >= ZOOM_FINESTRE;
-    ctx.lineWidth = (fine ? 0.8 : 0.6) / z;
-    ctx.strokeStyle = conAlfa(this.P.seppia, fine ? 0.8 : 0.55);
+    // Quanto è presente ogni strato di dettaglio a questo zoom: vale per tutto il fotogramma.
+    this.pLuce = presenza(z, DETTAGLI.luce);
+    this.pSpigoli = presenza(z, DETTAGLI.spigoli);
+    this.pCornici = presenza(z, DETTAGLI.cornici);
+    this.pCoppi = presenza(z, DETTAGLI.coppi);
+    this.pPieni = presenza(z, DETTAGLI.coppiPieni);
+    this.pFitti = presenza(z, DETTAGLI.coppiFitti);
+    this.pFinestre = presenza(z, DETTAGLI.finestre);
+    this.pFasce = presenza(z, DETTAGLI.fasce) * (1 - presenza(z, DETTAGLI.fasceVia)) * ALFA_FASCE;
+    this.pFacciata = presenza(z, DETTAGLI.facciata);
+    this.pComignoli = presenza(z, DETTAGLI.comignoli);
+    this.pAccese = this.P.finestra !== '' ? presenza(z, ZOOM_FINESTRE) : 0;
+    this.finestreAccese = this.pAccese > 0;
+    // I dettagli si preparano un poco prima che si vedano, così compaiono già pronti.
+    this.serveFacciata = z >= Math.min(DETTAGLI.fasce.da, ZOOM_FINESTRE.da) - 0.15;
+    this.serveTettoFine = z >= DETTAGLI.coppi.da - 0.25;
+    this.incompleto = false;
+    // Il terzo tono delle falde entra mescolando i colori, senza trasparenze: costa meno.
+    const quanto = Math.round(this.pLuce * 16);
+    if (quanto !== this.quantoLuce) {
+      this.quantoLuce = quanto;
+      this.tinteLuceOra =
+        quanto >= 16
+          ? this.tinteTettoLuce
+          : this.tinteTetto.map((c, k) => mescolaColori(c, this.tinteTettoLuce[k], quanto / 16));
+    }
+    // Forme nuove: finché c'è tempo in questo fotogramma. Il resto al prossimo.
+    this.numeroFotogramma++;
+    this.usatiPrima = this.usati;
+    this.usati = 0;
+    this.dipintiPrima = this.dipinti;
+    this.dipinti = 0;
+    this.preparati = 0;
+    this.tempoFinito = false;
+    this.scadenza = this.orologio() + this.bilancio.millisecondi;
+    if (
+      (this.dettagliPronti > this.bilancio.inMemoria && this.dettagliPronti > this.usatiPrima * 1.5) ||
+      (this.volumiPronti > VOLUMI_IN_MEMORIA && this.volumiPronti > this.dipintiPrima * 1.5)
+    ) {
+      this.dimenticaFuoriVista();
+    }
+    // Da vicino il tratto è pieno; a metà strada resta più leggero, perché i volumi sono piccoli.
+    this.spessoreTratto = (fine ? 0.8 : 0.6) / z;
+    this.tratto = conAlfa(this.P.seppia, fine ? 0.6 + 0.2 * presenza(z, { da: 2.4, a: 3.6 }) : 0.55);
+    this.spessoreCoppi = Math.max(0.1, 0.55 / z);
+    ctx.lineWidth = this.spessoreTratto;
+    ctx.strokeStyle = this.tratto;
+    // Tratti sottili e tantissimi: capi e giunti semplici costano molto meno di quelli tondi,
+    // e a questo spessore non si distinguono.
+    ctx.lineCap = 'butt';
+    ctx.lineJoin = 'bevel';
     for (let j = 0; j < trovati.length; j++) {
       const i = trovati[j];
       const tipo = el.tipo[i];
       if (tipo === EL_EDIFICIO) {
-        this.edificio(ctx, el.rif[i], finestre);
+        this.edificio(ctx, el.rif[i]);
       } else if (tipo === EL_ALBERO) {
         this.albero(ctx, el.rif[i], fine);
       } else if (tipo === EL_LAMPIONE) {
@@ -830,141 +1308,1118 @@ export class Disegnatore {
         inPixel();
         this.illustrazione(ctx, sp, s.densita);
         inIso();
-        ctx.lineWidth = (fine ? 0.8 : 0.6) / z;
-        ctx.strokeStyle = conAlfa(this.P.seppia, fine ? 0.8 : 0.55);
+        ctx.lineWidth = this.spessoreTratto;
+        ctx.strokeStyle = this.tratto;
       }
     }
   }
 
-  private edificio(ctx: CanvasRenderingContext2D, indice: number, finestre = false): void {
-    const e = this.scena.edifici[indice];
-    if (this.coperto(e)) return;
-    const a = e.anello;
-    const n = a.length >> 1;
-    const h = e.alt;
-    const muro = this.tinteMuro[this.iMuro[indice]];
-    const tetto = this.tinteTetto[this.iTetto[indice]];
-
-    if (h > 0.2 && e.ordineMuri) {
-      // Impronta con rientranze: un muro alla volta, dal più lontano al più vicino.
-      for (let k = 0; k < e.ordineMuri.length; k++) {
-        const i = e.ordineMuri[k];
-        const j = (i + 1) % n;
-        ctx.beginPath();
-        ctx.moveTo(a[i * 2], a[i * 2 + 1]);
-        ctx.lineTo(a[j * 2], a[j * 2 + 1]);
-        ctx.lineTo(a[j * 2], a[j * 2 + 1] - h);
-        ctx.lineTo(a[i * 2], a[i * 2 + 1] - h);
-        ctx.closePath();
-        ctx.fillStyle = e.lati[i] === MURO_SINISTRO ? muro.chiaro : muro.scuro;
-        ctx.fill();
-        ctx.stroke();
-        if (finestre) {
-          ctx.beginPath();
-          if (this.finestra(ctx, e, i)) {
-            ctx.fillStyle = this.P.finestra;
-            ctx.fill();
-          }
-        }
-      }
-    } else if (h > 0.2) {
-      for (let classe = MURO_SINISTRO; classe <= MURO_DESTRO; classe++) {
-        let qualcosa = false;
-        ctx.beginPath();
-        for (let i = 0; i < n; i++) {
-          if (e.lati[i] !== classe) continue;
-          const j = (i + 1) % n;
-          const ax = a[i * 2];
-          const ay = a[i * 2 + 1];
-          const bx = a[j * 2];
-          const by = a[j * 2 + 1];
-          ctx.moveTo(ax, ay);
-          ctx.lineTo(bx, by);
-          ctx.lineTo(bx, by - h);
-          ctx.lineTo(ax, ay - h);
-          ctx.closePath();
-          qualcosa = true;
-        }
-        if (!qualcosa) continue;
-        ctx.fillStyle = classe === MURO_SINISTRO ? muro.chiaro : muro.scuro;
-        ctx.fill();
-        ctx.stroke();
-        if (finestre) {
-          let accese = false;
-          ctx.beginPath();
-          for (let i = 0; i < n; i++) {
-            if (e.lati[i] === classe && this.finestra(ctx, e, i)) accese = true;
-          }
-          if (accese) {
-            ctx.fillStyle = this.P.finestra;
-            ctx.fill();
-          }
-        }
+  /** true se in questo fotogramma c'è ancora tempo per preparare una forma nuova. */
+  private puoPreparare(): boolean {
+    if (this.preparati >= this.bilancio.minimo) {
+      if (this.tempoFinito) return false;
+      // L'orologio si guarda ogni otto forme: leggerlo ha un costo.
+      if ((this.preparati & 7) === 0 && this.orologio() > this.scadenza) {
+        this.tempoFinito = true;
+        return false;
       }
     }
-
-    if (e.colmo > 0) {
-      // Tetto a punta: prima le falde che danno le spalle, poi quelle in vista.
-      const px = e.cx;
-      const py = e.cy - h - e.colmo;
-      for (let classe = MURO_DIETRO; classe <= MURO_DESTRO; classe++) {
-        let qualcosa = false;
-        ctx.beginPath();
-        for (let i = 0; i < n; i++) {
-          if (e.lati[i] !== classe) continue;
-          const j = (i + 1) % n;
-          ctx.moveTo(a[i * 2], a[i * 2 + 1] - h);
-          ctx.lineTo(a[j * 2], a[j * 2 + 1] - h);
-          ctx.lineTo(px, py);
-          ctx.closePath();
-          qualcosa = true;
-        }
-        if (!qualcosa) continue;
-        ctx.fillStyle =
-          classe === MURO_SINISTRO ? sfumaCache(tetto, 0.12) : classe === MURO_DESTRO ? sfumaCache(tetto, -0.14) : tetto;
-        ctx.fill();
-        ctx.stroke();
-      }
-      return;
-    }
-
-    ctx.beginPath();
-    tracciaAnello(ctx, a, h);
-    ctx.fillStyle = tetto;
-    ctx.fill();
-    ctx.stroke();
+    this.preparati++;
+    return true;
   }
 
   /**
-   * Aggiunge al percorso aperto una finestra accesa sul lato `i`, se quel muro ne ha una:
-   * lo decide il seme dell'edificio, così le stesse finestre restano accese a ogni fotogramma.
+   * Libera le forme (volumi, facciate e tetti fini) degli edifici che non sono stati dipinti
+   * nell'ultimo fotogramma. Quelli in vista restano: la mappa non perde nulla mentre la si guarda.
    */
-  private finestra(ctx: CanvasRenderingContext2D, e: EdificioPronto, i: number): boolean {
-    if (e.alt < 3.2 || e.tipo === 'industria') return false;
-    const caso = Math.imul(e.seme ^ Math.imul(i + 1, 0x9e3779b1), 0x85ebca6b) >>> 0;
-    if ((caso >>> 9) % 5 !== 0) return false;
-    const a = e.anello;
-    const j = (i + 1) % (a.length >> 1);
-    const ax = a[i * 2];
-    const ay = a[i * 2 + 1];
-    const dx = a[j * 2] - ax;
-    const dy = a[j * 2 + 1] - ay;
-    const lungo = Math.hypot(dx, dy);
-    if (lungo < 4.5) return false;
-    // Posizione lungo il muro e mezza larghezza, come frazioni della sua lunghezza.
-    const t = 0.28 + ((caso >>> 3) % 5) * 0.11;
-    const w = 0.75 / lungo;
-    const piani = e.alt > 8.5 && (caso & 4) !== 0 ? 2 : 1;
-    for (let p = 0; p < piani; p++) {
-      const sotto = Math.min(e.alt - 2.4, 1.6 + p * 3.4);
-      const sopra = sotto + 1.5;
-      ctx.moveTo(ax + dx * (t - w), ay + dy * (t - w) - sotto);
-      ctx.lineTo(ax + dx * (t + w), ay + dy * (t + w) - sotto);
-      ctx.lineTo(ax + dx * (t + w), ay + dy * (t + w) - sopra);
-      ctx.lineTo(ax + dx * (t - w), ay + dy * (t - w) - sopra);
-      ctx.closePath();
+  private dimenticaFuoriVista(): void {
+    const recente = this.numeroFotogramma - 1;
+    const uso = this.ultimoUso;
+    let restano = 0;
+    let volumi = 0;
+    for (let i = 0; i < uso.length; i++) {
+      if (uso[i] < 0) continue;
+      if (uso[i] >= recente) {
+        if (this.facciate[i]) restano++;
+        if (this.tettiFini[i]) restano++;
+        if (this.volumi[i]) volumi++;
+        continue;
+      }
+      uso[i] = -1;
+      this.volumi[i] = undefined;
+      this.facciate[i] = undefined;
+      this.tettiFini[i] = undefined;
     }
-    return true;
+    this.dettagliPronti = restano;
+    this.volumiPronti = volumi;
+  }
+
+  /** Quanti dettagli di edifici sono in memoria in questo momento (per le prove). */
+  get dettagliInMemoria(): number {
+    return this.dettagliPronti;
+  }
+
+  /** Quanti volumi di edifici sono in memoria in questo momento (per le prove). */
+  get volumiInMemoria(): number {
+    return this.volumiPronti;
+  }
+
+  /**
+   * Un edificio da vicino: muri, dettagli della facciata, tetto, dettagli del tetto. Le forme
+   * sono preparate una volta e riusate; qui si scelgono solo i colori e quanto si vede di
+   * ogni strato. Stesso edificio, stesso aspetto: tutto dipende dal suo seme.
+   */
+  private edificio(ctx: CanvasRenderingContext2D, indice: number): void {
+    const e = this.scena.edifici[indice];
+    if (this.coperto(e)) return;
+    const P = this.P;
+    const tinta = this.iTetto[indice];
+    let v = this.volumi[indice];
+    if (!v) {
+      if (!this.puoPreparare()) {
+        // Non c'è tempo per le sue forme: per ora il volume semplice, muri piatti e tetto piano
+        // alla gronda. Niente forme da tenere: si traccia direttamente.
+        this.incompleto = true;
+        const a = e.anello;
+        const n = a.length >> 1;
+        const piatto = this.tinteMuro[this.iMuro[indice]];
+        if (e.alt > 0.2) {
+          for (let lato = MURO_SINISTRO; lato <= MURO_DESTRO; lato++) {
+            ctx.beginPath();
+            for (let i = 0; i < n; i++) {
+              if (e.lati[i] !== lato) continue;
+              const j = (i + 1) % n;
+              ctx.moveTo(a[i * 2], a[i * 2 + 1]);
+              ctx.lineTo(a[j * 2], a[j * 2 + 1]);
+              ctx.lineTo(a[j * 2], a[j * 2 + 1] - e.alt);
+              ctx.lineTo(a[i * 2], a[i * 2 + 1] - e.alt);
+              ctx.closePath();
+            }
+            ctx.fillStyle = lato === MURO_SINISTRO ? piatto.chiaro : piatto.scuro;
+            ctx.fill();
+          }
+        }
+        ctx.beginPath();
+        tracciaAnello(ctx, a, e.alt);
+        ctx.fillStyle = this.tinteTetto[tinta];
+        ctx.fill();
+        ctx.stroke();
+        return;
+      }
+      v = this.preparaVolume(indice);
+      this.volumiPronti++;
+    }
+    this.dipinti++;
+    this.ultimoUso[indice] = this.numeroFotogramma;
+    const muro = this.tinteMuro[this.iMuro[indice]];
+    const muri = v.muri;
+    for (let k = 0; k < muri.length; k++) {
+      ctx.fillStyle = v.latoMuri[k] === MURO_SINISTRO ? muro.chiaro : muro.scuro;
+      ctx.fill(muri[k]);
+      if (v.muriATratti) ctx.stroke(muri[k]);
+    }
+    if (v.lineeMuri) ctx.stroke(v.lineeMuri);
+
+    if (this.serveFacciata && muri.length > 0) {
+      let f = this.facciate[indice];
+      if (!f) {
+        if (this.puoPreparare()) {
+          this.dettagliPronti++;
+          f = this.facciate[indice] = this.preparaFacciata(e);
+        } else {
+          this.incompleto = true;
+        }
+      }
+      if (f) this.usati++;
+      if (f && f !== SENZA_FACCIATA) {
+        const pF = this.pFinestre;
+        const pD = this.pFacciata;
+        if (this.pFasce > 0 && f.fasce) {
+          ctx.globalAlpha = this.pFasce * this.pesoFasce[this.iMuro[indice]];
+          ctx.fillStyle = P.vetro;
+          ctx.fill(f.fasce);
+        }
+        if (pD > 0 && f.ombre) {
+          ctx.globalAlpha = pD;
+          ctx.fillStyle = P.facciataOmbra;
+          ctx.fill(f.ombre);
+        }
+        if (pF > 0) {
+          ctx.globalAlpha = pF;
+          if (f.archi) {
+            ctx.fillStyle = P.portico;
+            ctx.fill(f.archi);
+          }
+          if (this.pCornici > 0 && f.cornici) {
+            ctx.globalAlpha = this.pCornici;
+            ctx.fillStyle = P.cornice;
+            ctx.fill(f.cornici);
+            ctx.globalAlpha = pF;
+          }
+          if (f.vetri) {
+            ctx.fillStyle = P.vetro;
+            ctx.fill(f.vetri);
+          }
+          if (this.pFitti > 0 && f.telai) {
+            ctx.globalAlpha = this.pFitti;
+            ctx.fillStyle = P.telaio;
+            ctx.fill(f.telai);
+            ctx.globalAlpha = pF;
+          }
+          if (f.porte) {
+            ctx.fillStyle = P.porte[f.iPorta % P.porte.length];
+            ctx.fill(f.porte);
+          }
+          if (pD > 0 && f.persiane) {
+            ctx.globalAlpha = pD;
+            ctx.fillStyle = P.persiane[f.iPersiana % P.persiane.length];
+            ctx.fill(f.persiane);
+          }
+        }
+        ctx.globalAlpha = 1;
+        if (this.finestreAccese && f.accese) {
+          ctx.globalAlpha = this.pAccese;
+          ctx.fillStyle = P.finestra;
+          ctx.fill(f.accese);
+          ctx.globalAlpha = 1;
+        }
+      }
+    }
+
+    ctx.fillStyle = this.tinteTetto[tinta];
+    ctx.fill(v.fondo);
+    if (v.luce && this.pLuce > 0) {
+      ctx.fillStyle = this.tinteLuceOra[tinta];
+      ctx.fill(v.luce);
+    }
+    if (v.ombra) {
+      ctx.fillStyle = this.tinteTettoOmbra[tinta];
+      ctx.fill(v.ombra);
+    }
+
+    let t: TettoFine | undefined;
+    if (this.serveTettoFine) {
+      t = this.tettiFini[indice];
+      if (!t) {
+        if (this.puoPreparare()) {
+          this.dettagliPronti++;
+          t = this.tettiFini[indice] = this.preparaTettoFine(e);
+        } else {
+          this.incompleto = true;
+        }
+      }
+      if (t) this.usati++;
+      if (t && t.coppi && this.pCoppi > 0) {
+        ctx.strokeStyle = P.coppi;
+        ctx.lineWidth = this.spessoreCoppi;
+        ctx.globalAlpha = this.pCoppi;
+        ctx.stroke(t.coppi);
+        if (t.pieni && this.pPieni > 0) {
+          ctx.globalAlpha = this.pPieni;
+          ctx.stroke(t.pieni);
+        }
+        if (t.fitti && this.pFitti > 0) {
+          ctx.globalAlpha = this.pFitti;
+          ctx.stroke(t.fitti);
+        }
+        ctx.globalAlpha = 1;
+        ctx.strokeStyle = this.tratto;
+        ctx.lineWidth = this.spessoreTratto;
+      }
+    }
+
+    if (v.timpano) {
+      ctx.fillStyle = v.latoTimpano === TIMPANO_SINISTRO ? muro.chiaro : muro.scuro;
+      ctx.fill(v.timpano);
+    }
+    // Tutti i tratti a penna in un colpo solo.
+    if (this.pSpigoli >= 1) {
+      ctx.stroke(v.lineePiene);
+    } else {
+      if (v.spigoli && this.pSpigoli > 0) {
+        ctx.globalAlpha = this.pSpigoli;
+        ctx.stroke(v.spigoli);
+        ctx.globalAlpha = 1;
+      }
+      ctx.stroke(v.linee);
+    }
+
+    if (t && t.camSopra && this.pComignoli > 0) {
+      ctx.globalAlpha = this.pComignoli;
+      if (t.camSx) {
+        ctx.fillStyle = muro.chiaro;
+        ctx.fill(t.camSx);
+      }
+      if (t.camDx) {
+        ctx.fillStyle = muro.scuro;
+        ctx.fill(t.camDx);
+      }
+      if (t.camVetri) {
+        // Di notte metà degli abbaini ha la luce accesa: lo decide il seme.
+        ctx.fillStyle = this.finestreAccese && (e.seme & 1) === 0 ? P.finestra : P.vetro;
+        ctx.fill(t.camVetri);
+      }
+      ctx.fillStyle = this.tinteTettoOmbra[tinta];
+      ctx.fill(t.camSopra);
+      if (t.camBordo) ctx.stroke(t.camBordo);
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  /**
+   * true se due muri in vista di un'impronta con rientranze si sovrappongono sullo schermo:
+   * allora vanno dipinti uno alla volta, dal più lontano. Se no l'ordine non conta.
+   */
+  private muriSiCoprono(e: EdificioPronto): boolean {
+    const a = e.anello;
+    const o = e.ordineMuri;
+    if (!o) return false;
+    const n = a.length >> 1;
+    for (let p = 0; p < o.length; p++) {
+      const i = o[p];
+      const i2 = (i + 1) % n;
+      const x0 = a[i * 2];
+      const x1 = a[i2 * 2];
+      if (x1 - x0 < 1e-3) continue;
+      const pend = (a[i2 * 2 + 1] - a[i * 2 + 1]) / (x1 - x0);
+      for (let q = p + 1; q < o.length; q++) {
+        const m = o[q];
+        const m2 = (m + 1) % n;
+        const largo = a[m2 * 2] - a[m * 2];
+        const c0 = Math.max(x0, a[m * 2]);
+        const c1 = Math.min(x1, a[m2 * 2]);
+        if (c1 - c0 < 0.05 || largo < 1e-3) continue;
+        // Distanza in verticale tra i piedi dei due muri ai capi del tratto comune.
+        const pendM = (a[m2 * 2 + 1] - a[m * 2 + 1]) / largo;
+        const d0 = a[i * 2 + 1] + pend * (c0 - x0) - (a[m * 2 + 1] + pendM * (c0 - a[m * 2]));
+        const d1 = a[i * 2 + 1] + pend * (c1 - x0) - (a[m * 2 + 1] + pendM * (c1 - a[m * 2]));
+        if (d0 * d1 > 0 && Math.min(Math.abs(d0), Math.abs(d1)) >= e.alt - 0.02) continue;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * true se il lato `i` e quello prima sono in vista dalla stessa parte e quasi allineati in
+   * pianta (meno di 18 gradi): insieme fanno una facciata sola.
+   */
+  private allineati(e: EdificioPronto, i: number): boolean {
+    const a = e.anello;
+    const n = a.length >> 1;
+    const h = (i + n - 1) % n;
+    if (e.lati[i] === MURO_DIETRO || e.lati[h] !== e.lati[i]) return false;
+    const j = (i + 1) % n;
+    const du0 = (a[i * 2] - a[h * 2]) / ISO_X;
+    const dv0 = (a[i * 2 + 1] - a[h * 2 + 1]) / ISO_Y;
+    const du1 = (a[j * 2] - a[i * 2]) / ISO_X;
+    const dv1 = (a[j * 2 + 1] - a[i * 2 + 1]) / ISO_Y;
+    // In pianta il lato è (du - dv, -(du + dv)) / 2: il prodotto scalare si riduce a questo.
+    const scalare = du0 * du1 + dv0 * dv1;
+    return scalare >= 0.95 * Math.sqrt((du0 * du0 + dv0 * dv0) * (du1 * du1 + dv1 * dv1));
+  }
+
+  /** Muri e tetto di un edificio come forme pronte da riempire. */
+  private preparaVolume(indice: number): Volume {
+    const e = this.scena.edifici[indice];
+    const a = e.anello;
+    const n = a.length >> 1;
+    const h = e.alt;
+    const muri: Path2D[] = [];
+    const latoMuri: number[] = [];
+    const linee = new Path2D();
+    const lineePiene = new Path2D();
+    let lineeMuri: Path2D | null = null;
+    let muriATratti = false;
+    const quadro = (p: Path2D, i: number): void => {
+      const j = (i + 1) % n;
+      p.moveTo(a[i * 2], a[i * 2 + 1]);
+      p.lineTo(a[j * 2], a[j * 2 + 1]);
+      p.lineTo(a[j * 2], a[j * 2 + 1] - h);
+      p.lineTo(a[i * 2], a[i * 2 + 1] - h);
+      p.closePath();
+    };
+    // Il contorno di un muro senza il lato di gronda, che è già nel contorno del tetto.
+    // Dove due lati sono quasi allineati (un muro curvo, o spezzato in più tratti) lo spigolo
+    // in verticale non si traccia: tanti spigoli vicini rigano la facciata.
+    const piedi = (p: Path2D, i: number): void => {
+      const j = (i + 1) % n;
+      if (this.allineati(e, i)) p.moveTo(a[i * 2], a[i * 2 + 1]);
+      else {
+        p.moveTo(a[i * 2], a[i * 2 + 1] - h);
+        p.lineTo(a[i * 2], a[i * 2 + 1]);
+      }
+      p.lineTo(a[j * 2], a[j * 2 + 1]);
+      if (!this.allineati(e, j)) p.lineTo(a[j * 2], a[j * 2 + 1] - h);
+    };
+    if (h > 0.2) {
+      if (e.ordineMuri && this.muriSiCoprono(e)) {
+        // Impronta con rientranze i cui muri si coprono: un muro alla volta, dal più lontano.
+        muriATratti = true;
+        let corrente: Path2D | null = null;
+        let latoCorrente = -1;
+        for (let k = 0; k < e.ordineMuri.length; k++) {
+          const i = e.ordineMuri[k];
+          const lato = e.lati[i];
+          if (lato === MURO_DIETRO) continue;
+          if (!corrente || lato !== latoCorrente) {
+            corrente = new Path2D();
+            latoCorrente = lato;
+            muri.push(corrente);
+            latoMuri.push(lato);
+          }
+          quadro(corrente, i);
+        }
+      } else {
+        // Nessun muro ne copre un altro: due riempimenti, uno per lato, e i contorni in un tratto.
+        // Nelle impronte con rientranze il tetto può coprire il piede di un muro: lì i contorni
+        // dei muri si tracciano prima del tetto, altrimenti insieme a tutto il resto.
+        if (e.ordineMuri) lineeMuri = new Path2D();
+        for (let lato = MURO_SINISTRO; lato <= MURO_DESTRO; lato++) {
+          let gruppo: Path2D | null = null;
+          for (let i = 0; i < n; i++) {
+            if (e.lati[i] !== lato) continue;
+            if (!gruppo) {
+              gruppo = new Path2D();
+              muri.push(gruppo);
+              latoMuri.push(lato);
+            }
+            quadro(gruppo, i);
+            if (lineeMuri) piedi(lineeMuri, i);
+            else {
+              piedi(linee, i);
+              piedi(lineePiene, i);
+            }
+          }
+        }
+      }
+    }
+
+    // Sotto a tutto l'impronta alzata alla gronda: qualunque cosa facciano le falde, il tetto
+    // non ha buchi. Le falde normali stanno tutte dentro questa sagoma; quelle che ne escono
+    // (due falde con il timpano dietro, punte ripide delle torri) si aggiungono al fondo.
+    const contorno = new Path2D();
+    tracciaAnello(contorno, a, h);
+    tracciaAnello(linee, a, h);
+    tracciaAnello(lineePiene, a, h);
+    let fondo = contorno;
+    let spigoli: Path2D | null = null;
+    let luce: Path2D | null = null;
+    let ombra: Path2D | null = null;
+    let timpano: Path2D | null = null;
+    let latoTimpano = 0;
+    if (e.facce && e.facceInfo) {
+      const v = e.facce;
+      let falde = 0;
+      for (let f = 1; f < e.facceInfo.length; f += 2) {
+        const classe = e.facceInfo[f] & MASCHERA_CLASSE;
+        if (classe !== TIMPANO_SINISTRO && classe !== TIMPANO_DESTRO) falde++;
+      }
+      const sporge = e.forma === TETTO_FALDE && (falde <= 2 || e.tipo === 'torre');
+      if (sporge) {
+        fondo = new Path2D();
+        tracciaAnello(fondo, a, h);
+      }
+      // Ogni spigolo sta su due falde: si ricorda quali sono già stati tracciati.
+      const fatti = new Set<string>();
+      const spigolo = (x0: number, y0: number, x1: number, y1: number): void => {
+        const p = Math.round(x0 * 16) + ':' + Math.round(y0 * 16);
+        const q = Math.round(x1 * 16) + ':' + Math.round(y1 * 16);
+        if (p === q) return;
+        const chiave = p < q ? p + '|' + q : q + '|' + p;
+        if (fatti.has(chiave)) return;
+        fatti.add(chiave);
+        spigoli ??= new Path2D();
+        spigoli.moveTo(x0, y0);
+        spigoli.lineTo(x1, y1);
+        lineePiene.moveTo(x0, y0);
+        lineePiene.lineTo(x1, y1);
+      };
+      let k = 0;
+      for (let f = 0; f < e.facceInfo.length; f += 2) {
+        const vertici = e.facceInfo[f];
+        const info = e.facceInfo[f + 1];
+        const classe = info & MASCHERA_CLASSE;
+        const gradone = (info & GRADONE) !== 0;
+        if (classe === TIMPANO_SINISTRO || classe === TIMPANO_DESTRO) {
+          timpano ??= new Path2D();
+          latoTimpano = classe;
+          tracciaFaccia(timpano, v, k, vertici);
+          tracciaFaccia(linee, v, k, vertici);
+          tracciaFaccia(lineePiene, v, k, vertici);
+        } else {
+          if (sporge) tracciaFaccia(fondo, v, k, vertici);
+          // Una falda vera comincia dal lato di gronda; nelle metà di un colmo finto il primo
+          // lato è il colmo, e va tracciato.
+          const falda =
+            (info & COLMO_FINTO) === 0 &&
+            e.pendenze !== null &&
+            (e.pendenze[f] !== 0 || e.pendenze[f + 1] !== 0);
+          for (let r = 0; r < vertici; r++) {
+            // Il lato di gronda lo fa già il contorno; il lato interno di un gradone non è uno spigolo.
+            if (falda && (r === 0 || (gradone && r === 2))) continue;
+            const r2 = (r + 1) % vertici;
+            spigolo(v[k + r * 2], v[k + r * 2 + 1], v[k + r2 * 2], v[k + r2 * 2 + 1]);
+          }
+          if (classe === FALDA_LUCE || classe === FASCIA) {
+            luce ??= new Path2D();
+            tracciaFaccia(luce, v, k, vertici);
+          } else if (classe === FALDA_OMBRA || classe === INTERNO) {
+            ombra ??= new Path2D();
+            tracciaFaccia(ombra, v, k, vertici);
+          }
+        }
+        k += vertici * 2;
+      }
+    }
+    const v: Volume = {
+      muri,
+      latoMuri,
+      muriATratti,
+      lineeMuri,
+      fondo,
+      linee,
+      lineePiene,
+      spigoli,
+      luce,
+      ombra,
+      timpano,
+      latoTimpano,
+    };
+    this.volumi[indice] = v;
+    return v;
+  }
+
+  /**
+   * La facciata di un edificio: finestre allineate per piano, persiane, porta, portico, zoccolo.
+   * Tutto in metri veri lungo il muro e in altezza; le scelte vengono dal seme.
+   */
+  private preparaFacciata(e: EdificioPronto): Facciata {
+    const a = e.anello;
+    const n = a.length >> 1;
+    const altezza = e.alt / ISO_Z;
+    if (altezza < 2.2) return SENZA_FACCIATA;
+    const seme = e.seme;
+    const inCentro = e.dist < RAGGIO_CENTRO;
+    const casa = e.tipo === 'casa' || e.tipo === 'altro' || e.tipo === 'pubblico';
+    // I corpi molto grandi fuori dal centro hanno tetto e muri da capannone, qualunque sia il tipo.
+    const capannone = e.tipo === 'industria' || e.forma === TETTO_CAPANNONE;
+
+    // Lunghezza in metri dei muri in vista. Nelle impronte con rientranze un muro può essere
+    // coperto in parte da un altro muro dello stesso edificio, più vicino a chi guarda: di ogni
+    // muro si tiene il tratto libero (da `liberoDa` a `liberoA` metri) e si dipinge solo lì.
+    const lunghi = new Float32Array(n);
+    const liberoDa = new Float32Array(n);
+    const liberoA = new Float32Array(n);
+    // Quanto è largo sullo schermo un metro di questo muro: i muri visti di taglio restano lisci.
+    const scorcio = new Float32Array(n);
+    // Fino a che altezza (metri) il piede del muro è nascosto da un'altra ala dello stesso edificio.
+    const nascosto = new Float32Array(n);
+    let piuLungo = -1;
+    let piuCorto = -1;
+    for (let i = 0; i < n; i++) {
+      if (e.lati[i] === MURO_DIETRO) continue;
+      const j = (i + 1) % n;
+      const du = (a[j * 2] - a[i * 2]) / ISO_X;
+      const dv = (a[j * 2 + 1] - a[i * 2 + 1]) / ISO_Y;
+      const lungo = Math.sqrt((du * du + dv * dv) / 2);
+      // Sullo schermo un muro in vista va sempre da sinistra a destra.
+      const x0 = a[i * 2];
+      const x1 = a[j * 2];
+      let f0 = x0;
+      let f1 = x1;
+      let sotto = 0;
+      if (e.ordineMuri && x1 - x0 > 1e-3) {
+        const y0 = a[i * 2 + 1];
+        const pend = (a[j * 2 + 1] - y0) / (x1 - x0);
+        // Tutti gli altri lati dell'impronta, anche quelli di spalle: sopra ognuno c'è il corpo
+        // dell'edificio, alto quanto questo muro.
+        for (let m = 0; m < n; m++) {
+          if (m === i) continue;
+          const m2 = (m + 1) % n;
+          let xa = a[m * 2];
+          let ya = a[m * 2 + 1];
+          let xb = a[m2 * 2];
+          let yb = a[m2 * 2 + 1];
+          if (xa > xb) {
+            const tx = xa;
+            const ty = ya;
+            xa = xb;
+            ya = yb;
+            xb = tx;
+            yb = ty;
+          }
+          if (xb - xa < 1e-3) continue;
+          const c0 = Math.max(x0, xa);
+          const c1 = Math.min(x1, xb);
+          if (c1 - c0 < 0.3) continue;
+          // Di quanto l'altro lato sta più in basso sullo schermo, cioè più vicino a chi guarda,
+          // ai due capi del tratto comune.
+          const pendM = (yb - ya) / (xb - xa);
+          const d0 = ya + pendM * (c0 - xa) - (y0 + pend * (c0 - x0));
+          const d1 = ya + pendM * (c1 - xa) - (y0 + pend * (c1 - x0));
+          if (d0 + d1 <= 0.1) continue;
+          const vicino = Math.max(0, Math.min(d0, d1));
+          // Quanta altezza del muro resta nascosta, dal piede in su.
+          const copre = e.alt - vicino;
+          if (copre <= 0.3) continue;
+          if (copre < e.alt * 0.62) {
+            // Coperto solo in basso (un cortile visto da sopra l'ala davanti): i piani alti si vedono.
+            if (copre > sotto) sotto = copre;
+            continue;
+          }
+          if (c0 <= f0 + 0.3) f0 = Math.max(f0, c1);
+          else if (c1 >= f1 - 0.3) f1 = Math.min(f1, c0);
+          else if (c0 - f0 >= f1 - c1) f1 = c0;
+          else f0 = c1;
+          if (f1 <= f0) break;
+        }
+      }
+      nascosto[i] = sotto / ISO_Z;
+      lunghi[i] = lungo;
+      if (lungo > 1e-3) {
+        scorcio[i] = (x1 - x0) / (lungo * ISO_X);
+      }
+      if (f1 > f0 && x1 - x0 > 1e-3) {
+        liberoDa[i] = ((f0 - x0) / (x1 - x0)) * lungo;
+        liberoA[i] = ((f1 - x0) / (x1 - x0)) * lungo;
+      } else if (f1 > f0) {
+        liberoA[i] = lungo;
+      }
+      if (scorcio[i] < SCORCIO_MINIMO || sotto > 0) continue;
+      const libero = liberoA[i] - liberoDa[i];
+      if (libero >= 3 && (piuLungo < 0 || libero > liberoA[piuLungo] - liberoDa[piuLungo])) piuLungo = i;
+      if (libero >= 5.5 && libero > lungo - 0.5 && (piuCorto < 0 || lungo < lunghi[piuCorto])) piuCorto = i;
+    }
+
+    // Tratti di facciata: lati in vista consecutivi, dalla stessa parte e quasi allineati (meno
+    // di 18 gradi), contano come una facciata sola. Le finestre si distribuiscono sulla
+    // lunghezza di tutto il tratto con un passo solo: un muro curvo, fatto di tanti lati corti,
+    // non si riempie di finestre strette.
+    const inizioTratto = new Float32Array(n);
+    const lungoTratto = new Float32Array(n);
+    const unito = (i: number): boolean => this.allineati(e, i);
+    for (let i = 0; i < n; i++) {
+      if (e.lati[i] === MURO_DIETRO || unito(i)) continue;
+      let somma = 0;
+      let ultimo = i;
+      for (let k = i, passi = 0; passi < n; passi++) {
+        inizioTratto[k] = somma;
+        somma += lunghi[k];
+        ultimo = k;
+        const dopo = (k + 1) % n;
+        if (dopo === i || !unito(dopo)) break;
+        k = dopo;
+      }
+      for (let k = i; ; k = (k + 1) % n) {
+        lungoTratto[k] = somma;
+        if (k === ultimo) break;
+      }
+    }
+
+    let ombre: Path2D | null = null;
+    let fasce: Path2D | null = null;
+    let archi: Path2D | null = null;
+    let cornici: Path2D | null = null;
+    let vetri: Path2D | null = null;
+    let telai: Path2D | null = null;
+    let accese: Path2D | null = null;
+    let persiane: Path2D | null = null;
+    let porte: Path2D | null = null;
+
+    // Misure della casa, uguali su tutti i suoi muri.
+    const piani = altezza < 4.6 ? 1 : Math.max(1, Math.round(altezza / 3.05));
+    const interpiano = altezza / piani;
+    const passoCasa = (e.tipo === 'pubblico' ? 3.2 : 2.7) + ((seme >>> 3) % 5) * 0.24;
+    const larga = e.tipo === 'pubblico' ? 1.15 : 0.92 + ((seme >>> 6) & 1) * 0.14;
+    const alta = inCentro ? 1.6 : 1.42;
+    const anta = larga * 0.44;
+    const conPersiane = casa && e.tipo !== 'pubblico' && (seme >>> 11) % 100 < (inCentro ? 78 : 42);
+    const conMarcapiano = casa && piani >= 2 && (seme >>> 9) % 100 < (inCentro ? 55 : 25);
+    const conPortico =
+      casa && inCentro && piani >= 2 && interpiano >= 2.8 && piuLungo >= 0 && lunghi[piuLungo] >= 9 &&
+      liberoA[piuLungo] - liberoDa[piuLungo] > lunghi[piuLungo] - 0.5 && (seme >>> 13) % 100 < 40;
+    // Variazioni tra un piano e l'altro: finestrelle di sottotetto all'ultimo piano, finestre
+    // più alte al piano nobile, vetrine con la tenda al piano terra nelle vie del centro.
+    const sottotetto = casa && piani >= 3 && (seme >>> 19) % 100 < 55;
+    const nobile = casa && inCentro && piani >= 3 && (seme >>> 23) % 100 < 50;
+    const conVetrine =
+      casa && e.tipo !== 'pubblico' && piani >= 2 && interpiano >= 2.8 && e.dist < RAGGIO_CINTURA &&
+      (seme >>> 25) % 100 < (inCentro ? 36 : 9);
+    const muroPorta = e.tipo === 'chiesa' && piuCorto >= 0 ? piuCorto : piuLungo;
+
+    for (let i = 0; i < n; i++) {
+      const lungo = lunghi[i];
+      const da = liberoDa[i];
+      const fino = liberoA[i];
+      if (fino - da < 1.2) continue;
+      const j = (i + 1) % n;
+      const ax = a[i * 2];
+      const ay = a[i * 2 + 1];
+      const ux = (a[j * 2] - ax) / lungo;
+      const uy = (a[j * 2 + 1] - ay) / lungo;
+      // Un rettangolo sul muro: da t0 a t1 metri lungo il muro, da z0 a z1 metri di altezza.
+      const pezza = (p: Path2D, t0: number, t1: number, z0: number, z1: number): void => {
+        p.moveTo(ax + ux * t0, ay + uy * t0 - z0 * ISO_Z);
+        p.lineTo(ax + ux * t1, ay + uy * t1 - z0 * ISO_Z);
+        p.lineTo(ax + ux * t1, ay + uy * t1 - z1 * ISO_Z);
+        p.lineTo(ax + ux * t0, ay + uy * t0 - z1 * ISO_Z);
+        p.closePath();
+      };
+
+      const coperto = nascosto[i];
+      ombre ??= new Path2D();
+      if (coperto === 0) pezza(ombre, da, fino, 0, Math.min(0.55, altezza * 0.2));
+      if (altezza >= 3) pezza(ombre, da, fino, altezza - 0.28, altezza);
+      if (conMarcapiano) {
+        for (let k = 1; k < piani; k++) {
+          if (k * interpiano > coperto + 0.2) pezza(ombre, da, fino, k * interpiano - 0.07, k * interpiano + 0.07);
+        }
+      }
+      // Un muro visto quasi di taglio resta liscio: lì finestre e porte sarebbero lamelle.
+      if (scorcio[i] < SCORCIO_LISCIO) continue;
+      // Di scorcio: finestre più rade, niente persiane, porte e vetrine. Nel centro storico una
+      // strada su due è vista così, e senza finestre quei fianchi sarebbero lastre spoglie.
+      const diScorcio = scorcio[i] < SCORCIO_MINIMO;
+      // Dove il muro è coperto in parte, finestre e porte solo nel tratto libero. Dove invece
+      // continua nel lato accanto (stessa facciata), una finestra può stare a cavallo del giunto.
+      const margineDa = da < 0.01 && unito(i) ? -9 : 0.25;
+      const margineA = fino > lungo - 0.01 && unito(j) ? -9 : 0.25;
+      const dentro = (centro: number, mezza: number): boolean =>
+        centro - mezza >= da + margineDa && centro + mezza <= fino - margineA;
+
+      if (capannone) {
+        if (diScorcio) continue;
+        // Capannone: una fascia di vetri in alto e un portone sul muro più lungo.
+        if (altezza >= 4 && fino - da >= 6 && altezza - 2 > coperto) {
+          vetri ??= new Path2D();
+          pezza(vetri, da + 1.2, fino - 1.2, altezza - 2, altezza - 1.1);
+        }
+        if (i === piuLungo && lungo >= 10 && altezza >= 4.5 && coperto === 0) {
+          const c = lungo * (0.3 + ((seme >>> 4) % 5) * 0.1);
+          if (dentro(c, 1.8)) {
+            porte ??= new Path2D();
+            pezza(porte, c - 1.8, c + 1.8, 0, Math.min(3.6, altezza - 1.4));
+          }
+        }
+        continue;
+      }
+
+      if (e.tipo === 'chiesa') {
+        if (lungo < 2.6 || diScorcio) continue;
+        // Il portale ad arco sul lato corto, con il rosone sopra se la facciata è alta.
+        const c0 = lungo / 2;
+        const portale = i === muroPorta && altezza >= 4.5 && coperto === 0 && dentro(c0, 1.3);
+        if (portale) {
+          cornici ??= new Path2D();
+          porte ??= new Path2D();
+          this.arco(cornici, ax, ay, ux, uy, c0, 1.25, 2.3, 3.55, 0);
+          this.arco(porte, ax, ay, ux, uy, c0, 1, 2.2, 3.2, 0);
+          const r = Math.min(1.15, altezza * 0.1);
+          const zc = Math.min(altezza - r - 0.8, 3.55 + r + 1.1);
+          if (altezza >= 7.5 && zc - r > 3.75) {
+            vetri ??= new Path2D();
+            this.tondo(cornici, ax, ay, ux, uy, c0, zc, r + 0.17);
+            this.tondo(vetri, ax, ay, ux, uy, c0, zc, r);
+            if ((seme & 2) === 0) this.tondo((accese ??= new Path2D()), ax, ay, ux, uy, c0, zc, r);
+          }
+        }
+        // Monofore ad arco nella parte alta del muro, grandi in proporzione alla chiesa, e
+        // lesene che scandiscono le campate.
+        const mezza = Math.max(0.55, Math.min(0.95, altezza * 0.05));
+        const z0 = Math.max(2.3, altezza * 0.4);
+        const z1 = Math.min(altezza - 1, z0 + Math.min(6, Math.max(2, altezza * 0.36)));
+        if (z1 - z0 < 1.5) continue;
+        const tra = 4.2 + mezza * 1.6;
+        const quante = Math.max(1, Math.floor((lungo - 2.4) / tra) + 1);
+        const primo = (lungo - (quante - 1) * tra) / 2;
+        if (coperto === 0 && altezza >= 6) {
+          for (let b = 0; b <= quante; b++) {
+            const c = primo + (b - 0.5) * tra;
+            if (dentro(c, 0.3) && !(portale && Math.abs(c - c0) < 1.6)) {
+              pezza(ombre, c - 0.2, c + 0.2, Math.min(0.55, altezza * 0.2), altezza - 0.28);
+            }
+          }
+        }
+        if (altezza >= 6) pezza(ombre, da, fino, altezza - 1.05, altezza - 0.85);
+        if (z0 < coperto + 0.3) continue;
+        for (let b = 0; b < quante; b++) {
+          const c = primo + b * tra;
+          if ((portale && Math.abs(c - c0) < 2.2) || !dentro(c, mezza + 0.15)) continue;
+          cornici ??= new Path2D();
+          vetri ??= new Path2D();
+          this.arco(cornici, ax, ay, ux, uy, c, mezza + 0.14, z1 - mezza, z1 + 0.14, z0 - 0.14);
+          this.arco(vetri, ax, ay, ux, uy, c, mezza, z1 - mezza, z1, z0);
+          if (mescola(seme, i, b) % 100 < 22) {
+            this.arco((accese ??= new Path2D()), ax, ay, ux, uy, c, mezza, z1 - mezza, z1, z0);
+          }
+        }
+        continue;
+      }
+
+      // Le campate si contano sul tratto intero; questo lato ne prende quelle che gli cadono sopra.
+      const tratto = lungoTratto[i];
+      const inizio = inizioTratto[i];
+      if (tratto < 2.6) continue;
+      const passo = diScorcio ? passoCasa * PASSO_DI_SCORCIO : passoCasa;
+      const campate = Math.max(1, Math.floor((tratto - 1.5) / passo) + 1);
+      const primo = (tratto - (campate - 1) * passo) / 2 - inizio;
+      const bMin = Math.max(0, Math.ceil(-primo / passo - 1e-6));
+      const bMax = Math.min(campate - 1, Math.floor((lungo - primo) / passo + 1e-6));
+      if (bMax < bMin) continue;
+      const strette = campate === 1 && tratto < larga + 2 * anta + 0.5;
+      const portico = conPortico && i === piuLungo && coperto === 0;
+      // Una porta sul muro principale, e una per ogni altra facciata lunga su strada.
+      const conPorta =
+        !portico && !diScorcio && coperto === 0 && (i === muroPorta || fino - da >= (inCentro ? 6.5 : 10));
+      const campataPorta = conPorta ? bMin + (mescola(seme, i, 77) % (bMax - bMin + 1)) : -1;
+      const vetrine = conVetrine && !portico && !diScorcio && coperto === 0 && fino - da >= 5;
+
+      if (portico) {
+        // Portico: archi a tutto sesto al piano terra, uno accanto all'altro.
+        archi ??= new Path2D();
+        const quanti = Math.max(2, Math.floor((lungo - 0.5) / 3.1));
+        const largo = lungo / quanti;
+        const mezzo = largo / 2 - 0.4;
+        const imposta = Math.max(1.2, Math.min(1.9, interpiano - 0.45 - mezzo));
+        for (let b = 0; b < quanti; b++) {
+          this.arco(archi, ax, ay, ux, uy, (b + 0.5) * largo, mezzo, imposta, imposta + mezzo, 0);
+        }
+      }
+
+      for (let k = 0; k < piani; k++) {
+        if (k === 0 && portico) continue;
+        const ultimo = sottotetto && k === piani - 1;
+        const z0 = k * interpiano + (piani === 1 ? Math.min(0.95, altezza * 0.3) : ultimo ? 1.15 : 0.95);
+        const altaQui = ultimo ? 0.78 : nobile && k === 1 ? alta + 0.3 : alta;
+        const z1 = Math.min(z0 + altaQui, (k + 1) * interpiano - 0.38);
+        // Niente finestre schiacciate: se non c'è l'altezza per una finestra vera, il piano resta liscio.
+        const finestra = z1 - z0 >= (ultimo ? 0.6 : 0.85) && z0 > coperto + 0.3;
+        let prima = Infinity;
+        let dopo = -Infinity;
+        let fz0 = z0;
+        let fz1 = z1;
+        for (let b = bMin; b <= bMax; b++) {
+          const c = primo + b * passo;
+          if (k === 0 && b === campataPorta) {
+            // La porta: più larga e con l'arco nei palazzi del centro e negli edifici pubblici.
+            const portone = (e.tipo === 'pubblico' || (inCentro && tratto >= 9)) && interpiano >= 3;
+            if (!dentro(c, portone ? 0.95 : 0.62)) continue;
+            porte ??= new Path2D();
+            cornici ??= new Path2D();
+            if (portone) {
+              pezza(cornici, c - 0.95, c + 0.95, 0, 2.75);
+              this.arco(porte, ax, ay, ux, uy, c, 0.8, 1.8, 2.6, 0);
+            } else {
+              const su = Math.min(2.15, altezza - 0.5);
+              pezza(cornici, c - 0.62, c + 0.62, 0, su + 0.12);
+              pezza(porte, c - 0.5, c + 0.5, 0, su);
+            }
+            continue;
+          }
+          if (k === 0 && vetrine) {
+            // Vetrina: un'apertura larga al piano terra, con la tenda sopra.
+            const mezza = Math.min(passo / 2 - 0.45, 1.05);
+            const su = Math.min(2.4, interpiano - 0.6);
+            if (su < 1.6 || !dentro(c, mezza + 0.2)) continue;
+            cornici ??= new Path2D();
+            vetri ??= new Path2D();
+            porte ??= new Path2D();
+            pezza(cornici, c - mezza - 0.1, c + mezza + 0.1, 0.3, su + 0.1);
+            pezza(vetri, c - mezza, c + mezza, 0.4, su);
+            pezza(porte, c - mezza - 0.2, c + mezza + 0.2, su + 0.12, su + 0.42);
+            if (mescola(seme, i * 64, b + 300) % 100 < 38) {
+              pezza((accese ??= new Path2D()), c - mezza, c + mezza, 0.4, su);
+            }
+            prima = Math.min(prima, c - mezza);
+            dopo = Math.max(dopo, c + mezza);
+            fz0 = 0.4;
+            fz1 = su;
+            continue;
+          }
+          if (!finestra || !dentro(c, larga / 2)) continue;
+          cornici ??= new Path2D();
+          pezza(cornici, c - larga / 2 - 0.12, c + larga / 2 + 0.12, z0 - 0.14, z1 + 0.12);
+          // Tutte le finestre stanno tra i vetri; quelle che di notte si accendono anche a parte.
+          pezza((vetri ??= new Path2D()), c - larga / 2, c + larga / 2, z0, z1);
+          prima = Math.min(prima, c - larga / 2);
+          dopo = Math.max(dopo, c + larga / 2);
+          const persiana = conPersiane && !strette && !diScorcio;
+          // Qualche finestra ha le persiane chiuse: resta scura anche di notte.
+          const chiusa = persiana && mescola(seme, i * 64 + k, b + 900) % 100 < 11;
+          if (!chiusa && mescola(seme, i * 64 + k, b) % 100 < 13) {
+            pezza((accese ??= new Path2D()), c - larga / 2, c + larga / 2, z0, z1);
+          }
+          // Telaio: un montante al centro e, se la finestra è alta, una traversa.
+          telai ??= new Path2D();
+          if (!diScorcio) pezza(telai, c - 0.04, c + 0.04, z0, z1);
+          if (z1 - z0 >= 1.2) {
+            const zt = z0 + (z1 - z0) * 0.64;
+            pezza(telai, c - larga / 2, c + larga / 2, zt - 0.035, zt + 0.035);
+          }
+          if (chiusa) {
+            persiane ??= new Path2D();
+            pezza(persiane, c - larga / 2, c + larga / 2, z0, z1);
+          } else if (persiana && dentro(c, larga / 2 + anta)) {
+            persiane ??= new Path2D();
+            pezza(persiane, c - larga / 2 - anta, c - larga / 2 - 0.03, z0, z1);
+            pezza(persiane, c + larga / 2 + 0.03, c + larga / 2 + anta, z0, z1);
+          }
+        }
+        // La fascia che sta al posto di questa fila di finestre nella vista di mezzo.
+        if (dopo > prima) pezza((fasce ??= new Path2D()), prima, dopo, fz0, fz1);
+      }
+    }
+    if (!ombre && !vetri && !accese && !porte) return SENZA_FACCIATA;
+    return {
+      ombre,
+      fasce,
+      archi,
+      cornici,
+      vetri,
+      telai,
+      accese,
+      persiane,
+      porte,
+      iPersiana: seme >>> 17,
+      iPorta: seme >>> 21,
+    };
+  }
+
+  /**
+   * Un'apertura ad arco su un muro: centro `c` metri lungo il muro, mezza larghezza `mezzo`,
+   * piedritti da `base` fino a `imposta`, colmo dell'arco a `cima`.
+   */
+  private arco(
+    p: Path2D,
+    ax: number,
+    ay: number,
+    ux: number,
+    uy: number,
+    c: number,
+    mezzo: number,
+    imposta: number,
+    cima: number,
+    base: number,
+  ): void {
+    p.moveTo(ax + ux * (c - mezzo), ay + uy * (c - mezzo) - base * ISO_Z);
+    p.lineTo(ax + ux * (c + mezzo), ay + uy * (c + mezzo) - base * ISO_Z);
+    const freccia = cima - imposta;
+    for (let k = 0; k <= 6; k++) {
+      const angolo = (Math.PI * k) / 6;
+      const t = c + mezzo * Math.cos(angolo);
+      const zeta = imposta + freccia * Math.sin(angolo);
+      p.lineTo(ax + ux * t, ay + uy * t - zeta * ISO_Z);
+    }
+    p.closePath();
+  }
+
+  /** Un'apertura tonda su un muro (il rosone): centro a `c` metri lungo il muro e `zc` di altezza. */
+  private tondo(
+    p: Path2D,
+    ax: number,
+    ay: number,
+    ux: number,
+    uy: number,
+    c: number,
+    zc: number,
+    r: number,
+  ): void {
+    for (let k = 0; k < 14; k++) {
+      const angolo = (Math.PI * 2 * k) / 14;
+      const t = c + r * Math.cos(angolo);
+      const zeta = zc + r * Math.sin(angolo);
+      if (k === 0) p.moveTo(ax + ux * t, ay + uy * t - zeta * ISO_Z);
+      else p.lineTo(ax + ux * t, ay + uy * t - zeta * ISO_Z);
+    }
+    p.closePath();
+  }
+
+  /** Righe dei coppi lungo la pendenza di ogni falda, comignoli sulle case, torrino sulle terrazze. */
+  private preparaTettoFine(e: EdificioPronto): TettoFine {
+    let coppi: Path2D | null = null;
+    let pieni: Path2D | null = null;
+    let fitti: Path2D | null = null;
+    let camSx: Path2D | null = null;
+    let camDx: Path2D | null = null;
+    let camSopra: Path2D | null = null;
+    let camVetri: Path2D | null = null;
+    let camBordo: Path2D | null = null;
+    const passo = 2.3;
+
+    // Una scatola sul tetto: comignolo o torrino. (x, y) è il piede sul piano isometrico.
+    const scatola = (x: number, y: number, mezza: number, alta: number, sotto: number): void => {
+      camSx ??= new Path2D();
+      camDx ??= new Path2D();
+      camSopra ??= new Path2D();
+      const ex = mezza * ISO_X;
+      const ey = mezza * ISO_Y;
+      const giu = y + sotto * ISO_Z;
+      const su = y - alta * ISO_Z;
+      // Angoli in pianta: ovest (x - 2ex), sud (y + 2ey), est (x + 2ex), nord (y - 2ey).
+      camSx.moveTo(x - 2 * ex, giu);
+      camSx.lineTo(x, giu + 2 * ey);
+      camSx.lineTo(x, su + 2 * ey);
+      camSx.lineTo(x - 2 * ex, su);
+      camSx.closePath();
+      camDx.moveTo(x, giu + 2 * ey);
+      camDx.lineTo(x + 2 * ex, giu);
+      camDx.lineTo(x + 2 * ex, su);
+      camDx.lineTo(x, su + 2 * ey);
+      camDx.closePath();
+      const bordo = 1.25;
+      camSopra.moveTo(x - 2 * ex * bordo, su);
+      camSopra.lineTo(x, su + 2 * ey * bordo);
+      camSopra.lineTo(x + 2 * ex * bordo, su);
+      camSopra.lineTo(x, su - 2 * ey * bordo);
+      camSopra.closePath();
+      // Contorno: i due fianchi in vista, lo spigolo tra loro e il coperchio.
+      camBordo ??= new Path2D();
+      camBordo.moveTo(x - 2 * ex, su);
+      camBordo.lineTo(x - 2 * ex, giu);
+      camBordo.lineTo(x, giu + 2 * ey);
+      camBordo.lineTo(x + 2 * ex, giu);
+      camBordo.lineTo(x + 2 * ex, su);
+      camBordo.moveTo(x, giu + 2 * ey);
+      camBordo.lineTo(x, su + 2 * ey * bordo);
+      camBordo.moveTo(x - 2 * ex * bordo, su);
+      camBordo.lineTo(x, su + 2 * ey * bordo);
+      camBordo.lineTo(x + 2 * ex * bordo, su);
+      camBordo.lineTo(x, su - 2 * ey * bordo);
+      camBordo.closePath();
+    };
+
+    if (e.forma === TETTO_FALDE && e.facce && e.facceInfo && e.pendenze) {
+      const v = e.facce;
+      let k = 0;
+      let falde = 0;
+      for (let f = 0; f < e.facceInfo.length; f += 2) {
+        const vertici = e.facceInfo[f];
+        const sx = e.pendenze[f];
+        const sy = e.pendenze[f + 1];
+        if ((e.facceInfo[f + 1] & MASCHERA_CLASSE) === CAPPELLO) {
+          // Un piano rimasto in cima: la stessa tessitura dei tetti piani in cotto.
+          coppi ??= new Path2D();
+          righePiane(coppi, v, k, vertici, 0, passo);
+        }
+        if ((sx !== 0 || sy !== 0) && vertici >= 3) {
+          falde++;
+          // Lato di gronda: i primi due vertici. Passo in metri veri lungo la gronda.
+          const ax = v[k];
+          const ay = v[k + 1];
+          const du = (v[k + 2] - ax) / ISO_X;
+          const dv = (v[k + 3] - ay) / ISO_Y;
+          const lungo = Math.sqrt((du * du + dv * dv) / 2);
+          if (lungo > 0.3) {
+            const gx = (v[k + 2] - ax) / lungo;
+            const gy = (v[k + 3] - ay) / lungo;
+            const croce = gx * sy - gy * sx;
+            if (Math.abs(croce) > 1e-6) {
+              // Di quanto la faccia si allarga oltre i capi della gronda, misurato lungo la gronda.
+              let min = 0;
+              let max = lungo;
+              for (let i = 2; i < vertici; i++) {
+                const t = ((v[k + i * 2] - ax) * sy - (v[k + i * 2 + 1] - ay) * sx) / croce;
+                if (t < min) min = t;
+                if (t > max) max = t;
+              }
+              const primo = Math.ceil(min / passo - 0.25);
+              for (let r = primo; (r + 0.25) * passo < max; r++) {
+                coppi ??= new Path2D();
+                pieni ??= new Path2D();
+                fitti ??= new Path2D();
+                const t = (r + 0.25) * passo;
+                rigaNelPoligono((r & 1) === 0 ? coppi : pieni, v, k, vertici, 0, ax + gx * t, ay + gy * t, sx, sy);
+                const t2 = t + passo / 2;
+                rigaNelPoligono(fitti, v, k, vertici, 0, ax + gx * t2, ay + gy * t2, sx, sy);
+              }
+            }
+          }
+        }
+        k += vertici * 2;
+      }
+      const casa = e.tipo === 'casa' || e.tipo === 'altro' || e.tipo === 'pubblico';
+      // Qualche abbaino sulle case grandi: una scatoletta con la finestra, sulla falda più
+      // larga tra quelle che guardano chi osserva (a sud o a ovest), a metà strada dalla gronda.
+      if (casa && e.area > 110 && (e.seme >>> 15) % 100 < (e.dist < RAGGIO_CENTRO ? 34 : 14)) {
+        let scelta = -1;
+        let inizioScelta = 0;
+        let largaScelta = 5;
+        k = 0;
+        for (let f = 0; f < e.facceInfo.length; f += 2) {
+          const vertici = e.facceInfo[f];
+          if (e.pendenze[f + 1] < -0.45 && vertici >= 4) {
+            const larga = Math.hypot(v[k + 2] - v[k], (v[k + 3] - v[k + 1]) * 2);
+            if (larga > largaScelta) {
+              largaScelta = larga;
+              scelta = f;
+              inizioScelta = k;
+            }
+          }
+          k += vertici * 2;
+        }
+        if (scelta >= 0) {
+          const vertici = e.facceInfo[scelta];
+          let x = 0;
+          let y = 0;
+          for (let i = 0; i < vertici; i++) {
+            x += v[inizioScelta + i * 2];
+            y += v[inizioScelta + i * 2 + 1];
+          }
+          // A metà tra il centro della falda e il centro della gronda.
+          x = (x / vertici + (v[inizioScelta] + v[inizioScelta + 2]) / 2) / 2;
+          y = (y / vertici + (v[inizioScelta + 1] + v[inizioScelta + 3]) / 2) / 2;
+          const mezza = 0.55;
+          const alta = 1;
+          scatola(x, y, mezza, alta, 0.35);
+          camVetri = new Path2D();
+          const ex = mezza * ISO_X;
+          const ey = mezza * ISO_Y;
+          // La finestra sta sulla faccia che guarda come la falda: a sud (destra) o a ovest (sinistra).
+          const aSud = e.pendenze[scelta] < 0;
+          const x0 = aSud ? x + 2 * ex * 0.2 : x - 2 * ex * 0.8;
+          const x1 = aSud ? x + 2 * ex * 0.8 : x - 2 * ex * 0.2;
+          const y0 = aSud ? y + 2 * ey * 0.8 : y + 2 * ey * 0.2;
+          const y1 = aSud ? y + 2 * ey * 0.2 : y + 2 * ey * 0.8;
+          camVetri.moveTo(x0, y0 - 0.2 * alta * ISO_Z);
+          camVetri.lineTo(x1, y1 - 0.2 * alta * ISO_Z);
+          camVetri.lineTo(x1, y1 - 0.8 * alta * ISO_Z);
+          camVetri.lineTo(x0, y0 - 0.8 * alta * ISO_Z);
+          camVetri.closePath();
+        }
+      }
+      // Comignoli: uno o due, su falde scelte dal seme, a metà falda.
+      if (casa && falde > 0 && e.area > 34 && (e.seme >>> 12) % 100 < 82) {
+        const quanti = e.area > 150 && (e.seme >>> 4) % 3 > 0 ? 2 : 1;
+        for (let c = 0; c < quanti; c++) {
+          let voluta = mescola(e.seme, c, 5) % falde;
+          k = 0;
+          for (let f = 0; f < e.facceInfo.length; f += 2) {
+            const vertici = e.facceInfo[f];
+            if ((e.pendenze[f] !== 0 || e.pendenze[f + 1] !== 0) && vertici >= 3 && voluta-- === 0) {
+              let x = 0;
+              let y = 0;
+              for (let i = 0; i < vertici; i++) {
+                x += v[k + i * 2];
+                y += v[k + i * 2 + 1];
+              }
+              scatola(x / vertici, y / vertici, 0.32, 1.15, 0.5);
+              break;
+            }
+            k += vertici * 2;
+          }
+        }
+      }
+    } else if (e.forma === TETTO_PIANO && e.tipo !== 'industria' && e.area >= 9) {
+      // Tetto piano in cotto: una tessitura leggera di righe, tutte nello stesso verso.
+      coppi = new Path2D();
+      righePiane(coppi, e.anello, 0, e.anello.length >> 1, e.alt, passo);
+    } else if (e.forma === TETTO_TERRAZZA && e.area > 180 && (e.seme >>> 12) % 100 < 70) {
+      // Torrino delle scale, se il centro cade davvero sul tetto.
+      if (puntoInPoligono(e.cx, e.cy, e.anello)) scatola(e.cx, e.cy - e.alt, 1.3, 2.3, 0);
+    }
+    if (!coppi && !camSopra) return SENZA_TETTO_FINE;
+    return { coppi, pieni, fitti, camSx, camDx, camSopra, camVetri, camBordo };
   }
 
   private albero(ctx: CanvasRenderingContext2D, indice: number, fine: boolean): void {
@@ -1189,15 +2644,4 @@ export class Disegnatore {
       ctx.stroke();
     }
   }
-}
-
-const sfumature = new Map<string, string>();
-function sfumaCache(colore: string, f: number): string {
-  const chiave = colore + f;
-  let v = sfumature.get(chiave);
-  if (!v) {
-    v = sfuma(colore, f);
-    sfumature.set(chiave, v);
-  }
-  return v;
 }

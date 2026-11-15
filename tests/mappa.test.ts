@@ -143,9 +143,13 @@ describe('edifici', () => {
     const e = { p: [0, 0, 0, 10, 10, 10, 10, 0], h: 10, t: 'casa' as const };
     const a = preparaEdificio(e);
     const b = preparaEdificio(e);
-    expect(a.alt).toBeCloseTo(8.165, 6);
+    // Il tetto a falde prende una parte dell'altezza: la gronda sta un poco sotto i 10 m,
+    // il colmo un poco sopra. A metà del tetto l'altezza è quella del dato.
+    expect(a.colmo).toBeGreaterThan(0);
+    expect(a.alt).toBeLessThan(8.165);
+    expect(a.alt + a.colmo / 2).toBeCloseTo(8.165, 4);
     expect(a.area).toBe(100);
-    expect(a.colmo).toBe(0);
+    expect(JSON.stringify(a)).toBe(JSON.stringify(b));
     expect(a.seme).toBe(b.seme);
     expect(a.seme).toBe(semeDi(e.p));
     expect(semeDi([1, 0, 0, 10, 10, 10, 10, 0])).not.toBe(a.seme);
@@ -238,7 +242,7 @@ describe('edifici', () => {
     expect(scena.edifici.map((e) => e.sotto)).toEqual([1, 1, -1]);
   });
 
-  it('il tetto a punta va solo sulle impronte convesse', () => {
+  it('riconosce le impronte con rientranze e dà un tetto a tutte', () => {
     const quadrato = [0, 0, 10, 0, 10, 10, 0, 10];
     // Pianta a L: una rientranza.
     const aElle = [0, 0, 20, 0, 20, 8, 8, 8, 8, 20, 0, 20];
@@ -247,9 +251,14 @@ describe('edifici', () => {
     expect(eConvesso(quadrato)).toBe(true);
     expect(eConvesso(aElle)).toBe(false);
     expect(eConvesso(quasi)).toBe(true);
+    // Il tetto a falde regge anche sulle piante con rientranze (vedi tests/edifici.test.ts).
     expect(preparaEdificio({ p: quadrato, h: 15, t: 'chiesa' }).colmo).toBeGreaterThan(0);
-    expect(preparaEdificio({ p: aElle, h: 15, t: 'chiesa' }).colmo).toBe(0);
-    expect(preparaEdificio({ p: aElle, h: 15, t: 'torre' }).colmo).toBe(0);
+    expect(preparaEdificio({ p: aElle, h: 15, t: 'chiesa' }).colmo).toBeGreaterThan(0);
+    expect(preparaEdificio({ p: aElle, h: 15, t: 'torre' }).colmo).toBeGreaterThan(0);
+    // La punta di una torre è più ripida del tetto di una casa sulla stessa pianta.
+    expect(preparaEdificio({ p: quadrato, h: 15, t: 'torre' }).colmo).toBeGreaterThan(
+      preparaEdificio({ p: quadrato, h: 15, t: 'casa' }).colmo,
+    );
   });
 
   it('nelle impronte con rientranze i muri vanno dal più lontano al più vicino', () => {
@@ -378,7 +387,18 @@ describe('griglia e selezione del visibile', () => {
     const perSelezione = (performance.now() - t1) / 100;
     expect(quanti).toBeGreaterThan(100);
     expect(quanti).toBeLessThan(s.elementi.n / 4);
-    expect(costruzione).toBeLessThan(3000);
+    // Il tempo totale a orologio dipende da quanto è carica la macchina: il limite è largo.
+    expect(costruzione).toBeLessThan(8000);
+    // Il conto vero è sul singolo edificio (tetto compreso): il migliore di tre giri su un
+    // campione, così un momento di carico non fa fallire la prova.
+    const campione = grande.base.edifici.slice(0, 1500);
+    let migliore = Infinity;
+    for (let giro = 0; giro < 3; giro++) {
+      const t2 = performance.now();
+      for (const e of campione) preparaEdificio(e);
+      migliore = Math.min(migliore, (performance.now() - t2) / campione.length);
+    }
+    expect(migliore).toBeLessThan(0.12);
     expect(perSelezione).toBeLessThan(4);
   });
 });
