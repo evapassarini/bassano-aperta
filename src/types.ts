@@ -64,6 +64,28 @@ export interface DatiBase {
 }
 
 // ---------------------------------------------------------------------------
+// Luce della mappa e lampioni: public/data/lampioni.json
+// ---------------------------------------------------------------------------
+
+/** Come è illuminata la mappa. */
+export type Luce = 'giorno' | 'pomeriggio' | 'notte';
+
+/** Scelta dell'utente: 'adesso' segue l'ora vera di Bassano (vedi src/luce.ts). */
+export type SceltaLuce = 'adesso' | Luce;
+
+export interface DatiLampioni {
+  generato: string;
+  fonte: string;
+  /** Quanti dei punti vengono davvero da OpenStreetMap (highway=street_lamp). */
+  veri: number;
+  /**
+   * Lampioni in metri locali: [x0, y0, x1, y1, ...]. Prima i `veri` da OpenStreetMap, poi quelli
+   * disposti dallo script lungo le strade dove OpenStreetMap non ne ha: sono illustrativi.
+   */
+  p: number[];
+}
+
+// ---------------------------------------------------------------------------
 // Strati tematici: public/data/strati.json
 // ---------------------------------------------------------------------------
 
