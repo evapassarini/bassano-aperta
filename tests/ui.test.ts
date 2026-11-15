@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { Avviso, DatiAvvisi, LetturaTreni, Punto, Storia, Treno } from '../src/types';
+import { luceAdesso } from '../src/luce';
+import type { Avviso, DatiAria, DatiAvvisi, DatiStrati, LetturaTreni, Luce, Punto, Storia, Treno } from '../src/types';
 import {
   chiaveOrdine,
   contaRisultati,
@@ -12,6 +13,7 @@ import {
   filtraStorie,
   fontiUniche,
   formattaData,
+  formattaDataBreve,
   formattaDataOra,
   formattaDataOraLunga,
   formattaDifferenza,
@@ -26,6 +28,7 @@ import {
   normalizza,
   parolaTendenza,
   quadroAvvisi,
+  riassuntoAria,
   scegliAvvisi,
   sottoPunto,
   statoTreno,
@@ -38,8 +41,11 @@ import {
   urlPaginaYouTube,
   urlSicuro,
 } from '../src/ui/aiuti';
+import { creaAriaBreve } from '../src/ui/ariaBreve';
 import { creaSchedaAvvisi } from '../src/ui/avvisi';
 import { tieniFuoco } from '../src/ui/dom';
+import { creaUI } from '../src/ui/index';
+import { CHIAVE_LUCE, PASSO_LUCE_MS, creaSelettoreLuce } from '../src/ui/luce';
 import { creaScheda } from '../src/ui/scheda';
 
 // Le schede leggono i dati dal modulo live: qui è finto, così nessun test tocca la rete.
@@ -48,6 +54,7 @@ const live = vi.hoisted(() => ({
   leggiAvvisi: vi.fn(),
   leggiAria: vi.fn(),
   leggiBrenta: vi.fn(),
+  leggiDataStazioni: vi.fn(),
 }));
 vi.mock('../src/live/index', () => live);
 
@@ -674,8 +681,39 @@ describe('quadro degli avvisi', () => {
 class Finto {
   figli: (Finto | string)[] = [];
   attributi = new Map<string, string>();
-  ascolti = new Map<string, (() => void)[]>();
+  ascolti = new Map<string, ((evento?: unknown) => void)[]>();
+  /** Quanto basta di classList, dataset e proprietà per montare tutta l'interfaccia. */
+  dataset: Record<string, string> = {};
+  value = '';
+  scrollTop = 0;
+  open = false;
+  classList = {
+    add: (...classi: string[]): void => {
+      const tutte = new Set([...(this.getAttribute('class') ?? '').split(' ').filter(Boolean), ...classi]);
+      this.setAttribute('class', [...tutte].join(' '));
+    },
+    remove: (...classi: string[]): void => {
+      this.setAttribute('class', (this.getAttribute('class') ?? '').split(' ').filter((c) => c && !classi.includes(c)).join(' '));
+    },
+  };
   constructor(readonly tag: string) {}
+  get hidden(): boolean {
+    return this.attributi.has('hidden');
+  }
+  set hidden(nascosto: boolean) {
+    if (nascosto) this.attributi.set('hidden', '');
+    else this.attributi.delete('hidden');
+  }
+  /** Gli eventi lanciati sul nodo, in ordine: qui non risalgono e non scendono. */
+  lanciati: { type: string; detail?: unknown }[] = [];
+  dispatchEvent(evento: { type: string; detail?: unknown }): boolean {
+    this.lanciati.push(evento);
+    this.emetti(evento.type, evento);
+    return true;
+  }
+  querySelectorAll(tag: string): Finto[] {
+    return this.conTag(tag);
+  }
   setAttribute(nome: string, valore: string): void {
     this.attributi.set(nome, String(valore));
   }
@@ -697,11 +735,20 @@ class Finto {
   get childElementCount(): number {
     return this.figli.filter((f) => typeof f !== 'string').length;
   }
-  addEventListener(tipo: string, ascolto: () => void): void {
+  addEventListener(tipo: string, ascolto: (evento?: unknown) => void): void {
     this.ascolti.set(tipo, [...(this.ascolti.get(tipo) ?? []), ascolto]);
   }
+  emetti(tipo: string, evento?: unknown): void {
+    for (const a of this.ascolti.get(tipo) ?? []) a(evento);
+  }
   click(): void {
-    for (const a of this.ascolti.get('click') ?? []) a();
+    this.emetti('click');
+  }
+  /** Un tasto premuto sul nodo. Restituisce l'evento, per vedere se è stato fermato. */
+  premi(key: string): { key: string; fermato: boolean } {
+    const evento = { key, fermato: false, preventDefault: () => void (evento.fermato = true) };
+    this.emetti('keydown', evento);
+    return evento;
   }
   /** Come nel browser: il fuoco va al nodo e `document.activeElement` lo segue. */
   focus(): void {
@@ -985,6 +1032,355 @@ describe('schede con dati in diretta', () => {
       expect(fuoco.attivo).toBe(stato);
       await respira();
       expect(scheda.conClasse('avviso')).toHaveLength(2);
+    });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Luce della mappa e aria in breve: il gruppo in basso a sinistra
+// ---------------------------------------------------------------------------
+
+describe('luce della mappa e aria in breve', () => {
+  // A Bassano, il 15 novembre: mattina piena, sole basso che scende, notte.
+  const MATTINA = new Date('2026-11-15T09:30:00Z');
+  const POMERIGGIO = new Date('2026-11-15T14:00:00Z');
+  const SERA = new Date('2026-11-15T22:00:00Z');
+
+  const ARIA: DatiAria = {
+    generato: '2026-11-14T22:54:54.138Z',
+    stazione: 'Bassano (ARPAV, codice 500000106)',
+    fonte: { nome: 'ARPAV', url: 'https://www2.arpa.veneto.it/aria-json/exported/aria/data.json', licenza: 'CC BY 4.0' },
+    misure: [
+      { inquinante: 'Ozono (media oraria)', valore: 36.4, unita: 'µg/m³', quando: '2026-11-14T22:00:00' },
+      { inquinante: 'PM10 (media giornaliera)', valore: 13.7, unita: 'µg/m³', quando: '2026-11-13' },
+    ],
+  };
+  const CENTRALINA: Punto = {
+    id: 'arpav-aria-bassano',
+    strato: 'ambiente',
+    tipo: 'aria',
+    nome: 'Stazione ARPAV «Bassano»',
+    x: 106.4,
+    y: -781.6,
+    nota: "Centralina ARPAV per la qualità dell'aria.",
+  };
+  const STRATI: DatiStrati = { generato: '2026-11-14T10:00:00Z', fonti: [], punti: [CENTRALINA], linee: [] };
+
+  let memoria: Map<string, string>;
+  let ora: Date;
+  const adesso = (): Date => ora;
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(MATTINA);
+    ora = MATTINA;
+    fuoco.attivo = null;
+    memoria = new Map();
+    vi.stubGlobal('document', {
+      createElement: (tag: string) => new Finto(tag),
+      createElementNS: (_spazio: string, tag: string) => new Finto(tag),
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      visibilityState: 'visible',
+      get activeElement() {
+        return fuoco.attivo;
+      },
+    });
+    vi.stubGlobal('HTMLElement', Finto);
+    vi.stubGlobal('localStorage', {
+      getItem: (chiave: string) => memoria.get(chiave) ?? null,
+      setItem: (chiave: string, valore: string) => void memoria.set(chiave, valore),
+    });
+    for (const finta of Object.values(live)) finta.mockReset();
+    live.leggiAria.mockResolvedValue(ARIA);
+  });
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.useRealTimers();
+  });
+
+  /** Monta tutta l'interfaccia su una radice finta. */
+  const monta = (strati: DatiStrati = STRATI) => {
+    const radice = new Finto('div');
+    const alCambioLuce = vi.fn<(luce: Luce) => void>();
+    const ui = creaUI({
+      radice: radice as unknown as HTMLElement,
+      storie: [],
+      strati,
+      alCambioStrato: () => {},
+      alVaiA: () => {},
+      allaChiusura: () => {},
+      alCambioLuce,
+      adesso,
+    });
+    const [gruppo] = radice.trova((n) => n.getAttribute('role') === 'radiogroup');
+    const scelta = (nome: string): Finto => gruppo.trova((n) => n.getAttribute('data-luce') === nome)[0];
+    const scelte = (): string[] =>
+      gruppo.trova((n) => n.getAttribute('role') === 'radio' && n.getAttribute('aria-checked') === 'true').map((n) => n.getAttribute('data-luce') ?? '');
+    return { radice, ui, alCambioLuce, gruppo, scelta, scelte };
+  };
+
+  it('le ore di prova danno le tre luci', () => {
+    expect([MATTINA, POMERIGGIO, SERA].map(luceAdesso)).toEqual(['giorno', 'pomeriggio', 'notte']);
+  });
+
+  describe('selettore della luce', () => {
+    it("all'avvio vale «Adesso» e la mappa riceve una volta la luce di quell'ora", () => {
+      ora = SERA;
+      const { radice, alCambioLuce, gruppo, scelta, scelte } = monta();
+      expect(alCambioLuce).toHaveBeenCalledTimes(1);
+      expect(alCambioLuce).toHaveBeenCalledWith(luceAdesso(SERA));
+      expect(alCambioLuce).toHaveBeenCalledWith('notte');
+      expect(radice.dataset.luce).toBe('notte');
+      // Quattro scelte esclusive, con il nome per chi ascolta.
+      expect(gruppo.getAttribute('aria-label')).toBe('Luce della mappa');
+      expect(gruppo.trova((n) => n.getAttribute('role') === 'radio').map((n) => n.conClasse('luce-nome')[0].textContent)).toEqual([
+        'Adesso',
+        'Giorno',
+        'Pomeriggio',
+        'Notte',
+      ]);
+      expect(scelte()).toEqual(['adesso']);
+      // Accanto ad «Adesso» c'è la luce in corso.
+      expect(scelta('adesso').textContent).toBe('Adesso · notte');
+      expect(scelta('notte').textContent).toBe('Notte');
+      // Un solo bottone nel giro di Tab.
+      expect(gruppo.trova((n) => n.getAttribute('tabindex') === '0').map((n) => n.getAttribute('data-luce'))).toEqual(['adesso']);
+    });
+
+    it('scegliendo «Notte» la mappa diventa notturna e la scelta si ricorda', () => {
+      const { radice, alCambioLuce, scelta, scelte } = monta();
+      expect(alCambioLuce).toHaveBeenLastCalledWith('giorno');
+      scelta('notte').click();
+      expect(alCambioLuce).toHaveBeenCalledTimes(2);
+      expect(alCambioLuce).toHaveBeenLastCalledWith('notte');
+      expect(scelte()).toEqual(['notte']);
+      expect(radice.dataset.luce).toBe('notte');
+      expect(memoria.get(CHIAVE_LUCE)).toBe('notte');
+      // Con una luce fissa «Adesso» non dice più nulla accanto.
+      expect(scelta('adesso').textContent).toBe('Adesso');
+      // Il tempo passa, ma la luce scelta a mano non si muove.
+      ora = POMERIGGIO;
+      vi.advanceTimersByTime(PASSO_LUCE_MS * 3);
+      expect(alCambioLuce).toHaveBeenCalledTimes(2);
+    });
+
+    it("tornando ad «Adesso» la mappa riprende la luce dell'ora vera", () => {
+      const { alCambioLuce, scelta, scelte } = monta();
+      scelta('notte').click();
+      ora = POMERIGGIO;
+      scelta('adesso').click();
+      expect(alCambioLuce).toHaveBeenLastCalledWith('pomeriggio');
+      expect(alCambioLuce).toHaveBeenCalledTimes(3);
+      expect(scelte()).toEqual(['adesso']);
+      expect(scelta('adesso').textContent).toBe('Adesso · pomeriggio');
+      expect(memoria.get(CHIAVE_LUCE)).toBe('adesso');
+    });
+
+    it('con «Adesso» ricontrolla ogni minuto e avvisa solo quando la luce cambia', () => {
+      ora = POMERIGGIO;
+      const { alCambioLuce, scelta } = monta();
+      expect(alCambioLuce).toHaveBeenCalledTimes(1);
+      vi.advanceTimersByTime(PASSO_LUCE_MS * 5);
+      expect(alCambioLuce).toHaveBeenCalledTimes(1);
+      ora = SERA;
+      vi.advanceTimersByTime(PASSO_LUCE_MS - 1000);
+      expect(alCambioLuce).toHaveBeenCalledTimes(1);
+      vi.advanceTimersByTime(1000);
+      expect(alCambioLuce).toHaveBeenCalledTimes(2);
+      expect(alCambioLuce).toHaveBeenLastCalledWith('notte');
+      expect(scelta('adesso').textContent).toBe('Adesso · notte');
+    });
+
+    it('non avvisa se la scelta nuova dà la stessa luce di prima', () => {
+      ora = SERA;
+      const { alCambioLuce, scelta, scelte } = monta();
+      scelta('notte').click();
+      expect(scelte()).toEqual(['notte']);
+      expect(alCambioLuce).toHaveBeenCalledTimes(1);
+    });
+
+    it('riparte dalla scelta ricordata, e ignora un valore che non conosce', () => {
+      memoria.set(CHIAVE_LUCE, 'pomeriggio');
+      const prima = monta();
+      expect(prima.scelte()).toEqual(['pomeriggio']);
+      expect(prima.alCambioLuce).toHaveBeenCalledWith('pomeriggio');
+      memoria.set(CHIAVE_LUCE, 'alba');
+      const dopo = monta();
+      expect(dopo.scelte()).toEqual(['adesso']);
+      expect(dopo.alCambioLuce).toHaveBeenCalledWith('giorno');
+    });
+
+    it('funziona anche se il browser non lascia usare la memoria', () => {
+      vi.stubGlobal('localStorage', {
+        getItem: () => {
+          throw new Error('vietato');
+        },
+        setItem: () => {
+          throw new Error('vietato');
+        },
+      });
+      const alCambio = vi.fn();
+      const selettore = creaSelettoreLuce({ alCambio, adesso });
+      expect(selettore.scelta()).toBe('adesso');
+      comeFinto(selettore.nodo).trova((n) => n.getAttribute('data-luce') === 'notte')[0].click();
+      expect(selettore.scelta()).toBe('notte');
+      expect(selettore.luce()).toBe('notte');
+      expect(alCambio).toHaveBeenLastCalledWith('notte');
+    });
+
+    it('da tastiera le frecce cambiano scelta e portano con sé il fuoco', () => {
+      const { alCambioLuce, gruppo, scelta, scelte } = monta();
+      const destra = gruppo.premi('ArrowRight');
+      expect(destra.fermato).toBe(true);
+      expect(scelte()).toEqual(['giorno']);
+      expect(fuoco.attivo).toBe(scelta('giorno'));
+      gruppo.premi('ArrowLeft');
+      gruppo.premi('ArrowLeft');
+      expect(scelte()).toEqual(['notte']);
+      expect(fuoco.attivo).toBe(scelta('notte'));
+      expect(alCambioLuce).toHaveBeenLastCalledWith('notte');
+      gruppo.premi('Home');
+      expect(scelte()).toEqual(['adesso']);
+      // Gli altri tasti restano alla pagina.
+      expect(gruppo.premi('a').fermato).toBe(false);
+      expect(scelte()).toEqual(['adesso']);
+    });
+
+    it('dopo distruggi() l’interfaccia non chiama più la mappa e toglie l’ascolto dei tasti', () => {
+      ora = POMERIGGIO;
+      const tolti: string[] = [];
+      const messi: string[] = [];
+      const doc = document as unknown as Record<string, unknown>;
+      doc.addEventListener = (tipo: string) => void messi.push(tipo);
+      doc.removeEventListener = (tipo: string) => void tolti.push(tipo);
+      const { ui, alCambioLuce } = monta();
+      expect(alCambioLuce).toHaveBeenCalledTimes(1);
+      ui.distruggi();
+      ora = SERA;
+      vi.advanceTimersByTime(PASSO_LUCE_MS * 3);
+      expect(alCambioLuce).toHaveBeenCalledTimes(1);
+      expect(messi.sort()).toEqual(['keydown', 'visibilitychange']);
+      expect(tolti.sort()).toEqual(['keydown', 'visibilitychange']);
+    });
+
+    it('fermato, non ricontrolla più', () => {
+      ora = POMERIGGIO;
+      const alCambio = vi.fn();
+      const selettore = creaSelettoreLuce({ alCambio, adesso });
+      selettore.distruggi();
+      ora = SERA;
+      vi.advanceTimersByTime(PASSO_LUCE_MS * 2);
+      expect(alCambio).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('riquadro «Aria»', () => {
+    it('sceglie il PM10, altrimenti la prima misura, e non dà giudizi', () => {
+      expect(formattaDataBreve('2026-11-13')).toBe('13 nov');
+      expect(riassuntoAria(ARIA, MATTINA)).toEqual({ nome: 'PM10', valore: '13,7', unita: 'µg/m³', quando: '13 nov', fotoVecchia: null });
+      expect(riassuntoAria({ ...ARIA, misure: [ARIA.misure[0]] }, MATTINA)).toEqual({
+        nome: 'Ozono',
+        valore: '36,4',
+        unita: 'µg/m³',
+        quando: '14 nov, ore 22:00',
+        fotoVecchia: null,
+      });
+      expect(riassuntoAria({ ...ARIA, misure: [] }, MATTINA)).toBeNull();
+      // Una misura senza numero non diventa un numero.
+      const rotta = { inquinante: 'PM10', valore: Number.NaN, unita: 'µg/m³', quando: '2026-11-13' };
+      expect(riassuntoAria({ ...ARIA, misure: [rotta] }, MATTINA)).toBeNull();
+      // Tre giorni esatti non bastano; poco dopo sì.
+      expect(riassuntoAria(ARIA, new Date('2026-11-17T22:00:00Z'))?.fotoVecchia).toBeNull();
+      expect(riassuntoAria(ARIA, new Date('2026-11-18T08:00:00Z'))?.fotoVecchia).toBe('foto del 14 nov');
+    });
+
+    it('una fotografia di un altro anno porta l’anno, per la misura e per la foto', () => {
+      expect(formattaDataBreve('2026-11-13', MATTINA)).toBe('13 nov');
+      expect(formattaDataBreve('2025-11-13', MATTINA)).toBe('13 nov 2025');
+      const r = riassuntoAria(ARIA, new Date('2027-11-20T08:00:00Z'));
+      expect(r?.quando).toBe('13 nov 2026');
+      expect(r?.fotoVecchia).toBe('foto del 14 nov 2026');
+    });
+
+    it('una misura senza data prende la data della fotografia, anche se è fresca', () => {
+      const senzaData = { inquinante: 'PM10', valore: 13.7, unita: 'µg/m³', quando: '' };
+      const r = riassuntoAria({ ...ARIA, misure: [senzaData] }, MATTINA);
+      expect(r?.quando).toBe('');
+      expect(r?.fotoVecchia).toBe('foto del 14 nov');
+    });
+
+    it('dichiara «dati non validati» a chi ascolta e al passaggio del mouse', async () => {
+      const { radice } = monta();
+      await respira();
+      const [riquadro] = radice.conClasse('aria-breve');
+      expect(riquadro.conClasse('solo-lettori')[0].textContent).toContain('Fonte: ARPAV, dati non validati');
+      expect(riquadro.getAttribute('title')).toBe('Fonte: ARPAV, dati non validati');
+    });
+
+    it('mostra numero, unità, data della misura e ARPAV', async () => {
+      const { radice } = monta();
+      const [riquadro] = radice.conClasse('aria-breve');
+      expect(riquadro.tag).toBe('button');
+      expect(riquadro.getAttribute('aria-busy')).toBe('true');
+      expect(riquadro.textContent).toContain('Aria: leggo il dato…');
+      await respira();
+      expect(riquadro.getAttribute('aria-busy')).toBeNull();
+      expect(riquadro.conClasse('aria-breve-testa')[0].textContent).toBe('Aria · ARPAV');
+      expect(riquadro.conClasse('aria-breve-riga')[0].textContent).toBe('PM10 13,7 µg/m³ · 13 nov');
+      expect(riquadro.conClasse('aria-breve-valore')[0].textContent).toBe('13,7');
+      expect(riquadro.textContent).not.toMatch(/buona|scarsa|discreta|pessima/i);
+      expect(riquadro.textContent).not.toContain('foto del');
+    });
+
+    it('al clic apre la scheda della stazione dell’aria', async () => {
+      const { radice } = monta();
+      await respira();
+      const [finestra] = radice.conClasse('finestra');
+      expect(finestra.hidden).toBe(true);
+      radice.conClasse('aria-breve')[0].click();
+      expect(finestra.hidden).toBe(false);
+      expect(finestra.dataset.tipo).toBe('punto');
+      expect(finestra.conClasse('scheda-nome')[0].textContent).toBe(CENTRALINA.nome);
+      expect(finestra.conClasse('adesso-aria')).toHaveLength(1);
+      expect(radice.lanciati.at(-1)).toMatchObject({ type: 'ba:punto', detail: { id: CENTRALINA.id } });
+      // Il fuoco va al titolo della scheda.
+      expect(fuoco.attivo).toBe(finestra.conClasse('scheda-nome')[0]);
+    });
+
+    it('se la fotografia ha più di tre giorni lo dice, con la data', async () => {
+      ora = new Date('2026-11-18T08:00:00Z');
+      const { radice } = monta();
+      await respira();
+      expect(radice.conClasse('aria-breve-testa')[0].textContent).toBe('Aria · ARPAV · foto del 14 nov');
+    });
+
+    it('se il file non si carica lo dice, senza numeri', async () => {
+      live.leggiAria.mockRejectedValue(new Error('404'));
+      const { radice } = monta();
+      await respira();
+      const [riquadro] = radice.conClasse('aria-breve');
+      expect(riquadro.getAttribute('aria-busy')).toBeNull();
+      expect(riquadro.conClasse('aria-breve-corpo')[0].textContent).toBe('Aria: dato non disponibile');
+      expect(riquadro.textContent).not.toMatch(/\d/);
+      // La scheda si apre lo stesso: lì c'è «Riprova».
+      riquadro.click();
+      expect(radice.conClasse('finestra')[0].hidden).toBe(false);
+    });
+
+    it('se la fotografia non ha misure lo dice', async () => {
+      live.leggiAria.mockResolvedValue({ ...ARIA, misure: [] });
+      const { radice } = monta();
+      await respira();
+      expect(radice.conClasse('aria-breve-corpo')[0].textContent).toBe('Aria: nessuna misura nella fotografia');
+    });
+
+    it('senza una stazione dell’aria sulla mappa il riquadro non è un bottone', async () => {
+      const riquadro = comeFinto(creaAriaBreve({ adesso }));
+      await respira();
+      expect(riquadro.tag).toBe('div');
+      expect(riquadro.textContent).toContain('PM10 13,7 µg/m³');
+      expect(monta({ ...STRATI, punti: [] }).radice.conClasse('aria-breve')[0].tag).toBe('div');
     });
   });
 });

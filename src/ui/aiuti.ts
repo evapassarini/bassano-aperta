@@ -1,7 +1,7 @@
 // Aiuti puri dell'interfaccia: ricerca, date e numeri in italiano, parole per la
 // tendenza del fiume, indirizzi dei video, tabellone dei treni, scelta degli avvisi. Nessun DOM qui dentro: si provano con vitest.
 
-import type { Avviso, DatiAvvisi, Fonte, IdStrato, LetturaTreni, Punto, Storia, TipoPunto, Treno } from '../types';
+import type { Avviso, DatiAria, DatiAvvisi, Fonte, IdStrato, LetturaTreni, Punto, Storia, TipoPunto, Treno } from '../types';
 
 // ---------------------------------------------------------------------------
 // Ricerca nei luoghi
@@ -206,6 +206,69 @@ export function formattaDataOraLunga(iso: string): string {
   if (!d) return iso;
   if (d.soloData) return formattaData(iso);
   return `${formattaData(iso)}, ore ${formattaOra(iso)}`;
+}
+
+/**
+ * "13 nov". Se la stringa non è una data, la restituisce com'è. Con `adesso`, una data di un
+ * altro anno porta anche l'anno ("13 nov 2025"): senza, sembrerebbe di questi giorni.
+ */
+export function formattaDataBreve(iso: string, adesso?: Date): string {
+  const d = leggiData(iso);
+  if (!d) return iso;
+  if (adesso) {
+    const anno = (data: Date): string => new Intl.DateTimeFormat('it-IT', { year: 'numeric', timeZone: d.fuso }).format(data);
+    if (anno(d.data) !== anno(adesso)) return parti(d, { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+  return parti(d, { day: 'numeric', month: 'short' });
+}
+
+// ---------------------------------------------------------------------------
+// Aria: il dato principale, per il riquadro piccolo sulla mappa
+// ---------------------------------------------------------------------------
+
+/** Oltre questa età la fotografia dell'aria si dichiara, con la sua data. */
+const FOTO_ARIA_VECCHIA_MS = 3 * 24 * 60 * 60 * 1000;
+
+export interface AriaBreve {
+  /** Nome corto della misura, es. "PM10". */
+  nome: string;
+  /** Valore già scritto all'italiana, es. "13,7". */
+  valore: string;
+  unita: string;
+  /** Data breve della misura, es. "13 nov" oppure "14 nov, ore 22:00". Vuota se non si legge. */
+  quando: string;
+  /** "foto del 12 nov" se la fotografia ha più di tre giorni, altrimenti null. */
+  fotoVecchia: string | null;
+}
+
+/**
+ * Il dato da mostrare nel riquadro «Aria»: il PM10 se c'è, altrimenti la prima misura.
+ * Nessun giudizio (buona, scarsa): nei dati non c'è una soglia ufficiale. null se non ci sono misure.
+ */
+export function riassuntoAria(dati: Pick<DatiAria, 'generato' | 'misure'>, adesso: Date): AriaBreve | null {
+  const valide = (Array.isArray(dati.misure) ? dati.misure : []).filter(
+    (m) => m && typeof m.inquinante === 'string' && typeof m.valore === 'number' && Number.isFinite(m.valore),
+  );
+  const misura = valide.find((m) => /^pm\s?10\b/i.test(m.inquinante.trim())) ?? valide[0];
+  if (!misura) return null;
+  const nome = misura.inquinante.split('(')[0].trim() || misura.inquinante.trim();
+  let quando = '';
+  if (typeof misura.quando === 'string' && leggiData(misura.quando)) {
+    const ora = formattaOra(misura.quando);
+    const giorno = formattaDataBreve(misura.quando, adesso);
+    quando = ora ? `${giorno}, ore ${ora}` : giorno;
+  }
+  const scattata = Date.parse(dati.generato);
+  // La data della fotografia si dichiara se è vecchia, oppure se la misura non ha una data
+  // propria: il numero non resta mai senza una data accanto.
+  const vecchia = Number.isFinite(scattata) && (!quando || adesso.getTime() - scattata > FOTO_ARIA_VECCHIA_MS);
+  return {
+    nome,
+    valore: formattaMisura(misura.valore),
+    unita: typeof misura.unita === 'string' ? misura.unita : '',
+    quando,
+    fotoVecchia: vecchia ? `foto del ${formattaDataBreve(dati.generato, adesso)}` : null,
+  };
 }
 
 /**

@@ -9,8 +9,9 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "dati": "node scripts/dati-osm.mjs && node scripts/dati-strati.mjs && node scripts/dati-aria.mjs && node scripts/dati-avvisi.mjs",
+    "dati": "node scripts/dati-osm.mjs && node scripts/dati-strati.mjs && node scripts/dati-aria.mjs && node scripts/dati-avvisi.mjs && node scripts/dati-lampioni.mjs",
     "dati:avvisi": "node scripts/dati-avvisi.mjs",
+    "dati:lampioni": "node scripts/dati-lampioni.mjs",
     "dati:stazioni": "node scripts/dati-stazioni.mjs",
     "illustrazioni": "node scripts/landmark/genera.mjs"
   },

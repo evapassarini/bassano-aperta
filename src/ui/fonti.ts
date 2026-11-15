@@ -2,13 +2,16 @@
 
 import type { DatiStrati } from '../types';
 import { leggiAria, leggiAvvisi, leggiDataStazioni } from '../live';
-import { formattaDataOraLunga, urlSicuro } from './aiuti';
+import { formattaDataOraLunga, formattaNumero, urlSicuro } from './aiuti';
 import { el, icona, idUnico, linkEsterno, soli } from './dom';
 
 export interface OpzioniFonti {
   strati: DatiStrati;
   /** Data di generazione della mappa di base (base.json), se chi avvia la conosce. */
   baseGenerato?: string;
+  /** Quanti lampioni vengono da OpenStreetMap e quanti sono in tutto (numeri scritti come testo). */
+  lampioniVeri?: string;
+  lampioniTutti?: string;
   /** Dove segnalare un errore (pagina delle segnalazioni del progetto), se esiste. */
   segnalazioni?: string;
   /** Pagina del codice sorgente, se esiste. */
@@ -54,6 +57,19 @@ export function creaFonti(opzioni: OpzioniFonti): FinestraFonti {
     ),
     date.childElementCount > 0 ? date : null,
   );
+  const veri = Number(opzioni.lampioniVeri);
+  const tutti = Number(opzioni.lampioniTutti);
+  if (opzioni.lampioniVeri && opzioni.lampioniTutti && Number.isInteger(veri) && Number.isInteger(tutti) && veri >= 0 && tutti > veri) {
+    osm.append(
+      el(
+        'p',
+        null,
+        veri === 0
+          ? `I lampioni che si accendono di notte: i ${formattaNumero(tutti)} sulla mappa sono disposti dal nostro codice lungo le strade e sul bordo delle piazze, a scopo illustrativo. Non sono un rilievo dell'illuminazione pubblica.`
+          : `I lampioni che si accendono di notte: ${formattaNumero(veri)} sono segnati su OpenStreetMap. Gli altri ${formattaNumero(tutti - veri)} sono disposti dal nostro codice lungo le strade e sul bordo delle piazze, a scopo illustrativo: non sono un rilievo dell'illuminazione pubblica.`,
+      ),
+    );
+  }
   if (strati.fonti.length > 0) {
     const elenco = el('ul', { class: 'fonti-elenco' });
     for (const f of strati.fonti) {

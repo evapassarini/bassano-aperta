@@ -1,7 +1,7 @@
-// Interfaccia sopra la mappa: testata, strati, elenco dei luoghi, finestra-racconto,
-// scheda dei punti, fonti e licenze. DOM a mano, nessun framework.
+// Interfaccia sopra la mappa: testata, strati, elenco dei luoghi, luce della mappa, aria,
+// finestra-racconto, scheda dei punti, fonti e licenze. DOM a mano, nessun framework.
 
-import type { DatiStrati, IdStrato, LonLat, Media, Punto, Storia } from '../types';
+import type { DatiStrati, IdStrato, LonLat, Luce, Media, Punto, Storia } from '../types';
 import { metriInLonLat } from '../map/proiezione';
 import {
   NOME_AVVISI,
@@ -16,9 +16,11 @@ import {
   trovaVoceAvvisi,
   urlSicuro,
 } from './aiuti';
+import { creaAriaBreve } from './ariaBreve';
 import { creaSchedaAvvisi } from './avvisi';
 import { el, icona, idUnico, linkEsterno, segnoStrato, soli } from './dom';
 import { creaFonti } from './fonti';
+import { creaSelettoreLuce } from './luce';
 import { creaRacconto } from './racconto';
 import type { Racconto } from './racconto';
 import { creaScheda } from './scheda';
@@ -32,12 +34,24 @@ export interface OpzioniUI {
   /** Avvicina (fattore > 1) o allontana (fattore < 1) la mappa. Senza, i bottoni non ci sono. */
   alloZoom?: (fattore: number) => void;
   allaChiusura: () => void;
+  /**
+   * La luce che la mappa deve mostrare. Chiamata una volta all'avvio e poi solo quando la luce
+   * effettiva cambia: per una scelta di chi guarda, oppure da sola se la scelta è «Adesso».
+   */
+  alCambioLuce?: (luce: Luce) => void;
+  /** Che ora è. Serve ai test; predefinito: () => new Date(). */
+  adesso?: () => Date;
 }
 
 export interface UI {
   apriStoria(id: string): void;
   apriPunto(punto: Punto): void;
   chiudi(): void;
+  /**
+   * Ferma ciò che l'interfaccia tiene acceso fuori da `radice`: il controllo dell'ora di
+   * «Adesso» e l'ascolto dei tasti sulla pagina. Dopo, `alCambioLuce` non viene più chiamata.
+   */
+  distruggi(): void;
 }
 
 const STRATI: IdStrato[] = ['cultura', 'ambiente', 'mobilita'];
@@ -115,6 +129,25 @@ export function creaUI(opzioni: OpzioniUI): UI {
     { class: 'aiuto-tasti', 'aria-hidden': 'true' },
     'La mappa ascolta la tastiera: frecce per muoverti, + e - per lo zoom.',
   );
+
+  // =========================================================================
+  // In basso a sinistra: la qualità dell'aria in breve e la luce della mappa
+  // =========================================================================
+  const puntoAria = strati.punti.find((p) => p.tipo === 'aria');
+  const ariaBreve = creaAriaBreve({
+    // Apre la stessa scheda che si apre dal segnaposto della stazione.
+    apri: puntoAria ? () => apriPunto(puntoAria) : undefined,
+    adesso: opzioni.adesso,
+  });
+  const selettoreLuce = creaSelettoreLuce({
+    adesso: opzioni.adesso,
+    alCambio: (luce) => {
+      // Sulla radice per il CSS e per chi avvia; i pannelli restano chiari in ogni luce.
+      radice.dataset.luce = luce;
+      opzioni.alCambioLuce?.(luce);
+    },
+  });
+  const inBasso = el('div', { class: 'in-basso' }, ariaBreve, selettoreLuce.nodo);
 
   // =========================================================================
   // Elenco dei luoghi
@@ -281,6 +314,8 @@ export function creaUI(opzioni: OpzioniUI): UI {
   const fonti = creaFonti({
     strati,
     baseGenerato: radice.dataset.baseGenerato,
+    lampioniVeri: radice.dataset.lampioniVeri,
+    lampioniTutti: radice.dataset.lampioniTutti,
     segnalazioni: radice.dataset.segnalazioni,
     codice: radice.dataset.codice,
   });
@@ -421,7 +456,7 @@ export function creaUI(opzioni: OpzioniUI): UI {
 
   // Esc chiude ciò che sta sopra: prima le finestre di dialogo (ci pensa il browser),
   // poi l'elenco, poi il racconto.
-  document.addEventListener('keydown', (e) => {
+  const alTasto = (e: KeyboardEvent): void => {
     if (e.key !== 'Escape' || e.defaultPrevented) return;
     if (lente.open || fonti.nodo.open) return;
     if (elencoAperto()) {
@@ -431,7 +466,8 @@ export function creaUI(opzioni: OpzioniUI): UI {
       e.preventDefault();
       chiudi();
     }
-  });
+  };
+  document.addEventListener('keydown', alTasto);
 
   // =========================================================================
   // Montaggio
@@ -443,7 +479,12 @@ export function creaUI(opzioni: OpzioniUI): UI {
     gruppoStrati,
     el('div', { class: 'controlli-azioni' }, bottoneLuoghi, bottoneFonti),
   );
-  radice.append(...soli(controlli, gruppoZoom, aiutoTasti, elenco, finestra, fonti.nodo, lente));
+  radice.append(...soli(controlli, inBasso, gruppoZoom, aiutoTasti, elenco, finestra, fonti.nodo, lente));
 
-  return { apriStoria, apriPunto, chiudi };
+  const distruggi = (): void => {
+    selettoreLuce.distruggi();
+    document.removeEventListener('keydown', alTasto);
+  };
+
+  return { apriStoria, apriPunto, chiudi, distruggi };
 }

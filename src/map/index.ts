@@ -2,7 +2,7 @@
 // L'interfaccia pubblica è quella di docs/SPEC.md.
 
 import { ORIGINE } from '../types';
-import type { DatiBase, DatiStrati, IdStrato, Landmark, LonLat, Punto } from '../types';
+import type { DatiBase, DatiStrati, IdStrato, Landmark, LonLat, Luce, Punto } from '../types';
 import { trovaBersaglio, ZOOM_NOMI } from './bersagli';
 import type { Colpito } from './bersagli';
 import { Disegnatore } from './disegno';
@@ -26,6 +26,8 @@ export interface OpzioniMappa {
   strati: DatiStrati;
   landmark: Landmark[];
   alClic: (bersaglio: { storia?: string; punto?: Punto } | null) => void;
+  /** Lampioni in metri locali [x0, y0, ...] (DatiLampioni.p). Senza, la notte è buia ma funziona. */
+  lampioni?: number[];
 }
 
 export interface Mappa {
@@ -34,6 +36,11 @@ export interface Mappa {
   /** Avvicina (fattore > 1) o allontana (fattore < 1) attorno al centro della vista. */
   zooma(fattore: number): void;
   evidenzia(storia: string | null): void;
+  /**
+   * Cambia la luce della mappa. All'avvio vale 'giorno'; con la luce già attiva non fa nulla.
+   * Sul canvas resta scritto l'attributo data-luce, per chi vuole intonare la pagina.
+   */
+  impostaLuce(luce: Luce): void;
   distruggi(): void;
 }
 
@@ -52,6 +59,23 @@ export const PASSO_ZOOM = 1.5;
 /** Zoom a cui si arriva scegliendo un luogo dall'elenco: i nomi dei segnaposto si leggono. */
 const ZOOM_ARRIVO = Math.max(2.4, ZOOM_NOMI + 0.2);
 const ATTESA_HASH = 300;
+/** Durata della dissolvenza tra una luce e l'altra, in millisecondi. */
+const DURATA_DISSOLVENZA = 420;
+const LUCI: Luce[] = ['giorno', 'pomeriggio', 'notte'];
+
+/**
+ * Solo in sviluppo: ?luce=notte (o pomeriggio, giorno) nell'indirizzo blocca la mappa su
+ * quella luce, qualunque cosa chieda l'interfaccia. Serve per le prove e le schermate.
+ */
+function luceDiProva(): Luce | null {
+  if (!import.meta.env?.DEV) return null;
+  try {
+    const voluta = new URLSearchParams(window.location.search).get('luce');
+    return LUCI.find((l) => l === voluta) ?? null;
+  } catch {
+    return null;
+  }
+}
 
 export function creaMappa(opzioni: OpzioniMappa): Mappa {
   const { canvas, alClic } = opzioni;
@@ -59,7 +83,7 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
   if (!contesto) throw new Error('Il browser non permette di disegnare la mappa (canvas 2D assente).');
   const ctx: CanvasRenderingContext2D = contesto;
 
-  const scena = costruisciScena(opzioni.base, opzioni.strati, opzioni.landmark);
+  const scena = costruisciScena(opzioni.base, opzioni.strati, opzioni.landmark, opzioni.lampioni);
   const area = riquadroInMetri();
   const cartella = (import.meta.env?.BASE_URL ?? '/') + 'landmarks/';
   let vivo = true;
@@ -111,6 +135,8 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
     const c = limitaCamera(nuova, area, zoomMinimo, ZOOM_MASSIMO);
     if (c.x === camera.x && c.y === camera.y && c.zoom === camera.zoom) return;
     camera = c;
+    // La vecchia immagine non combacia più con la mappa spostata: la dissolvenza finisce qui.
+    chiudiDissolvenza();
     richiedi();
     if (scriviHash) pianificaHash();
   };
@@ -143,6 +169,35 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
   }
   let volo: Volo | null = null;
 
+  // Passaggio tra due luci: la vecchia immagine resta sopra la nuova e svanisce.
+  let telaDissolvenza: HTMLCanvasElement | null = null;
+  let dissolvenza: { inizio: number } | null = null;
+  let disegnata = false;
+
+  function chiudiDissolvenza(): void {
+    if (!dissolvenza) return;
+    dissolvenza = null;
+    // Si libera la memoria dell'immagine, la tela si riusa al prossimo cambio.
+    if (telaDissolvenza) telaDissolvenza.width = telaDissolvenza.height = 0;
+  }
+
+  function avviaDissolvenza(): void {
+    chiudiDissolvenza();
+    if (!disegnata || volo || menoMovimento?.matches || canvas.width <= 1) return;
+    try {
+      const tela = telaDissolvenza ?? document.createElement('canvas');
+      tela.width = canvas.width;
+      tela.height = canvas.height;
+      const c = tela.getContext('2d');
+      if (!c) return;
+      c.drawImage(canvas, 0, 0);
+      telaDissolvenza = tela;
+      dissolvenza = { inizio: performance.now() };
+    } catch {
+      dissolvenza = null;
+    }
+  }
+
   function passo(ora: number): void {
     fotogramma = 0;
     if (!vivo) return;
@@ -171,8 +226,11 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
         fotogramma = requestAnimationFrame(passo);
       }
     }
+    if (dissolvenza && volo) chiudiDissolvenza();
+    if (dissolvenza) daDisegnare = true;
     if (!daDisegnare) return;
     daDisegnare = false;
+    disegnata = true;
     disegnatore.disegna(ctx, {
       camera,
       vista,
@@ -183,6 +241,18 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
       landmarkSopra,
       area,
     });
+    if (dissolvenza && telaDissolvenza) {
+      const t = (ora - dissolvenza.inizio) / DURATA_DISSOLVENZA;
+      if (t >= 1 || telaDissolvenza.width !== canvas.width || telaDissolvenza.height !== canvas.height) {
+        chiudiDissolvenza();
+      } else {
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.globalAlpha = 1 - Math.max(0, t);
+        ctx.drawImage(telaDissolvenza, 0, 0);
+        ctx.globalAlpha = 1;
+        if (!fotogramma) fotogramma = requestAnimationFrame(passo);
+      }
+    }
   }
 
   // --- indirizzo --------------------------------------------------------------
@@ -468,6 +538,10 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
 
   // --- avvio ------------------------------------------------------------------
 
+  const bloccata = luceDiProva();
+  if (bloccata) disegnatore.impostaLuce(bloccata);
+  canvas.dataset.luce = disegnatore.luce;
+
   misura();
   const daHash = leggiHash(window.location.hash);
   camera = limitaCamera(daHash ? daHash.camera : cameraIniziale(), area, zoomMinimo, ZOOM_MASSIMO);
@@ -523,9 +597,22 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
       evidenziata = storia;
       richiedi();
     },
+    impostaLuce(luce) {
+      if (!vivo || bloccata || luce === disegnatore.luce || !LUCI.includes(luce)) return;
+      avviaDissolvenza();
+      if (!disegnatore.impostaLuce(luce)) {
+        chiudiDissolvenza();
+        return;
+      }
+      canvas.dataset.luce = luce;
+      richiedi();
+    },
     distruggi() {
       if (!vivo) return;
       vivo = false;
+      chiudiDissolvenza();
+      telaDissolvenza = null;
+      delete canvas.dataset.luce;
       if (fotogramma) cancelAnimationFrame(fotogramma);
       fotogramma = 0;
       window.clearTimeout(timerHash);

@@ -27,11 +27,11 @@ export function dopoMezzogiornoSolare(quando: Date): boolean {
 
 /**
  * Luce di questo momento: 'notte' con il sole più di 4 gradi sotto l'orizzonte; 'pomeriggio'
- * quando il sole scende ed è sotto i 25 gradi; altrimenti 'giorno'.
+ * quando il sole scende ed è sotto i 14 gradi (le ultime due ore circa di luce); altrimenti 'giorno'.
  */
 export function luceAdesso(quando: Date): Luce {
   const altezza = altezzaSole(quando);
   if (altezza < -4) return 'notte';
-  if (dopoMezzogiornoSolare(quando) && altezza < 25) return 'pomeriggio';
+  if (dopoMezzogiornoSolare(quando) && altezza < 14) return 'pomeriggio';
   return 'giorno';
 }

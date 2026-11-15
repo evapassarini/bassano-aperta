@@ -3,6 +3,7 @@
 // i browser lo disegnano uguale) e poi lo si tiene pronto come immagine.
 
 import type { Landmark } from '../types';
+import { PALETTE, type TintaIllustrazioni } from './palette';
 
 /** Lato della maschera di opacità usata per i clic. */
 const MASCHERA = 48;
@@ -25,6 +26,31 @@ export interface Illustrazione {
   larghezzaCopia: number;
   /** Opacità campionata su una griglia MASCHERA x MASCHERA; null se non disponibile. */
   maschera: Uint8Array | null;
+  /**
+   * Solo per i disegni che contengono una pezza d'acqua (il Brenta sotto il Ponte Vecchio): il
+   * disegno senza la pezza e la pezza da sola. Servono quando la luce cambia, perché la pezza
+   * deve prendere il colore dell'acqua della mappa e non quello del giorno scurito dal velo.
+   */
+  senzaAcqua: HTMLImageElement | null;
+  soloAcqua: HTMLImageElement | null;
+}
+
+/**
+ * Separa da un SVG le pezze d'acqua: gli elementi chiusi in se stessi con `fill` uguale al
+ * colore dell'acqua di giorno. Restituisce null se non ce ne sono. Le pezze devono stare fuori
+ * da gruppi con trasformazioni (negli SVG di oggi è così).
+ */
+export function separaAcqua(testo: string): { senza: string; solo: string } | null {
+  const apertura = /<svg\b[^>]*>/i.exec(testo);
+  if (!apertura) return null;
+  const colore = PALETTE.aree.acqua.replace('#', '\\#');
+  const pezza = new RegExp(`<(?:path|polygon|rect|ellipse|circle)\\b[^>]*\\sfill="${colore}"[^>]*/>`, 'gi');
+  const pezze = testo.match(pezza);
+  if (!pezze) return null;
+  return {
+    senza: testo.replace(pezza, ''),
+    solo: apertura[0] + pezze.join('') + '</svg>',
+  };
 }
 
 /** Legge larghezza e altezza del disegno e gli impone una dimensione esplicita. */
@@ -64,6 +90,9 @@ export class Illustrazioni {
   readonly elenco: Illustrazione[];
   private readonly indirizzi: string[] = [];
   private vivo = true;
+  private tinta: TintaIllustrazioni | null = null;
+  /** Tela d'appoggio per la luce calda e per l'acqua, riusata. */
+  private telaLuce: HTMLCanvasElement | null = null;
 
   constructor(
     landmark: Landmark[],
@@ -78,6 +107,8 @@ export class Illustrazioni {
       copia: null,
       larghezzaCopia: 0,
       maschera: null,
+      senzaAcqua: null,
+      soloAcqua: null,
     }));
     landmark.forEach((l, i) => {
       void this.carica(i, cartella + l.file);
@@ -96,6 +127,11 @@ export class Illustrazioni {
         proporzione = pulito.proporzione;
         sorgente = URL.createObjectURL(new Blob([pulito.testo], { type: 'image/svg+xml' }));
         this.indirizzi.push(sorgente);
+        const parti = separaAcqua(pulito.testo);
+        if (parti && this.vivo) {
+          this.caricaParte(voce, 'senzaAcqua', parti.senza);
+          this.caricaParte(voce, 'soloAcqua', parti.solo);
+        }
       }
     } catch {
       // Se la lettura come testo non riesce si prova comunque a caricarlo come immagine.
@@ -122,6 +158,21 @@ export class Illustrazioni {
       voce.fallita = true;
     };
     immagine.src = sorgente;
+  }
+
+  /** Carica una delle due parti di un disegno con l'acqua; quando arriva, la copia si rifà. */
+  private caricaParte(voce: Illustrazione, quale: 'senzaAcqua' | 'soloAcqua', testo: string): void {
+    const indirizzo = URL.createObjectURL(new Blob([testo], { type: 'image/svg+xml' }));
+    this.indirizzi.push(indirizzo);
+    const immagine = new Image();
+    immagine.decoding = 'async';
+    immagine.onload = () => {
+      if (!this.vivo) return;
+      voce[quale] = immagine;
+      voce.larghezzaCopia = 0;
+      if (voce.pronta && this.tinta) this.alCarico();
+    };
+    immagine.src = indirizzo;
   }
 
   private campiona(immagine: HTMLImageElement): Uint8Array | null {
@@ -187,7 +238,12 @@ export class Illustrazioni {
         const ctx = tela.getContext('2d');
         if (!ctx) return voce.immagine;
         ctx.clearRect(0, 0, larghezza, altezza);
-        ctx.drawImage(voce.immagine, 0, 0, larghezza, altezza);
+        if (this.tinta) {
+          const diviso = voce.senzaAcqua && voce.soloAcqua;
+          this.intona(ctx, diviso ? voce.senzaAcqua! : voce.immagine, larghezza, altezza, this.tinta);
+          if (diviso) this.stendiAcqua(ctx, voce.soloAcqua!, larghezza, altezza, this.tinta.acqua);
+        }
+        else ctx.drawImage(voce.immagine, 0, 0, larghezza, altezza);
         voce.copia = tela;
         voce.larghezzaCopia = larghezza;
       } catch {
@@ -197,6 +253,102 @@ export class Illustrazioni {
     return voce.copia;
   }
 
+  /**
+   * Cambia il modo in cui i disegni si intonano alla luce della mappa (null: come sono).
+   * Le copie già pronte vengono rifatte alla prossima richiesta, una volta sola, sulla
+   * stessa tela: non si accumula memoria.
+   */
+  impostaTinta(tinta: TintaIllustrazioni | null): void {
+    const a = this.tinta;
+    if (tinta?.velo === a?.velo && tinta?.luce === a?.luce && tinta?.acqua === a?.acqua) return;
+    this.tinta = tinta;
+    for (const voce of this.elenco) voce.larghezzaCopia = 0;
+  }
+
+  /**
+   * Disegna l'illustrazione intonata: velo su tutto il disegno e, se serve, una luce calda dal
+   * basso sulle sole parti piene.
+   *
+   * Il velo si moltiplica su fondo nero pieno, non sul disegno trasparente: su un fondo
+   * trasparente la moltiplicazione lascia ai punti semitrasparenti (le ombre a terra degli SVG)
+   * quasi il colore del velo, e di notte l'ombra del ponte sull'acqua diventava una fascia
+   * chiara. Così invece le ombre restano ombre, anzi un poco più scure.
+   */
+  private intona(
+    ctx: CanvasRenderingContext2D,
+    immagine: HTMLImageElement,
+    larghezza: number,
+    altezza: number,
+    tinta: TintaIllustrazioni,
+  ): void {
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, larghezza, altezza);
+    ctx.drawImage(immagine, 0, 0, larghezza, altezza);
+    ctx.globalCompositeOperation = 'multiply';
+    ctx.fillStyle = tinta.velo;
+    ctx.fillRect(0, 0, larghezza, altezza);
+    // Si ritaglia sulla sagoma del disegno: il fondo nero sparisce.
+    ctx.globalCompositeOperation = 'destination-in';
+    ctx.drawImage(immagine, 0, 0, larghezza, altezza);
+    ctx.globalCompositeOperation = 'source-over';
+    if (!tinta.luce) return;
+    // La luce si prepara a parte e si ritaglia tre volte sul disegno: resta piena dove il
+    // disegno è pieno e quasi sparisce sulle ombre a terra, che non devono schiarirsi.
+    const tela = this.appoggio(larghezza, altezza);
+    const c = tela.getContext('2d');
+    if (!c) return;
+    const cy = altezza * 0.72;
+    const raggio = Math.max(larghezza * 0.42, altezza * 0.5);
+    const luce = c.createRadialGradient(larghezza / 2, cy, 0, larghezza / 2, cy, raggio);
+    luce.addColorStop(0, tinta.luce);
+    luce.addColorStop(0.55, tinta.luce.replace(/[\d.]+\)$/, '0.1)'));
+    luce.addColorStop(1, tinta.luce.replace(/[\d.]+\)$/, '0)'));
+    c.fillStyle = luce;
+    c.fillRect(0, 0, larghezza, altezza);
+    c.globalCompositeOperation = 'destination-in';
+    for (let k = 0; k < 3; k++) c.drawImage(immagine, 0, 0, larghezza, altezza);
+    c.globalCompositeOperation = 'source-over';
+    ctx.globalCompositeOperation = 'source-atop';
+    ctx.drawImage(tela, 0, 0);
+    ctx.globalCompositeOperation = 'source-over';
+    // La tela d'appoggio non tiene memoria tra un disegno e l'altro.
+    tela.width = 1;
+    tela.height = 1;
+  }
+
+  /** Mette sotto il disegno la pezza d'acqua, nel colore dell'acqua della mappa. */
+  private stendiAcqua(
+    ctx: CanvasRenderingContext2D,
+    pezza: HTMLImageElement,
+    larghezza: number,
+    altezza: number,
+    colore: string,
+  ): void {
+    const tela = this.appoggio(larghezza, altezza);
+    const c = tela.getContext('2d');
+    if (!c) return;
+    c.drawImage(pezza, 0, 0, larghezza, altezza);
+    c.globalCompositeOperation = 'source-in';
+    c.fillStyle = colore;
+    c.fillRect(0, 0, larghezza, altezza);
+    c.globalCompositeOperation = 'source-over';
+    ctx.globalCompositeOperation = 'destination-over';
+    ctx.drawImage(tela, 0, 0);
+    ctx.globalCompositeOperation = 'source-over';
+    tela.width = 1;
+    tela.height = 1;
+  }
+
+  /** La tela d'appoggio, vuota e della misura chiesta. */
+  private appoggio(larghezza: number, altezza: number): HTMLCanvasElement {
+    const tela = this.telaLuce ?? document.createElement('canvas');
+    this.telaLuce = tela;
+    tela.width = larghezza;
+    tela.height = altezza;
+    return tela;
+  }
+
   distruggi(): void {
     this.vivo = false;
     for (const u of this.indirizzi) URL.revokeObjectURL(u);
@@ -204,7 +356,10 @@ export class Illustrazioni {
     for (const voce of this.elenco) {
       voce.immagine = null;
       voce.copia = null;
+      voce.senzaAcqua = null;
+      voce.soloAcqua = null;
       voce.pronta = false;
     }
+    this.telaLuce = null;
   }
 }

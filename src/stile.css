@@ -42,6 +42,8 @@
   --piano-elenco: 30;
 
   --margine: 16px;
+  /* Larghezza della colonna di sinistra: testata e strati in alto, aria e luce in basso. */
+  --colonna: 276px;
 }
 
 /* ---------------------------------------------------------------------------
@@ -78,6 +80,16 @@ body {
 #mappa:focus-visible {
   outline: 3px solid var(--fuoco);
   outline-offset: -3px;
+}
+
+/* Di notte la mappa è scura e il blu del fuoco non basta: dentro la cornice blu ce n'è una
+   chiara, così il fuoco si vede con ogni luce. */
+#mappa:focus-visible ~ #ui::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 2px solid var(--foglio);
+  pointer-events: none;
 }
 
 /* Messaggio a tutta pagina per chi avvia: caricamento, errore, niente JavaScript. */
@@ -260,7 +272,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 276px;
+  width: var(--colonna);
   max-height: calc(100% - var(--margine) * 2);
 }
 
@@ -429,14 +441,23 @@ body {
    Zoom e aiuto per la tastiera
 --------------------------------------------------------------------------- */
 
+/* Lo zoom sta in basso a destra. Se si apre la finestra, si sposta appena alla sua sinistra. */
 .zoom {
   position: absolute;
-  left: var(--margine);
+  right: var(--margine);
   bottom: var(--margine);
   z-index: var(--piano-controlli);
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+.ba[data-finestra='storia'] .zoom {
+  right: calc(var(--margine) * 2 + clamp(380px, 36vw, 500px));
+}
+
+.ba[data-finestra='punto'] .zoom {
+  right: calc(var(--margine) * 2 + 372px);
 }
 
 .bottone-zoom {
@@ -447,13 +468,15 @@ body {
   box-shadow: var(--ombra-foglio);
 }
 
+/* Sta tra il gruppo in basso a sinistra e lo zoom, senza coprirli. */
 .aiuto-tasti {
   position: absolute;
-  left: 50%;
+  left: calc(var(--margine) + var(--colonna) + 12px);
+  right: calc(var(--margine) + 44px + 12px);
   bottom: var(--margine);
   z-index: var(--piano-controlli);
   display: none;
-  max-width: calc(100% - 140px);
+  width: fit-content;
   margin: 0;
   padding: 8px 14px;
   border: 1px solid var(--bordo-forte);
@@ -462,7 +485,6 @@ body {
   box-shadow: var(--ombra-foglio);
   font-size: 0.875rem;
   line-height: 1.35;
-  transform: translateX(-50%);
   pointer-events: none;
 }
 
@@ -474,6 +496,192 @@ body {
   padding: 4px 12px 0;
   color: var(--seppia);
   font-size: 0.8125rem;
+}
+
+/* ---------------------------------------------------------------------------
+   In basso a sinistra: la qualità dell'aria in breve e la luce della mappa.
+   Restano di carta chiara con ogni luce: di notte è la mappa a scurirsi, non i pannelli.
+--------------------------------------------------------------------------- */
+
+.in-basso {
+  position: absolute;
+  left: var(--margine);
+  bottom: var(--margine);
+  z-index: var(--piano-controlli);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: var(--colonna);
+}
+
+.aria-breve {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 5px 12px 6px;
+  border: 1px solid var(--bordo);
+  border-radius: 8px;
+  background: var(--foglio);
+  box-shadow: var(--ombra-foglio);
+  color: var(--inchiostro);
+  font-size: 0.8125rem;
+  line-height: 1.3;
+  text-align: left;
+  transition: background-color 0.15s;
+}
+
+button.aria-breve:hover {
+  background: var(--foglio-ombra);
+}
+
+.aria-breve-corpo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.aria-breve-testa {
+  color: var(--seppia);
+  font-weight: 600;
+  font-size: 0.6875rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* La fotografia non recente si dichiara: scritta normale, in cotto. */
+.aria-breve-foto {
+  color: var(--cotto-scuro);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.aria-breve-valore {
+  font-weight: 700;
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.aria-breve-quando,
+.aria-breve-manca {
+  color: var(--seppia);
+}
+
+.luce {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--bordo);
+  border-radius: 8px;
+  background: var(--foglio);
+  box-shadow: var(--ombra-foglio);
+}
+
+.luce-scelta {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  /* Come gli altri comandi sulla mappa: almeno 44 px sotto il dito. */
+  min-height: 44px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--inchiostro);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  line-height: 1.15;
+  white-space: nowrap;
+  transition: background-color 0.15s;
+}
+
+.luce-scelta:hover {
+  background: var(--foglio-ombra);
+}
+
+.luce-scelta[aria-checked='true'] {
+  background: var(--seppia);
+  color: #fffaf0;
+}
+
+/* "Adesso · notte": la luce in corso sta sotto il nome, piccola. Il puntino serve solo a chi ascolta. */
+.luce-in-corso {
+  font-weight: 500;
+  font-size: 0.6875rem;
+}
+
+.luce-in-corso:empty {
+  display: none;
+}
+
+.luce-punto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Il fuoco resta dentro il pannello chiaro: si vede anche sulla scelta piena. */
+.ba .luce-scelta:focus-visible {
+  position: relative;
+  z-index: 1;
+  outline: 2px solid var(--fuoco);
+  outline-offset: 1px;
+  box-shadow: 0 0 0 1px var(--foglio);
+}
+
+/* I comandi che galleggiano sulla mappa: attorno al segno del fuoco c'è un bordo di carta,
+   così si vede anche quando la mappa è scura. */
+.ba .controlli :focus-visible,
+.ba .zoom :focus-visible,
+.ba .aria-breve:focus-visible {
+  box-shadow: 0 0 0 6px var(--foglio);
+}
+
+/* Finestra larga e alta abbastanza: testata e strati non scendono mai sopra aria e luce.
+   Se manca il posto (testo molto ingrandito) è la colonna in alto a scorrere. */
+@media (min-width: 720px) and (min-height: 36em) {
+  .controlli {
+    max-height: calc(100% - var(--margine) * 2 - 8.5rem);
+    overflow-y: auto;
+    /* Il posto per l'ombra dei fogli e per il segno del fuoco, che lo scorrimento taglierebbe. */
+    margin: -8px;
+    padding: 8px;
+    width: calc(var(--colonna) + 16px);
+  }
+}
+
+/* Finestra larga ma bassa (telefono coricato, portatile piccolo, testo ingrandito): la colonna
+   di sinistra non basta per tutto, aria e luce si spostano accanto, e lasciano il posto alla
+   finestra quando si apre. La soglia è in em: cresce insieme al testo, come i pannelli. */
+@media (min-width: 720px) and (max-height: 35.99em) {
+  .in-basso {
+    left: calc(var(--margine) + var(--colonna) + 10px);
+  }
+
+  .ba-finestra-aperta .in-basso {
+    visibility: hidden;
+  }
+
+  .aiuto-tasti {
+    left: var(--margine);
+    bottom: calc(var(--margine) + 116px);
+  }
+}
+
+/* Finestra stretta con il racconto aperto: a destra non c'è posto, lo zoom va sopra aria e luce. */
+@media (min-width: 720px) and (max-width: 819px) and (min-height: 36em) {
+  .ba.ba-finestra-aperta .zoom {
+    right: auto;
+    left: var(--margine);
+    bottom: calc(var(--margine) + 114px);
+    flex-direction: row;
+  }
 }
 
 /* ---------------------------------------------------------------------------
@@ -1810,17 +2018,43 @@ body {
     bottom: calc(var(--margine) + env(safe-area-inset-bottom, 0px));
   }
 
-  /* Lo zoom sta a destra, sopra il pollice dell'altra mano. */
-  .zoom {
+  /* Sopra le azioni, sempre a sinistra: l'aria, e sotto la luce. A destra resta il posto per lo zoom. */
+  .in-basso {
     position: fixed;
-    left: auto;
+    bottom: calc(var(--margine) + 44px + 6px + env(safe-area-inset-bottom, 0px));
+    gap: 6px;
+    /* Tutta la larghezza che resta accanto allo zoom: le quattro scelte della luce si allargano. */
+    width: calc(100% - var(--margine) * 2 - 44px - 8px);
+    max-width: 360px;
+  }
+
+  .aria-breve {
+    padding-inline: 10px;
+  }
+
+  .luce-scelta {
+    padding: 0 5px;
+  }
+
+  /* Lo zoom sta a destra, sopra il pollice dell'altra mano. */
+  .zoom,
+  .ba[data-finestra] .zoom {
+    position: fixed;
     right: var(--margine);
     bottom: calc(var(--margine) + env(safe-area-inset-bottom, 0px));
   }
 
+  /* Con il foglio aperto la mappa è quasi tutta coperta: aria, luce e zoom tornano alla chiusura. */
+  .ba-finestra-aperta .in-basso,
+  .ba-finestra-aperta .zoom {
+    visibility: hidden;
+  }
+
   .aiuto-tasti {
-    bottom: calc(var(--margine) + 56px + env(safe-area-inset-bottom, 0px));
-    max-width: calc(100% - 2 * var(--margine));
+    left: var(--margine);
+    right: var(--margine);
+    bottom: calc(var(--margine) + 156px + env(safe-area-inset-bottom, 0px));
+    margin-inline: auto;
   }
 
   .elenco {
@@ -1936,6 +2170,8 @@ body {
   .strato-leva::after,
   .galleria-voce img,
   .video-segno,
+  .aria-breve,
+  .luce-scelta,
   .bottone {
     transition: none;
   }
@@ -1948,5 +2184,13 @@ body {
 
   .adesso-puntino {
     animation: none;
+  }
+}
+
+/* Schermi molto stretti: le quattro scelte della luce si stringono, ma restano alte 44 px. */
+@media (max-width: 359px) {
+  .luce-scelta {
+    padding: 0 3px;
+    font-size: 0.75rem;
   }
 }

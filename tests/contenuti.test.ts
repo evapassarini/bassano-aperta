@@ -1,12 +1,12 @@
 // Controlla dati e contenuti veri contro i contratti di src/types.ts:
-// storie, strati, luoghi simbolo, mappa di base, aria, avvisi sulla viabilità, stazioni dei treni.
+// storie, strati, luoghi simbolo, mappa di base, lampioni, aria, avvisi sulla viabilità, stazioni dei treni.
 
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { RIQUADRO } from '../src/types';
-import type { DatiAria, DatiAvvisi, DatiBase, DatiStrati, Landmark, Storia } from '../src/types';
+import type { DatiAria, DatiAvvisi, DatiBase, DatiLampioni, DatiStrati, Landmark, Storia } from '../src/types';
 import { lonLatInMetri } from '../src/map/proiezione';
 
 const RADICE = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -18,6 +18,7 @@ const storie = fileStorie.map((f) => ({ file: f, storia: leggi<Storia>(`${CARTEL
 const idStorie = new Set(storie.map((s) => s.storia.id));
 const strati = leggi<DatiStrati>('public/data/strati.json');
 const base = leggi<DatiBase>('public/data/base.json');
+const lampioni = leggi<DatiLampioni>('public/data/lampioni.json');
 const aria = leggi<DatiAria>('public/data/aria.json');
 const avvisi = leggi<DatiAvvisi>('public/data/avvisi.json');
 const stazioniTreni = leggi<{
@@ -223,6 +224,30 @@ describe('mappa di base (public/data/base.json)', () => {
     for (const a of base.aree) if (!tipiA.has(a.t) || a.p.length < 6 || !piattoNelRiquadro(a.p)) errati++;
     if (!piattoNelRiquadro(base.alberi)) errati++;
     expect(errati).toBe(0);
+  });
+});
+
+describe('lampioni (public/data/lampioni.json)', () => {
+  it('ha data, fonte che dichiara i lampioni illustrativi e solo le chiavi previste', () => {
+    expect(Object.keys(lampioni).sort()).toEqual(['fonte', 'generato', 'p', 'veri']);
+    expect(Number.isNaN(Date.parse(lampioni.generato))).toBe(false);
+    expect(stringa(lampioni.fonte)).toBe(true);
+    expect(lampioni.fonte).toContain('illustrativ');
+    if (lampioni.veri > 0) expect(lampioni.fonte).toContain('OpenStreetMap');
+    // Regole editoriali: niente trattini lunghi.
+    expect(/[\u2013\u2014]/.test(lampioni.fonte)).toBe(false);
+  });
+
+  it('ha coppie di numeri in metri dentro il riquadro, con i veri per primi e in minoranza', () => {
+    expect(Array.isArray(lampioni.p)).toBe(true);
+    expect(lampioni.p.length % 2).toBe(0);
+    expect(lampioni.p.length).toBeGreaterThan(0);
+    expect(lampioni.p.every((n) => numero(n))).toBe(true);
+    expect(piattoNelRiquadro(lampioni.p)).toBe(true);
+    expect(Number.isInteger(lampioni.veri) && lampioni.veri >= 0).toBe(true);
+    expect(lampioni.veri).toBeLessThanOrEqual(lampioni.p.length / 2);
+    // La mappa regge qualche migliaio di lampioni: oltre va diradato lo script.
+    expect(lampioni.p.length / 2).toBeLessThanOrEqual(10000);
   });
 });
 

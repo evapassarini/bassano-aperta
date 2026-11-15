@@ -4,7 +4,7 @@ import './stile.css';
 import { creaMappa } from './map/index';
 import { lonLatInMetri } from './map/proiezione';
 import { RIQUADRO } from './types';
-import type { DatiBase, DatiStrati, Landmark, LonLat, Punto, Storia } from './types';
+import type { DatiBase, DatiLampioni, DatiStrati, Landmark, LonLat, Punto, Storia } from './types';
 import { creaUI } from './ui/index';
 
 const BASE = import.meta.env.BASE_URL;
@@ -60,6 +60,21 @@ async function puntiPersonali(): Promise<Punto[]> {
   }
 }
 
+/**
+ * I lampioni servono solo alla luce della notte: se il file manca o è rovinato la mappa parte
+ * lo stesso, con la notte buia.
+ */
+async function lampioni(): Promise<DatiLampioni | undefined> {
+  try {
+    const risposta = await fetch(BASE + 'data/lampioni.json');
+    if (!risposta.ok) return undefined;
+    const dati = (await risposta.json()) as DatiLampioni;
+    return Array.isArray(dati.p) && dati.p.length % 2 === 0 ? dati : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 /** Per quanto il luogo resta evidenziato dopo la chiusura del suo racconto. */
 const DURATA_EVIDENZA_MS = 8000;
 
@@ -91,10 +106,11 @@ async function avvia(): Promise<void> {
     const radice = document.getElementById('ui');
     if (!(canvas instanceof HTMLCanvasElement) || !radice) throw new Error('La pagina è incompleta.');
 
-    const [base, strati, landmark] = await Promise.all([
+    const [base, strati, landmark, datiLampioni] = await Promise.all([
       scarica<DatiBase>('data/base.json', 'la mappa di base'),
       scarica<DatiStrati>('data/strati.json', 'gli strati della mappa'),
       scarica<Landmark[]>('landmarks/indice.json', "l'elenco dei luoghi simbolo"),
+      lampioni(),
     ]);
 
     strati.punti.push(...(await puntiPersonali()));
@@ -114,6 +130,7 @@ async function avvia(): Promise<void> {
       base,
       strati,
       landmark,
+      lampioni: datiLampioni?.p,
       alClic: (bersaglio) => {
         if (!bersaglio) return;
         if (bersaglio.storia && conosciute.has(bersaglio.storia)) ui.apriStoria(bersaglio.storia);
@@ -123,6 +140,11 @@ async function avvia(): Promise<void> {
 
     // La data della mappa di base e gli indirizzi del progetto servono a "Fonti e licenze".
     radice.dataset.baseGenerato = base.generato;
+    // Quanti lampioni sono rilevati e quanti illustrativi: lo dice «Fonti e licenze».
+    if (datiLampioni && Number.isInteger(datiLampioni.veri)) {
+      radice.dataset.lampioniVeri = String(datiLampioni.veri);
+      radice.dataset.lampioniTutti = String(datiLampioni.p.length / 2);
+    }
 
     const ui = creaUI({
       radice,
@@ -131,6 +153,8 @@ async function avvia(): Promise<void> {
       alCambioStrato: (id, visibile) => mappa.mostraStrato(id, visibile),
       alVaiA: (ll) => mappa.vaiA(dentroIlRiquadro(ll)),
       alloZoom: (fattore) => mappa.zooma(fattore),
+      // La prima chiamata arriva subito, dentro creaUI: la mappa esiste già.
+      alCambioLuce: (luce) => mappa.impostaLuce(luce),
       // Chiuso il racconto, il luogo resta acceso ancora un po': su telefono la finestra
       // copriva la mappa, e così si capisce quale luogo si è appena letto.
       allaChiusura: () => {
@@ -163,6 +187,13 @@ async function avvia(): Promise<void> {
     mappa.mostraStrato('mobilita', false);
 
     avviso?.remove();
+
+    // In sviluppo, quando Vite ricarica questo modulo, mappa e interfaccia vecchie si fermano:
+    // senza, resterebbero accesi i loro timer e i loro ascoltatori.
+    import.meta.hot?.dispose(() => {
+      ui.distruggi();
+      mappa.distruggi();
+    });
   } catch (errore) {
     mostraErrore(avviso, errore);
   }

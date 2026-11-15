@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   colpisceMarcatore,
   dentroSprite,
@@ -16,8 +16,17 @@ import {
 } from '../src/map/bersagli';
 import type { Marcatore, Sprite } from '../src/map/bersagli';
 import { formattaHash, hashDellaMappa, leggiHash } from '../src/map/indirizzo';
-import { normalizzaSvg } from '../src/map/immagini';
-import { PALETTE, sfuma } from '../src/map/palette';
+import { normalizzaSvg, separaAcqua } from '../src/map/immagini';
+import { Disegnatore, aloniInVista, quotaAloni, ZOOM_ALONI } from '../src/map/disegno';
+import type { Illustrazioni } from '../src/map/immagini';
+import {
+  luminanza,
+  PALETTE,
+  PALETTE_NOTTE,
+  PALETTE_PER_LUCE,
+  PALETTE_POMERIGGIO,
+  sfuma,
+} from '../src/map/palette';
 import { isoInSchermo, metriInIso, riquadroVisibile } from '../src/map/proiezione';
 import type { Camera, Vista } from '../src/map/proiezione';
 import {
@@ -28,8 +37,10 @@ import {
   eConvesso,
   EL_ALBERO,
   EL_EDIFICIO,
+  EL_LAMPIONE,
   EL_LANDMARK,
   Griglia,
+  lampioniNellaZona,
   livelloDettaglio,
   MURO_DESTRO,
   MURO_DIETRO,
@@ -38,6 +49,7 @@ import {
   ordinaMuri,
   ordinePerProfondita,
   preparaEdificio,
+  preparaLampioni,
   preparaLandmark,
   profonditaImpronta,
   raggruppaInTessere,
@@ -581,6 +593,380 @@ describe('contorno', () => {
     expect(b?.testo).toContain('width="1024" height="512"');
     expect(b?.testo).not.toContain('width="200"');
     expect(normalizzaSvg('<div/>')).toBeNull();
+  });
+});
+
+describe('luce: le tre tavolozze', () => {
+  /** Tutte le chiavi di un oggetto, annidate, con il tipo del valore e la lunghezza degli elenchi. */
+  const forma = (v: unknown, prefisso = ''): string[] => {
+    if (Array.isArray(v)) return [`${prefisso}[${v.length}]`];
+    if (v !== null && typeof v === 'object') {
+      return Object.entries(v)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .flatMap(([k, w]) => forma(w, prefisso + '.' + k));
+    }
+    // null (nessun velo sui disegni, di giorno) conta come oggetto mancante: si guarda solo il nome.
+    return [prefisso + ':' + (v === null ? 'oggetto' : typeof v)];
+  };
+  const senzaVelo = (righe: string[]): string[] => righe.filter((r) => !r.startsWith('.illustrazioni'));
+
+  it('hanno le stesse chiavi e gli elenchi della stessa lunghezza', () => {
+    expect(Object.keys(PALETTE_PER_LUCE).sort()).toEqual(['giorno', 'notte', 'pomeriggio']);
+    expect(Object.keys(PALETTE_POMERIGGIO).sort()).toEqual(Object.keys(PALETTE).sort());
+    expect(Object.keys(PALETTE_NOTTE).sort()).toEqual(Object.keys(PALETTE).sort());
+    expect(senzaVelo(forma(PALETTE_POMERIGGIO))).toEqual(senzaVelo(forma(PALETTE)));
+    expect(senzaVelo(forma(PALETTE_NOTTE))).toEqual(senzaVelo(forma(PALETTE)));
+  });
+
+  it('ogni colore è scritto in un modo che il canvas capisce', () => {
+    const colori = (v: unknown): string[] =>
+      typeof v === 'string' ? [v] : v !== null && typeof v === 'object' ? Object.values(v).flatMap(colori) : [];
+    for (const p of Object.values(PALETTE_PER_LUCE)) {
+      for (const c of colori(p)) {
+        if (c === '') continue;
+        expect(c).toMatch(/^(#[0-9a-f]{6}|rgba\(\d+, \d+, \d+, [\d.]+\))$/);
+      }
+    }
+  });
+
+  it('il giorno è quello di sempre', () => {
+    expect(PALETTE_PER_LUCE.giorno).toBe(PALETTE);
+    expect(PALETTE.carta).toBe('#f6ecd6');
+    expect(PALETTE.seppia).toBe('#6b4f3a');
+    expect(PALETTE.aree.acqua).toBe('#7fb8ad');
+    expect(PALETTE.acquaChiara).toBe('#a5d2c6');
+    expect(PALETTE.strade.principale).toEqual({ riempimento: '#fff6e0', bordo: '#bfa27c' });
+    expect(PALETTE.tetti).toEqual(['#c8643c', '#bd5a35', '#d17447', '#c46a48', '#b9553a', '#cf7f55', '#c26040']);
+    expect(PALETTE.intonaci[0]).toBe('#f1dcae');
+    expect(PALETTE.edificiLontani).toBe('#cf8a66');
+    expect(PALETTE.ombra).toBe('rgba(84, 62, 42, 0.18)');
+    expect(PALETTE.etichetta).toBe('#3d2c20');
+    expect(PALETTE.etichettaAlone).toBe('#fbf4e3');
+    // Di giorno le pareti hanno il chiaroscuro di prima e nulla è acceso o velato.
+    expect(PALETTE.muri).toEqual({ chiaro: 0.1, scuro: -0.17 });
+    expect(PALETTE.ombraLunga).toBe(1);
+    expect(PALETTE.sfondo).toBe(PALETTE.carta);
+    expect(PALETTE.lampioni.accesi).toBe(false);
+    expect(PALETTE.finestra).toBe('');
+    expect(PALETTE.illustrazioni).toBeNull();
+  });
+
+  const principali = (p: typeof PALETTE): string[] => [
+    p.carta,
+    p.sfondo,
+    ...Object.values(p.aree),
+    ...Object.values(p.strade).map((s) => s.riempimento),
+    ...p.tetti,
+    ...p.intonaci,
+    p.edificiLontani,
+    ...p.chiome,
+  ];
+  const media = (colori: string[]): number => colori.reduce((s, c) => s + luminanza(c), 0) / colori.length;
+
+  it('la notte è molto più scura del giorno, il pomeriggio poco', () => {
+    const giorno = media(principali(PALETTE));
+    const pomeriggio = media(principali(PALETTE_POMERIGGIO));
+    const notte = media(principali(PALETTE_NOTTE));
+    expect(notte).toBeLessThan(giorno * 0.45);
+    expect(pomeriggio).toBeLessThan(giorno);
+    expect(pomeriggio).toBeGreaterThan(giorno * 0.8);
+    // Ogni singolo colore della notte è più scuro del suo gemello di giorno.
+    const g = principali(PALETTE);
+    principali(PALETTE_NOTTE).forEach((c, i) => expect(luminanza(c)).toBeLessThan(luminanza(g[i])));
+  });
+
+  it('di notte la mappa resta leggibile', () => {
+    const N = PALETTE_NOTTE;
+    // Case più chiare della carta, strade più chiare della carta, Brenta più scuro.
+    for (const c of N.intonaci) expect(luminanza(c)).toBeGreaterThan(luminanza(N.carta) + 0.1);
+    for (const s of Object.values(N.strade)) {
+      expect(luminanza(s.riempimento)).toBeGreaterThan(luminanza(N.carta) + 0.06);
+    }
+    expect(luminanza(N.aree.acqua)).toBeLessThan(luminanza(N.carta));
+    // Scritte chiare su alone scuro, al contrario del giorno.
+    expect(luminanza(N.etichetta) - luminanza(N.etichettaAlone)).toBeGreaterThan(0.7);
+    expect(luminanza(PALETTE.etichettaAlone) - luminanza(PALETTE.etichetta)).toBeGreaterThan(0.7);
+    // I segnaposto non cambiano: si riconoscono dal colore dello strato.
+    expect(N.strati).toEqual(PALETTE.strati);
+    expect(PALETTE_POMERIGGIO.strati).toEqual(PALETTE.strati);
+    expect(N.lampioni.accesi).toBe(true);
+    expect(N.finestra).not.toBe('');
+  });
+
+  it('il pomeriggio è più caldo: meno blu, pareti più contrastate, ombre più lunghe', () => {
+    const blu = (c: string): number => parseInt(c.slice(5), 16);
+    const rosso = (c: string): number => parseInt(c.slice(1, 3), 16);
+    expect(blu(PALETTE_POMERIGGIO.carta)).toBeLessThan(blu(PALETTE.carta) - 20);
+    expect(rosso(PALETTE_POMERIGGIO.carta)).toBeGreaterThan(rosso(PALETTE.carta) - 8);
+    expect(blu(PALETTE_POMERIGGIO.aree.acqua)).toBeLessThan(blu(PALETTE.aree.acqua));
+    expect(PALETTE_POMERIGGIO.muri.scuro).toBeLessThan(PALETTE.muri.scuro);
+    expect(PALETTE_POMERIGGIO.ombraLunga).toBeGreaterThan(1.5);
+  });
+});
+
+describe('lampioni', () => {
+  const c = creaCittaFinta(300);
+  // Tre lampioni lungo una via, uno lontano, e una coppia rovinata che va scartata.
+  const metri = [0, 0, 30, 0, 60, 0, 400, -350, Number.NaN, 5];
+
+  it('proietta le posizioni e scarta quelle non valide', () => {
+    const p = preparaLampioni(metri);
+    expect(p.length).toBe(8);
+    for (let i = 0; i < 4; i++) {
+      const iso = metriInIso(metri[i * 2], metri[i * 2 + 1]);
+      expect(p[i * 2]).toBeCloseTo(iso.sx, 3);
+      expect(p[i * 2 + 1]).toBeCloseTo(iso.sy, 3);
+    }
+    expect(preparaLampioni(undefined).length).toBe(0);
+    expect(preparaLampioni([1, 2, 3]).length).toBe(2);
+  });
+
+  it('senza lampioni la scena è quella di prima', () => {
+    const scena = costruisciScena(c.base, c.strati, c.landmark);
+    expect(scena.lampioni.length).toBe(0);
+    expect(scena.elementi.n).toBe(scena.edifici.length + scena.alberi.length / 2 + scena.landmark.length);
+    expect(lampioniNellaZona(scena, { minX: -1e6, minY: -1e6, maxX: 1e6, maxY: 1e6 }).length).toBe(0);
+  });
+
+  it('con i lampioni: contati, in ordine di profondità tra le case, trovati per riquadro', () => {
+    const senza = costruisciScena(c.base, c.strati, c.landmark);
+    const scena = costruisciScena(c.base, c.strati, c.landmark, metri);
+    expect(scena.lampioni.length / 2).toBe(4);
+    const el = scena.elementi;
+    expect(el.n).toBe(senza.elementi.n + 4);
+    let contati = 0;
+    for (let i = 0; i < el.n; i++) {
+      if (el.tipo[i] === EL_LAMPIONE) contati++;
+      if (i > 0) expect(el.chiave[i]).toBeLessThanOrEqual(el.chiave[i - 1]);
+    }
+    expect(contati).toBe(4);
+    // La chiave di un lampione è x + y del suo piede.
+    for (let i = 0; i < el.n; i++) {
+      if (el.tipo[i] !== EL_LAMPIONE) continue;
+      const k = el.rif[i];
+      expect(el.chiave[i]).toBeCloseTo(metri[k * 2] + metri[k * 2 + 1], 2);
+    }
+
+    // Un riquadro stretto attorno ai primi due.
+    const a = metriInIso(0, 0);
+    const b = metriInIso(30, 0);
+    const zona = {
+      minX: Math.min(a.sx, b.sx) - 2,
+      maxX: Math.max(a.sx, b.sx) + 2,
+      minY: Math.min(a.sy, b.sy) - 2,
+      maxY: Math.max(a.sy, b.sy) + 2,
+    };
+    expect([...lampioniNellaZona(scena, zona)]).toEqual([0, 1]);
+    // La vista sul centro a zoom alto prende i tre della via e non quello lontano.
+    const camera: Camera = { x: 30, y: 0, zoom: 4 };
+    expect([...lampioniNellaZona(scena, riquadroVisibile(camera, vista))]).toEqual([0, 1, 2]);
+    expect(lampioniNellaZona(scena, { minX: 9000, minY: 9000, maxX: 9100, maxY: 9100 }).length).toBe(0);
+  });
+
+  it('regge diecimila lampioni', () => {
+    const tanti: number[] = [];
+    for (let i = 0; i < 10000; i++) tanti.push(((i * 37) % 1200) - 600, ((i * 91) % 1200) - 600);
+    const scena = costruisciScena(c.base, c.strati, c.landmark, tanti);
+    const inizio = performance.now();
+    let trovati = 0;
+    for (let i = 0; i < 200; i++) {
+      trovati += lampioniNellaZona(scena, riquadroVisibile({ x: (i % 20) * 20 - 200, y: 0, zoom: 3 }, vista)).length;
+    }
+    expect(trovati).toBeGreaterThan(0);
+    expect(performance.now() - inizio).toBeLessThan(400);
+  });
+});
+
+describe('aloni dei lampioni da lontano', () => {
+  const c = creaCittaFinta(50);
+  // Ottomila lampioni sparsi su circa 4 km, come nel file vero, in ordine di x come i primi del file.
+  const tanti: number[] = [];
+  for (let i = 0; i < 8000; i++) tanti.push((i / 8000) * 4000 - 2000, ((i * 7919) % 4000) - 2000);
+  const scena = costruisciScena(c.base, c.strati, c.landmark, tanti);
+  const accesi = (camera: Camera, v: Vista): Set<number> => {
+    const a = aloniInVista(scena, camera, v);
+    return new Set(a.indici.subarray(0, a.quanti));
+  };
+
+  it('la quota cresce con lo zoom senza scatti: metà da lontano, tutti da vicino', () => {
+    expect(quotaAloni(0.05)).toBe(0.5);
+    expect(quotaAloni(ZOOM_ALONI.pochi)).toBe(0.5);
+    expect(quotaAloni(ZOOM_ALONI.tutti)).toBe(1);
+    expect(quotaAloni(8)).toBe(1);
+    for (let z = 0.05; z < 1; z += 0.01) {
+      const salto = quotaAloni(z + 0.01) - quotaAloni(z);
+      expect(salto).toBeGreaterThanOrEqual(0);
+      expect(salto).toBeLessThan(0.03);
+    }
+  });
+
+  it('il rango è sparso in modo uniforme, anche tra lampioni vicini nel file', () => {
+    expect(scena.rangoLampioni.length).toBe(8000);
+    for (const [da, a] of [[0, 600], [600, 1200], [7000, 8000]]) {
+      let sotto = 0;
+      for (let i = da; i < a; i++) if (scena.rangoLampioni[i] < 0.5) sotto++;
+      expect(sotto / (a - da)).toBeGreaterThan(0.45);
+      expect(sotto / (a - da)).toBeLessThan(0.55);
+    }
+  });
+
+  it('trascinando la mappa restano accese le stesse luci', () => {
+    for (const [v, zoom] of [[{ larghezza: 1440, altezza: 800 }, 0.18], [{ larghezza: 390, altezza: 760 }, 0.06]] as [Vista, number][]) {
+      const prima = accesi({ x: 0, y: 0, zoom }, v);
+      // 40 pixel di trascinamento, in metri sul piano della mappa.
+      const dopo = accesi({ x: 40 / zoom, y: -40 / zoom, zoom }, v);
+      expect(prima.size).toBeGreaterThan(1000);
+      let comuni = 0;
+      for (const i of prima) if (dopo.has(i)) comuni++;
+      // Cambiano solo le luci che entrano o escono dal bordo.
+      expect(comuni / prima.size).toBeGreaterThan(0.9);
+      // E nessun lampione rimasto in vista si spegne o si accende.
+      const quota = quotaAloni(zoom);
+      for (const i of dopo) expect(scena.rangoLampioni[i]).toBeLessThan(quota);
+    }
+  });
+
+  it('cambiando zoom di poco cambia di poco anche il numero di luci', () => {
+    const v: Vista = { larghezza: 1440, altezza: 800 };
+    let prima = accesi({ x: 0, y: 0, zoom: 0.1 }, v).size;
+    for (let zoom = 0.11; zoom < 0.6; zoom += 0.01) {
+      const ora = accesi({ x: 0, y: 0, zoom }, v).size;
+      expect(Math.abs(ora - prima) / Math.max(prima, 1)).toBeLessThan(0.15);
+      prima = ora;
+    }
+  });
+
+  it('da vicino si accendono tutti quelli in vista', () => {
+    const a = aloniInVista(scena, { x: 0, y: 0, zoom: 2 }, { larghezza: 1440, altezza: 800 });
+    expect(a.quota).toBe(1);
+    expect(a.quanti).toBe(a.indici.length);
+    expect(a.quanti).toBeGreaterThan(0);
+  });
+});
+
+describe('pezze d\'acqua nei disegni dei luoghi simbolo', () => {
+  const svg =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><g stroke="#000">' +
+    '<path d="M0 0L5 0L5 5Z" fill="#7fb8ad" stroke="none"/>' +
+    '<path d="M0 0L5 0L5 5Z" fill="#3d3a2c" fill-opacity="0.28"/>' +
+    '<rect x="1" y="1" width="2" height="2" fill="#7FB8AD"/></g></svg>';
+
+  it('separa gli elementi con il colore dell\'acqua di giorno dal resto', () => {
+    const parti = separaAcqua(svg);
+    expect(parti).not.toBeNull();
+    if (!parti) return;
+    expect(parti.senza).not.toMatch(/7fb8ad/i);
+    expect(parti.senza).toContain('#3d3a2c');
+    expect(parti.solo.match(/7fb8ad/gi)?.length).toBe(2);
+    expect(parti.solo).not.toContain('#3d3a2c');
+    expect(parti.solo.startsWith('<svg')).toBe(true);
+    expect(parti.solo.endsWith('</svg>')).toBe(true);
+    expect(parti.solo).toContain('viewBox="0 0 10 10"');
+  });
+
+  it('un disegno senza acqua resta intero', () => {
+    expect(separaAcqua('<svg viewBox="0 0 1 1"><path d="M0 0" fill="#fff"/></svg>')).toBeNull();
+    expect(separaAcqua('niente')).toBeNull();
+  });
+
+  it('il colore cercato è quello dell\'acqua di giorno, e le luci dicono il proprio', () => {
+    expect(PALETTE.aree.acqua).toBe('#7fb8ad');
+    expect(PALETTE_NOTTE.illustrazioni?.acqua).toBe(PALETTE_NOTTE.aree.acqua);
+    expect(PALETTE_POMERIGGIO.illustrazioni?.acqua).toBe(PALETTE_POMERIGGIO.aree.acqua);
+  });
+});
+
+describe('disegno nelle tre luci', () => {
+  afterEach(() => vi.unstubAllGlobals());
+
+  /** Un contesto finto: accetta ogni chiamata e ricorda i colori usati per riempire. */
+  const contestoFinto = (): { ctx: CanvasRenderingContext2D; riempimenti: Set<string>; chiamate: () => number } => {
+    const riempimenti = new Set<string>();
+    let chiamate = 0;
+    const stato: Record<string, unknown> = { canvas: { width: 1000, height: 700 } };
+    const ctx = new Proxy(stato, {
+      get(o, nome: string) {
+        if (nome in o) return o[nome];
+        if (nome === 'measureText') return () => ({ width: 40 });
+        return () => {
+          chiamate++;
+        };
+      },
+      set(o, nome: string, valore) {
+        o[nome] = valore;
+        if (nome === 'fillStyle' && typeof valore === 'string') riempimenti.add(valore);
+        return true;
+      },
+    }) as unknown as CanvasRenderingContext2D;
+    return { ctx, riempimenti, chiamate: () => chiamate };
+  };
+
+  const illustrazioniFinte = (quante: number): { finte: Illustrazioni; tinte: unknown[] } => {
+    const tinte: unknown[] = [];
+    const finte = {
+      elenco: Array.from({ length: quante }, () => ({ pronta: false, proporzione: 1 })),
+      impostaTinta: (t: unknown) => tinte.push(t),
+      daDisegnare: () => null,
+    } as unknown as Illustrazioni;
+    return { finte, tinte };
+  };
+
+  it('impostaLuce cambia i colori, non rompe il disegno e con la stessa luce non fa nulla', () => {
+    vi.stubGlobal(
+      'Path2D',
+      class {
+        moveTo(): void {}
+        lineTo(): void {}
+        closePath(): void {}
+      },
+    );
+    const c = creaCittaFinta(200);
+    const lampioni: number[] = [];
+    for (let x = -200; x <= 200; x += 25) lampioni.push(x, 0);
+    const scena = costruisciScena(c.base, c.strati, c.landmark, lampioni);
+    const copia = JSON.stringify([...scena.elementi.tipo.slice(0, 50)]);
+    const { finte, tinte } = illustrazioniFinte(c.landmark.length);
+    const d = new Disegnatore(scena, finte);
+    expect(d.luce).toBe('giorno');
+    expect(d.sfondo).toBe(PALETTE.sfondo);
+    expect(d.impostaLuce('giorno')).toBe(false);
+    expect(tinte.length).toBe(0);
+
+    const stato = (zoom: number) => ({
+      camera: { x: 0, y: 0, zoom },
+      vista,
+      densita: 1,
+      visibili: tutti,
+      evidenziata: null,
+      puntoSopra: -1,
+      landmarkSopra: -1,
+      area: { minX: -600, minY: -600, maxX: 600, maxY: 600 },
+    });
+    const usati: Record<string, Set<string>> = {};
+    for (const luce of ['giorno', 'notte', 'pomeriggio', 'giorno'] as const) {
+      if (luce !== 'giorno' || usati.giorno) expect(d.impostaLuce(luce)).toBe(true);
+      expect(d.impostaLuce(luce)).toBe(false);
+      expect(d.luce).toBe(luce);
+      expect(d.sfondo).toBe(PALETTE_PER_LUCE[luce].sfondo);
+      // Tutti e tre i livelli di dettaglio: piatto, solo tetti, pieno; e da molto vicino.
+      for (const zoom of [0.1, 0.5, 2.4, 6]) {
+        const f = contestoFinto();
+        expect(() => d.disegna(f.ctx, stato(zoom))).not.toThrow();
+        expect(f.chiamate()).toBeGreaterThan(10);
+        expect(f.riempimenti.has(PALETTE_PER_LUCE[luce].carta)).toBe(true);
+        if (zoom === 2.4) usati[luce] = f.riempimenti;
+      }
+    }
+    // Di notte nessun riempimento usa la carta chiara del giorno, e i tetti sono quelli della notte.
+    expect(usati.notte.has(PALETTE.carta)).toBe(false);
+    expect(PALETTE_NOTTE.tetti.some((t) => usati.notte.has(t))).toBe(true);
+    expect(PALETTE.tetti.some((t) => usati.giorno.has(t))).toBe(true);
+    expect(usati.notte.has(PALETTE_NOTTE.finestra)).toBe(true);
+    expect(usati.giorno.has(PALETTE_NOTTE.finestra)).toBe(false);
+    // I luoghi simbolo sono stati avvisati a ogni cambio; al ritorno al giorno, nessun velo.
+    expect(tinte).toEqual([PALETTE_NOTTE.illustrazioni, PALETTE_POMERIGGIO.illustrazioni, null]);
+    // La scena non è stata toccata.
+    expect(JSON.stringify([...scena.elementi.tipo.slice(0, 50)])).toBe(copia);
   });
 });
 

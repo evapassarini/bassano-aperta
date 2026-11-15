@@ -1,7 +1,7 @@
 // Disegno della mappa su canvas 2D. Ordine: carta, aree, strade, linee tematiche,
 // poi tutto ciò che sta in piedi dal più lontano al più vicino, infine i segnaposto.
 
-import type { IdStrato, TipoArea, TipoStrada } from '../types';
+import type { IdStrato, Luce, TipoArea, TipoStrada } from '../types';
 import {
   marcatoriInVista,
   puntoSuEdificio,
@@ -11,12 +11,15 @@ import {
 } from './bersagli';
 import type { Marcatore, Sprite } from './bersagli';
 import type { Illustrazioni } from './immagini';
-import { conAlfa, PALETTE, sfuma } from './palette';
+import { conAlfa, PALETTE, PALETTE_PER_LUCE, sfuma } from './palette';
+import type { Palette } from './palette';
 import { angoliInIso, isoInSchermo, metriInIso, riquadroVisibile } from './proiezione';
 import type { Camera, Rettangolo, Vista } from './proiezione';
 import {
+  ALTEZZA_LAMPIONE,
   EL_ALBERO,
   EL_EDIFICIO,
+  EL_LAMPIONE,
   EL_LANDMARK,
   LATO_TESSERA,
   livelloDettaglio,
@@ -63,6 +66,82 @@ const LARGHEZZE: Record<Exclude<TipoStrada, 'ferrovia'>, { metri: number; minimo
   pedonale: { metri: 2.2, minimo: 0.6, da: 0.55 },
 };
 
+/** Raggio in metri della luce che un lampione stende a terra. */
+const RAGGIO_ALONE = 16;
+/** Da questo zoom in su i lampioni si disegnano con il palo; sotto, di notte, restano gli aloni. */
+export const ZOOM_PALI = { giorno: 3, notte: 1.7 };
+/** Da questo zoom in su, di notte, si vedono le finestre accese. */
+const ZOOM_FINESTRE = 1.5;
+/**
+ * Da lontano non si accendono tutti i lampioni: sotto ZOOM_ALONI.pochi la metà, da
+ * ZOOM_ALONI.tutti in su tutti, in mezzo la quota cresce un poco alla volta. Dipende solo
+ * dallo zoom: trascinando la mappa restano accese le stesse luci.
+ */
+export const ZOOM_ALONI = { pochi: 0.2, tutti: 0.5 };
+/** Tetto di sicurezza agli aloni disegnati in un fotogramma (schermi molto grandi). */
+const ALONI_MASSIMI = 7000;
+
+/** Quota di lampioni accesi a terra a un certo zoom, tra 0.5 e 1. */
+export function quotaAloni(zoom: number): number {
+  const t = (zoom - ZOOM_ALONI.pochi) / (ZOOM_ALONI.tutti - ZOOM_ALONI.pochi);
+  return 0.5 + 0.5 * Math.max(0, Math.min(1, t));
+}
+
+/**
+ * I lampioni che stendono luce a terra in questa vista. Restituisce i loro numeri (validi fino
+ * alla prossima ricerca nella griglia dei lampioni), quanti sono e la quota usata. Un lampione
+ * è acceso se il suo rango sta sotto la quota: la scelta è la stessa per ogni vista.
+ */
+export function aloniInVista(
+  scena: Scena,
+  camera: Camera,
+  vista: Vista,
+): { indici: Int32Array; quanti: number; quota: number; raggio: number } {
+  const z = camera.zoom;
+  // Da lontano l'alone non scende sotto qualche pixel: la città resta punteggiata di luci.
+  const raggio = Math.max(RAGGIO_ALONE, 2.6 / z);
+  const zona = riquadroVisibile(camera, vista, raggio + 4 / z);
+  const trovati = scena.grigliaLampioni.interroga(zona);
+  let quota = quotaAloni(z);
+  if (trovati.length * quota > ALONI_MASSIMI) quota = ALONI_MASSIMI / trovati.length;
+  if (quota >= 1) return { indici: trovati, quanti: trovati.length, quota: 1, raggio };
+  const rango = scena.rangoLampioni;
+  let quanti = 0;
+  for (let j = 0; j < trovati.length; j++) {
+    const i = trovati[j];
+    if (rango[i] < quota) trovati[quanti++] = i;
+  }
+  return { indici: trovati, quanti, quota, raggio };
+}
+const LATO_SPRITE = 96;
+
+/**
+ * L'alone di una luce disegnato una volta sola: un disco che sfuma verso il bordo.
+ * null dove non c'è un documento (nelle prove) o il canvas non è disponibile.
+ */
+function creaAlone(colore: string): HTMLCanvasElement | null {
+  if (typeof document === 'undefined') return null;
+  try {
+    const tela = document.createElement('canvas');
+    tela.width = LATO_SPRITE;
+    tela.height = LATO_SPRITE;
+    const ctx = tela.getContext('2d');
+    if (!ctx) return null;
+    const m = LATO_SPRITE / 2;
+    const g = ctx.createRadialGradient(m, m, 0, m, m, m);
+    g.addColorStop(0, conAlfa(colore, 1));
+    g.addColorStop(0.18, conAlfa(colore, 0.72));
+    g.addColorStop(0.45, conAlfa(colore, 0.3));
+    g.addColorStop(0.75, conAlfa(colore, 0.08));
+    g.addColorStop(1, conAlfa(colore, 0));
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, LATO_SPRITE, LATO_SPRITE);
+    return tela;
+  } catch {
+    return null;
+  }
+}
+
 const CARATTERE = '"Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", sans-serif';
 
 function tracciaAnello(percorso: Path2D | CanvasRenderingContext2D, a: Float32Array, su = 0): void {
@@ -95,11 +174,18 @@ export class Disegnatore {
   private pronteNeiPezzi = -1;
 
   /** Colori per edificio, decisi una volta. */
-  private readonly tinteTetto: string[] = [];
-  private readonly tinteMuro: { chiaro: string; scuro: string }[] = [];
+  private tinteTetto: string[] = [];
+  private tinteMuro: { chiaro: string; scuro: string }[] = [];
   private readonly iTetto: Uint8Array;
   private readonly iMuro: Uint8Array;
-  private readonly chiome: { base: string; luce: string }[];
+  private chiome: { base: string; luce: string }[] = [];
+
+  /** Tavolozza della luce attiva. */
+  private P: Palette = PALETTE;
+  private luceAttiva: Luce = 'giorno';
+  /** Alone dei lampioni già disegnato, e il colore con cui è stato fatto. */
+  private sprite: HTMLCanvasElement | null = null;
+  private coloreSprite = '';
 
   private readonly larghezzeTesto = new Map<string, number>();
   /** Indici dei luoghi simbolo nell'ordine di disegno (dal più lontano). */
@@ -183,24 +269,14 @@ export class Disegnatore {
       tracciaLinea(percorso, l.linea);
     }
 
-    // --- colori degli edifici
+    // --- colori degli edifici: gli indici si decidono una volta, le tinte a ogni cambio di luce
     const P = PALETTE;
-    const aggiungiTetti = (colori: string[]): number => {
-      const da = this.tinteTetto.length;
-      this.tinteTetto.push(...colori);
-      return da;
-    };
-    const aggiungiMuri = (colori: string[]): number => {
-      const da = this.tinteMuro.length;
-      for (const c of colori) this.tinteMuro.push({ chiaro: sfuma(c, 0.1), scuro: sfuma(c, -0.17) });
-      return da;
-    };
-    const tCotto = aggiungiTetti(P.tetti);
-    const tIndustria = aggiungiTetti(P.tettoIndustria);
-    const mIntonaci = aggiungiMuri(P.intonaci);
-    const mIndustria = aggiungiMuri(P.intonacoIndustria);
-    const mPietra = aggiungiMuri(P.pietra);
-    const mMattone = aggiungiMuri(P.mattone);
+    const tCotto = 0;
+    const tIndustria = P.tetti.length;
+    const mIntonaci = 0;
+    const mIndustria = mIntonaci + P.intonaci.length;
+    const mPietra = mIndustria + P.intonacoIndustria.length;
+    const mMattone = mPietra + P.pietra.length;
     this.iTetto = new Uint8Array(scena.edifici.length);
     this.iMuro = new Uint8Array(scena.edifici.length);
     scena.edifici.forEach((e, i) => {
@@ -220,7 +296,7 @@ export class Disegnatore {
         this.iMuro[i] = mIntonaci + (b % P.intonaci.length);
       }
     });
-    this.chiome = P.chiome.map((c) => ({ base: c, luce: sfuma(c, 0.18) }));
+    this.calcolaTinte();
 
     // --- tessere per la vista da lontano
     const tutti = scena.edifici.map((_, i) => i);
@@ -232,6 +308,51 @@ export class Disegnatore {
       t.minY -= su;
     }
     this.azzeraPezzi();
+  }
+
+  /** Le tinte di tetti, muri e chiome nella luce attiva, nello stesso ordine in ogni luce. */
+  private calcolaTinte(): void {
+    const P = this.P;
+    this.tinteTetto = [...P.tetti, ...P.tettoIndustria];
+    this.tinteMuro = [...P.intonaci, ...P.intonacoIndustria, ...P.pietra, ...P.mattone].map((c) => ({
+      chiaro: sfuma(c, P.muri.chiaro),
+      scuro: sfuma(c, P.muri.scuro),
+    }));
+    this.chiome = P.chiome.map((c) => ({ base: c, luce: sfuma(c, 0.18) }));
+  }
+
+  /** Luce con cui si sta disegnando. */
+  get luce(): Luce {
+    return this.luceAttiva;
+  }
+
+  /** Colore steso sotto la mappa nella luce attiva: chi vuole può intonarci la pagina. */
+  get sfondo(): string {
+    return this.P.sfondo;
+  }
+
+  /**
+   * Cambia la luce: tavolozza, tinte degli edifici e velo sui luoghi simbolo. Restituisce
+   * false se era già quella. Le tessere (pezziPiatti, pezziTetti) sono solo forme, senza
+   * colori: restano valide in ogni luce e non vanno rifatte. Le sole immagini in memoria
+   * sono le copie dei luoghi simbolo, rifatte sulla stessa tela, e lo sprite dell'alone.
+   */
+  impostaLuce(luce: Luce): boolean {
+    if (luce === this.luceAttiva || !(luce in PALETTE_PER_LUCE)) return false;
+    this.luceAttiva = luce;
+    this.P = PALETTE_PER_LUCE[luce];
+    this.calcolaTinte();
+    this.illustrazioni.impostaTinta(this.P.illustrazioni);
+    return true;
+  }
+
+  private alone(): HTMLCanvasElement | null {
+    const colore = this.P.lampioni.alone;
+    if (this.coloreSprite !== colore) {
+      this.coloreSprite = colore;
+      this.sprite = creaAlone(colore);
+    }
+    return this.sprite;
   }
 
   private azzeraPezzi(): void {
@@ -317,6 +438,10 @@ export class Disegnatore {
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+    // Il fondo è quello della pagina di giorno (stesso colore della carta), più scuro di notte.
+    ctx.fillStyle = this.P.sfondo;
+    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
     ctx.setLineDash([]);
@@ -334,6 +459,7 @@ export class Disegnatore {
     this.carta(ctx, s, z);
     this.terreno(ctx, visibile, z);
     this.rete(ctx, visibile, z);
+    if (this.P.lampioni.accesi) this.aloniATerra(ctx, camera, vista);
     this.tematiche(ctx, s, z);
 
     inPixel();
@@ -364,21 +490,21 @@ export class Disegnatore {
     // Oltre il bordo dei dati la carta sfuma: tanti contorni larghi e leggeri.
     const sfumatura = Math.max(140, 90 / z);
     const passi = 12;
-    ctx.strokeStyle = PALETTE.carta;
+    ctx.strokeStyle = this.P.carta;
     ctx.globalAlpha = 0.2;
     for (let i = passi; i >= 1; i--) {
       ctx.lineWidth = (2 * sfumatura * i) / passi;
       ctx.stroke(rombo);
     }
     ctx.globalAlpha = 1;
-    ctx.fillStyle = PALETTE.carta;
+    ctx.fillStyle = this.P.carta;
     ctx.fill(rombo);
   }
 
   // --- aree ----------------------------------------------------------------------
 
   private terreno(ctx: CanvasRenderingContext2D, visibile: Rettangolo, z: number): void {
-    const P = PALETTE;
+    const P = this.P;
     // Prima campi e verde, poi l'acqua, poi le piazze: nei dati veri prati e parchi
     // di riva si sovrappongono al fiume e lo nasconderebbero.
     const stendi = (tipo: TipoArea): void => {
@@ -424,7 +550,7 @@ export class Disegnatore {
   // --- strade --------------------------------------------------------------------
 
   private rete(ctx: CanvasRenderingContext2D, visibile: Rettangolo, z: number): void {
-    const P = PALETTE;
+    const P = this.P;
     const conBordo = z >= 0.7;
     const bordo = Math.max(0.45, 0.8 / z);
     const larghezza = (t: Exclude<TipoStrada, 'ferrovia'>): number =>
@@ -474,10 +600,72 @@ export class Disegnatore {
     }
   }
 
+  // --- lampioni ------------------------------------------------------------------
+
+  /**
+   * La luce dei lampioni sul terreno e sulle strade, prima di tutto ciò che sta in piedi:
+   * le case la coprono come farebbero davvero. Uno sprite solo, schiacciato come un cerchio
+   * visto in isometria; con 'screen' le luci vicine si sommano senza bruciare.
+   */
+  private aloniATerra(ctx: CanvasRenderingContext2D, camera: Camera, vista: Vista): void {
+    const sprite = this.alone();
+    const lampioni = this.scena.lampioni;
+    if (!sprite || lampioni.length === 0) return;
+    const { indici, quanti, quota, raggio } = aloniInVista(this.scena, camera, vista);
+    if (quanti === 0) return;
+    ctx.save();
+    ctx.globalCompositeOperation = 'screen';
+    // Con meno luci accese ognuna è un poco più forte: la luce in tutto cambia senza scatti.
+    ctx.globalAlpha = Math.min(1, 0.72 / Math.sqrt(quota));
+    for (let j = 0; j < quanti; j++) {
+      const i = indici[j];
+      ctx.drawImage(sprite, lampioni[i * 2] - raggio, lampioni[i * 2 + 1] - raggio / 2, raggio * 2, raggio);
+    }
+    ctx.restore();
+  }
+
+  /** Un lampione tra le case: palo sottile da vicino; di notte lampada accesa e piccolo alone. */
+  private lampione(ctx: CanvasRenderingContext2D, indice: number, z: number): void {
+    const L = this.P.lampioni;
+    const conPalo = z >= (L.accesi ? ZOOM_PALI.notte : ZOOM_PALI.giorno);
+    if (!conPalo && !L.accesi) return;
+    const sx = this.scena.lampioni[indice * 2];
+    const sy = this.scena.lampioni[indice * 2 + 1];
+    const cima = sy - ALTEZZA_LAMPIONE;
+    if (L.accesi) {
+      // Alone attorno alla lampada: schiarisce le facciate dietro, e le case davanti lo coprono.
+      const sprite = this.alone();
+      if (sprite) {
+        const r = 5.5;
+        ctx.globalAlpha = 0.5;
+        ctx.drawImage(sprite, sx - r, cima - r, r * 2, r * 2);
+        ctx.globalAlpha = 1;
+      }
+    }
+    if (!conPalo) return;
+    ctx.save();
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = L.palo;
+    ctx.lineWidth = Math.max(0.32, 0.9 / z);
+    ctx.beginPath();
+    ctx.moveTo(sx, sy);
+    ctx.lineTo(sx, cima + 0.4);
+    ctx.stroke();
+    ctx.fillStyle = L.lampada;
+    ctx.beginPath();
+    ctx.arc(sx, cima, L.accesi ? 0.62 : 0.5, 0, Math.PI * 2);
+    ctx.fill();
+    if (!L.accesi) {
+      ctx.lineWidth = Math.max(0.18, 0.6 / z);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
   // --- linee tematiche -------------------------------------------------------------
 
   private tematiche(ctx: CanvasRenderingContext2D, s: StatoDisegno, z: number): void {
-    const P = PALETTE;
+    const P = this.P;
     for (const l of this.linee) {
       if (!s.visibili[l.strato]) continue;
       const spessore = Math.max(2.2, 2.6 / z);
@@ -517,7 +705,7 @@ export class Disegnatore {
       const c = isoInSchermo(l.sx, l.sy, camera, vista);
       if (!this.illustrazioni.elenco[i].pronta) return;
       const raggio = Math.max(l.semiL * 1.25 * camera.zoom, 30);
-      this.alone(ctx, c.px, c.py, raggio);
+      this.aloneEvidenza(ctx, c.px, c.py, raggio);
     });
   }
 
@@ -532,8 +720,8 @@ export class Disegnatore {
   }
 
   /** Alone morbido e anello dorato appoggiati sul terreno. */
-  private alone(ctx: CanvasRenderingContext2D, x: number, y: number, raggio: number): void {
-    ctx.fillStyle = PALETTE.evidenza;
+  private aloneEvidenza(ctx: CanvasRenderingContext2D, x: number, y: number, raggio: number): void {
+    ctx.fillStyle = this.P.evidenza;
     for (let i = 5; i >= 0; i--) {
       const r = raggio * (1 + i * 0.13);
       ctx.globalAlpha = 0.09;
@@ -542,7 +730,7 @@ export class Disegnatore {
       ctx.fill();
     }
     ctx.globalAlpha = 0.9;
-    ctx.strokeStyle = PALETTE.evidenza;
+    ctx.strokeStyle = this.P.evidenza;
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.ellipse(x, y, raggio, raggio / 2, 0, 0, Math.PI * 2);
@@ -571,7 +759,7 @@ export class Disegnatore {
           for (const i of tessera.indici) tracciaAnello(pezzo, edifici[i].anello);
           this.pezziPiatti[t] = pezzo;
         }
-        ctx.fillStyle = PALETTE.edificiLontani;
+        ctx.fillStyle = this.P.edificiLontani;
         ctx.fill(pezzo);
         continue;
       }
@@ -592,7 +780,7 @@ export class Disegnatore {
       }
       const contorno = z > 0.6;
       if (contorno) {
-        ctx.strokeStyle = conAlfa(PALETTE.seppia, 0.5);
+        ctx.strokeStyle = conAlfa(this.P.seppia, 0.5);
         ctx.lineWidth = 0.6 / z;
       }
       for (const [tinta, p] of pezzi) {
@@ -616,15 +804,18 @@ export class Disegnatore {
     const el = this.scena.elementi;
     const trovati = el.griglia.interroga(visibile);
     const fine = z >= 2;
+    const finestre = this.P.finestra !== '' && z >= ZOOM_FINESTRE;
     ctx.lineWidth = (fine ? 0.8 : 0.6) / z;
-    ctx.strokeStyle = conAlfa(PALETTE.seppia, fine ? 0.8 : 0.55);
+    ctx.strokeStyle = conAlfa(this.P.seppia, fine ? 0.8 : 0.55);
     for (let j = 0; j < trovati.length; j++) {
       const i = trovati[j];
       const tipo = el.tipo[i];
       if (tipo === EL_EDIFICIO) {
-        this.edificio(ctx, el.rif[i]);
+        this.edificio(ctx, el.rif[i], finestre);
       } else if (tipo === EL_ALBERO) {
         this.albero(ctx, el.rif[i], fine);
+      } else if (tipo === EL_LAMPIONE) {
+        this.lampione(ctx, el.rif[i], z);
       } else {
         const indice = el.rif[i];
         const ill = this.illustrazioni.elenco[indice];
@@ -640,12 +831,12 @@ export class Disegnatore {
         this.illustrazione(ctx, sp, s.densita);
         inIso();
         ctx.lineWidth = (fine ? 0.8 : 0.6) / z;
-        ctx.strokeStyle = conAlfa(PALETTE.seppia, fine ? 0.8 : 0.55);
+        ctx.strokeStyle = conAlfa(this.P.seppia, fine ? 0.8 : 0.55);
       }
     }
   }
 
-  private edificio(ctx: CanvasRenderingContext2D, indice: number): void {
+  private edificio(ctx: CanvasRenderingContext2D, indice: number, finestre = false): void {
     const e = this.scena.edifici[indice];
     if (this.coperto(e)) return;
     const a = e.anello;
@@ -668,6 +859,13 @@ export class Disegnatore {
         ctx.fillStyle = e.lati[i] === MURO_SINISTRO ? muro.chiaro : muro.scuro;
         ctx.fill();
         ctx.stroke();
+        if (finestre) {
+          ctx.beginPath();
+          if (this.finestra(ctx, e, i)) {
+            ctx.fillStyle = this.P.finestra;
+            ctx.fill();
+          }
+        }
       }
     } else if (h > 0.2) {
       for (let classe = MURO_SINISTRO; classe <= MURO_DESTRO; classe++) {
@@ -691,6 +889,17 @@ export class Disegnatore {
         ctx.fillStyle = classe === MURO_SINISTRO ? muro.chiaro : muro.scuro;
         ctx.fill();
         ctx.stroke();
+        if (finestre) {
+          let accese = false;
+          ctx.beginPath();
+          for (let i = 0; i < n; i++) {
+            if (e.lati[i] === classe && this.finestra(ctx, e, i)) accese = true;
+          }
+          if (accese) {
+            ctx.fillStyle = this.P.finestra;
+            ctx.fill();
+          }
+        }
       }
     }
 
@@ -726,6 +935,38 @@ export class Disegnatore {
     ctx.stroke();
   }
 
+  /**
+   * Aggiunge al percorso aperto una finestra accesa sul lato `i`, se quel muro ne ha una:
+   * lo decide il seme dell'edificio, così le stesse finestre restano accese a ogni fotogramma.
+   */
+  private finestra(ctx: CanvasRenderingContext2D, e: EdificioPronto, i: number): boolean {
+    if (e.alt < 3.2 || e.tipo === 'industria') return false;
+    const caso = Math.imul(e.seme ^ Math.imul(i + 1, 0x9e3779b1), 0x85ebca6b) >>> 0;
+    if ((caso >>> 9) % 5 !== 0) return false;
+    const a = e.anello;
+    const j = (i + 1) % (a.length >> 1);
+    const ax = a[i * 2];
+    const ay = a[i * 2 + 1];
+    const dx = a[j * 2] - ax;
+    const dy = a[j * 2 + 1] - ay;
+    const lungo = Math.hypot(dx, dy);
+    if (lungo < 4.5) return false;
+    // Posizione lungo il muro e mezza larghezza, come frazioni della sua lunghezza.
+    const t = 0.28 + ((caso >>> 3) % 5) * 0.11;
+    const w = 0.75 / lungo;
+    const piani = e.alt > 8.5 && (caso & 4) !== 0 ? 2 : 1;
+    for (let p = 0; p < piani; p++) {
+      const sotto = Math.min(e.alt - 2.4, 1.6 + p * 3.4);
+      const sopra = sotto + 1.5;
+      ctx.moveTo(ax + dx * (t - w), ay + dy * (t - w) - sotto);
+      ctx.lineTo(ax + dx * (t + w), ay + dy * (t + w) - sotto);
+      ctx.lineTo(ax + dx * (t + w), ay + dy * (t + w) - sopra);
+      ctx.lineTo(ax + dx * (t - w), ay + dy * (t - w) - sopra);
+      ctx.closePath();
+    }
+    return true;
+  }
+
   private albero(ctx: CanvasRenderingContext2D, indice: number, fine: boolean): void {
     const sx = this.scena.alberi[indice * 2];
     const sy = this.scena.alberi[indice * 2 + 1];
@@ -734,13 +975,14 @@ export class Disegnatore {
     const chioma = this.chiome[(seme >>> 3) % this.chiome.length];
     const cy = sy - r * 1.35;
     // Ombra a terra, verso destra.
-    ctx.fillStyle = PALETTE.ombra;
+    ctx.fillStyle = this.P.ombra;
     ctx.beginPath();
-    ctx.ellipse(sx + r * 0.55, sy + r * 0.1, r * 1.05, r * 0.5, 0, 0, Math.PI * 2);
+    const lunga = this.P.ombraLunga;
+    ctx.ellipse(sx + r * 0.55 * lunga, sy + r * 0.1, r * 1.05 * (0.5 + lunga / 2), r * 0.5, 0, 0, Math.PI * 2);
     ctx.fill();
     if (fine) {
       ctx.save();
-      ctx.strokeStyle = PALETTE.tronco;
+      ctx.strokeStyle = this.P.tronco;
       ctx.lineWidth = Math.max(0.5, r * 0.22);
       ctx.beginPath();
       ctx.moveTo(sx, sy);
@@ -770,7 +1012,7 @@ export class Disegnatore {
   // --- segnaposto ------------------------------------------------------------------
 
   private segnaposto(ctx: CanvasRenderingContext2D, s: StatoDisegno, sprite: Sprite[]): void {
-    const P = PALETTE;
+    const P = this.P;
     const marcatori = this.marcatori(s.visibili, s.camera, s.vista);
     // Un luogo senza illustrazione si evidenzia sul suo segnaposto, anche a strato spento:
     // l'alone va sopra gli edifici, altrimenti resterebbe nascosto.
@@ -779,7 +1021,7 @@ export class Disegnatore {
       for (const p of this.scena.punti) {
         if (p.dati.storia !== s.evidenziata) continue;
         const c = isoInSchermo(p.sx, p.sy, s.camera, s.vista);
-        this.alone(ctx, c.px, c.py, 22);
+        this.aloneEvidenza(ctx, c.px, c.py, 22);
         evidenziati.push({ nome: p.dati.nome, px: c.px, py: c.py });
       }
     }
@@ -896,7 +1138,7 @@ export class Disegnatore {
     const x = m.tx;
     const y = m.ty;
     // Ombra a terra sotto la punta.
-    ctx.fillStyle = PALETTE.ombra;
+    ctx.fillStyle = this.P.ombra;
     ctx.beginPath();
     ctx.ellipse(m.px, m.py, r * 0.55, r * 0.26, 0, 0, Math.PI * 2);
     ctx.fill();
@@ -932,7 +1174,7 @@ export class Disegnatore {
     ctx.fillStyle = fondo;
     ctx.fill();
     ctx.lineWidth = sopra ? 2 : 1.4;
-    ctx.strokeStyle = sopra ? segno : conAlfa(PALETTE.seppia, 0.9);
+    ctx.strokeStyle = sopra ? segno : conAlfa(this.P.seppia, 0.9);
     ctx.stroke();
 
     // Segno interno: pieno per i luoghi con una storia, un anello per gli altri.

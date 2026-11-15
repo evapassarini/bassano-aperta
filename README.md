@@ -42,7 +42,7 @@ funziona da qualunque indirizzo, anche in una sottocartella.
 npm run dati
 ```
 
-Esegue quattro script, in ordine:
+Esegue cinque script, in ordine:
 
 | Script | Scrive | Da dove |
 |---|---|---|
@@ -50,17 +50,26 @@ Esegue quattro script, in ordine:
 | `scripts/dati-strati.mjs` | `public/data/strati.json` | Punti e linee di Cultura, Ambiente, Mobilità (OpenStreetMap e ARPAV) |
 | `scripts/dati-aria.mjs` | `public/data/aria.json` | Fotografia della qualità dell'aria (ARPAV, stazione di Bassano) |
 | `scripts/dati-avvisi.mjs` | `public/data/avvisi.json` | Fotografia degli avvisi sulla viabilità (CCISS Viaggiare Informati e Vi.abilità della Provincia di Vicenza) |
+| `scripts/dati-lampioni.mjs` | `public/data/lampioni.json` | Lampioni per la luce della notte: quelli segnati su OpenStreetMap, più altri disposti lungo le strade a scopo illustrativo |
 
-Due comandi a parte:
+Tre comandi a parte:
 
 ```sh
 npm run dati:avvisi    # rifà solo la fotografia degli avvisi
+npm run dati:lampioni  # rifà solo i lampioni (legge base.json: va lanciato dopo dati-osm)
 npm run dati:stazioni  # rifà la tabella dei nomi delle stazioni dei treni
 ```
 
 `dati:stazioni` scrive `public/data/stazioni-treni.json` a partire dagli orari di Trenitalia
 distribuiti da BusOne. Scarica un archivio di circa 25 MB e ha bisogno del comando `unzip`: per
 questo non fa parte di `npm run dati` e si rilancia solo quando cambiano le stazioni.
+
+`dati:lampioni` scarica da OpenStreetMap i lampioni rilevati (pochi, a Bassano) e ne aggiunge
+altri lungo le strade e sul bordo delle piazze di `base.json`, con regole fisse e senza caso: a
+ogni corsa escono gli stessi punti. Nel file i rilevati stanno per primi e il campo `veri` dice
+quanti sono; gli altri sono illustrativi e il sito lo dichiara in «Fonti e licenze». Se Overpass
+non risponde lo script tiene i lampioni rilevati del file che c'è già e lo scrive in console;
+solo se un file precedente con lampioni rilevati non esiste scrive `veri: 0`.
 
 Da sapere:
 
@@ -188,6 +197,9 @@ Le regole complete e i contratti tra le parti stanno in `docs/SPEC.md`.
   scritti nel racconto e mostrati sotto il file.
 - **Video**: incorporati da YouTube, restano dei rispettivi canali.
 - **Webcam**: solo collegamenti a siti esterni.
+- **Lampioni**: quelli segnati su OpenStreetMap (ODbL 1.0), più altri disposti dal nostro codice
+  lungo le strade e sul bordo delle piazze a scopo illustrativo. Non sono un rilievo
+  dell'illuminazione pubblica; i due numeri stanno in «Fonti e licenze» sul sito.
 - **Illustrazioni dei luoghi simbolo** (`public/landmarks/`): disegnate per il progetto a partire
   dalle sagome di OpenStreetMap; altezze e dettagli sono in gran parte stime.
 - **Caratteri**: Fraunces e Inter (SIL Open Font License), serviti dal sito stesso.

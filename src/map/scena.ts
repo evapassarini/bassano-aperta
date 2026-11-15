@@ -566,6 +566,10 @@ export function raggioSegnaposto(l: LandmarkPronto): number {
 export const EL_EDIFICIO = 0;
 export const EL_ALBERO = 1;
 export const EL_LANDMARK = 2;
+export const EL_LAMPIONE = 3;
+
+/** Altezza di un lampione, in unità isometriche (circa sei metri). */
+export const ALTEZZA_LAMPIONE = 6 * ISO_Z;
 
 /** Tutto ciò che sta in piedi, già in ordine di disegno (dal più lontano). */
 export interface Elementi {
@@ -622,13 +626,51 @@ export interface Scena {
   linee: LineaPronta[];
   /** Punti degli strati, dal più lontano al più vicino. */
   punti: PuntoPronto[];
+  /** Piede dei lampioni sul piano isometrico: [sx0, sy0, sx1, sy1, ...]. */
+  lampioni: Float32Array;
+  /** Per trovare in fretta i lampioni di una zona (vedi lampioniNellaZona). */
+  grigliaLampioni: Griglia;
+  /**
+   * Un numero fisso tra 0 e 1 per ogni lampione, sparso in modo uniforme e senza legame con
+   * la posizione nel file. Da lontano si accendono solo quelli sotto una certa quota: la
+   * scelta non dipende da che cosa è in vista, quindi trascinando la mappa le luci non cambiano.
+   */
+  rangoLampioni: Float32Array;
+}
+
+/** Rango di un lampione: la parte frazionaria di (numero + 1) per la sezione aurea. */
+export function rangoLampione(indice: number): number {
+  return (Math.imul(indice + 1, 0x9e3779b1) >>> 0) / 4294967296;
+}
+
+/** Toglie le coppie con valori non numerici e proietta i lampioni sul piano isometrico. */
+export function preparaLampioni(p: ArrayLike<number> | undefined): Float32Array {
+  if (!p) return new Float32Array(0);
+  const buoni: number[] = [];
+  for (let i = 0; i + 1 < p.length; i += 2) {
+    if (Number.isFinite(p[i]) && Number.isFinite(p[i + 1])) buoni.push(p[i], p[i + 1]);
+  }
+  return proiettaPiatto(buoni);
+}
+
+/**
+ * Numeri dei lampioni il cui piede cade nella zona (sul piano isometrico), in ordine crescente.
+ * Il risultato vale fino alla chiamata dopo: chi lo vuole tenere lo copia.
+ */
+export function lampioniNellaZona(scena: Scena, zona: Rettangolo): Int32Array {
+  return scena.grigliaLampioni.interroga(zona);
 }
 
 /** Lato delle celle della griglia e delle tessere, in unità isometriche. */
 export const LATO_GRIGLIA = 160;
 export const LATO_TESSERA = 420;
 
-export function costruisciScena(base: DatiBase, strati: DatiStrati, landmark: Landmark[]): Scena {
+export function costruisciScena(
+  base: DatiBase,
+  strati: DatiStrati,
+  landmark: Landmark[],
+  lampioniInMetri?: ArrayLike<number>,
+): Scena {
   const luoghi = landmark.map(preparaLandmark);
 
   const edifici: EdificioPronto[] = [];
@@ -691,7 +733,17 @@ export function costruisciScena(base: DatiBase, strati: DatiStrati, landmark: La
   const nAlberi = alberi.length >> 1;
 
   // Chiavi di profondità di tutto ciò che sta in piedi, poi un solo ordinamento.
-  const n = edifici.length + nAlberi + luoghi.length;
+  const lampioni = preparaLampioni(lampioniInMetri);
+  const nLampioni = lampioni.length >> 1;
+  const riquadriLampioni = new Float32Array(nLampioni * 4);
+  for (let i = 0; i < nLampioni; i++) {
+    riquadriLampioni[i * 4] = riquadriLampioni[i * 4 + 2] = lampioni[i * 2];
+    riquadriLampioni[i * 4 + 1] = riquadriLampioni[i * 4 + 3] = lampioni[i * 2 + 1];
+  }
+  const rangoLampioni = new Float32Array(nLampioni);
+  for (let i = 0; i < nLampioni; i++) rangoLampioni[i] = rangoLampione(i);
+
+  const n = edifici.length + nAlberi + luoghi.length + nLampioni;
   const tipoGrezzo = new Uint8Array(n);
   const rifGrezzo = new Int32Array(n);
   const chiaveGrezza = new Float64Array(n);
@@ -729,6 +781,18 @@ export function costruisciScena(base: DatiBase, strati: DatiStrati, landmark: La
     riquadriGrezzi[k * 4 + 1] = l.sy - l.larghezza * 3;
     riquadriGrezzi[k * 4 + 2] = l.sx + l.larghezza;
     riquadriGrezzi[k * 4 + 3] = l.sy + l.larghezza * 3;
+  }
+  for (let i = 0; i < nLampioni; i++, k++) {
+    const sx = lampioni[i * 2];
+    const sy = lampioni[i * 2 + 1];
+    tipoGrezzo[k] = EL_LAMPIONE;
+    rifGrezzo[k] = i;
+    chiaveGrezza[k] = -sy / ISO_Y; // x + y
+    // Abbondante: di notte attorno alla lampada c'è un piccolo alone.
+    riquadriGrezzi[k * 4] = sx - 6;
+    riquadriGrezzi[k * 4 + 1] = sy - ALTEZZA_LAMPIONE - 6;
+    riquadriGrezzi[k * 4 + 2] = sx + 6;
+    riquadriGrezzi[k * 4 + 3] = sy + 1;
   }
   const ordine = ordinePerProfondita(chiaveGrezza);
   const tipo = new Uint8Array(n);
@@ -804,6 +868,9 @@ export function costruisciScena(base: DatiBase, strati: DatiStrati, landmark: La
     riquadriStrade,
     linee,
     punti,
+    lampioni,
+    grigliaLampioni: new Griglia(riquadriLampioni, nLampioni, LATO_GRIGLIA),
+    rangoLampioni,
   };
 }
 
