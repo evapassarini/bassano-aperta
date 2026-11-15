@@ -14,7 +14,7 @@ import {
 } from './bersagli';
 import type { Marcatore, Sprite } from './bersagli';
 import type { Illustrazioni } from './immagini';
-import { conAlfa, luminanza, mescolaColori, PALETTE, PALETTE_PER_LUCE, sfuma } from './palette';
+import { conAlfa, inOmbra, luminanza, mescolaColori, PALETTE, PALETTE_PER_LUCE, sfuma } from './palette';
 import type { Palette } from './palette';
 import { angoliInIso, ISO_X, ISO_Y, ISO_Z, isoInSchermo, metriInIso, riquadroVisibile } from './proiezione';
 import type { Camera, Rettangolo, Vista } from './proiezione';
@@ -37,6 +37,7 @@ import {
   CAPPELLO,
   COLMO_FINTO,
   FALDA_LUCE,
+  FALDA_MEDIA,
   FALDA_OMBRA,
   FASCIA,
   GRADONE,
@@ -49,6 +50,7 @@ import {
   TIMPANO_DESTRO,
   TIMPANO_SINISTRO,
 } from './tetti';
+import { campi, creaIncrespature, creaMacchie, creaSelciato, livelloTrama, METRI_TRAMA, motivo } from './trame';
 
 export interface StatoDisegno {
   camera: Camera;
@@ -105,9 +107,9 @@ export const DETTAGLI = {
   /** Terzo tono dei tetti: le falde in piena luce. Prima ci sono solo base e ombra. */
   luce: { da: 1.45, a: 2.1 },
   /** Colmi e displuvi tracciati a penna sopra le tinte delle falde. */
-  spigoli: { da: 1.7, a: 2.5 },
+  spigoli: { da: 1.7, a: 3 },
   /** Fasce tenui al posto delle file di finestre, quando le finestre sarebbero puntini. */
-  fasce: { da: 1.9, a: 2.4 },
+  fasce: { da: 1.9, a: 2.8 },
   /** Le fasce se ne vanno mentre entrano le finestre vere. */
   fasceVia: { da: 2.9, a: 3.6 },
   /** Finestre, porte e archi dei portici: sagome scure. */
@@ -124,6 +126,10 @@ export const DETTAGLI = {
   cornici: { da: 3.5, a: 4.6 },
   /** Seconda serie di righe dei coppi, in mezzo alle prime; telai a croce delle finestre. */
   coppiFitti: { da: 5.5, a: 7.5 },
+  /** Lastre del selciato su piazze e strade del centro, increspature dell'acqua. */
+  selciato: { da: 2.6, a: 4.2 },
+  /** La mano d'acquerello stesa su tutto il foglio: macchie di colore e grana della carta. */
+  macchie: { da: 1.3, a: 3.4 },
 };
 
 /** Quanto è presente uno strato a un certo zoom: 0 sotto `da`, 1 sopra `a`. */
@@ -134,6 +140,27 @@ export function presenza(zoom: number, soglia: { da: number; a: number }): numbe
 
 /** Entro questa distanza dal centro (metri) la città è il centro storico: tinte calde, portici. */
 const RAGGIO_CENTRO = 480;
+/**
+ * Il centro storico ha due fuochi (metri locali): le piazze e, oltre il Ponte Vecchio, il borgo
+ * di Angarano sulla riva ovest. Chi sta dentro uno dei due cerchi è «in centro».
+ */
+export const FUOCHI_CENTRO = [
+  { x: 0, y: 0, raggio: RAGGIO_CENTRO },
+  { x: -335, y: 110, raggio: 310 },
+];
+
+/**
+ * Quanto un punto (metri locali) è lontano dal centro storico, contando i due fuochi: sotto
+ * RAGGIO_CENTRO è dentro. Attorno al primo fuoco è la distanza dal centro della città.
+ */
+export function lontananzaDalCentro(x: number, y: number): number {
+  let minima = Infinity;
+  for (const f of FUOCHI_CENTRO) {
+    const d = Math.hypot(x - f.x, y - f.y) - f.raggio + RAGGIO_CENTRO;
+    if (d < minima) minima = d;
+  }
+  return minima;
+}
 /** Fino a qui la prima cintura: ancora intonaci caldi, qualche tinta chiara. */
 const RAGGIO_CINTURA = 950;
 /** Oltre questo numero di dettagli pronti (facciate e tetti), quelli fuori vista si dimenticano. */
@@ -162,6 +189,7 @@ interface Volume {
   latoMuri: number[];
   /** true se ogni gruppo di muri va contornato subito: i muri si coprono tra loro. */
   muriATratti: boolean;
+
   /** Contorni dei muri da tracciare prima del tetto (impronte con rientranze), oppure null. */
   lineeMuri: Path2D | null;
   /** Tutto il tetto, da riempire con la tinta di base. */
@@ -211,6 +239,18 @@ interface TettoFine {
   camVetri: Path2D | null;
   /** Il contorno a penna di tutte le scatole, in un solo tratto. */
   camBordo: Path2D | null;
+}
+
+/** Le trame di una luce, pronte da usare come riempimento. */
+interface Trame {
+  /**
+   * La mano d'acquerello: veli trasparenti da stendere su tutto il foglio, dal più fine al più
+   * ridotto (vedi livelloTrama). Elenco vuoto se non si possono creare.
+   */
+  macchie: CanvasPattern[];
+  /** Fughe del selciato e increspature dell'acqua, su fondo trasparente. */
+  selciato: CanvasPattern | null;
+  increspature: CanvasPattern | null;
 }
 
 interface PezzoTetti {
@@ -490,11 +530,19 @@ export class Disegnatore {
   private quantoLuce = -1;
   private tinteTettoOmbra: string[] = [];
   private tinteMuro: { chiaro: string; scuro: string }[] = [];
+  /** Le trame dipinte di ogni luce già usata; null dove non si possono creare (nelle prove). */
+  private readonly trameDiLuce = new Map<Luce, Trame | null>();
+  /** Il terreno del centro storico: la sagoma dei due fuochi, larga e stretta, e il suo riquadro. */
+  private readonly centroLargo: Path2D;
+  private readonly centroStretto: Path2D;
+  private readonly riquadroCentro: Rettangolo;
+  /** Per ogni edificio, quanto è lontano dal centro storico contando i due fuochi (metri). */
+  private readonly lontano: Float32Array;
   /** Quanto pesano le fasce dei piani su ogni intonaco: meno su quelli scuri, dove rigano. */
   private pesoFasce: number[] = [];
   private readonly iTetto: Uint8Array;
   private readonly iMuro: Uint8Array;
-  private chiome: { base: string; luce: string }[] = [];
+  private chiome: { base: string; luce: string; ombra: string }[] = [];
 
   /** Tavolozza della luce attiva. */
   private P: Palette = PALETTE;
@@ -512,6 +560,8 @@ export class Disegnatore {
   constructor(scena: Scena, illustrazioni: Illustrazioni) {
     this.scena = scena;
     this.illustrazioni = illustrazioni;
+    // Anche di giorno i disegni dei luoghi simbolo prendono il loro velo, fin dal primo fotogramma.
+    illustrazioni.impostaTinta(this.P.illustrazioni);
     const el = scena.elementi;
     for (let i = 0; i < el.n; i++) {
       if (el.tipo[i] === EL_LANDMARK) {
@@ -599,7 +649,42 @@ export class Disegnatore {
     this.ultimoUso = new Int32Array(scena.edifici.length).fill(-1);
     this.iTetto = new Uint8Array(scena.edifici.length);
     this.iMuro = new Uint8Array(scena.edifici.length);
+    this.lontano = new Float32Array(scena.edifici.length);
+    // Sagoma del centro storico sul piano isometrico: un cerchio in pianta è un'ellisse 2:1.
+    const sagoma = (margine: number): Path2D => {
+      const p = new Path2D();
+      for (const f of FUOCHI_CENTRO) {
+        const c = metriInIso(f.x, f.y);
+        const r = f.raggio + margine;
+        for (let k = 0; k < 40; k++) {
+          const angolo = (Math.PI * 2 * k) / 40;
+          const x = c.sx + r * Math.cos(angolo);
+          const y = c.sy + (r / 2) * Math.sin(angolo);
+          if (k === 0) p.moveTo(x, y);
+          else p.lineTo(x, y);
+        }
+        p.closePath();
+      }
+      return p;
+    };
+    this.centroLargo = sagoma(70);
+    this.centroStretto = sagoma(0);
+    const rc: Rettangolo = { minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity };
+    for (const f of FUOCHI_CENTRO) {
+      const c = metriInIso(f.x, f.y);
+      const r = f.raggio + 70;
+      rc.minX = Math.min(rc.minX, c.sx - r);
+      rc.maxX = Math.max(rc.maxX, c.sx + r);
+      rc.minY = Math.min(rc.minY, c.sy - r / 2);
+      rc.maxY = Math.max(rc.maxY, c.sy + r / 2);
+    }
+    this.riquadroCentro = rc;
     scena.edifici.forEach((e, i) => {
+      // Dal centro dell'impronta sul piano isometrico si torna ai metri locali.
+      const piu = -e.cy / ISO_Y;
+      const meno = e.cx / ISO_X;
+      const lontano = Math.min(e.dist, lontananzaDalCentro((piu + meno) / 2, (piu - meno) / 2));
+      this.lontano[i] = lontano;
       const a = e.seme & 0xffff;
       const b = e.seme >>> 16;
       if (e.tipo === 'industria' || e.forma === TETTO_CAPANNONE) {
@@ -622,9 +707,9 @@ export class Disegnatore {
         const intonaco = mIntonaci + (altro % P.intonaci.length);
         const forte = mForti + (altro % P.intonaciForti.length);
         const chiaro = mChiari + (altro % P.intonaciChiari.length);
-        if (e.dist < RAGGIO_CENTRO) {
+        if (lontano < RAGGIO_CENTRO) {
           this.iMuro[i] = caso < 36 ? forte : caso < 93 ? intonaco : mPietra + (altro % P.pietra.length);
-        } else if (e.dist < RAGGIO_CINTURA) {
+        } else if (lontano < RAGGIO_CINTURA) {
           this.iMuro[i] = caso < 16 ? forte : caso < 74 ? intonaco : chiaro;
         } else {
           this.iMuro[i] = caso < 46 ? chiaro : caso < 92 ? intonaco : forte;
@@ -654,7 +739,7 @@ export class Disegnatore {
     this.tinteTettoLuce = this.tinteTetto.map((c) => sfuma(c, P.falde.luce));
     const fredda = P.ombraTinta;
     this.tinteTettoOmbra = this.tinteTetto.map((c) =>
-      mescolaColori(sfuma(c, P.falde.ombra), fredda.colore, fredda.quanto),
+      mescolaColori(inOmbra(c, P.falde.ombra, P.ombraCalda), fredda.colore, fredda.quanto),
     );
     this.quantoLuce = -1;
     this.tinteMuro = [
@@ -666,13 +751,50 @@ export class Disegnatore {
       ...P.intonaciChiari,
     ].map((c) => ({
       chiaro: sfuma(c, P.muri.chiaro),
-      scuro: mescolaColori(sfuma(c, P.muri.scuro), fredda.colore, fredda.quanto),
+      scuro: mescolaColori(inOmbra(c, P.muri.scuro, P.ombraCalda), fredda.colore, fredda.quanto),
     }));
     this.pesoFasce = this.tinteMuro.map((m) => {
       const l = (luminanza(m.chiaro) - 0.45) / 0.35;
       return 0.4 + 0.6 * Math.max(0, Math.min(1, l));
     });
-    this.chiome = P.chiome.map((c) => ({ base: c, luce: sfuma(c, 0.18) }));
+    this.chiome = P.chiome.map((c) => ({ base: c, luce: sfuma(c, 0.16), ombra: inOmbra(c, -0.2, P.ombraCalda * 0.5) }));
+  }
+
+  /**
+   * Le trame dipinte della luce attiva: si creano la prima volta che servono (qualche decina di
+   * tele piccole, pochi millisecondi) e poi restano. null dove non c'è un documento.
+   */
+  private trame(): Trame | null {
+    let t = this.trameDiLuce.get(this.luceAttiva);
+    if (t === undefined) {
+      t = this.creaTrame();
+      this.trameDiLuce.set(this.luceAttiva, t);
+    }
+    return t;
+  }
+
+  private creaTrame(): Trame | null {
+    if (typeof document === 'undefined') return null;
+    const P = this.P;
+    const C = campi();
+    const selciato = creaSelciato(P.selciato);
+    const onde = creaIncrespature(P.acquaChiara, P.acquaBordo);
+    const macchie: CanvasPattern[] = [];
+    for (const campo of C.macchie) {
+      const lato = Math.round(Math.sqrt(campo.length));
+      const m = motivo(creaMacchie(campo, P.macchie, P.macchieTinta.scuro, P.macchieTinta.chiaro), METRI_TRAMA / lato);
+      // O tutti i livelli o nessuno: l'indice del livello deve valere sempre.
+      if (!m) {
+        macchie.length = 0;
+        break;
+      }
+      macchie.push(m);
+    }
+    return {
+      macchie,
+      selciato: selciato ? motivo(selciato.tela, selciato.scala) : null,
+      increspature: onde ? motivo(onde.tela, onde.scala) : null,
+    };
   }
 
   /** Luce con cui si sta disegnando. */
@@ -813,9 +935,12 @@ export class Disegnatore {
     }
 
     inIso();
+    const trame = this.trame();
+    // Quanto si vedono le lastre del selciato e le increspature dell'acqua a questo zoom.
+    const pSelciato = trame ? presenza(z, DETTAGLI.selciato) : 0;
     this.carta(ctx, s, z);
-    this.terreno(ctx, visibile, z);
-    this.rete(ctx, visibile, z);
+    this.terreno(ctx, visibile, z, trame, pSelciato);
+    this.rete(ctx, visibile, z, trame, pSelciato);
     if (dettaglio === 'pieno' && this.P.ombraCase !== '' && z > DETTAGLI.ombre.da) {
       this.ombreATerra(ctx, visibile, presenza(z, DETTAGLI.ombre));
     }
@@ -833,6 +958,25 @@ export class Disegnatore {
       this.daLontano(ctx, visibile, z, dettaglio === 'piatto');
       inPixel();
       for (const sp of sprite) this.illustrazione(ctx, sp, densita);
+    }
+
+    // La mano d'acquerello: una passata sola su tutto il foglio, case, strade, acqua e luoghi
+    // simbolo insieme, così tutto sembra dipinto dalla stessa mano. Sta attaccata alla mappa.
+    // Un riempimento per fotogramma, qualunque sia il numero di case in vista, con la fusione
+    // normale (veli trasparenti): è leggera, il colore vero lo danno le tinte di tetti e muri.
+    // Da lontano si usa una tela ridotta, perché la grana non frigga muovendo la mappa.
+    const veli = trame ? trame.macchie : [];
+    const pMacchie = veli.length > 0 ? presenza(z, DETTAGLI.macchie) : 0;
+    if (pMacchie > 0) {
+      inIso();
+      ctx.globalAlpha = pMacchie;
+      ctx.fillStyle = veli[Math.min(veli.length - 1, livelloTrama(k))];
+      // Senza ammorbidire: i pixel della tela scelta sono già grandi quasi come quelli dello
+      // schermo, e così il riempimento costa meno.
+      ctx.imageSmoothingEnabled = false;
+      ctx.fillRect(visibile.minX, visibile.minY, visibile.maxX - visibile.minX, visibile.maxY - visibile.minY);
+      ctx.imageSmoothingEnabled = true;
+      ctx.globalAlpha = 1;
     }
 
     // Oltre il bordo dei dati non c'è il vuoto: un banco di nuvole copre il margine.
@@ -892,12 +1036,27 @@ export class Disegnatore {
     ctx.globalAlpha = 1;
     ctx.fillStyle = this.P.carta;
     ctx.fill(rombo);
+    // Il terreno del centro storico: una mano di sabbia calda, in due passate perché il bordo
+    // non sia netto.
+    const C = this.P.centro;
+    if (C.alfa > 0 && siToccano(this.riquadroCentro, riquadroVisibile(s.camera, s.vista, 4 / z))) {
+      ctx.fillStyle = conAlfa(C.colore, C.alfa * 0.5);
+      ctx.fill(this.centroLargo);
+      ctx.fill(this.centroStretto);
+    }
   }
 
   // --- aree ----------------------------------------------------------------------
 
-  private terreno(ctx: CanvasRenderingContext2D, visibile: Rettangolo, z: number): void {
+  private terreno(
+    ctx: CanvasRenderingContext2D,
+    visibile: Rettangolo,
+    z: number,
+    trame: Trame | null,
+    pSelciato: number,
+  ): void {
     const P = this.P;
+    const lastre = pSelciato > 0 && trame ? trame.selciato : null;
     // Prima campi e verde, poi l'acqua, poi le piazze: nei dati veri prati e parchi
     // di riva si sovrappongono al fiume e lo nasconderebbero.
     const stendi = (tipo: TipoArea): void => {
@@ -912,11 +1071,26 @@ export class Disegnatore {
           ctx.lineWidth = 0.6 / z;
           ctx.stroke(p.percorso);
         }
+        if (tipo === 'piazza' && lastre) {
+          ctx.globalAlpha = pSelciato * P.trame.selciato;
+          ctx.fillStyle = lastre;
+          ctx.fill(p.percorso);
+          ctx.globalAlpha = 1;
+          ctx.fillStyle = P.aree[tipo];
+        }
       }
     };
     for (const tipo of AREE_SOTTO) stendi(tipo);
     if (this.acqua && siToccano(this.acqua, visibile)) {
       const acqua = this.acqua.percorso;
+      const pArgine = presenza(z, { da: 1.2, a: 2 });
+      if (pArgine > 0) {
+        // L'argine: un bordo di pietra chiara lungo la riva. Si traccia prima dell'acqua, che ne
+        // copre la metà interna: così resta fuori, e un canale stretto non si svuota.
+        ctx.strokeStyle = conAlfa(P.argine, pArgine);
+        ctx.lineWidth = 2.8;
+        ctx.stroke(acqua);
+      }
       ctx.fillStyle = P.aree.acqua;
       ctx.fill(acqua);
       // Fascia più chiara parallela alla riva lontana, come un filo di corrente.
@@ -924,15 +1098,31 @@ export class Disegnatore {
       ctx.clip(acqua);
       ctx.translate(0, 9);
       ctx.fillStyle = P.acquaChiara;
-      ctx.globalAlpha = 0.75;
+      ctx.globalAlpha = P.corrente;
       ctx.fill(acqua);
       ctx.translate(0, 13);
       ctx.globalAlpha = 1;
       ctx.fillStyle = P.aree.acqua;
       ctx.fill(acqua);
+      ctx.translate(0, -22);
+      if (z > 1.2) {
+        // Sotto le rive l'acqua è più scura: due passate larghe lungo il bordo, tagliate dall'acqua.
+        ctx.strokeStyle = conAlfa(P.acquaBordo, 0.13 * pArgine);
+        ctx.lineWidth = 14;
+        ctx.stroke(acqua);
+        ctx.lineWidth = 5;
+        ctx.stroke(acqua);
+      }
+      if (pSelciato > 0 && trame?.increspature) {
+        ctx.globalAlpha = pSelciato * P.trame.acqua;
+        ctx.fillStyle = trame.increspature;
+        ctx.fill(acqua);
+        ctx.globalAlpha = 1;
+      }
       ctx.restore();
       if (z > 0.5) {
-        ctx.strokeStyle = conAlfa(P.acquaBordo, 0.55);
+        // Il filo scuro dell'acqua lungo la riva.
+        ctx.strokeStyle = conAlfa(P.acquaBordo, 0.55 + 0.25 * pArgine);
         ctx.lineWidth = Math.max(0.5, 0.8 / z);
         ctx.stroke(acqua);
       }
@@ -942,7 +1132,13 @@ export class Disegnatore {
 
   // --- strade --------------------------------------------------------------------
 
-  private rete(ctx: CanvasRenderingContext2D, visibile: Rettangolo, z: number): void {
+  private rete(
+    ctx: CanvasRenderingContext2D,
+    visibile: Rettangolo,
+    z: number,
+    trame: Trame | null,
+    pSelciato: number,
+  ): void {
     const P = this.P;
     const conBordo = z >= 0.7;
     const bordo = Math.max(0.45, 0.8 / z);
@@ -973,6 +1169,20 @@ export class Disegnatore {
         ctx.strokeStyle = conBordo ? P.strade[t].riempimento : P.strade[t].bordo;
         ctx.lineWidth = conBordo ? larghezza(t) : Math.max(larghezza(t) * 0.7, 0.8 / z);
         passa(t + coda, (p) => ctx.stroke(p.percorso));
+      }
+      // Nel centro storico le strade sono lastricate: le stesse lastre delle piazze, stese
+      // sopra la tinta della strada e tagliate sulla sagoma del centro.
+      if (!ponte && pSelciato > 0 && trame?.selciato && siToccano(this.riquadroCentro, visibile)) {
+        ctx.save();
+        ctx.clip(this.centroStretto);
+        ctx.globalAlpha = pSelciato * P.trame.selciato;
+        ctx.strokeStyle = trame.selciato;
+        for (const t of ORDINE_STRADE) {
+          if (z < LARGHEZZE[t].da) continue;
+          ctx.lineWidth = larghezza(t);
+          passa(t, (p) => ctx.stroke(p.percorso));
+        }
+        ctx.restore();
       }
       // La ferrovia di base: una riga scura con i tratti chiari delle traversine.
       const chiave = 'ferrovia' + coda;
@@ -1315,8 +1525,12 @@ export class Disegnatore {
       this.dimenticaFuoriVista();
     }
     // Da vicino il tratto è pieno; a metà strada resta più leggero, perché i volumi sono piccoli.
-    this.spessoreTratto = (fine ? 0.8 : 0.6) / z;
-    this.tratto = conAlfa(this.P.seppia, fine ? 0.6 + 0.2 * presenza(z, { da: 2.4, a: 3.6 }) : 0.55);
+    // La china: più scura della seppia e un poco più grossa avvicinandosi, come un pennino.
+    // Spessore e peso crescono piano con lo zoom, senza scatti: a metà strada, dove gli isolati
+    // sono fitti, un tratto pieno farebbe una ragnatela scura.
+    const vicino = presenza(z, { da: 1.8, a: 5 });
+    this.spessoreTratto = (0.6 + 0.45 * vicino) / z;
+    this.tratto = conAlfa(this.P.china, 0.5 + 0.36 * vicino);
     this.spessoreCoppi = Math.max(0.1, 0.55 / z);
     ctx.lineWidth = this.spessoreTratto;
     ctx.strokeStyle = this.tratto;
@@ -1464,7 +1678,7 @@ export class Disegnatore {
       if (!f) {
         if (this.puoPreparare()) {
           this.dettagliPronti++;
-          f = this.facciate[indice] = this.preparaFacciata(e);
+          f = this.facciate[indice] = this.preparaFacciata(e, this.lontano[indice]);
         } else {
           this.incompleto = true;
         }
@@ -1536,13 +1750,14 @@ export class Disegnatore {
       ctx.fill(v.ombra);
     }
 
+
     let t: TettoFine | undefined;
     if (this.serveTettoFine) {
       t = this.tettiFini[indice];
       if (!t) {
         if (this.puoPreparare()) {
           this.dettagliPronti++;
-          t = this.tettiFini[indice] = this.preparaTettoFine(e);
+          t = this.tettiFini[indice] = this.preparaTettoFine(e, this.lontano[indice]);
         } else {
           this.incompleto = true;
         }
@@ -1800,7 +2015,13 @@ export class Disegnatore {
             const r2 = (r + 1) % vertici;
             spigolo(v[k + r * 2], v[k + r * 2 + 1], v[k + r2 * 2], v[k + r2 * 2 + 1]);
           }
-          if (classe === FALDA_LUCE || classe === FASCIA) {
+          // Il tono cambia anche da falda a falda, come in un tetto dipinto a mano: una falda
+          // in luce su quattro resta a mezza tinta, una a mezza tinta su quattro prende la luce.
+          // Lo decide il seme; costa zero, sono gli stessi riempimenti. Le falde in ombra non si
+          // toccano: da lontano sono stese a tessere e cambierebbero di colpo.
+          const sorte = mescola(e.seme, f, 977) % 100;
+          const inLuce = classe === FALDA_LUCE ? sorte >= 24 : classe === FASCIA || (classe === FALDA_MEDIA && falda && sorte < 24);
+          if (inLuce) {
             luce ??= new Path2D();
             tracciaFaccia(luce, v, k, vertici);
           } else if (classe === FALDA_OMBRA || classe === INTERNO) {
@@ -1833,13 +2054,13 @@ export class Disegnatore {
    * La facciata di un edificio: finestre allineate per piano, persiane, porta, portico, zoccolo.
    * Tutto in metri veri lungo il muro e in altezza; le scelte vengono dal seme.
    */
-  private preparaFacciata(e: EdificioPronto): Facciata {
+  private preparaFacciata(e: EdificioPronto, lontano: number): Facciata {
     const a = e.anello;
     const n = a.length >> 1;
     const altezza = e.alt / ISO_Z;
     if (altezza < 2.2) return SENZA_FACCIATA;
     const seme = e.seme;
-    const inCentro = e.dist < RAGGIO_CENTRO;
+    const inCentro = lontano < RAGGIO_CENTRO;
     const casa = e.tipo === 'casa' || e.tipo === 'altro' || e.tipo === 'pubblico';
     // I corpi molto grandi fuori dal centro hanno tetto e muri da capannone, qualunque sia il tipo.
     const capannone = e.tipo === 'industria' || e.forma === TETTO_CAPANNONE;
@@ -1969,21 +2190,22 @@ export class Disegnatore {
     // Misure della casa, uguali su tutti i suoi muri.
     const piani = altezza < 4.6 ? 1 : Math.max(1, Math.round(altezza / 3.05));
     const interpiano = altezza / piani;
-    const passoCasa = (e.tipo === 'pubblico' ? 3.2 : 2.7) + ((seme >>> 3) % 5) * 0.24;
-    const larga = e.tipo === 'pubblico' ? 1.15 : 0.92 + ((seme >>> 6) & 1) * 0.14;
-    const alta = inCentro ? 1.6 : 1.42;
+    // In centro le finestre sono piccole, scure e fitte, come nelle case antiche.
+    const passoCasa = (e.tipo === 'pubblico' ? 3.2 : inCentro ? 2.3 : 2.7) + ((seme >>> 3) % 5) * (inCentro ? 0.2 : 0.24);
+    const larga = e.tipo === 'pubblico' ? 1.15 : (inCentro ? 0.8 : 0.92) + ((seme >>> 6) & 1) * 0.14;
+    const alta = inCentro ? 1.5 : 1.42;
     const anta = larga * 0.44;
     const conPersiane = casa && e.tipo !== 'pubblico' && (seme >>> 11) % 100 < (inCentro ? 78 : 42);
     const conMarcapiano = casa && piani >= 2 && (seme >>> 9) % 100 < (inCentro ? 55 : 25);
     const conPortico =
-      casa && inCentro && piani >= 2 && interpiano >= 2.8 && piuLungo >= 0 && lunghi[piuLungo] >= 9 &&
-      liberoA[piuLungo] - liberoDa[piuLungo] > lunghi[piuLungo] - 0.5 && (seme >>> 13) % 100 < 40;
+      casa && inCentro && piani >= 2 && interpiano >= 2.8 && piuLungo >= 0 && lunghi[piuLungo] >= 8 &&
+      liberoA[piuLungo] - liberoDa[piuLungo] > lunghi[piuLungo] - 0.5 && (seme >>> 13) % 100 < 55;
     // Variazioni tra un piano e l'altro: finestrelle di sottotetto all'ultimo piano, finestre
     // più alte al piano nobile, vetrine con la tenda al piano terra nelle vie del centro.
     const sottotetto = casa && piani >= 3 && (seme >>> 19) % 100 < 55;
     const nobile = casa && inCentro && piani >= 3 && (seme >>> 23) % 100 < 50;
     const conVetrine =
-      casa && e.tipo !== 'pubblico' && piani >= 2 && interpiano >= 2.8 && e.dist < RAGGIO_CINTURA &&
+      casa && e.tipo !== 'pubblico' && piani >= 2 && interpiano >= 2.8 && lontano < RAGGIO_CINTURA &&
       (seme >>> 25) % 100 < (inCentro ? 36 : 9);
     const muroPorta = e.tipo === 'chiesa' && piuCorto >= 0 ? piuCorto : piuLungo;
 
@@ -2178,7 +2400,10 @@ export class Disegnatore {
           }
           if (!finestra || !dentro(c, larga / 2)) continue;
           cornici ??= new Path2D();
-          pezza(cornici, c - larga / 2 - 0.12, c + larga / 2 + 0.12, z0 - 0.14, z1 + 0.12);
+          // Nelle case del centro niente cornice chiara tutt'attorno (sugli intonaci crema
+          // faceva tante caselle): solo il davanzale, e la finestra resta un segno scuro.
+          if (inCentro && casa && e.tipo !== 'pubblico') pezza(cornici, c - larga / 2 - 0.1, c + larga / 2 + 0.1, z0 - 0.13, z0);
+          else pezza(cornici, c - larga / 2 - 0.1, c + larga / 2 + 0.1, z0 - 0.13, z1 + 0.1);
           // Tutte le finestre stanno tra i vetri; quelle che di notte si accendono anche a parte.
           pezza((vetri ??= new Path2D()), c - larga / 2, c + larga / 2, z0, z1);
           prima = Math.min(prima, c - larga / 2);
@@ -2275,7 +2500,7 @@ export class Disegnatore {
   }
 
   /** Righe dei coppi lungo la pendenza di ogni falda, comignoli sulle case, torrino sulle terrazze. */
-  private preparaTettoFine(e: EdificioPronto): TettoFine {
+  private preparaTettoFine(e: EdificioPronto, lontano: number): TettoFine {
     let coppi: Path2D | null = null;
     let pieni: Path2D | null = null;
     let fitti: Path2D | null = null;
@@ -2284,7 +2509,7 @@ export class Disegnatore {
     let camSopra: Path2D | null = null;
     let camVetri: Path2D | null = null;
     let camBordo: Path2D | null = null;
-    const passo = 2.3;
+    const passo = 2.1;
 
     // Una scatola sul tetto: comignolo o torrino. (x, y) è il piede sul piano isometrico.
     const scatola = (x: number, y: number, mezza: number, alta: number, sotto: number): void => {
@@ -2367,9 +2592,11 @@ export class Disegnatore {
                 coppi ??= new Path2D();
                 pieni ??= new Path2D();
                 fitti ??= new Path2D();
-                const t = (r + 0.25) * passo;
+                // Le file non sono tirate con la riga: ognuna scarta un poco, sempre allo stesso modo.
+                const scarto = ((mescola(e.seme, f, r + 64) % 1000) / 1000 - 0.5) * 0.3;
+                const t = (r + 0.25 + scarto) * passo;
                 rigaNelPoligono((r & 1) === 0 ? coppi : pieni, v, k, vertici, 0, ax + gx * t, ay + gy * t, sx, sy);
-                const t2 = t + passo / 2;
+                const t2 = (r + 0.75 - scarto * 0.6) * passo;
                 rigaNelPoligono(fitti, v, k, vertici, 0, ax + gx * t2, ay + gy * t2, sx, sy);
               }
             }
@@ -2380,7 +2607,7 @@ export class Disegnatore {
       const casa = e.tipo === 'casa' || e.tipo === 'altro' || e.tipo === 'pubblico';
       // Qualche abbaino sulle case grandi: una scatoletta con la finestra, sulla falda più
       // larga tra quelle che guardano chi osserva (a sud o a ovest), a metà strada dalla gronda.
-      if (casa && e.area > 110 && (e.seme >>> 15) % 100 < (e.dist < RAGGIO_CENTRO ? 34 : 14)) {
+      if (casa && e.area > 110 && (e.seme >>> 15) % 100 < (lontano < RAGGIO_CENTRO ? 34 : 14)) {
         let scelta = -1;
         let inizioScelta = 0;
         let largaScelta = 5;
@@ -2484,17 +2711,30 @@ export class Disegnatore {
       ctx.stroke();
       ctx.restore();
     }
-    ctx.fillStyle = chioma.base;
+    if (!fine) {
+      ctx.fillStyle = chioma.base;
+      ctx.beginPath();
+      ctx.arc(sx, cy, r, 0, Math.PI * 2);
+      ctx.fill();
+      return;
+    }
+    // Da vicino la chioma ha tre toni, come una macchia d'acquerello: tutta in ombra, poi la
+    // parte in luce verso l'alto a sinistra (l'ombra resta come una falce in basso a destra) e
+    // un tocco chiaro. Le due luci sono un riempimento solo ciascuna; il contorno una volta.
+    ctx.fillStyle = chioma.ombra;
     ctx.beginPath();
     ctx.arc(sx, cy, r, 0, Math.PI * 2);
     ctx.fill();
-    if (fine) {
-      ctx.stroke();
-      ctx.fillStyle = chioma.luce;
-      ctx.beginPath();
-      ctx.arc(sx - r * 0.28, cy - r * 0.3, r * 0.5, 0, Math.PI * 2);
-      ctx.fill();
-    }
+    ctx.stroke();
+    ctx.fillStyle = chioma.base;
+    ctx.beginPath();
+    ctx.arc(sx - r * 0.16, cy - r * 0.18, r * 0.76, 0, Math.PI * 2);
+    ctx.arc(sx - r * 0.3, cy + r * 0.28, r * 0.42, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = chioma.luce;
+    ctx.beginPath();
+    ctx.arc(sx - r * 0.3, cy - r * 0.34, r * 0.4, 0, Math.PI * 2);
+    ctx.fill();
   }
 
   private illustrazione(ctx: CanvasRenderingContext2D, sp: Sprite, densita: number): void {

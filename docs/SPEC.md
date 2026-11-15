@@ -476,9 +476,9 @@ solo quando porta ancora con sé la fermata di Bassano e il suo orario: nel feed
 
 ## Aspetto
 
-Una cartolina illustrata, non una dashboard. Carta color crema, tetti in cotto, intonaci
-ocra e rosa veneziani, Brenta verde-azzurro, verde dei colli morbido. Contorni sottili color
-seppia. Titoli in Fraunces, testi in Inter (pacchetti `@fontsource`, niente font da server
+Una cartolina illustrata, non una dashboard: una veduta dipinta ad acquerello e china. Carta
+crema calda, tetti in cotto profondo, intonaci ocra, gialli e crema (poco rosa, niente bianco
+freddo), Brenta verde-azzurro, verde dei colli morbido. Contorni a china color seppia scuro. Titoli in Fraunces, testi in Inter (pacchetti `@fontsource`, niente font da server
 esterni). Niente gradienti viola, niente vetro sfocato, niente emoji. Deve funzionare su
 telefono (la finestra-racconto diventa un foglio dal basso) e da tastiera; rispettare
 `prefers-reduced-motion`. Di notte la cartolina resta una cartolina: blu notte e luci calde,
@@ -515,9 +515,14 @@ porte, portici. Nessuna dipendenza in più. I dieci luoghi simbolo restano SVG a
   non supera l'altezza del dato). Sotto i 3 m di altezza (tettoie, garage) il tetto non sale
   più di 0,6 volte l'altezza.
 - **Luce sui tetti.** Come sui muri: chiare le falde a ovest, scure quelle a sud e a est, a
-  mezza tinta quelle a nord. I toni di cotto cambiano da casa a casa. Le parti in ombra (muri
-  e falde) virano verso una tinta fredda scelta per ogni luce (`ombraTinta`): appena di
-  giorno, di più nel pomeriggio.
+  mezza tinta quelle a nord. I toni di cotto cambiano da casa a casa (dieci toni, dal bruno
+  all'arancio) e un poco anche da falda a falda: una falda in luce su quattro resta a mezza
+  tinta e una a mezza tinta su quattro prende la luce, lo decide il seme (sono gli stessi
+  riempimenti: costo zero). Le falde in ombra non cambiano, perché da lontano sono stese a
+  tessere. Le parti in ombra (muri e falde) non ingrigiscono: di giorno e nel pomeriggio il
+  rosso scende meno e il blu di più (`inOmbra`, chiave `ombraCalda`), così l'ombra di un
+  giallo è ocra bruciata e non oliva; poi virano appena verso `ombraTinta` (terra calda di
+  giorno, viola nel pomeriggio).
 - **Ombre a terra.** Di giorno e nel pomeriggio ogni casa stende un'ombra sul terreno, verso
   sud-est (sullo schermo: a destra), lunga in proporzione all'altezza e più lunga nel
   pomeriggio. Si disegna prima di tutto ciò che sta in piedi, una forma sola per tessera, e
@@ -540,22 +545,62 @@ porte, portici. Nessuna dipendenza in più. I dieci luoghi simbolo restano SVG a
   che si vedono. Chiese con intonaco chiaro e caldo, lesene, monofore ad arco grandi in
   proporzione, portale ad arco sul lato corto e rosone sopra se la facciata è alta. Capannoni
   con una fascia di vetri e un portone.
-- **Intonaci.** Entro 480 m dal centro tinte calde e cariche (ocra, giallo, rosa e rosso
-  veneziano, crema, qualche pietra); fino a 950 m intonaci caldi con qualche tinta chiara;
+- **Intonaci.** Nel centro storico tinte calde e cariche (ocra, giallo, terracotta, crema,
+  qualche pietra); nella prima cintura (fino a 950 m) intonaci caldi con qualche tinta chiara;
   oltre, tinte chiare e moderne con qualche casa colorata.
+- **Centro storico: due fuochi.** «In centro» vuol dire entro 480 m dal centro della città
+  oppure entro 310 m dal borgo di Angarano, sulla riva ovest subito oltre il Ponte Vecchio
+  (`FUOCHI_CENTRO`, `lontananzaDalCentro` in `src/map/disegno.ts`). Vale per intonaci, finestre
+  (in centro più piccole, scure e fitte), persiane, portici, vetrine, abbaini, e per il terreno:
+  dentro la sagoma dei due fuochi la carta prende una mano di sabbia calda.
+- **Stile dipinto, uno solo per tutta la città** (`src/map/trame.ts`). Nessuna immagine: poche
+  tele piccole create dal codice una volta per luce, da un seme fisso, e riusate come motivo.
+  - *Mano d'acquerello*: un velo leggero di macchie e grana (rumore che si ripete ai bordi,
+    21 m di lato): tela trasparente a due colori per luce (`macchieTinta`: bruno e crema di
+    giorno, blu di notte), stesa con la fusione normale su tutto il foglio in una passata
+    sola, dopo case e luoghi simbolo e prima di nuvole, nomi e segnaposto. È grana, non
+    colore: la variazione vera sta nelle tinte di tetti e muri. Sta attaccata alla mappa. La
+    tela esiste in quattro misure, ognuna la media della precedente (`livelloTrama`): da
+    lontano si usa quella ridotta, così la grana non frigge muovendo la mappa. Passa anche su
+    luoghi simbolo, linee tematiche e alone dell'evidenza (stanno in mezzo alle case, non si
+    possono disegnare dopo): con questo peso i loro colori cambiano di poco. Entra sfumando
+    tra zoom 1,3 e 3,4.
+  - *Selciato*: lastre in isometria (giunti a mano, uno su quattro manca, qualche lastra più
+    scura o più chiara; la tessera ripete ogni 7 lastre) su piazze e strade dentro la sagoma
+    del centro; entra tra zoom 2,6 e 4,2. Non si stende sul resto del terreno del centro: era
+    un riempimento a tutto schermo quasi tutto nascosto dalle case.
+  - *Acqua*: un bordo di pietra chiara (l'argine) tracciato prima dell'acqua, che ne copre la
+    metà interna: resta fuori dalla riva e un canale stretto non si svuota. Sotto le rive due
+    passate più scure, il filo scuro dell'acqua, increspature lungo la corrente da vicino. La
+    fascia chiara di corrente pesa secondo la luce (`corrente`).
+  - *China*: i contorni di case e tetti usano `china`, seppia scura; peso e spessore crescono
+    piano tra zoom 1,8 e 5, senza scatti. Le file dei coppi scartano un poco, sempre allo
+    stesso modo (dal seme).
+  - *Alberi*: da vicino tre toni (ombra in basso a destra, tinta, tocco di luce) e contorno.
+  - *Luoghi simbolo*: i file SVG non si toccano; in ogni luce il disegno viene moltiplicato per
+    un velo (`illustrazioni.velo`: caldo e leggero di giorno, dorato nel pomeriggio, blu di
+    notte) e le pezze d'acqua prendono il colore del fiume della mappa. Il colore dell'acqua
+    scritto nei file è una costante a parte (`ACQUA_NEI_DISEGNI`), non la tavolozza.
+  - Dove non c'è un documento (nelle prove) le tele non si creano e la mappa resta a tinte
+    piatte; il disegno a motivo è provato con trame finte in `tests/mappa.test.ts`.
 - **Livelli di dettaglio** (`DETTAGLI` in `src/map/disegno.ts`). Da molto lontano sagome
   unite; poi tetti stesi a tessere, con le falde in ombra; da zoom 1 circa muri e tetti a
-  falde edificio per edificio. Avvicinandosi compaiono, in quest'ordine: il terzo tono delle
-  falde (da 1,45), le ombre a terra (1,5), colmi e displuvi a penna (1,7), una fascia tenue
-  per ogni fila di finestre (1,9: sta al posto delle finestre finché sarebbero puntini, e se
+  falde edificio per edificio. Avvicinandosi compaiono, in quest'ordine: la mano d'acquerello
+  (da 1,3 a 3,4), il terzo tono delle falde (1,45), le ombre a terra (1,5), colmi e displuvi a
+  penna (da 1,7 a 3), una fascia tenue
+  per ogni fila di finestre (da 1,9 a 2,8: sta al posto delle finestre finché sarebbero puntini, e se
   ne va tra 2,9 e 3,6; pesa meno sugli intonaci scuri, dove rigava la facciata), finestre,
-  porte e archi (2,6), righe dei coppi una sì e una no (2,8), persiane, zoccolo e marcapiano
+  porte e archi (2,6; in centro le case hanno solo il davanzale chiaro, non la cornice), righe dei coppi una sì e una no (2,8), persiane, zoccolo e marcapiano
   (3,3), le altre righe dei coppi e le cornici (3,5), comignoli e abbaini (3,9), coppi più
-  fitti e telai delle finestre (5,5). Ogni strato entra sfumando tra
+  fitti e telai delle finestre (5,5); a terra il selciato (2,6). Ogni strato entra sfumando tra
   due valori di zoom: mai uno scatto.
 - **Luci.** Le tre tavolozze hanno le stesse chiavi anche per gli edifici (intonaci carichi e
   chiari, tetti piani, toni delle falde, coppi, vetro, cornice, telaio, persiane, porte, ombra
-  di facciata, portico, tinta fredda delle ombre, ombra a terra delle case). Di notte le finestre accese sono un sottoinsieme fisso delle finestre
+  di facciata, portico, tinta delle ombre, ombra a terra delle case, china, peso e tinte della
+  mano d'acquerello, calore delle ombre, selciato, terreno del centro, argine, fascia di
+  corrente, velo dei luoghi simbolo). Di giorno l'ombra propria vira a una terra calda, nel
+  pomeriggio appena al viola. Fuori dal centro le strade sono più chiare della carta e hanno
+  il bordo scuro: la trama delle vie deve leggersi anche in periferia. Di notte le finestre accese sono un sottoinsieme fisso delle finestre
   dipinte, le altre restano scure; compaiono sfumando tra zoom 1,9 e 2,3 (più da lontano
   restano le luci dei lampioni: servirebbe la facciata di migliaia di case per dei puntini). I
   portici hanno una luce calda. I luoghi simbolo di notte prendono un velo blu-viola chiaro,
@@ -611,6 +656,20 @@ penna (muri, gronda, colmi, timpano) un solo tratto; il terzo tono delle falde e
 mescolando i colori, senza trasparenze. I tratti degli edifici hanno capi e giunti semplici
 (`butt`, `bevel`): a quello spessore non si distinguono da quelli tondi e costano molto meno,
 soprattutto sulle righe dei coppi.
+
+Stile dipinto: nessun lavoro in più per edificio. La mano d'acquerello è un solo riempimento a
+tutto schermo per fotogramma, qualunque sia il numero di case, con la fusione normale e senza
+ammorbidire (la tela scelta ha già i pixel grandi quasi come quelli dello schermo). Si è
+provato a riempire ogni tetto e ogni muro con un motivo (dal 40 all'80% in più su processore)
+e a fondere il velo con `overlay` (fino al 35% in più): no a tutti e due. Selciato, argini e
+increspature sono pochi riempimenti e tratti sulle forme del terreno che c'erano già; i toni
+diversi delle falde riusano i riempimenti che c'erano.
+Misura (Chrome senza interfaccia, 1400 x 900 a densità 2, la camera si sposta a ogni
+fotogramma; «prima» è la versione senza stile dipinto). Disegno su processore
+(`--disable-gpu`), intervallo medio tra fotogrammi: zoom 2,4 da 144 a 151 ms (+5%); zoom 6 da
+144 a 162 ms (+13%); zoom 3,5 da 195 a 219 ms (+12%). Con la scheda grafica i fotogrammi
+restano a 60 al secondo prima e dopo e il tempo di disegno nel codice non cambia (zoom 2,4:
+5,6 e 5,4 ms; zoom 6: 3,1 e 2,9 ms). Sono numeri di una macchina sola: contano i rapporti.
 
 ## Licenze
 

@@ -16,10 +16,11 @@ import {
 } from '../src/map/bersagli';
 import type { Marcatore, Sprite } from '../src/map/bersagli';
 import { formattaHash, hashDellaMappa, leggiHash } from '../src/map/indirizzo';
-import { normalizzaSvg, separaAcqua } from '../src/map/immagini';
+import { ACQUA_NEI_DISEGNI, normalizzaSvg, separaAcqua } from '../src/map/immagini';
 import { Disegnatore, aloniInVista, quotaAloni, ZOOM_ALONI } from '../src/map/disegno';
 import type { Illustrazioni } from '../src/map/immagini';
 import {
+  inOmbra,
   luminanza,
   PALETTE,
   PALETTE_NOTTE,
@@ -649,26 +650,65 @@ describe('luce: le tre tavolozze', () => {
     }
   });
 
-  it('il giorno è quello di sempre', () => {
+  it('il giorno è la cartolina dipinta: carta calda, cotto profondo, intonaci ocra', () => {
     expect(PALETTE_PER_LUCE.giorno).toBe(PALETTE);
-    expect(PALETTE.carta).toBe('#f6ecd6');
+    expect(PALETTE.carta).toBe('#f2e5c6');
     expect(PALETTE.seppia).toBe('#6b4f3a');
-    expect(PALETTE.aree.acqua).toBe('#7fb8ad');
-    expect(PALETTE.acquaChiara).toBe('#a5d2c6');
-    expect(PALETTE.strade.principale).toEqual({ riempimento: '#fff6e0', bordo: '#bfa27c' });
-    expect(PALETTE.tetti).toEqual(['#c8643c', '#bd5a35', '#d17447', '#c46a48', '#b9553a', '#cf7f55', '#c26040']);
-    expect(PALETTE.intonaci[0]).toBe('#f1dcae');
-    expect(PALETTE.edificiLontani).toBe('#cf8a66');
-    expect(PALETTE.ombra).toBe('rgba(84, 62, 42, 0.18)');
+    expect(PALETTE.aree.acqua).toBe('#86b4a4');
+    expect(PALETTE.acquaChiara).toBe('#a8cdbc');
+    expect(PALETTE.strade.principale).toEqual({ riempimento: '#fff6e0', bordo: '#b3946a' });
+    // Le strade staccano dal terreno: sono tutte più chiare della carta, anche fuori dal centro.
+    for (const s of Object.values(PALETTE.strade)) {
+      expect(luminanza(s.riempimento)).toBeGreaterThan(luminanza(PALETTE.carta) + 0.005);
+      expect(luminanza(s.bordo)).toBeLessThan(luminanza(PALETTE.carta) - 0.15);
+    }
+    // Dieci toni di cotto, tutti più rossi che verdi e più verdi che blu: mai rosa, mai grigi.
+    expect(PALETTE.tetti).toHaveLength(10);
+    for (const t of PALETTE.tetti) {
+      const n = parseInt(t.slice(1), 16);
+      expect((n >> 16) & 255).toBeGreaterThan(((n >> 8) & 255) + 60);
+      expect((n >> 8) & 255).toBeGreaterThan((n & 255) + 30);
+    }
+    // Intonaci ocra, gialli e crema: il blu resta ben sotto il rosso (niente bianco freddo).
+    for (const c of [...PALETTE.intonaci, ...PALETTE.intonaciForti, ...PALETTE.intonaciChiari]) {
+      const n = parseInt(c.slice(1), 16);
+      expect((n >> 16) & 255).toBeGreaterThan((n & 255) + 20);
+    }
+    expect(PALETTE.intonaci[0]).toBe('#f0d9a4');
+    expect(PALETTE.edificiLontani).toBe('#c98455');
+    expect(PALETTE.ombra).toBe('rgba(84, 62, 42, 0.2)');
     expect(PALETTE.etichetta).toBe('#3d2c20');
     expect(PALETTE.etichettaAlone).toBe('#fbf4e3');
-    // Di giorno le pareti hanno il chiaroscuro di prima e nulla è acceso o velato.
-    expect(PALETTE.muri).toEqual({ chiaro: 0.1, scuro: -0.17 });
+    // Di giorno ombre proprie decise ma calde: l'ombra di un giallo resta ocra, non oliva.
+    expect(PALETTE.muri).toEqual({ chiaro: 0.08, scuro: -0.17 });
+    expect(PALETTE.ombraCalda).toBe(1);
+    expect(PALETTE_NOTTE.ombraCalda).toBe(0);
+    {
+      const canali = (c: string): number[] => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+      const [r0, g0, b0] = canali('#e2ad52');
+      const [r, g, b] = canali(inOmbra('#e2ad52', -0.2, 1));
+      const [rs, gs, bs] = canali(sfuma('#e2ad52', -0.2));
+      // Più scuro, ma il rosso scende meno e il blu di più che scurendo tutto insieme.
+      expect(r).toBeLessThan(r0);
+      expect(r).toBeGreaterThan(rs);
+      expect(g).toBeLessThanOrEqual(gs);
+      expect(b).toBeLessThan(bs);
+      expect(g0 - g).toBeGreaterThan(0);
+      expect(b0 - b).toBeGreaterThan(0);
+      // Senza calore è proprio sfuma, e schiarendo pure.
+      expect(inOmbra('#e2ad52', -0.2, 0)).toBe(sfuma('#e2ad52', -0.2));
+      expect(inOmbra('#e2ad52', 0.1, 1)).toBe(sfuma('#e2ad52', 0.1));
+    }
+    expect(parseInt(PALETTE.ombraTinta.colore.slice(1, 3), 16)).toBeGreaterThan(parseInt(PALETTE.ombraTinta.colore.slice(5), 16));
+    // La china dei contorni è più scura della seppia dei dettagli.
+    expect(luminanza(PALETTE.china)).toBeLessThan(luminanza(PALETTE.seppia));
     expect(PALETTE.ombraLunga).toBe(1);
     expect(PALETTE.sfondo).toBe(PALETTE.carta);
     expect(PALETTE.lampioni.accesi).toBe(false);
     expect(PALETTE.finestra).toBe('');
-    expect(PALETTE.illustrazioni).toBeNull();
+    // I luoghi simbolo prendono un velo caldo leggero, senza luce dal basso.
+    expect(PALETTE.illustrazioni?.luce).toBe('');
+    expect(luminanza(PALETTE.illustrazioni?.velo ?? '#000000')).toBeGreaterThan(0.8);
   });
 
   const principali = (p: typeof PALETTE): string[] => [
@@ -889,8 +929,9 @@ describe('pezze d\'acqua nei disegni dei luoghi simbolo', () => {
     expect(separaAcqua('niente')).toBeNull();
   });
 
-  it('il colore cercato è quello dell\'acqua di giorno, e le luci dicono il proprio', () => {
-    expect(PALETTE.aree.acqua).toBe('#7fb8ad');
+  it('il colore cercato è quello scritto nei file, e ogni luce dice il proprio', () => {
+    expect(ACQUA_NEI_DISEGNI).toBe('#7fb8ad');
+    expect(PALETTE.illustrazioni?.acqua).toBe(PALETTE.aree.acqua);
     expect(PALETTE_NOTTE.illustrazioni?.acqua).toBe(PALETTE_NOTTE.aree.acqua);
     expect(PALETTE_POMERIGGIO.illustrazioni?.acqua).toBe(PALETTE_POMERIGGIO.aree.acqua);
   });
@@ -950,7 +991,8 @@ describe('disegno nelle tre luci', () => {
     expect(d.luce).toBe('giorno');
     expect(d.sfondo).toBe(PALETTE.sfondo);
     expect(d.impostaLuce('giorno')).toBe(false);
-    expect(tinte.length).toBe(0);
+    // Alla nascita il disegnatore dice ai luoghi simbolo il velo del giorno, una volta sola.
+    expect(tinte).toEqual([PALETTE.illustrazioni]);
 
     const stato = (zoom: number) => ({
       camera: { x: 0, y: 0, zoom },
@@ -983,10 +1025,141 @@ describe('disegno nelle tre luci', () => {
     expect(PALETTE.tetti.some((t) => usati.giorno.has(t))).toBe(true);
     expect(usati.notte.has(PALETTE_NOTTE.finestra)).toBe(true);
     expect(usati.giorno.has(PALETTE_NOTTE.finestra)).toBe(false);
-    // I luoghi simbolo sono stati avvisati a ogni cambio; al ritorno al giorno, nessun velo.
-    expect(tinte).toEqual([PALETTE_NOTTE.illustrazioni, PALETTE_POMERIGGIO.illustrazioni, null]);
+    // I luoghi simbolo sono stati avvisati alla nascita e a ogni cambio.
+    expect(tinte).toEqual([
+      PALETTE.illustrazioni,
+      PALETTE_NOTTE.illustrazioni,
+      PALETTE_POMERIGGIO.illustrazioni,
+      PALETTE.illustrazioni,
+    ]);
     // La scena non è stata toccata.
     expect(JSON.stringify([...scena.elementi.tipo.slice(0, 50)])).toBe(copia);
+  });
+
+  it('la pittura a motivo: un velo solo per fotogramma, stato rimesso a posto, nessun lavoro in più per casa', () => {
+    vi.stubGlobal(
+      'Path2D',
+      class {
+        moveTo(): void {}
+        lineTo(): void {}
+        closePath(): void {}
+      },
+    );
+    // Un contesto che ricorda ogni riempimento e ogni tratto con lo stato che aveva in quel momento.
+    interface Passo {
+      nome: string;
+      stile: unknown;
+      alfa: unknown;
+      fusione: unknown;
+      morbido: unknown;
+    }
+    const registratore = (): { ctx: CanvasRenderingContext2D; passi: Passo[]; stato: Record<string, unknown>; conta: Record<string, number> } => {
+      const passi: Passo[] = [];
+      const conta: Record<string, number> = {};
+      const stato: Record<string, unknown> = { canvas: { width: 1000, height: 700 }, imageSmoothingEnabled: true };
+      const ctx = new Proxy(stato, {
+        get(o, nome: string) {
+          if (nome in o) return o[nome];
+          if (nome === 'measureText') return () => ({ width: 40 });
+          return () => {
+            conta[nome] = (conta[nome] ?? 0) + 1;
+            if (nome === 'fill' || nome === 'stroke' || nome === 'fillRect' || nome === 'drawImage' || nome === 'fillText') {
+              passi.push({
+                nome,
+                stile: nome === 'stroke' ? o.strokeStyle : o.fillStyle,
+                alfa: o.globalAlpha,
+                fusione: o.globalCompositeOperation,
+                morbido: o.imageSmoothingEnabled,
+              });
+            }
+          };
+        },
+        set(o, nome: string, valore) {
+          o[nome] = valore;
+          return true;
+        },
+      }) as unknown as CanvasRenderingContext2D;
+      return { ctx, passi, stato, conta };
+    };
+    // Trame finte: oggetti qualunque al posto dei motivi, riconoscibili per identità.
+    const veli = [{ v: 0 }, { v: 1 }, { v: 2 }, { v: 3 }];
+    const selciato = { s: 1 };
+    const increspature = { o: 1 };
+    const conTrame = (quanteCase: number): Disegnatore => {
+      const c = creaCittaFinta(200);
+      const base = { ...c.base, edifici: c.base.edifici.slice(0, quanteCase) };
+      const d = new Disegnatore(costruisciScena(base, c.strati, c.landmark, []), illustrazioniFinte(c.landmark.length).finte);
+      const interno = d as unknown as { trameDiLuce: Map<string, unknown> };
+      for (const luce of ['giorno', 'pomeriggio', 'notte']) {
+        interno.trameDiLuce.set(luce, { macchie: veli, selciato, increspature });
+      }
+      return d;
+    };
+    const stato = (zoom: number) => ({
+      camera: { x: 0, y: 0, zoom },
+      vista,
+      densita: 1,
+      visibili: tutti,
+      evidenziata: null,
+      puntoSopra: -1,
+      landmarkSopra: -1,
+      area: { minX: -600, minY: -600, maxX: 600, maxY: 600 },
+    });
+    const aMotivo = (p: Passo): boolean => veli.includes(p.stile as { v: number }) || p.stile === selciato || p.stile === increspature;
+
+    const d = conTrame(200);
+    for (const luce of ['giorno', 'notte', 'pomeriggio'] as const) {
+      d.impostaLuce(luce);
+      for (const zoom of [3, 6]) {
+        const r = registratore();
+        d.disegna(r.ctx, stato(zoom));
+        // Il velo d'acquerello: un solo riempimento a tutto schermo, con la fusione normale.
+        const passate = r.passi.filter((p) => veli.includes(p.stile as { v: number }));
+        expect(passate).toHaveLength(1);
+        expect(passate[0].nome).toBe('fillRect');
+        expect(passate[0].fusione).toBe('source-over');
+        expect(passate[0].alfa as number).toBeGreaterThan(0);
+        expect(passate[0].alfa as number).toBeLessThanOrEqual(1);
+        // Dopo il velo (nuvole, nomi, segnaposto) lo stato è quello di sempre: niente resta fuso
+        // o trasparente per sbaglio, e le immagini tornano ammorbidite.
+        const dopo = r.passi.slice(r.passi.indexOf(passate[0]) + 1);
+        for (const p of dopo) {
+          expect(p.fusione).toBe('source-over');
+          expect(p.morbido).toBe(true);
+          expect(aMotivo(p)).toBe(false);
+        }
+        expect(r.stato.globalAlpha).toBe(1);
+        expect(r.stato.globalCompositeOperation).toBe('source-over');
+        expect(r.stato.imageSmoothingEnabled).toBe(true);
+        expect(r.conta.save ?? 0).toBe(r.conta.restore ?? 0);
+        // Selciato e increspature si vedono, sempre con la fusione normale.
+        expect(r.passi.some((p) => p.stile === selciato)).toBe(true);
+        expect(r.passi.some((p) => p.stile === increspature)).toBe(true);
+        for (const p of r.passi.filter(aMotivo)) expect(p.fusione).toBe('source-over');
+      }
+    }
+    d.impostaLuce('giorno');
+    // Da lontano niente velo e niente lastre: a zoom 1,2 nessun riempimento a motivo.
+    const lontano = registratore();
+    d.disegna(lontano.ctx, stato(1.2));
+    expect(lontano.passi.filter(aMotivo)).toHaveLength(0);
+    // Avvicinandosi il velo usa una tela più fine: da lontano la più ridotta, da vicino la prima.
+    const quale = (zoom: number): unknown => {
+      const r = registratore();
+      d.disegna(r.ctx, stato(zoom));
+      return r.passi.find((p) => veli.includes(p.stile as { v: number }))?.stile;
+    };
+    expect(quale(1.5)).toBe(veli[3]);
+    expect(quale(12)).toBe(veli[0]);
+    // I riempimenti a motivo non crescono con le case: con metà degli edifici sono gli stessi.
+    const quanti = (disegnatore: Disegnatore): number => {
+      const r = registratore();
+      disegnatore.disegna(r.ctx, stato(4));
+      return r.passi.filter(aMotivo).length;
+    };
+    const pochi = conTrame(60);
+    expect(quanti(d)).toBeGreaterThan(0);
+    expect(quanti(pochi)).toBe(quanti(d));
   });
 });
 

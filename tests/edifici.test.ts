@@ -3,7 +3,8 @@
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { puntoSuEdificio } from '../src/map/bersagli';
-import { DETTAGLI, Disegnatore, presenza } from '../src/map/disegno';
+import { DETTAGLI, Disegnatore, FUOCHI_CENTRO, lontananzaDalCentro, presenza } from '../src/map/disegno';
+import { campi, creaMacchie, creaSelciato, dimezza, LIVELLI_TRAMA, livelloTrama, rumore } from '../src/map/trame';
 import type { Illustrazioni } from '../src/map/immagini';
 import { PALETTE, PALETTE_NOTTE, PALETTE_PER_LUCE, PALETTE_POMERIGGIO } from '../src/map/palette';
 import { ISO_Z, metriInIso } from '../src/map/proiezione';
@@ -574,6 +575,103 @@ describe('tavolozze: le chiavi nuove nelle tre luci', () => {
     // Di notte il vetro spento è scuro, la finestra accesa è la luce calda di prima.
     expect(PALETTE_NOTTE.vetro).not.toBe(PALETTE.vetro);
     expect(PALETTE_NOTTE.finestra).toBe('#ffd58a');
+  });
+
+  it('la pittura ha le sue chiavi in ogni luce: china, macchie, selciato, centro, argine', () => {
+    for (const p of Object.values(PALETTE_PER_LUCE)) {
+      for (const c of [p.china, p.selciato, p.argine, p.centro.colore, p.macchieTinta.scuro, p.macchieTinta.chiaro]) {
+        expect(c).toMatch(/^#[0-9a-f]{6}$/);
+      }
+      for (const v of [p.ombraCalda, p.corrente]) {
+        expect(v).toBeGreaterThanOrEqual(0);
+        expect(v).toBeLessThanOrEqual(1);
+      }
+      // Il velo è leggero: il colore lo danno le tinte, non le macchie.
+      expect(p.macchie).toBeLessThanOrEqual(0.3);
+      expect(p.macchie).toBeGreaterThan(0);
+      expect(p.macchie).toBeLessThan(0.7);
+      for (const v of [p.trame.selciato, p.trame.acqua, p.centro.alfa]) {
+        expect(v).toBeGreaterThan(0);
+        expect(v).toBeLessThanOrEqual(1);
+      }
+    }
+    // Di notte la mano d'acquerello pesa meno e il terreno del centro resta scuro.
+    expect(PALETTE_NOTTE.macchie).toBeLessThanOrEqual(PALETTE.macchie / 2);
+    // Di notte i veli sono blu, non bruni: il blu supera il rosso in tutti e due.
+    for (const c of Object.values(PALETTE_NOTTE.macchieTinta)) {
+      expect(parseInt(c.slice(5), 16)).toBeGreaterThan(parseInt(c.slice(1, 3), 16));
+    }
+    expect(PALETTE_NOTTE.centro.colore).not.toBe(PALETTE.centro.colore);
+  });
+});
+
+describe('trame dipinte', () => {
+  it('il rumore viene dal seme, ha media zero, sta tra -1 e 1 e si ripete ai bordi', () => {
+    const ottave = [
+      [3, 3, 0.5],
+      [8, 8, 0.4],
+    ] as const;
+    const a = rumore(32, 7, ottave);
+    const b = rumore(32, 7, ottave);
+    expect([...a]).toEqual([...b]);
+    expect([...rumore(32, 8, ottave)]).not.toEqual([...a]);
+    let somma = 0;
+    let massimo = 0;
+    for (const v of a) {
+      somma += v;
+      massimo = Math.max(massimo, Math.abs(v));
+    }
+    expect(Math.abs(somma / a.length)).toBeLessThan(1e-4);
+    expect(massimo).toBeCloseTo(1, 5);
+    // Affiancata a se stessa la tessera non ha giunti: l'ultima colonna continua nella prima
+    // con lo stesso passo che c'è tra due colonne vicine.
+    let salto = 0;
+    let dentro = 0;
+    for (let y = 0; y < 32; y++) {
+      salto = Math.max(salto, Math.abs(a[y * 32 + 31] - a[y * 32]));
+      for (let x = 0; x < 31; x++) dentro = Math.max(dentro, Math.abs(a[y * 32 + x + 1] - a[y * 32 + x]));
+    }
+    expect(salto).toBeLessThanOrEqual(dentro + 1e-6);
+  });
+
+  it('i campi del velo: dal più fine al più ridotto, ognuno la media del precedente', () => {
+    const c = campi().macchie;
+    expect(c).toHaveLength(LIVELLI_TRAMA);
+    for (let l = 1; l < c.length; l++) expect(c[l].length).toBe(c[l - 1].length / 4);
+    const piccolo = dimezza(new Float32Array([1, 3, 0, 0, 5, 7, 0, 0, 0, 0, 2, 2, 0, 0, 2, 2]));
+    expect([...piccolo]).toEqual([4, 0, 0, 2]);
+    // La media smorza la grana: il campo ridotto non è mai più mosso di quello fine.
+    const ampiezza = (v: Float32Array): number => v.reduce((m, x) => Math.max(m, Math.abs(x)), 0);
+    expect(ampiezza(c[c.length - 1])).toBeLessThan(ampiezza(c[0]));
+    // Da lontano la tela ridotta, da vicino quella fine; mai fuori dall'elenco.
+    expect(livelloTrama(1.3)).toBe(LIVELLI_TRAMA - 1);
+    expect(livelloTrama(4.8)).toBe(1);
+    expect(livelloTrama(12)).toBe(0);
+    expect(livelloTrama(400)).toBe(0);
+    expect(livelloTrama(0)).toBe(LIVELLI_TRAMA - 1);
+    let prima = LIVELLI_TRAMA;
+    for (let z = 0.5; z < 40; z *= 1.3) {
+      const l = livelloTrama(z);
+      expect(l).toBeLessThanOrEqual(prima);
+      prima = l;
+    }
+  });
+
+  it('senza un documento non crea tele: la mappa resta a tinte piatte', () => {
+    expect(creaMacchie(rumore(8, 1, [[2, 2, 1]]), 0.4)).toBeNull();
+    expect(creaSelciato('#a98c62')).toBeNull();
+  });
+
+  it('il centro storico ha due fuochi: le piazze e la riva oltre il Ponte Vecchio', () => {
+    expect(FUOCHI_CENTRO).toHaveLength(2);
+    const raggio = FUOCHI_CENTRO[0].raggio;
+    // Attorno al primo fuoco è la distanza dal centro della città.
+    expect(lontananzaDalCentro(100, 0)).toBeCloseTo(100, 6);
+    // Il Ponte Vecchio e il borgo di Angarano, subito oltre il ponte, sono dentro.
+    expect(lontananzaDalCentro(-222, 104)).toBeLessThan(raggio);
+    expect(lontananzaDalCentro(-560, 110)).toBeLessThan(raggio);
+    // La periferia resta fuori.
+    expect(lontananzaDalCentro(900, -1500)).toBeGreaterThan(raggio * 2);
   });
 });
 

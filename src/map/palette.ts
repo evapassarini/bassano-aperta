@@ -95,6 +95,27 @@ export interface Palette {
   ombraTinta: { colore: string; quanto: number };
   /** Ombra che le case stendono a terra, come rgba(); stringa vuota per non disegnarla. */
   ombraCase: string;
+  /** China dei contorni di case e tetti: più scura e più viva della seppia dei dettagli. */
+  china: string;
+  /** Quanto pesa, tra 0 e 1, la mano d'acquerello stesa su tutto il foglio (vedi trame.ts). */
+  macchie: number;
+  /** I due veli della mano d'acquerello: il pigmento che si carica e quello che si slava. */
+  macchieTinta: { scuro: string; chiaro: string };
+  /**
+   * Quanto, tra 0 e 1, la parte in ombra di muri e falde gira al caldo invece di ingrigire:
+   * 1 di giorno (il giallo in ombra è ocra bruciata, non oliva), 0 di notte.
+   */
+  ombraCalda: number;
+  /** Quanto si vede, tra 0 e 1, la fascia chiara di corrente in mezzo al fiume. */
+  corrente: number;
+  /** Quanto pesano, tra 0 e 1, le lastre del selciato e le increspature dell'acqua. */
+  trame: { selciato: number; acqua: number };
+  /** Fughe tra le lastre del selciato di piazze e strade del centro. */
+  selciato: string;
+  /** Terra battuta e selciato del centro storico: la tinta e quanto copre la carta. */
+  centro: { colore: string; alfa: number };
+  /** Bordo di pietra lungo le rive: gli argini. */
+  argine: string;
   /** Come si intonano i disegni dei luoghi simbolo; null per lasciarli come sono. */
   illustrazioni: TintaIllustrazioni | null;
 }
@@ -109,38 +130,38 @@ export interface TintaIllustrazioni {
 }
 
 export const PALETTE: Palette = {
-  carta: '#f6ecd6',
+  carta: '#f2e5c6',
   seppia: '#6b4f3a',
   seppiaChiaro: '#a88e72',
   aree: {
-    acqua: '#7fb8ad',
-    coltivo: '#ece2bd',
+    acqua: '#86b4a4',
+    coltivo: '#ebe0b8',
     prato: '#dfe3b4',
     parco: '#c9d9a2',
     bosco: '#a9c48e',
-    piazza: '#ecdcc0',
+    piazza: '#ecd9b0',
   },
-  acquaChiara: '#a5d2c6',
-  acquaBordo: '#4f8f86',
+  acquaChiara: '#a8cdbc',
+  acquaBordo: '#4f8a7e',
   strade: {
-    principale: { riempimento: '#fff6e0', bordo: '#bfa27c' },
-    secondaria: { riempimento: '#fdf3df', bordo: '#c9b08c' },
-    locale: { riempimento: '#faf1de', bordo: '#d3bf9f' },
-    pedonale: { riempimento: '#f1e2c2', bordo: '#d8c4a0' },
+    principale: { riempimento: '#fff6e0', bordo: '#b3946a' },
+    secondaria: { riempimento: '#fdf3dc', bordo: '#bb9e76' },
+    locale: { riempimento: '#fbf0d8', bordo: '#c4aa82' },
+    pedonale: { riempimento: '#f8ebcc', bordo: '#ccb48a' },
   },
   ponteBordo: '#8a6c50',
   ferrovia: '#7a6657',
-  ferroviaTratto: '#f6ecd6',
-  tetti: ['#c8643c', '#bd5a35', '#d17447', '#c46a48', '#b9553a', '#cf7f55', '#c26040'],
+  ferroviaTratto: '#f2e5c6',
+  tetti: ['#c6642e', '#b45326', '#d0733a', '#bf6530', '#a94e26', '#d27f42', '#b95a2a', '#cb6c34', '#b05c34', '#d8843e'],
   tettoIndustria: ['#b7b0a3', '#a9a79d', '#c2b8a6'],
-  intonaci: ['#f1dcae', '#e8c98c', '#eec0a0', '#f3e4c4', '#e7b592', '#f0d49a', '#f5e9d2', '#e4c8a0'],
+  intonaci: ['#f0d9a4', '#e7c47e', '#edc890', '#f2e2bc', '#e4b877', '#efce86', '#f3e6c6', '#e3c590'],
   intonacoIndustria: ['#e3dccb', '#d9d3c4'],
   pietra: ['#f3e3c0', '#ecd9b4'],
   mattone: ['#cf9c78', '#c48f6c'],
-  edificiLontani: '#cf8a66',
-  chiome: ['#8fb074', '#7fa56c', '#9dba7a', '#86aa62'],
+  edificiLontani: '#c98455',
+  chiome: ['#84a363', '#75985c', '#90ab68', '#7c9e56'],
   tronco: '#7b5b41',
-  ombra: 'rgba(84, 62, 42, 0.18)',
+  ombra: 'rgba(84, 62, 42, 0.2)',
   strati: {
     cultura: { fondo: '#a8392b', segno: '#fff6e0' },
     ambiente: { fondo: '#3f7d4e', segno: '#fff6e0' },
@@ -151,28 +172,39 @@ export const PALETTE: Palette = {
   evidenza: '#f0a92e',
   etichetta: '#3d2c20',
   etichettaAlone: '#fbf4e3',
-  sfondo: '#f6ecd6',
+  sfondo: '#f2e5c6',
   nuvole: { colore: '#fffdf8', ombra: '#d3c4a8', alfa: 0.97 },
-  muri: { chiaro: 0.1, scuro: -0.17 },
+  muri: { chiaro: 0.08, scuro: -0.17 },
   ombraLunga: 1,
   lampioni: { accesi: false, palo: '#6b5a4c', lampada: '#f3e7c8', alone: '#ffc67a' },
   finestra: '',
-  intonaciForti: ['#d9825f', '#e3b25c', '#d99a5b', '#e09a8a', '#c9694e', '#ebc674'],
-  intonaciChiari: ['#f7f0df', '#f3ead0', '#efe9dc', '#f6e7cf', '#e9e6dc', '#f4edc9'],
+  intonaciForti: ['#d88a58', '#e2ad52', '#d99a50', '#dfa37c', '#c8703f', '#e9c066'],
+  intonaciChiari: ['#f6eeda', '#f2e7c9', '#efe6d2', '#f5e5c8', '#ebe3cf', '#f3eac2'],
   tettoPiano: ['#dcd2bd', '#d3c9b6', '#e0d5bb'],
-  falde: { luce: 0.13, ombra: -0.13 },
-  faldaVeloOmbra: 'rgba(92, 40, 24, 0.2)',
-  coppi: 'rgba(110, 48, 28, 0.34)',
-  vetro: '#6a5d54',
-  cornice: '#fbf3df',
+  falde: { luce: 0.13, ombra: -0.17 },
+  faldaVeloOmbra: 'rgba(84, 34, 16, 0.26)',
+  coppi: 'rgba(92, 36, 16, 0.4)',
+  vetro: '#4c3d34',
+  cornice: '#f8eed6',
   persiane: ['#55705a', '#7a5a40', '#3f5e4b', '#8a6748', '#6b7f5c', '#6e4a36', '#4f6b6a', '#93714e'],
   porte: ['#6f4a32', '#4d5f47', '#7d3f2f', '#5b4636'],
-  facciataOmbra: 'rgba(84, 56, 36, 0.2)',
-  portico: '#5a4638',
+  facciataOmbra: 'rgba(84, 52, 30, 0.22)',
+  portico: '#49362a',
   telaio: '#e9dfc8',
-  ombraTinta: { colore: '#7c6470', quanto: 0.07 },
-  ombraCase: 'rgba(96, 70, 48, 0.17)',
-  illustrazioni: null,
+  ombraTinta: { colore: '#a8603a', quanto: 0.08 },
+  ombraCase: 'rgba(92, 58, 34, 0.27)',
+  china: '#573a26',
+  macchie: 0.25,
+  macchieTinta: { scuro: '#7a4a26', chiaro: '#fff3d6' },
+  ombraCalda: 1,
+  corrente: 0.5,
+  trame: { selciato: 0.62, acqua: 0.5 },
+  selciato: '#a98c62',
+  centro: { colore: '#ecd7a8', alfa: 0.62 },
+  argine: '#dcc8a0',
+  // Di giorno un velo caldo leggero: i disegni dei luoghi simbolo sono più lisci e più accesi
+  // delle case dipinte accanto.
+  illustrazioni: { velo: '#f6e3c8', luce: '', acqua: '#86b4a4' },
 };
 
 /** Applica `f` a tutti i colori esadecimali di una tavolozza; il resto resta com'è. */
@@ -220,7 +252,7 @@ export const PALETTE_POMERIGGIO: Palette = {
   evidenza: PALETTE.evidenza,
   etichetta: PALETTE.etichetta,
   etichettaAlone: '#fdf3dc',
-  muri: { chiaro: 0.16, scuro: -0.3 },
+  muri: { chiaro: 0.16, scuro: -0.25 },
   ombraLunga: 2.1,
   lampioni: { accesi: false, palo: '#66503f', lampada: '#f6e2b4', alone: '#ffc67a' },
   finestra: '',
@@ -228,9 +260,12 @@ export const PALETTE_POMERIGGIO: Palette = {
   faldaVeloOmbra: 'rgba(96, 36, 20, 0.3)',
   coppi: 'rgba(104, 40, 22, 0.38)',
   facciataOmbra: 'rgba(96, 52, 24, 0.26)',
-  ombraTinta: { colore: '#5b3f66', quanto: 0.24 },
-  ombraCase: 'rgba(98, 50, 40, 0.24)',
-  illustrazioni: { velo: '#ffe9c4', luce: '', acqua: '#86b09a' },
+  ombraTinta: { colore: '#6a4460', quanto: 0.15 },
+  ombraCase: 'rgba(98, 50, 40, 0.3)',
+  macchie: 0.2,
+  corrente: 0.28,
+  trame: { selciato: 0.62, acqua: 0.45 },
+  illustrazioni: { velo: '#fbe2bc', luce: '', acqua: '#86b09a' },
 };
 
 // Notte: carta blu scuro, case un poco più chiare del terreno perché si distinguano,
@@ -298,7 +333,16 @@ export const PALETTE_NOTTE: Palette = {
   telaio: '#3a4263',
   ombraTinta: { colore: '#0e1430', quanto: 0.08 },
   ombraCase: '',
-  illustrazioni: { velo: '#5d6698', luce: 'rgba(255, 190, 112, 0.3)', acqua: '#15223f' },
+  china: '#0b1022',
+  macchie: 0.1,
+  macchieTinta: { scuro: '#0a0f26', chiaro: '#6570a8' },
+  ombraCalda: 0,
+  corrente: 0.75,
+  trame: { selciato: 0.5, acqua: 0.3 },
+  selciato: '#1d2440',
+  centro: { colore: '#2f3654', alfa: 0.62 },
+  argine: '#3a4263',
+  illustrazioni: { velo: '#58618f', luce: 'rgba(255, 190, 112, 0.22)', acqua: '#15223f' },
 };
 
 export const PALETTE_PER_LUCE: Record<Luce, Palette> = {
@@ -323,6 +367,22 @@ export function sfuma(esadecimale: string, f: number): string {
   const r = canale((n >> 16) & 255);
   const g = canale((n >> 8) & 255);
   const b = canale(n & 255);
+  return '#' + ((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1);
+}
+
+/**
+ * La parte in ombra di un colore: f negativo, come in `sfuma`. Con `caldo` a 0 è proprio
+ * `sfuma` (tutti i canali scendono insieme, e il giallo diventa oliva); con `caldo` a 1 il
+ * rosso scende meno e il blu di più: l'ombra resta lo stesso intonaco, più carico e più caldo.
+ */
+export function inOmbra(esadecimale: string, f: number, caldo: number): string {
+  if (f >= 0 || caldo <= 0) return sfuma(esadecimale, f);
+  const n = parseInt(esadecimale.slice(1), 16);
+  const canale = (v: number, peso: number): number =>
+    Math.max(0, Math.min(255, Math.round(v * (1 + f * (1 + (peso - 1) * caldo)))));
+  const r = canale((n >> 16) & 255, 0.62);
+  const g = canale((n >> 8) & 255, 1.02);
+  const b = canale(n & 255, 1.5);
   return '#' + ((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1);
 }
 

@@ -3,7 +3,13 @@
 // i browser lo disegnano uguale) e poi lo si tiene pronto come immagine.
 
 import type { Landmark } from '../types';
-import { PALETTE, type TintaIllustrazioni } from './palette';
+import type { TintaIllustrazioni } from './palette';
+
+/**
+ * Il colore con cui i file SVG dei luoghi simbolo disegnano le pezze d'acqua. Sta scritto nei
+ * file: non segue la tavolozza, che può cambiare la tinta del fiume senza toccarli.
+ */
+export const ACQUA_NEI_DISEGNI = '#7fb8ad';
 
 /** Lato della maschera di opacità usata per i clic. */
 const MASCHERA = 48;
@@ -37,13 +43,13 @@ export interface Illustrazione {
 
 /**
  * Separa da un SVG le pezze d'acqua: gli elementi chiusi in se stessi con `fill` uguale al
- * colore dell'acqua di giorno. Restituisce null se non ce ne sono. Le pezze devono stare fuori
+ * colore dell'acqua nei disegni (ACQUA_NEI_DISEGNI). Restituisce null se non ce ne sono. Le pezze devono stare fuori
  * da gruppi con trasformazioni (negli SVG di oggi è così).
  */
 export function separaAcqua(testo: string): { senza: string; solo: string } | null {
   const apertura = /<svg\b[^>]*>/i.exec(testo);
   if (!apertura) return null;
-  const colore = PALETTE.aree.acqua.replace('#', '\\#');
+  const colore = ACQUA_NEI_DISEGNI.replace('#', '\\#');
   const pezza = new RegExp(`<(?:path|polygon|rect|ellipse|circle)\\b[^>]*\\sfill="${colore}"[^>]*/>`, 'gi');
   const pezze = testo.match(pezza);
   if (!pezze) return null;
