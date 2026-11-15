@@ -8,3 +8,5 @@ public/tasselli/
 # impostazioni locali degli strumenti, mai pubblicate
 .claude/
 .vercel/
+.vercel
+.env*
