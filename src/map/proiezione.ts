@@ -171,22 +171,29 @@ export function angoliInIso(r: Rettangolo): Iso[] {
 }
 
 /**
- * Di quanti metri il centro della camera deve restare dentro il bordo dei dati, perché
- * oltre il bordo non c'è nulla da vedere: il bordo può arrivare quasi al margine più
- * vicino dello schermo, non oltre. Mai più del 45%
- * del lato corto dell'area, così a zoom basso ci si può ancora muovere.
+ * Contorno delle nuvole che chiudono la mappa (vedi nuvole.ts), in metri: di quanto sta
+ * dentro il bordo dei dati, di quanto ondeggia e che raggio hanno i suoi angoli.
+ */
+export const BORDO_NUVOLE = { rientro: 240, onda: 130, raggio: 1100 } as const;
+
+/**
+ * Di quanti metri il centro della camera deve restare dentro il bordo dei dati: oltre il
+ * contorno delle nuvole non c'è nulla da vedere, quindi le nuvole possono occupare al più
+ * la fascia esterna dello schermo. Mai più del 45% del lato corto dell'area, così a zoom
+ * basso ci si può ancora muovere.
  */
 export function margineCamera(area: Rettangolo, zoom: number, vista: Vista): number {
   const mezzo = Math.min(vista.larghezza, vista.altezza) / 2;
   // Un metro verso est o verso nord sono circa 0,79 unità sullo schermo a zoom 1.
-  const metri = (0.9 * mezzo) / (Math.hypot(ISO_X, ISO_Y) * Math.max(zoom, 1e-6));
+  const metri = (0.68 * mezzo) / (Math.hypot(ISO_X, ISO_Y) * Math.max(zoom, 1e-6));
   const tetto = 0.45 * Math.min(area.maxX - area.minX, area.maxY - area.minY);
-  return Math.max(0, Math.min(tetto, metri));
+  return Math.max(0, Math.min(tetto, BORDO_NUVOLE.rientro + metri));
 }
 
 /**
  * Tiene il centro della camera dentro l'area dei dati e lo zoom tra i limiti. Con `vista`
- * il centro resta anche lontano dal bordo quanto basta a non riempire lo schermo di vuoto.
+ * il centro resta dentro il contorno delle nuvole, angoli tondi compresi, quanto basta a non
+ * riempire lo schermo di sole nuvole.
  */
 export function limitaCamera(
   camera: Camera,
@@ -197,11 +204,26 @@ export function limitaCamera(
 ): Camera {
   const zoom = Math.min(zoomMax, Math.max(zoomMin, camera.zoom));
   const m = vista ? margineCamera(area, zoom, vista) : 0;
-  return {
-    x: Math.min(area.maxX - m, Math.max(area.minX + m, camera.x)),
-    y: Math.min(area.maxY - m, Math.max(area.minY + m, camera.y)),
-    zoom,
-  };
+  let x = Math.min(area.maxX - m, Math.max(area.minX + m, camera.x));
+  let y = Math.min(area.maxY - m, Math.max(area.minY + m, camera.y));
+  const raggio = vista ? Math.max(0, BORDO_NUVOLE.raggio - m) : 0;
+  if (raggio > 0) {
+    // Negli angoli il limite è un arco: il centro non entra nello spicchio coperto di nuvole.
+    const cx = (area.minX + area.maxX) / 2;
+    const cy = (area.minY + area.maxY) / 2;
+    const ax = (area.maxX - area.minX) / 2 - m - raggio;
+    const ay = (area.maxY - area.minY) / 2 - m - raggio;
+    const dx = Math.abs(x - cx) - ax;
+    const dy = Math.abs(y - cy) - ay;
+    if (ax >= 0 && ay >= 0 && dx > 0 && dy > 0) {
+      const d = Math.hypot(dx, dy);
+      if (d > raggio) {
+        x = cx + Math.sign(x - cx) * (ax + (dx / d) * raggio);
+        y = cy + Math.sign(y - cy) * (ay + (dy / d) * raggio);
+      }
+    }
+  }
+  return { x, y, zoom };
 }
 
 /** Lo zoom a cui l'intera area dei dati entra nella vista. */

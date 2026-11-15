@@ -229,12 +229,18 @@ describe('bordo della mappa', () => {
   const area = { minX: -2000, minY: -3000, maxX: 2000, maxY: 3000 };
   const vista = { larghezza: 1200, altezza: 800 };
 
-  it('con la vista il centro della camera resta lontano dal bordo', () => {
+  it('con la vista il centro della camera resta dentro il contorno delle nuvole', () => {
     const m = margineCamera(area, 2, vista);
-    expect(m).toBeGreaterThan(100);
-    const c = limitaCamera({ x: 99999, y: -99999, zoom: 2 }, area, 0.2, 8, vista);
-    expect(c.x).toBeCloseTo(area.maxX - m, 6);
-    expect(c.y).toBeCloseTo(area.minY + m, 6);
+    expect(m).toBeGreaterThan(240);
+    // Lungo un lato il limite è dritto.
+    const lato = limitaCamera({ x: 99999, y: 0, zoom: 2 }, area, 0.2, 8, vista);
+    expect(lato.x).toBeCloseTo(area.maxX - m, 6);
+    expect(lato.y).toBe(0);
+    // Nell'angolo è un arco: il centro resta più dentro che lungo i lati, e fuori dalle nuvole.
+    const angolo = limitaCamera({ x: 99999, y: -99999, zoom: 2 }, area, 0.2, 8, vista);
+    expect(angolo.x).toBeLessThan(area.maxX - m);
+    expect(angolo.y).toBeGreaterThan(area.minY + m);
+    expect(fuoriDi(area, angolo.x, angolo.y)).toBeLessThan(0);
     // Da vicino il margine si stringe; da lontano non supera il 45% del lato corto.
     expect(margineCamera(area, 8, vista)).toBeLessThan(m);
     expect(margineCamera(area, 0.01, vista)).toBeCloseTo(0.45 * 4000, 6);

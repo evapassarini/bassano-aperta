@@ -3,7 +3,7 @@
 // Posizioni e contorno vengono da una griglia e da un seme: sempre uguali.
 
 import { conAlfa } from './palette';
-import { isoInMetri } from './proiezione';
+import { BORDO_NUVOLE, isoInMetri } from './proiezione';
 import type { Rettangolo } from './proiezione';
 
 export interface Nuvola {
@@ -18,12 +18,9 @@ export interface Nuvola {
 
 /** Lato della griglia a zoom 1, in unità isometriche. */
 const PASSO = 105;
-/** Quanto il contorno delle nuvole si sposta in dentro e in fuori, in metri. */
-const ONDA = 130;
-/** Di quanto il contorno sta dentro il bordo dei dati, in media, in metri. */
-const RIENTRO = 240;
-/** Raggio degli angoli del contorno, in metri. */
-const RAGGIO_ANGOLI = 1100;
+const ONDA = BORDO_NUVOLE.onda;
+const RIENTRO = BORDO_NUVOLE.rientro;
+const RAGGIO_ANGOLI = BORDO_NUVOLE.raggio;
 /** Lato delle celle dell'onda, in metri. */
 const CELLA_ONDA = 850;
 
