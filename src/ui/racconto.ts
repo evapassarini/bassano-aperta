@@ -9,6 +9,7 @@ import {
   immagineDellaTappa,
   mediaResidui,
   urlIncorporamento,
+  urlLicenza,
   urlMiniatura,
   urlPaginaYouTube,
   urlSicuro,
@@ -38,19 +39,30 @@ function paragrafi(testo: string, classe: string): HTMLElement[] {
     .map((p) => el('p', { class: classe }, p));
 }
 
+/**
+ * Riga dei crediti di un file: autore, licenza e link alla pagina di origine. Se la licenza è
+ * una Creative Commons, il suo nome porta al testo ufficiale della licenza.
+ */
+export function creditiMedia(m: Media, pagina: string | null, etichettaPagina: string): HTMLElement {
+  const riga = el('span', { class: 'didascalia-crediti' });
+  if (m.autore) riga.append(m.autore);
+  if (m.licenza) {
+    if (m.autore) riga.append(', ');
+    const testoLicenza = urlLicenza(m.licenza);
+    riga.append(testoLicenza ? linkEsterno(testoLicenza, m.licenza, 'licenza', ': testo della licenza') : m.licenza);
+  }
+  if (m.autore || m.licenza) riga.append('. ');
+  if (pagina) riga.append(linkEsterno(pagina, etichettaPagina));
+  return riga;
+}
+
 /** Didascalia: titolo, autore, licenza e link alla pagina di origine. */
 function didascalia(m: Media, etichettaPagina = 'Pagina del file'): HTMLElement {
-  const crediti = [m.autore, m.licenza].filter(Boolean).join(', ');
   return el(
     'figcaption',
     null,
     el('span', { class: 'didascalia-titolo' }, m.titolo),
-    el(
-      'span',
-      { class: 'didascalia-crediti' },
-      crediti ? `${crediti}. ` : null,
-      urlSicuro(m.pagina) ? linkEsterno(m.pagina, etichettaPagina) : null,
-    ),
+    creditiMedia(m, urlSicuro(m.pagina), etichettaPagina),
   );
 }
 
@@ -121,18 +133,12 @@ function figuraVideo(m: Media): HTMLElement | null {
   });
   cornice.append(bottone);
   const figura = el('figure', { class: 'video' }, cornice);
-  const crediti = [m.autore, m.licenza].filter(Boolean).join(', ');
   figura.append(
     el(
       'figcaption',
       null,
       el('span', { class: 'didascalia-titolo' }, m.titolo),
-      el(
-        'span',
-        { class: 'didascalia-crediti' },
-        crediti ? `${crediti}. ` : null,
-        pagina ? linkEsterno(pagina, 'Guardalo su YouTube') : null,
-      ),
+      creditiMedia(m, pagina, 'Guardalo su YouTube'),
     ),
   );
   return figura;

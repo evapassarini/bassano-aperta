@@ -443,6 +443,34 @@ body {
 }
 
 /* ---------------------------------------------------------------------------
+   Credito della mappa: sempre in vista, piccolo, su carta chiara in ogni luce.
+   Su schermo largo sta nel margine sotto lo zoom, in basso a destra: lì non arriva nessun
+   pannello. Su telefono sta sotto gli strati, a destra (vedi più sotto).
+--------------------------------------------------------------------------- */
+
+.credito-mappa {
+  position: fixed;
+  right: var(--margine);
+  bottom: 0;
+  margin: 0;
+  padding: 1px 6px;
+  border-radius: 4px 4px 0 0;
+  background: rgba(252, 246, 232, 0.92);
+  color: var(--inchiostro);
+  font-size: 0.6875rem;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.ba .credito-mappa a {
+  color: var(--inchiostro);
+}
+
+.ba .credito-mappa a.esterno .icona {
+  display: none;
+}
+
+/* ---------------------------------------------------------------------------
    Zoom e aiuto per la tastiera
 --------------------------------------------------------------------------- */
 
@@ -2155,6 +2183,13 @@ button.aria-breve:hover {
     position: fixed;
     left: var(--margine);
     bottom: calc(var(--margine) + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Il credito della mappa segue gli strati, in alto a destra: in basso non c'è posto. */
+  .credito-mappa {
+    position: static;
+    align-self: flex-end;
+    border-radius: 4px;
   }
 
   /* Sopra le azioni, sempre a sinistra: l'aria, e sotto la luce. A destra resta il posto per lo zoom. */

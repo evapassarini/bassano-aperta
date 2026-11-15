@@ -1,7 +1,7 @@
 // Motore della mappa isometrica: camera, interazione, indirizzo, disegno.
 // L'interfaccia pubblica è quella di docs/SPEC.md.
 
-import { Tasselli } from './tasselli';
+import { creaTasselli } from './tasselli';
 import { ORIGINE } from '../types';
 import type { DatiBase, DatiStrati, IdStrato, Landmark, LonLat, Luce, Punto } from '../types';
 import { trovaBersaglio, ZOOM_NOMI } from './bersagli';
@@ -98,7 +98,8 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
 
   const illustrazioni = new Illustrazioni(opzioni.landmark, cartella, richiedi);
   const disegnatore = new Disegnatore(scena, illustrazioni);
-  const tasselli = new Tasselli((import.meta.env?.BASE_URL ?? '/') + 'tasselli/', richiedi);
+  // Spenti se non li si accende apposta: senza, nessuna richiesta a tasselli/indice.json.
+  const tasselli = creaTasselli((import.meta.env?.BASE_URL ?? '/') + 'tasselli/', richiedi);
   disegnatore.tasselli = tasselli;
 
   const vista: Vista = { larghezza: 1, altezza: 1 };
@@ -637,7 +638,7 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
       canvas.style.cursor = '';
       puntatori.clear();
       illustrazioni.distruggi();
-      tasselli.distruggi();
+      tasselli?.distruggi();
     },
   };
 }

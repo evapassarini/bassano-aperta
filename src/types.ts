@@ -61,6 +61,12 @@ export interface DatiBase {
   aree: Area[];
   /** Alberi singoli o punti campionati nelle aree verdi: [x0, y0, x1, y1, ...]. */
   alberi: number[];
+  /**
+   * Quanti alberi vengono da OpenStreetMap: sono i primi di `alberi`. Gli altri sono aggiunti
+   * in modo illustrativo dentro boschi e parchi. Manca nei file preparati prima che lo script
+   * lo salvasse: in quel caso il sito lo dice a parole, senza numero.
+   */
+  alberiVeri?: number;
 }
 
 // ---------------------------------------------------------------------------

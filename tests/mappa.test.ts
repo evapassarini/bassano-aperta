@@ -1196,7 +1196,7 @@ describe('doppioni tra gli edifici (scripts/lib/doppioni.mjs)', () => {
   });
 });
 
-import { presenzaTassello } from '../src/map/tasselli';
+import { Tasselli, creaTasselli, presenzaTassello, tasselliAccesi } from '../src/map/tasselli';
 
 describe('tasselli dipinti', () => {
   it('entrano sfumando dallo zoom indicato', () => {
@@ -1204,5 +1204,41 @@ describe('tasselli dipinti', () => {
     expect(presenzaTassello(3.2, 3.2)).toBe(0);
     expect(presenzaTassello(3.55, 3.2)).toBeCloseTo(0.5, 5);
     expect(presenzaTassello(6, 3.2)).toBe(1);
+  });
+});
+
+describe('interruttore dei tasselli', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('è spento se nessuno lo accende, e si accende solo con VITE_TASSELLI=1', () => {
+    expect(tasselliAccesi({})).toBe(false);
+    expect(tasselliAccesi(undefined)).toBe(false);
+    expect(tasselliAccesi({ VITE_TASSELLI: '0' })).toBe(false);
+    expect(tasselliAccesi({ VITE_TASSELLI: 'true' })).toBe(false);
+    expect(tasselliAccesi({ VITE_TASSELLI: '1' })).toBe(true);
+    // Così come si costruisce il sito oggi: spento.
+    expect(tasselliAccesi()).toBe(false);
+  });
+
+  it('da spento non crea nulla e non chiede nulla alla rete', async () => {
+    const finto = vi.fn(async () => ({ ok: false, status: 404 }));
+    vi.stubGlobal('fetch', finto);
+    expect(creaTasselli('./tasselli/', () => {})).toBeNull();
+    expect(creaTasselli('./tasselli/', () => {}, false)).toBeNull();
+    await Promise.resolve();
+    expect(finto).not.toHaveBeenCalled();
+  });
+
+  it("da acceso chiede l'indice e, se manca, la mappa resta quella disegnata dal codice", async () => {
+    const finto = vi.fn(async () => ({ ok: false, status: 404 }));
+    vi.stubGlobal('fetch', finto);
+    const tasselli = creaTasselli('./tasselli/', () => {}, true);
+    expect(tasselli).toBeInstanceOf(Tasselli);
+    await Promise.resolve();
+    expect(finto).toHaveBeenCalledTimes(1);
+    expect(finto).toHaveBeenCalledWith('./tasselli/indice.json');
+    tasselli?.distruggi();
   });
 });

@@ -1,6 +1,7 @@
+import { readFileSync, readdirSync } from 'node:fs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { luceAdesso } from '../src/luce';
-import type { Avviso, DatiAria, DatiAvvisi, DatiStrati, LetturaTreni, Luce, Punto, Storia, Treno } from '../src/types';
+import type { Avviso, DatiAria, DatiAvvisi, DatiStrati, LetturaTreni, Luce, Media, Punto, Storia, Treno } from '../src/types';
 import {
   chiaveOrdine,
   contaRisultati,
@@ -38,6 +39,7 @@ import {
   tracciaSerie,
   trovaVoceAvvisi,
   urlIncorporamento,
+  urlLicenza,
   urlMiniatura,
   urlPaginaYouTube,
   urlSicuro,
@@ -45,7 +47,9 @@ import {
 import { creaAriaBreve } from '../src/ui/ariaBreve';
 import { creaSchedaAvvisi } from '../src/ui/avvisi';
 import { tieniFuoco } from '../src/ui/dom';
-import { creaUI } from '../src/ui/index';
+import { creaFonti } from '../src/ui/fonti';
+import { TESTO_CREDITO_OSM, URL_CREDITO_OSM, creaUI } from '../src/ui/index';
+import { creditiMedia } from '../src/ui/racconto';
 import { CHIAVE_LUCE, PASSO_LUCE_MS, creaSelettoreLuce } from '../src/ui/luce';
 import { creaScheda } from '../src/ui/scheda';
 
@@ -307,6 +311,47 @@ describe('altri indirizzi', () => {
       'https://commons.wikimedia.org/wiki/Special:FilePath/Pallarch3-2.jpg?width=500',
     );
     expect(urlMiniatura('https://esempio.it/foto.jpg?width=960')).toBe('https://esempio.it/foto.jpg?width=960');
+  });
+});
+
+describe('licenze dei media', () => {
+  it('le licenze Creative Commons portano alla pagina ufficiale, nella versione giusta', () => {
+    expect(urlLicenza('CC BY 2.5')).toBe('https://creativecommons.org/licenses/by/2.5/');
+    expect(urlLicenza('CC BY 3.0')).toBe('https://creativecommons.org/licenses/by/3.0/');
+    expect(urlLicenza('CC BY 4.0')).toBe('https://creativecommons.org/licenses/by/4.0/');
+    expect(urlLicenza('CC BY-SA 2.0')).toBe('https://creativecommons.org/licenses/by-sa/2.0/');
+    expect(urlLicenza('CC BY-SA 3.0')).toBe('https://creativecommons.org/licenses/by-sa/3.0/');
+    expect(urlLicenza('CC BY-SA 4.0')).toBe('https://creativecommons.org/licenses/by-sa/4.0/');
+    expect(urlLicenza('CC0')).toBe('https://creativecommons.org/publicdomain/zero/1.0/');
+    expect(urlLicenza('CC0 1.0')).toBe('https://creativecommons.org/publicdomain/zero/1.0/');
+  });
+
+  it('non bada a spazi e maiuscole', () => {
+    expect(urlLicenza('  cc  by-sa 4.0 ')).toBe('https://creativecommons.org/licenses/by-sa/4.0/');
+  });
+
+  it('per tutto il resto non inventa un link', () => {
+    expect(urlLicenza('Pubblico dominio')).toBeNull();
+    expect(urlLicenza('Licenza non indicata: video solo incorporato da YouTube')).toBeNull();
+    expect(urlLicenza('CC BY-SA 3.0 IT')).toBeNull();
+    expect(urlLicenza('CC BY-SA 5.0')).toBeNull();
+    expect(urlLicenza('CC BY-NC 4.0')).toBeNull();
+    expect(urlLicenza('CC BY-SA')).toBeNull();
+    expect(urlLicenza('')).toBeNull();
+    expect(urlLicenza(undefined)).toBeNull();
+  });
+
+  it('tutte le licenze Creative Commons scritte nei racconti hanno il loro link', () => {
+    const cartella = new URL('../content/luoghi/', import.meta.url);
+    const licenze = new Set<string>();
+    for (const nome of readdirSync(cartella)) {
+      if (!nome.endsWith('.json')) continue;
+      const racconto = JSON.parse(readFileSync(new URL(nome, cartella), 'utf8')) as Storia;
+      for (const m of racconto.media) if (m.licenza) licenze.add(m.licenza);
+    }
+    const cc = [...licenze].filter((l) => /^CC/i.test(l));
+    expect(cc.length).toBeGreaterThan(0);
+    for (const l of cc) expect(urlLicenza(l), l).toMatch(/^https:\/\/creativecommons\.org\//);
   });
 });
 
@@ -1566,6 +1611,149 @@ describe('luce della mappa e aria in breve', () => {
       expect(riquadro.tag).toBe('div');
       expect(riquadro.textContent).toContain('PM10 13,7 µg/m³');
       expect(monta({ ...STRATI, punti: [] }).radice.conClasse('aria-breve')[0].tag).toBe('div');
+    });
+  });
+});
+
+describe('crediti, fonti e indirizzi del progetto', () => {
+  const REPOSITORY = 'https://github.com/evapassarini/bassano-aperta';
+  const STRATI: DatiStrati = { generato: '2026-11-14T10:00:00Z', fonti: [], punti: [], linee: [] };
+
+  beforeEach(() => {
+    fuoco.attivo = null;
+    vi.stubGlobal('document', {
+      createElement: (tag: string) => new Finto(tag),
+      createElementNS: (_spazio: string, tag: string) => new Finto(tag),
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      visibilityState: 'visible',
+      get activeElement() {
+        return fuoco.attivo;
+      },
+    });
+    vi.stubGlobal('HTMLElement', Finto);
+    for (const finta of Object.values(live)) finta.mockReset();
+    live.leggiAria.mockRejectedValue(new Error('nessuna rete nei test'));
+  });
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  const link = (nodo: Finto, testo: string): Finto | undefined =>
+    nodo.conTag('a').find((a) => a.textContent.startsWith(testo));
+
+  it('il credito di OpenStreetMap è sempre sulla mappa, con il link al copyright', () => {
+    const radice = new Finto('div');
+    const ui = creaUI({
+      radice: radice as unknown as HTMLElement,
+      storie: [],
+      strati: STRATI,
+      alCambioStrato: () => {},
+      alVaiA: () => {},
+      allaChiusura: () => {},
+    });
+    const [credito] = radice.conClasse('credito-mappa');
+    expect(credito).toBeDefined();
+    expect(credito.hidden).toBe(false);
+    expect(TESTO_CREDITO_OSM).toBe('© OpenStreetMap contributors');
+    expect(URL_CREDITO_OSM).toBe('https://www.openstreetmap.org/copyright');
+    const [a] = credito.conTag('a');
+    expect(a.textContent).toContain('© OpenStreetMap contributors');
+    expect(a.getAttribute('href')).toBe('https://www.openstreetmap.org/copyright');
+    expect(a.getAttribute('target')).toBe('_blank');
+    expect(a.getAttribute('rel')).toContain('noopener');
+    ui.distruggi();
+  });
+
+  it('index.html porta gli indirizzi del codice e delle segnalazioni', () => {
+    const pagina = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+    const ui = /<div[^>]*\bid="ui"[^>]*>/.exec(pagina)?.[0] ?? '';
+    expect(ui).toContain(`data-codice="${REPOSITORY}"`);
+    expect(ui).toContain(`data-segnalazioni="${REPOSITORY}/issues"`);
+  });
+
+  it('«Fonti e licenze» mostra «Vai al codice» e «Segnala un errore» con gli indirizzi scritti sulla radice', () => {
+    const radice = new Finto('div');
+    radice.dataset.codice = REPOSITORY;
+    radice.dataset.segnalazioni = `${REPOSITORY}/issues`;
+    const ui = creaUI({
+      radice: radice as unknown as HTMLElement,
+      storie: [],
+      strati: STRATI,
+      alCambioStrato: () => {},
+      alVaiA: () => {},
+      allaChiusura: () => {},
+    });
+    const [fonti] = radice.conClasse('fonti');
+    expect(link(fonti, 'Vai al codice')?.getAttribute('href')).toBe(REPOSITORY);
+    expect(link(fonti, 'Segnala un errore')?.getAttribute('href')).toBe(`${REPOSITORY}/issues`);
+    ui.distruggi();
+  });
+
+  it('senza indirizzi «Fonti e licenze» non mostra link vuoti', () => {
+    const fonti = comeFinto(creaFonti({ strati: STRATI }).nodo);
+    expect(link(fonti, 'Vai al codice')).toBeUndefined();
+    expect(link(fonti, 'Segnala un errore')).toBeUndefined();
+  });
+
+  it('«Fonti e licenze» parla delle illustrazioni dei luoghi simbolo', () => {
+    const testo = comeFinto(creaFonti({ strati: STRATI }).nodo).textContent;
+    expect(testo).toContain('Le illustrazioni dei luoghi simbolo');
+    expect(testo).toContain('a partire dalle sagome degli edifici su OpenStreetMap');
+    expect(testo).toContain('Altezze e dettagli sono in gran parte stime');
+  });
+
+  it('degli alberi dice il numero solo se la mappa di base lo porta, altrimenti lo dice a parole', () => {
+    const frase = (opzioni: { alberiVeri?: string; alberiTutti?: string }): string =>
+      comeFinto(creaFonti({ strati: STRATI, ...opzioni }).nodo)
+        .conTag('p')
+        .map((p) => p.textContent)
+        .find((t) => t.startsWith('Gli alberi')) ?? '';
+    const aParole = frase({});
+    expect(aParole).toContain('una parte è segnata su OpenStreetMap');
+    expect(aParole).toContain('dentro boschi e parchi, a scopo illustrativo');
+    expect(aParole).not.toMatch(/\d/);
+    // Numeri che non tornano: di nuovo a parole.
+    expect(frase({ alberiVeri: '500', alberiTutti: '400' })).not.toMatch(/\d/);
+    expect(frase({ alberiVeri: 'tanti', alberiTutti: '6000' })).not.toMatch(/\d/);
+    const conNumeri = frase({ alberiVeri: '12345', alberiTutti: '60000' });
+    expect(conNumeri).toContain('12.345 sono segnati su OpenStreetMap');
+    expect(conNumeri).toContain('Gli altri 47.655');
+    expect(conNumeri).toContain('a scopo illustrativo');
+  });
+
+  describe('didascalie dei media', () => {
+    const media = (parziale: Partial<Media>): Media => ({
+      tipo: 'immagine',
+      titolo: 'Il ponte',
+      url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ponte.jpg?width=960',
+      pagina: 'https://commons.wikimedia.org/wiki/File:Ponte.jpg',
+      autore: '',
+      licenza: '',
+      ...parziale,
+    });
+
+    it('il nome di una licenza Creative Commons è un link al testo della licenza', () => {
+      const riga = comeFinto(creditiMedia(media({ autore: 'Autore di prova', licenza: 'CC BY-SA 4.0' }), 'https://commons.wikimedia.org/wiki/File:Ponte.jpg', 'Pagina del file'));
+      const [licenza, pagina] = riga.conTag('a');
+      expect(licenza.textContent).toContain('CC BY-SA 4.0');
+      expect(licenza.getAttribute('href')).toBe('https://creativecommons.org/licenses/by-sa/4.0/');
+      expect(licenza.getAttribute('target')).toBe('_blank');
+      expect(licenza.getAttribute('rel')).toContain('noopener');
+      expect(pagina.getAttribute('href')).toBe('https://commons.wikimedia.org/wiki/File:Ponte.jpg');
+      expect(riga.textContent.startsWith('Autore di prova, CC BY-SA 4.0')).toBe(true);
+    });
+
+    it('le altre licenze restano testo semplice', () => {
+      const riga = comeFinto(creditiMedia(media({ autore: 'Autore di prova', licenza: 'Pubblico dominio' }), null, 'Pagina del file'));
+      expect(riga.conTag('a')).toHaveLength(0);
+      expect(riga.textContent).toBe('Autore di prova, Pubblico dominio. ');
+    });
+
+    it('senza autore né licenza resta solo il link alla pagina', () => {
+      const riga = comeFinto(creditiMedia(media({}), 'https://commons.wikimedia.org/wiki/File:Ponte.jpg', 'Pagina del file'));
+      expect(riga.conTag('a')).toHaveLength(1);
+      expect(riga.textContent.startsWith('Pagina del file')).toBe(true);
     });
   });
 });

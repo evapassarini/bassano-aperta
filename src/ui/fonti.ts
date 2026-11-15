@@ -13,6 +13,9 @@ export interface OpzioniFonti {
   /** Quanti lampioni vengono da OpenStreetMap e quanti sono in tutto (numeri scritti come testo). */
   lampioniVeri?: string;
   lampioniTutti?: string;
+  /** Quanti alberi vengono da OpenStreetMap e quanti sono in tutto (numeri scritti come testo). */
+  alberiVeri?: string;
+  alberiTutti?: string;
   /** Dove segnalare un errore (pagina delle segnalazioni del progetto), se esiste. */
   segnalazioni?: string;
   /** Pagina del codice sorgente, se esiste. */
@@ -71,6 +74,24 @@ export function creaFonti(opzioni: OpzioniFonti): FinestraFonti {
       ),
     );
   }
+  // Alberi: il numero si scrive solo se la mappa di base lo porta con sé.
+  const alberiVeri = Number(opzioni.alberiVeri);
+  const alberiTutti = Number(opzioni.alberiTutti);
+  const contoAlberi =
+    Boolean(opzioni.alberiVeri && opzioni.alberiTutti) &&
+    Number.isInteger(alberiVeri) &&
+    Number.isInteger(alberiTutti) &&
+    alberiVeri > 0 &&
+    alberiTutti > alberiVeri;
+  osm.append(
+    el(
+      'p',
+      null,
+      contoAlberi
+        ? `Gli alberi: ${formattaNumero(alberiVeri)} sono segnati su OpenStreetMap. Gli altri ${formattaNumero(alberiTutti - alberiVeri)} sono aggiunti dal nostro codice dentro boschi e parchi, a scopo illustrativo: non sono un rilievo degli alberi della città.`
+        : 'Gli alberi: una parte è segnata su OpenStreetMap, una parte è aggiunta dal nostro codice dentro boschi e parchi, a scopo illustrativo. Non sono un rilievo degli alberi della città.',
+    ),
+  );
   if (strati.fonti.length > 0) {
     const elenco = el('ul', { class: 'fonti-elenco' });
     for (const f of strati.fonti) {
@@ -85,6 +106,12 @@ export function creaFonti(opzioni: OpzioniFonti): FinestraFonti {
     }
     osm.append(el('p', { class: 'fonti-sotto' }, 'Fonti degli strati:'), elenco);
   }
+
+  // --- Illustrazioni dei luoghi simbolo ---------------------------------------
+  const illustrazioni = voce(
+    'Le illustrazioni dei luoghi simbolo',
+    'I disegni dei luoghi simbolo, come il Ponte Vecchio, sono fatti per questo progetto a partire dalle sagome degli edifici su OpenStreetMap. Altezze e dettagli sono in gran parte stime: sono illustrazioni, non rilievi.',
+  );
 
   // --- ARPAV ---------------------------------------------------------------
   const ariaQuando = el('li', null, "Qualità dell'aria: leggo la data della fotografia…");
@@ -171,13 +198,13 @@ export function creaFonti(opzioni: OpzioniFonti): FinestraFonti {
 
   // --- Media ---------------------------------------------------------------
   const commons = voce(
-    'Immagini e audio: Wikimedia Commons',
+    'Immagini: Wikimedia Commons',
     el(
       'p',
       null,
-      'Fotografie, stampe e registrazioni vengono da ',
+      'Fotografie e stampe vengono da ',
       linkEsterno('https://commons.wikimedia.org/', 'Wikimedia Commons'),
-      '. Ogni file ha la sua licenza: la trovi scritta sotto ciascuna immagine o registrazione, con autore e link alla pagina del file.',
+      '. Ogni file ha la sua licenza: la trovi scritta sotto ciascuna immagine, con autore e link alla pagina del file. Il nome di una licenza Creative Commons porta al testo della licenza.',
     ),
   );
   const youtube = voce(
@@ -194,6 +221,7 @@ export function creaFonti(opzioni: OpzioniFonti): FinestraFonti {
       'Bassano Aperta è un progetto civico a codice aperto, con licenza MIT: chiunque può leggerlo, copiarlo e migliorarlo. ',
       opzioni.codice && urlSicuro(opzioni.codice) ? linkEsterno(opzioni.codice, 'Vai al codice') : null,
     ),
+    'La licenza MIT vale solo per il codice. I testi dei racconti e le illustrazioni restano di chi cura il sito; i dati seguono le licenze delle fonti scritte qui sopra.',
     'I caratteri sono Fraunces e Inter, con licenza SIL Open Font License, serviti da questo sito e non da server esterni.',
   );
 
@@ -216,7 +244,7 @@ export function creaFonti(opzioni: OpzioniFonti): FinestraFonti {
     'dialog',
     { class: 'fonti', 'aria-labelledby': idTitolo },
     el('div', { class: 'fonti-testata' }, el('h2', { id: idTitolo, tabindex: '-1' }, 'Fonti e licenze'), chiudi),
-    el('div', { class: 'fonti-corpo' }, osm, arpav, treni, viabilita, commons, youtube, codice, testi),
+    el('div', { class: 'fonti-corpo' }, osm, illustrazioni, arpav, treni, viabilita, commons, youtube, codice, testi),
   );
 
   chiudi.addEventListener('click', () => nodo.close());

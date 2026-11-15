@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import campione from './fixtures/brenta-arpav.json';
 import { etaInOre, interpretaBrenta, millisDi, tendenza } from '../src/live/brenta';
@@ -614,7 +615,13 @@ describe('leggiTreni e leggiAvvisi', () => {
     const chiamate = finto.mock.calls.map((c) => ({ url: String(c[0]), opzioni: c[1] as { headers: Record<string, string> } }));
     const busone = chiamate.find((c) => c.url === 'https://proxy.busone.app/trenitalia/gtfs-rt/trip-updates.json');
     expect(busone).toBeDefined();
-    expect(busone!.opzioni.headers['X-BusOne-Client']).toBe('bassano-aperta (progetto civico open source)');
+    // Il contatto del progetto è l'indirizzo del repository: nessuna email.
+    expect(busone!.opzioni.headers['X-BusOne-Client']).toBe('bassano-aperta (progetto civico open source; https://github.com/evapassarini/bassano-aperta)');
+    expect(busone!.opzioni.headers['X-BusOne-Client']).not.toContain('@');
+    // Lo script che rigenera la tabella delle stazioni si presenta allo stesso modo.
+    const script = readFileSync(new URL('../scripts/dati-stazioni.mjs', import.meta.url), 'utf8');
+    expect(script).toContain(`'X-BusOne-Client': '${busone!.opzioni.headers['X-BusOne-Client']}'`);
+    expect(script).toContain("'X-BusOne-Use': 'personal'");
     expect(busone!.opzioni.headers['X-BusOne-Use']).toBe('personal');
     const stazioni = chiamate.find((c) => c.url === `${import.meta.env.BASE_URL}data/stazioni-treni.json`);
     expect(stazioni).toBeDefined();

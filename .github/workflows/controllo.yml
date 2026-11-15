@@ -1,0 +1,29 @@
+# Controllo a ogni push e a ogni pull request: tipi, test e build.
+# Non scarica dati e non pubblica nulla: il sito lo ricostruisce Vercel.
+name: Controllo
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: controllo-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  controllo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 26
+          cache: npm
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npm test
+      - run: npm run build

@@ -9,6 +9,36 @@
       content="Una mappa isometrica di Bassano del Grappa, progetto civico open source: i luoghi simbolo raccontati con le fonti, il livello del Brenta in diretta, cultura, ambiente e mobilità."
     />
     <meta name="theme-color" content="#f4ead7" />
+
+    <!--
+      Indirizzo del sito: https://bassano-aperta.vercel.app è un segnaposto.
+      Quando il dominio definitivo è noto va cambiato solo qui, nelle tre righe
+      che seguono (canonical, og:url, og:image). Nel resto del sito non compare.
+    -->
+    <link rel="canonical" href="https://bassano-aperta.vercel.app/" />
+    <meta property="og:url" content="https://bassano-aperta.vercel.app/" />
+    <meta property="og:image" content="https://bassano-aperta.vercel.app/anteprima.jpg" />
+
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="La mappa illustrata del centro di Bassano del Grappa, con il Ponte Vecchio sul Brenta."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="it_IT" />
+    <meta property="og:site_name" content="Bassano Aperta" />
+    <meta
+      property="og:title"
+      content="Bassano Aperta: la mappa illustrata di Bassano del Grappa, candidata a Capitale italiana della Cultura 2029"
+    />
+    <meta
+      property="og:description"
+      content="Una mappa isometrica di Bassano del Grappa, progetto civico open source: i luoghi simbolo raccontati con le fonti, il livello del Brenta in diretta, cultura, ambiente e mobilità."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link
       rel="icon"
       type="image/svg+xml"
@@ -17,7 +47,11 @@
   </head>
   <body>
     <canvas id="mappa"></canvas>
-    <div id="ui"></div>
+    <div
+      id="ui"
+      data-codice="https://github.com/evapassarini/bassano-aperta"
+      data-segnalazioni="https://github.com/evapassarini/bassano-aperta/issues"
+    ></div>
     <div id="avvio" class="avviso-pagina" role="status" aria-live="polite">
       <p>Sto caricando la mappa di Bassano…</p>
     </div>

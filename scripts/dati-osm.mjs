@@ -703,6 +703,9 @@ async function principale() {
     strade: s.strade,
     aree: a.aree,
     alberi: al.alberi,
+    // Quanti dei punti in `alberi` vengono da OpenStreetMap (sono i primi dell'elenco).
+    // Gli altri sono aggiunti in modo illustrativo dentro boschi e parchi.
+    alberiVeri: al.veri,
   };
 
   console.log('\n6. Controlli');

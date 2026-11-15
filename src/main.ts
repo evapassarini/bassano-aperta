@@ -146,6 +146,13 @@ async function avvia(): Promise<void> {
       radice.dataset.lampioniTutti = String(datiLampioni.p.length / 2);
     }
 
+    // Quanti alberi vengono da OpenStreetMap e quanti sono in tutto. Se il numero manca
+    // «Fonti e licenze» lo dice a parole.
+    if (typeof base.alberiVeri === 'number' && Number.isInteger(base.alberiVeri)) {
+      radice.dataset.alberiVeri = String(base.alberiVeri);
+      radice.dataset.alberiTutti = String(base.alberi.length / 2);
+    }
+
     const ui = creaUI({
       radice,
       storie,

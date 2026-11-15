@@ -39,7 +39,8 @@ const USCITA = join(RADICE, 'public', 'data', 'stazioni-treni.json');
 const URL_GTFS = 'https://proxy.busone.app/trenitalia/gtfs.zip';
 const INTESTAZIONI = {
   'User-Agent': 'bassano-aperta/0.1 (progetto civico open source)',
-  'X-BusOne-Client': 'bassano-aperta (progetto civico open source)',
+  // Il contatto del progetto è l'indirizzo del repository. Stesso valore in src/live/index.ts.
+  'X-BusOne-Client': 'bassano-aperta (progetto civico open source; https://github.com/evapassarini/bassano-aperta)',
   'X-BusOne-Use': 'personal',
 };
 

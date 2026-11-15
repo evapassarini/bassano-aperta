@@ -1,7 +1,8 @@
 # Bassano Aperta: specifica della versione 1
 
-Nome provvisorio. Progetto civico open source: una mappa isometrica di Bassano del Grappa
-con dati utili e il racconto dei luoghi. Nasce attorno alla candidatura di Bassano a
+Nome provvisorio. Progetto civico open source, personale di chi lo cura (non di uno studio né
+di un'azienda): una mappa isometrica di Bassano del Grappa con dati utili e il racconto dei
+luoghi. Nasce attorno alla candidatura di Bassano a
 **Capitale italiana della Cultura 2029** (dicitura corretta: "candidata a", mai "Città della
 cultura 2029", mai "europea").
 
@@ -11,13 +12,15 @@ cultura 2029", mai "europea").
    in stile illustrato. Si trascina, si zooma, la posizione sta nell'indirizzo (`#@x,y,zoom`).
 2. Sopra la base ci sono i luoghi simbolo, disegnati a parte come SVG.
 3. Tre strati accendibili: **Cultura**, **Ambiente**, **Mobilità**.
-4. Clic su un luogo: si apre la **finestra-racconto** con una linea del tempo a tappe, immagini,
-   video e audio, e un riquadro **Adesso** con il dato live dove esiste davvero.
+4. Clic su un luogo: si apre la **finestra-racconto** con una linea del tempo a tappe, immagini
+   e video (l'audio è previsto, oggi nessun racconto ne ha), e un riquadro **Adesso** con il dato live dove esiste davvero.
 5. Nello strato Mobilità, la scheda della stazione mostra i **prossimi treni** con i ritardi
    dichiarati, letti in diretta.
 6. Dall'elenco «Luoghi» si apre la scheda **Avvisi sulla viabilità**: gli avvisi pubblicati
    dagli enti per le strade attorno a Bassano, come fotografia con data e ora.
-7. Una pagina **Fonti e licenze** elenca ogni fonte, con data.
+7. Una pagina **Fonti e licenze** elenca ogni fonte, con data, e porta al codice e alle
+   segnalazioni. Sulla mappa è sempre scritto il credito «© OpenStreetMap contributors». Su telefono il
+   foglio di un racconto aperto lo copre insieme alla mappa.
 8. La mappa si guarda in tre luci: **giorno**, **pomeriggio**, **notte**. Un comando in basso a
    sinistra offre quattro scelte: Adesso, Giorno, Pomeriggio, Notte. Di notte la mappa diventa
    scura e si accendono i lampioni lungo le strade.
@@ -40,8 +43,8 @@ sono il traffico: sono testi pubblicati dagli enti, e il sito lo dice.
 - Le affermazioni aziendali (Nardini, Poli) si attribuiscono: "secondo l'azienda".
 - Viale dei Martiri e Tempio Ossario: tono sobrio, nessun dettaglio crudo, nessuna foto delle
   vittime.
-- King Kong Rhino (Li-Jen Shih, Palazzo Sturm): la scultura c'è ancora (confermato di persona da chi cura il sito,
-  novembre 2026). Niente fotografie della scultura (artista vivente, in Italia non c'è libertà
+- King Kong Rhino (Li-Jen Shih, Palazzo Sturm): la scultura c'è ancora (confermato di persona
+  da chi cura il sito, novembre 2026). Niente fotografie della scultura (artista vivente, in Italia non c'è libertà
   di panorama): solo la nostra illustrazione e la xilografia di Dürer.
 - Niente orari, prezzi o calendari scritti a mano: si rimanda alla pagina ufficiale.
 - Lingua: italiano, frasi semplici, niente gergo.
@@ -50,7 +53,17 @@ sono il traffico: sono testi pubblicati dagli enti, e il sito lo dice.
 
 - Immagini e audio: solo da Wikimedia Commons con licenza verificata, caricati con
   `https://commons.wikimedia.org/wiki/Special:FilePath/<NomeFile>?width=960`. Sotto ogni
-  immagine: autore, licenza, link alla pagina.
+  immagine: autore, licenza, link alla pagina. Se la licenza è CC BY, CC BY-SA (versioni 1.0,
+  2.0, 2.5, 3.0, 4.0) o CC0, il suo nome è un link alla pagina ufficiale su creativecommons.org
+  (`urlLicenza()` in `src/ui/aiuti.ts`). Nei contenuti la licenza va scritta nella forma
+  «CC BY-SA 4.0», «CC BY 2.5», «CC0»: le altre forme (pubblico dominio, licenze adattate a un
+  paese come «3.0 IT», testo libero) restano testo senza link. La riga dei crediti è una sola
+  funzione, `creditiMedia()` in `src/ui/racconto.ts`, usata sotto immagini, audio, video e
+  nell'immagine ingrandita.
+- Audio: oggi nessun racconto ne ha. Le due registrazioni di «Sul ponte di Bassano» su Commons
+  sono state tolte dal Ponte Vecchio perché nessuno le ha ascoltate e non si sa quale delle due
+  canzoni con quel titolo contengano; i loro dati sono nel README, «Da confermare prima di
+  pubblicare».
 - Video: solo incorporati da `https://www.youtube-nocookie.com/embed/<id>`, e solo dopo un
   clic dell'utente ("Carica il video da YouTube"), per non tracciare chi apre la finestra.
 - Webcam: solo link esterni (i termini d'uso per l'incorporamento non sono stati verificati).
@@ -146,7 +159,8 @@ soglie, con le fonti nel commento.
   file presa come fine dell'ora di misura (vedi «Ore dell'ozono»: se fosse l'inizio, le finestre
   si spostano di un'ora); i confini dell'ozono in concentrazione e il 25 del PM10, che sono
   aritmetica dai riferimenti ARPAV.
-- **Da fare prima di pubblicare**: in un giorno feriale, quando un giorno validato cade dentro
+- **Ancora da fare** (era da fare prima di pubblicare; il sito esce lo stesso, con le
+  avvertenze scritte sopra, e il punto resta aperto): in un giorno feriale, quando un giorno validato cade dentro
   le 48 ore di ozono, confrontare la nostra media mobile con `CONC_MM_O3` e il nostro giudizio
   con `IQA` della tabella validata (`aria_tabella_cop`). Il 15/11/2026 il confronto per l'ozono
   non era possibile (validato fermo al 12, orari dal 13). Guardare a mano anche un'esportazione
@@ -161,7 +175,10 @@ soglie, con le fonti nel commento.
   BusOne in JSON (circa 1 MB, tutte le corse nazionali). Si tengono le corse che fermano al
   codice `02520` (e figlie `02520:...`), da un'ora fa a sei ore avanti.
   - Ogni richiesta manda gli header `X-BusOne-Client: bassano-aperta (progetto civico open
-    source)` e `X-BusOne-Use: personal`. Solo verso BusOne, mai verso altri indirizzi.
+    source; https://github.com/evapassarini/bassano-aperta)` e `X-BusOne-Use: personal`. Il
+    contatto è l'indirizzo del repository: nessuna email. Lo stesso valore sta in
+    `src/live/index.ts` e in `scripts/dati-stazioni.mjs`. Solo verso BusOne, mai verso altri
+    indirizzi.
   - Condizioni di BusOne: gratuito per usi non commerciali di privati ed enti non profit;
     attribuzione obbligatoria "BusOne (busone.app) e fonte originale" (Trenitalia); BusOne può
     revocare il servizio.
@@ -215,6 +232,10 @@ soglie, con le fonti nel commento.
     due i casi scrive il file ed esce con codice 2. Un feed senza voci, o senza nessuna data
     leggibile, vale come fonte che non risponde. Se mancano tutte e due esce con codice 1 e non
     tocca il file.
+  - Sul sito pubblicato lo script gira ogni 6 ore dentro `.github/workflows/dati.yml` (vedi
+    «Pubblicazione»). Lì anche il codice 2 vale come errore: la fotografia incompleta si scarta
+    e resta il file di prima. Se una delle due fonti rifiuta le richieste dai server di GitHub
+    la fotografia non si aggiorna più: si vede solo al primo avvio vero.
   - La scheda non dice mai nulla su «questo momento»: se non ci sono avvisi scrive «Nella
     fotografia del ... non ci sono avvisi per la zona di Bassano». Se la fotografia ha più di 24
     ore lo dice e rimanda ai siti delle fonti. Le ordinanze pubblicate da più di 120 giorni
@@ -304,6 +325,7 @@ stanno in `src/types.ts`.
 | Interfaccia | `src/ui/*.ts`, `src/stile.css` | Strati, luce della mappa, aria in breve, finestra-racconto, scheda avvisi, fonti |
 | Live | `src/live/*.ts` | Brenta, aria e giudizio a parole sull'aria, treni, avvisi |
 | Avvio | `index.html`, `src/main.ts` | Collega tutto |
+| Pubblicazione | `vercel.json`, `.github/workflows/*.yml` | Sito su Vercel, intestazioni di sicurezza, aggiornamento di aria e avvisi ogni 6 ore, controllo a ogni push |
 
 ### Proiezione (vincolante per mappa e illustrazioni)
 
@@ -368,15 +390,24 @@ export function creaUI(opzioni: OpzioniUI): UI;
 Dove stanno i comandi. Da 720 px di larghezza in su: in alto a sinistra testata, strati,
 «Luoghi» e «Fonti e licenze»; **in basso a sinistra** il riquadro Aria e, sotto, le quattro
 scelte della luce, larghi come la colonna di sinistra; lo zoom in basso a destra (accanto alla
-finestra quando un racconto o una scheda è aperta). Su telefono: in basso a sinistra, dal basso
+finestra quando un racconto o una scheda è aperta) e, nel margine sotto lo zoom, il credito
+«© OpenStreetMap contributors». Su telefono: in basso a sinistra, dal basso
 verso l'alto, «Luoghi» e «Fonti e licenze», le scelte della luce, il riquadro Aria; lo zoom in
-basso a destra; con il foglio dal basso aperto, luce, Aria e zoom si nascondono. Le scelte della
+basso a destra; il credito OpenStreetMap in alto a destra, sotto gli strati; con il foglio dal basso aperto, luce, Aria e zoom si nascondono. Le scelte della
 luce sono un gruppo di scelte esclusive (`role="radiogroup"`, «Luce della mappa»): Tab entra, le
 frecce cambiano scelta. Ogni scelta è alta almeno 44 px, come gli altri comandi sulla mappa; su
 telefono il gruppo prende tutta la larghezza che resta accanto allo zoom. Se la finestra è larga
 ma bassa (sotto 36em di altezza: la soglia cresce con il testo) Aria e luce si spostano accanto
 alla colonna di sinistra; sopra quella soglia la colonna in alto non scende mai sopra Aria e
 luce e, se manca il posto, scorre.
+
+Il credito della mappa (classe `.credito-mappa`, dentro `.controlli`; testo e indirizzo nelle
+costanti `TESTO_CREDITO_OSM` e `URL_CREDITO_OSM` di `src/ui/index.ts`) è una riga piccola con
+il link a `https://www.openstreetmap.org/copyright`, che si apre in una nuova scheda. È
+visibile in ogni luce, su fondo di carta chiara, finché si vede la mappa. Su telefono, con il
+foglio di un racconto aperto, il credito è coperto quasi del tutto dal foglio, insieme alla
+mappa, e torna in vista alla chiusura (provato sul sito costruito a 375x812). Il credito con il
+link resta sempre in «Fonti e licenze».
 
 Il riquadro **Aria** legge `leggiAria()`. Per prima cosa scrive il giudizio a parole, con il
 tondo colorato: «Aria buona · ieri» (dopo due o tre giorni la data al posto di «ieri»; oltre i
@@ -458,7 +489,21 @@ solo quando porta ancora con sé la fermata di Bassano e il suo orario: nel feed
 - Attributi facoltativi su `radice`, letti da `creaUI` per «Fonti e licenze»:
   `data-base-generato` (lo imposta `main.ts` da `base.generato`), `data-lampioni-veri` e
   `data-lampioni-tutti` (li imposta `main.ts` da `lampioni.json`: quanti lampioni vengono da
-  OpenStreetMap e quanti sono in tutto), `data-codice`, `data-segnalazioni`.
+  OpenStreetMap e quanti sono in tutto), `data-alberi-veri` e `data-alberi-tutti` (li imposta
+  `main.ts` da `base.json`, solo se contiene il campo facoltativo `alberiVeri`: quanti alberi
+  vengono da OpenStreetMap, che sono i primi dell'elenco), `data-codice` e `data-segnalazioni`
+  (scritti in `index.html`: l'indirizzo del repository e quello delle segnalazioni; in «Fonti e
+  licenze» diventano «Vai al codice» e «Segnala un errore»).
+- Alberi: `scripts/dati-osm.mjs` salva `alberiVeri` in `base.json`, ma lo script non è stato
+  rilanciato e nel file di oggi il campo non c'è. Finché manca, «Fonti e licenze» dice a parole
+  che una parte degli alberi viene da OpenStreetMap e una parte è aggiunta a scopo illustrativo
+  dentro boschi e parchi; quando c'è, scrive i due numeri.
+- «Fonti e licenze» ha anche una voce sulle illustrazioni dei luoghi simbolo: fatte per questo
+  progetto a partire dalle sagome su OpenStreetMap, con altezze e dettagli in gran parte stime.
+- Nella testa di `index.html` ci sono i dati per le anteprime sui social (`og:*`,
+  `twitter:card`), l'indirizzo canonico e l'icona per iPhone. L'indirizzo del sito è un
+  segnaposto e sta solo lì, nelle tre righe sotto il commento «Indirizzo del sito»
+  (`canonical`, `og:url`, `og:image`).
 - `alVaiA` riporta le coordinate dentro `RIQUADRO`. Unica eccezione documentata al riquadro:
   la storia `monte-grappa` tiene le coordinate vere della cima (fuori mappa) e sulla mappa ha
   un segnaposto sul margine nord-est.
@@ -619,7 +664,12 @@ un'isola in mezzo alle nuvole.
 
 ### Tasselli dipinti (prova)
 
-Facoltativi: se esiste `public/tasselli/indice.json`, `src/map/tasselli.ts` stende sopra gli
+Facoltativi e spenti. Non basta che esista `public/tasselli/indice.json`: i tasselli si
+accendono solo con la variabile d'ambiente `VITE_TASSELLI=1` al momento di costruire il sito o
+di avviare lo sviluppo (per esempio `VITE_TASSELLI=1 npm run dev`). In `src/map/tasselli.ts`,
+`tasselliAccesi()` legge la variabile e `creaTasselli()` da spento restituisce `null` e non fa
+nessuna richiesta alla rete; `src/map/index.ts` usa `creaTasselli()`. Su Vercel la variabile
+non va impostata finché i tasselli non esistono. Da accesi, `src/map/tasselli.ts` stende sopra gli
 edifici, sotto etichette e segnaposto, le immagini elencate (centro in metri locali, lati sul
 piano isometrico, zoom da cui compaiono), con i bordi sfumati. Sono versioni dipinte dello
 stesso scorcio disegnato dal codice e si mostrano solo con la luce di giorno. Oggi non ce n'è
@@ -671,18 +721,68 @@ fotogramma; «prima» è la versione senza stile dipinto). Disegno su processore
 restano a 60 al secondo prima e dopo e il tempo di disegno nel codice non cambia (zoom 2,4:
 5,6 e 5,4 ms; zoom 6: 3,1 e 2,9 ms). Sono numeri di una macchina sola: contano i rapporti.
 
+## Pubblicazione
+
+- **Chi firma**: progetto personale di chi lo cura, senza scopi commerciali. Conta per le
+  condizioni di BusOne (solo privati ed enti non profit).
+- **Repository**: `https://github.com/evapassarini/bassano-aperta`, pubblico. Segnalazioni:
+  `https://github.com/evapassarini/bassano-aperta/issues`.
+- **Sito**: statico, su Vercel, collegato al repository. A ogni push sul ramo principale Vercel
+  esegue `npm ci` e `npm run build` e pubblica `dist` (`vercel.json`). `/assets/*` resta in
+  memoria un anno; `/data/*` e `/landmarks/*` 5 minuti. La versione di Node si sceglie nelle
+  impostazioni del progetto Vercel (24 o superiore; il progetto è provato con la 26).
+- **Dominio**: quello definitivo non è ancora noto. Il segnaposto sta in un punto solo, in
+  `index.html` (vedi «Avvio»).
+- **Intestazioni di sicurezza** (`vercel.json`): `X-Content-Type-Options`, `Referrer-Policy`,
+  `Permissions-Policy` e una Content-Security-Policy. Indirizzi esterni permessi:
+  `api.arpa.veneto.it` e `proxy.busone.app` per i dati; `commons.wikimedia.org` e
+  `*.wikimedia.org` per immagini e audio; `www.youtube-nocookie.com` per i video. Una fonte
+  esterna nuova va aggiunta anche lì, altrimenti il browser la blocca. Il sito non si può
+  incorporare in una cornice su altri siti (`frame-ancestors 'self'`). La regola è stata
+  provata in locale, non su Vercel.
+- **Aggiornamento automatico** (`.github/workflows/dati.yml`): ogni 6 ore, al minuto 17 (ora
+  UTC), e a mano dalla scheda Actions. Esegue `npm run dati:aria` e `npm run dati:avvisi`, poi
+  `npm test`. Regola: niente dati rotti. Se uno script non esce con codice 0 il suo file torna
+  com'era e non si pubblica; l'altro, se è riuscito, si pubblica lo stesso. Se le prove
+  falliscono non si pubblica nulla. Se una fonte non ha risposto il lavoro finisce in rosso. Il
+  commit, fatto da `github-actions[bot]`, contiene solo `public/data/aria.json` e
+  `public/data/avvisi.json`, e solo se sono cambiati; poi Vercel ricostruisce il sito. Gli
+  altri file di dati si rigenerano solo a mano.
+- **Controllo automatico** (`.github/workflows/controllo.yml`): a ogni push e pull request
+  `npm ci`, `npx tsc --noEmit`, `npm test`, `npm run build`.
+- **Anteprima per i social**: `public/anteprima.jpg`, 1200x630, scatto del sito costruito (non
+  del server di sviluppo). Icona per iPhone: `public/apple-touch-icon.png`, 180x180. Come
+  rifarle è nel README.
+- I due workflow non sono ancora mai girati su GitHub.
+
 ## Licenze
 
-Codice MIT. Dati OpenStreetMap ODbL ("© OpenStreetMap contributors"). Dati ARPAV con
-attribuzione. Treni: BusOne (busone.app) e Trenitalia, uso non commerciale di privati ed enti
-non profit. Avvisi CCISS e Vi.abilità: licenza non dichiarata, solo citazioni brevi con link.
-Media: licenza di ciascun file.
+Il dettaglio è nel file `NOTICE`. Codice MIT, e solo il codice. Dati in `public/data/` e in
+`scripts/landmark/plan/` con le licenze delle fonti: OpenStreetMap ODbL 1.0 («© OpenStreetMap
+contributors»); ARPAV con attribuzione (CC BY 4.0 dichiarata per i file XML, non dichiarata in
+modo esplicito per l'idrometro); treni BusOne (busone.app) e Trenitalia, uso non commerciale di
+privati ed enti non profit; avvisi CCISS e Vi.abilità con licenza non dichiarata, solo citazioni
+brevi con link. Testi dei racconti (`content/`), illustrazioni (`public/landmarks/`),
+documentazione e le due immagini del progetto (`public/anteprima.jpg`,
+`public/apple-touch-icon.png`): non sono MIT e per ora non hanno una licenza aperta, restano di
+chi cura il sito; la scelta è tra i punti da confermare. Foto e video citati: restano dei loro
+autori, con la licenza di ciascun file.
 
 ## Da confermare prima della pubblicazione
 
-L'elenco completo delle domande aperte sta nella ricerca (`open_questions`). Le principali:
-distruzione del ponte nel 1945; ruolo degli Alpini nel 1948; numeri del 26 settembre 1944;
-conferma scritta ARPAV per l'uso continuo dell'API; permessi per le webcam; chi firma il
-progetto rispetto alle condizioni di BusOne (solo privati ed enti non profit) e il contatto
-da mettere nell'header `X-BusOne-Client`; conferma scritta di CCISS e Vi.abilità per il riuso
-degli avvisi. L'elenco completo è nel README.
+Chi cura il sito ha scelto di pubblicarlo con tutte le fonti accese, con attribuzione e link. I
+punti qui sotto restano aperti. L'elenco completo e aggiornato è nel README; le domande della
+ricerca stanno in `open_questions`.
+
+Già deciso: chi firma il progetto (personale, quindi dentro le condizioni di BusOne) e il
+contatto nell'header `X-BusOne-Client` (l'indirizzo del repository).
+
+Ancora aperto: distruzione del ponte nel 1945; ruolo degli Alpini nel 1948; numeri del 26
+settembre 1944; conferma scritta di ARPAV per l'uso continuo dell'API e per la licenza;
+conferma scritta di CCISS e Vi.abilità per il riuso degli avvisi; rilettura alla fonte dei
+termini di BusOne; confronto del giudizio sull'aria con quello di ARPAV in un giorno feriale;
+17 video mai guardati per intero; sei file di Commons non ricontrollati; inquadrature delle due
+webcam; permessi per le webcam; testi che scadono il 12 e il 16 dicembre 2026; dominio
+definitivo al posto del segnaposto; licenza di testi, illustrazioni e documentazione; chi firma
+i commit e quale storia git si pubblica; controllo che Vercel ripubblichi dopo i commit
+automatici dei dati.

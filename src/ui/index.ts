@@ -21,7 +21,7 @@ import { creaSchedaAvvisi } from './avvisi';
 import { el, icona, idUnico, linkEsterno, segnoStrato, soli } from './dom';
 import { creaFonti } from './fonti';
 import { creaSelettoreLuce } from './luce';
-import { creaRacconto } from './racconto';
+import { creaRacconto, creditiMedia } from './racconto';
 import type { Racconto } from './racconto';
 import { creaScheda } from './scheda';
 
@@ -56,6 +56,10 @@ export interface UI {
 
 const STRATI: IdStrato[] = ['cultura', 'ambiente', 'mobilita'];
 const ACCESI_ALL_AVVIO: Record<IdStrato, boolean> = { cultura: true, ambiente: false, mobilita: false };
+
+/** Il credito che resta sempre scritto sulla mappa, con il link alla pagina del copyright. */
+export const TESTO_CREDITO_OSM = '© OpenStreetMap contributors';
+export const URL_CREDITO_OSM = 'https://www.openstreetmap.org/copyright';
 
 export function creaUI(opzioni: OpzioniUI): UI {
   const { radice, storie, strati } = opzioni;
@@ -316,6 +320,8 @@ export function creaUI(opzioni: OpzioniUI): UI {
     baseGenerato: radice.dataset.baseGenerato,
     lampioniVeri: radice.dataset.lampioniVeri,
     lampioniTutti: radice.dataset.lampioniTutti,
+    alberiVeri: radice.dataset.alberiVeri,
+    alberiTutti: radice.dataset.alberiTutti,
     segnalazioni: radice.dataset.segnalazioni,
     codice: radice.dataset.codice,
   });
@@ -354,15 +360,9 @@ export function creaUI(opzioni: OpzioniUI): UI {
     origineLente = origine;
     lenteImmagine.src = url;
     lenteImmagine.alt = m.alt ?? m.titolo;
-    const crediti = [m.autore, m.licenza].filter(Boolean).join(', ');
     lenteDidascalia.replaceChildren(
       el('span', { class: 'didascalia-titolo' }, m.titolo),
-      el(
-        'span',
-        { class: 'didascalia-crediti' },
-        crediti ? `${crediti}. ` : null,
-        urlSicuro(m.pagina) ? linkEsterno(m.pagina, 'Pagina del file') : null,
-      ),
+      creditiMedia(m, urlSicuro(m.pagina), 'Pagina del file'),
     );
     if (!lente.open) lente.showModal();
     lenteChiudi.focus();
@@ -472,12 +472,16 @@ export function creaUI(opzioni: OpzioniUI): UI {
   // =========================================================================
   // Montaggio
   // =========================================================================
+  // Il credito della mappa, sempre in vista: lo chiede la licenza dei dati (ODbL).
+  const creditoMappa = el('p', { class: 'credito-mappa' }, linkEsterno(URL_CREDITO_OSM, TESTO_CREDITO_OSM));
+
   const controlli = el(
     'div',
     { class: 'controlli' },
     testata,
     gruppoStrati,
     el('div', { class: 'controlli-azioni' }, bottoneLuoghi, bottoneFonti),
+    creditoMappa,
   );
   radice.append(...soli(controlli, inBasso, gruppoZoom, aiutoTasti, elenco, finestra, fonti.nodo, lente));
 

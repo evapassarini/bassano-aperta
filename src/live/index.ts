@@ -72,9 +72,13 @@ export function leggiAria(): Promise<DatiAria> {
 // ---------------------------------------------------------------------------
 
 const URL_TRENI = 'https://proxy.busone.app/trenitalia/gtfs-rt/trip-updates.json';
-/** BusOne chiede a chi usa il servizio di presentarsi a ogni richiesta. */
-const INTESTAZIONI_BUSONE = {
-  'X-BusOne-Client': 'bassano-aperta (progetto civico open source)',
+/**
+ * BusOne chiede a chi usa il servizio di presentarsi a ogni richiesta. Il contatto è
+ * l'indirizzo del repository (nessuna email). Lo stesso valore sta in scripts/dati-stazioni.mjs:
+ * un test controlla che restino uguali.
+ */
+export const INTESTAZIONI_BUSONE = {
+  'X-BusOne-Client': 'bassano-aperta (progetto civico open source; https://github.com/evapassarini/bassano-aperta)',
   'X-BusOne-Use': 'personal',
 };
 const DURATA_MEMORIA_TRENI_MS = 2 * 60 * 1000;

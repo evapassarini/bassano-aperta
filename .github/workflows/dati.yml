@@ -1,0 +1,84 @@
+# Aggiorna le due fotografie che il browser non può leggere da solo:
+# public/data/aria.json (ARPAV) e public/data/avvisi.json (CCISS e Vi.abilità).
+# Gira ogni 6 ore e si può avviare a mano dalla scheda Actions.
+#
+# Regola: non si pubblicano dati rotti.
+# - Ogni file ha il suo script. Se lo script non esce con codice 0, il suo file
+#   torna com'era nell'ultimo commit e non entra nel commit.
+#   (dati-avvisi.mjs esce con codice 2 quando una delle due fonti non risponde e
+#   scrive una fotografia incompleta: qui anche quella si scarta.)
+# - Poi girano i test. Se non passano non si fa nessun commit.
+# - Il commit contiene solo i due file, e solo se sono cambiati.
+# - Se una fonte non ha risposto il lavoro finisce in rosso, così si vede.
+# Il push sul ramo principale fa ricostruire il sito a Vercel.
+name: Dati
+
+on:
+  schedule:
+    # Ogni 6 ore, al minuto 17 (ora UTC): lontano dall'ora piena, quando GitHub è più carico.
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dati
+  cancel-in-progress: false
+
+jobs:
+  aggiorna:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # L'avvio pianificato gira sempre sul ramo principale. Un avvio a mano da un altro ramo non fa nulla.
+    if: github.event_name == 'schedule' || github.ref_name == github.event.repository.default_branch
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 26
+          cache: npm
+      - run: npm ci
+
+      - name: Aria (ARPAV)
+        id: aria
+        continue-on-error: true
+        run: npm run dati:aria
+
+      - name: Avvisi sulla viabilità (CCISS e Vi.abilità)
+        id: avvisi
+        continue-on-error: true
+        run: npm run dati:avvisi
+
+      - name: Scarta i file degli script falliti
+        run: |
+          if [ "${{ steps.aria.outcome }}" != "success" ]; then
+            echo "::warning::Aria: lo script non è riuscito, resta il file di prima."
+            git checkout -- public/data/aria.json
+          fi
+          if [ "${{ steps.avvisi.outcome }}" != "success" ]; then
+            echo "::warning::Avvisi: lo script non è riuscito o la fotografia è incompleta, resta il file di prima."
+            git checkout -- public/data/avvisi.json
+          fi
+          rm -f public/data/aria.json.tmp public/data/avvisi.json.tmp
+
+      - name: Test
+        run: npm test
+
+      - name: Commit e push, solo se i dati sono cambiati
+        run: |
+          if git diff --quiet -- public/data/aria.json public/data/avvisi.json; then
+            echo "Nessun dato nuovo: niente commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data/aria.json public/data/avvisi.json
+          git commit -m "Dati: aggiorna aria e avvisi"
+          git push
+
+      - name: Segnala le fonti che non hanno risposto
+        if: steps.aria.outcome != 'success' || steps.avvisi.outcome != 'success'
+        run: |
+          echo "Almeno una fonte non ha risposto: il suo file non è stato aggiornato. Guarda i passi sopra."
+          exit 1

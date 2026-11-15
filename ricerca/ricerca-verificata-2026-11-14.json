@@ -406,7 +406,7 @@
    "Coordinate del luogo 'Brenta': scelta redazionale, non da fonte. Le coordinate del ponte sono invece confermate da OpenStreetMap.",
    "La foto Commons 'Folla sul Ponte degli Alpini.JPG' (segnalata da chi ha fatto la ricerca con data 1899 errata) non e' stata ricontrollata: resta esclusa.",
    "Fonti: la storia del ponte poggia ancora in gran parte su Wikipedia IT, con molte frasi senza nota. Sarebbe opportuna una verifica sul catalogo 'Palladio, Bassano e il Ponte' (Sagep, 2021) o con i Musei Civici.",
-   "Copertura: questa verifica riguarda solo ponte e fiume. Nardini (alto/basso) e il 'rinoceronte di Bassano', chiesti dall'utente, non sono in questo JSON."
+   "Copertura: questa verifica riguarda solo ponte e fiume. Nardini (alto/basso) e il 'rinoceronte di Bassano', che fanno parte del progetto, non sono in questo JSON."
   ]
  },
  "nardini": {
@@ -847,7 +847,7 @@
    }
   ],
   "open_questions": [
-   "NESSUNA FONTE LIVE VERIFICATA per questi luoghi: live_sources resta vuoto ovunque. Non esiste, per quanto ho trovato, una webcam puntata sul Ponte Vecchio o sulle grapperie. Windy elenca webcam a Bassano (Piazza della Liberta', Via Matteotti, Piazza Garibaldi) ma le pagine non restituiscono immagini ai controlli automatici: aprirle a mano in un browser prima di collegarle. La pagina ARPAV dei dati in diretta (arpa.veneto.it/dati-ambientali/dati-in-diretta/meteo-idro-nivo/variabili_idro) si carica e dichiara dati in tempo reale degli ultimi 2 giorni, ma non ho trovato l'URL diretto della stazione idrometrica sul Brenta a Bassano (Barziza): da cercare a mano. La richiesta dell'utente parla di contenuti \"live\": allo stato attuale per Nardini/Poli ci sono solo video YouTube e foto, niente in diretta.",
+   "NESSUNA FONTE LIVE VERIFICATA per questi luoghi: live_sources resta vuoto ovunque. Non esiste, per quanto ho trovato, una webcam puntata sul Ponte Vecchio o sulle grapperie. Windy elenca webcam a Bassano (Piazza della Liberta', Via Matteotti, Piazza Garibaldi) ma le pagine non restituiscono immagini ai controlli automatici: aprirle a mano in un browser prima di collegarle. La pagina ARPAV dei dati in diretta (arpa.veneto.it/dati-ambientali/dati-in-diretta/meteo-idro-nivo/variabili_idro) si carica e dichiara dati in tempo reale degli ultimi 2 giorni, ma non ho trovato l'URL diretto della stazione idrometrica sul Brenta a Bassano (Barziza): da cercare a mano. Il progetto prevede contenuti \"live\": allo stato attuale per Nardini/Poli ci sono solo video YouTube e foto, niente in diretta.",
    "Da confermare con un bassanese: che \"Nardini Basso\" e \"Nardini Alto\" siano davvero i nomi usati in citta' (fonti: un blog di viaggi e l'etichetta OpenStreetMap \"Nardini basso\"), e come etichettare il punto alto sulla mappa (nome storico, \"Garage Nardini\" o entrambi).",
    "Garage Nardini: date di chiusura di Nardini Alto e di apertura del Garage NON verificate. I due articoli del Gazzettino indicati dal ricercatore non sono stati aperti (bloccano i client automatici) e non compaiono nelle ricerche: leggerli a mano. Archilovers (scheda autopubblicata) data i lavori al 2017; viaggiadipiu.it nell'aprile 2021 lo da' gia' per trasformato.",
    "Garage Nardini: posizione esatta e numero civico non verificati. Difford's dice n. 9 di Piazzale Generale Giardino (pagina datata), Milano Finanza conferma solo il piazzale; OpenStreetMap/Nominatim non ha un elemento \"Garage Nardini\". Le coordinate 45.7692, 11.7383 sono una stima: prenderle sul posto o da una mappa.",
@@ -861,7 +861,7 @@
    "Video Poli: i tre video e la playlist rispondono all'oEmbed di YouTube (quindi esistono e sono incorporabili) con titoli in italiano e autore PoliDistillerie; non ho potuto riprodurli ne' verificare lingua dell'audio, durata, numero di video della playlist. Non ho trovato un canale YouTube ufficiale Nardini. Europeana, Internet Archive e Catalogo generale dei beni culturali non sono stati consultati.",
    "Museo Poli: orari (tutti i giorni 9-19.30, chiuso 1 gennaio, Pasqua, 25 dicembre) e prezzo della visita con degustazione (3,50 euro) vengono da una pagina mobile di poligrappa.com non datata: verificare prima di pubblicarli. Verificare anche che la Grapperia Nardini accetti di comparire con il \"Mezzo e Mezzo\" (origine anni '70 secondo Locali Storici; un'altra fonte parla del Rosso con soda gia' negli anni '20).",
    "Le Bolle di Nardini sono a circa 3 km dal centro (Via Madonna di Monte Berico 7): confermare se la mappa arriva fin li' o se serve un richiamo fuori mappa; le visite sono solo su prenotazione tramite nardini.it/book-your-tour (condizioni non verificate).",
-   "Fuori dal perimetro di questo JSON: il Ponte Vecchio come scheda propria e il \"rinoceronte di Bassano\", citati nella richiesta, non sono stati controllati qui."
+   "Fuori dal perimetro di questo JSON: il Ponte Vecchio come scheda propria e il \"rinoceronte di Bassano\", che fanno parte del progetto, non sono stati controllati qui."
   ]
  },
  "rinoceronte": {
@@ -1374,7 +1374,7 @@
    }
   ],
   "open_questions": [
-   "Cosa intende l'utente con 'il rinoceronte di Bassano'? L'identificazione con la scultura 'King Kong Rhino' di Li-Jen Shih a Palazzo Sturm è un'ipotesi ragionevole ma non confermata da lei: chiederglielo prima di costruire la scheda.",
+   "Che cosa si intende con 'il rinoceronte di Bassano'? L'identificazione con la scultura 'King Kong Rhino' di Li-Jen Shih a Palazzo Sturm è un'ipotesi ragionevole ma non confermata: da chiarire con chi cura il sito prima di costruire la scheda.",
    "Il rinoceronte è ancora a Palazzo Sturm oggi (novembre 2026)? Era un comodato di dodici mesi dal dicembre 2018; la scheda dei Musei riporta 19.12.2018 - 31.12.2021 e l'ultima fonte datata verificata è del luglio 2021. Nessuna fonte istituzionale né recente lo conferma o lo smentisce: va verificato di persona o chiedendo ai Musei Civici prima di metterlo sulla mappa come presenza fissa.",
    "Posizione esatta della scultura: Bassanonet (2018-2019) dice terrazza panoramica/belvedere di Palazzo Sturm, il blog Assoyuanfen dice 'cortile'. Da verificare sul posto.",
    "Dati tecnici della scultura discordanti: 880x220x285 cm (Bassanonet) contro 888x220x458 e 888x220x485 cm nelle didascalie Commons; materiale 'acciaio inossidabile' (Musei) o 'acciaio cromato' (Assoyuanfen). Non pubblicare misure senza una conferma dei Musei. Peso non trovato.",
@@ -1386,11 +1386,11 @@
    "Disegni di Canova al Museo: 1.756 (Finestre sull'Arte) o 'tremila disegni autografi' (Wikipedia IT)? La ricerca originale affermava anche che Sartori Canova portò album di disegni, incisioni e biblioteca nel 1852-1857: la fonte aperta conferma solo i manoscritti, il resto è stato tolto.",
    "Palazzo Sturm: 'donato nel 1943' (sito Musei) o lascito alla morte del barone (Wikipedia IT)? Palazzo Bonaguro: 'donato nel 1969' (sito Musei) o 'acquisito' (Wikipedia IT)? Scegliere la formulazione con un locale o con i Musei.",
    "Palazzo Bonaguro: il nome 'Ca' Veggia' non compare nelle fonti aperte; le coordinate vengono solo dalla categoria Commons; i fatti documentati sono appena sei e vengono da due fonti che si ripetono. Serve una fonte locale più ricca. Verificare anche se 'Mondo Animale' è oggi regolarmente aperto.",
-   "Nessuna sorgente davvero 'live' (webcam, sensori, feed) esiste per questi quattro luoghi. Le pagine dei Musei si aggiornano ma non hanno feed né API, lo stato 'Oggi aperto' è mostrato a livello di sito e la pagina 'Mostre in corso' elenca anche mostre già concluse. L'utente ha chiesto 'video o qualcosa live': va chiarito con lei se bastano video e link aggiornati o se serve una webcam (ad esempio sul Ponte Vecchio, non cercata in questo passaggio).",
+   "Nessuna sorgente davvero 'live' (webcam, sensori, feed) esiste per questi quattro luoghi. Le pagine dei Musei si aggiornano ma non hanno feed né API, lo stato 'Oggi aperto' è mostrato a livello di sito e la pagina 'Mostre in corso' elenca anche mostre già concluse. Il progetto prevede 'video o qualcosa live': da chiarire con chi cura il sito se bastano video e link aggiornati o se serve una webcam (ad esempio sul Ponte Vecchio, non cercata in questo passaggio).",
    "L'Archivio digitale Antonio Canova (https://archiviocanova.medialibrary.it/home/index.aspx) è raggiungibile e offre manoscritti digitalizzati, ma non è una sorgente live ed è stato tolto da quell'elenco; alcune funzioni prevedono login e la pagina ha una sezione sulle licenze dei contenuti da leggere prima di riusare immagini.",
    "Video YouTube: titoli e canali verificati via oEmbed, ma nessun contenuto è stato visionato e la licenza non è stata letta sulla pagina (presumibilmente licenza standard YouTube, che consente l'embed ma non la copia). Guardarli prima di incorporarli. Non è stato trovato alcun video dedicato al rinoceronte, a Palazzo Sturm o a Palazzo Bonaguro.",
    "La foto Commons 'Bassano del Grappa 90 (8187906213)' è stata indicata come veduta con Palazzo Sturm, ma la sua descrizione non lo dice: controllare a occhio.",
-   "La richiesta dell'utente cita anche Ponte Vecchio, Nardini alto e Nardini basso, che non sono in questo blocco di ricerca: vanno coperti altrove."
+   "Il progetto comprende anche Ponte Vecchio, Nardini alto e Nardini basso, che non sono in questo blocco di ricerca: vanno coperti altrove."
   ]
  },
  "centro": {
@@ -2376,7 +2376,7 @@
    }
   ],
   "open_questions": [
-   "RICHIESTA DELL'UTENTE NON COPERTA: questa ricerca non contiene nulla sui luoghi chiesti (Ponte Vecchio come storia, Nardini 'alto' e 'basso', il rinoceronte di Bassano). Servono schede dedicate; in particolare va chiesto a un bassanese cosa si intende esattamente per 'Nardini alto / Nardini basso' e per 'il rinoceronte'.",
+   "PARTE DEL PROGETTO NON COPERTA: questa ricerca non contiene nulla su alcuni luoghi previsti (Ponte Vecchio come storia, Nardini 'alto' e 'basso', il rinoceronte di Bassano). Servono schede dedicate; in particolare va chiesto a un bassanese cosa si intende esattamente per 'Nardini alto / Nardini basso' e per 'il rinoceronte'.",
    "'Live' sul Ponte Vecchio: non esiste oggi una webcam funzionante ne' un video in diretta. Chiedere al Comune se la webcam del ponte verra' riattivata e a quali condizioni si possono incorporare le immagini. meteobassano.it dichiarerebbe una propria webcam sul ponte ma il sito non risponde: non verificata.",
    "Capitale della Cultura: le date 16 dicembre 2026 (dieci finaliste) e 27 marzo 2027 (proclamazione) vengono da un solo articolo locale (bassanonet.it, 10/11/2026). Il comunicato ministeriale non riporta scadenze e il decreto allegato non e' stato letto. Riverificare prima di pubblicare e aggiornare dopo il 16 dicembre.",
    "Data di consegna del dossier: nessuna fonte letta indica il giorno esatto. Il Giornale dell'Arte e il sito ufficiale danno la notizia il 24/09/2026, bassanonet il 25/09; il termine riportato da Finestre sull'Arte era il 23 settembre. Scrivere 'settembre 2026' o chiedere al Comune.",

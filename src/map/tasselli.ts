@@ -1,6 +1,7 @@
 // Tasselli dipinti: immagini che coprono una zona della mappa con una versione dipinta a mano
-// (o da un generatore di immagini) dello stesso identico scorcio. Sono facoltativi: se
-// public/tasselli/indice.json non c'è, la mappa resta quella disegnata dal codice.
+// (o da un generatore di immagini) dello stesso identico scorcio. Sono facoltativi e spenti
+// se non li si accende apposta (vedi tasselliAccesi): da spenti non si chiede nulla alla rete
+// e la mappa resta quella disegnata dal codice. Da accesi si legge public/tasselli/indice.json.
 // Per ora si mostrano solo con la luce di giorno.
 
 import { metriInIso } from './proiezione';
@@ -45,6 +46,24 @@ function valida(v: unknown): v is VoceTassello {
     (t.larghezza as number) > 0 &&
     (t.altezza as number) > 0
   );
+}
+
+/**
+ * L'interruttore dei tasselli. È spento se non lo si accende apposta: oggi i tasselli non
+ * esistono, e senza interruttore ogni visita chiederebbe un indice.json che non c'è (errore 404).
+ * Si accende con la variabile d'ambiente VITE_TASSELLI=1, al momento di costruire o di avviare
+ * il sito in sviluppo.
+ */
+export function tasselliAccesi(ambiente: Record<string, unknown> | undefined = import.meta.env): boolean {
+  return ambiente?.VITE_TASSELLI === '1';
+}
+
+/**
+ * Crea i tasselli solo se l'interruttore è acceso. Da spento restituisce null e non parte
+ * nessuna richiesta di rete.
+ */
+export function creaTasselli(cartella: string, alCarico: () => void, accesi: boolean = tasselliAccesi()): Tasselli | null {
+  return accesi ? new Tasselli(cartella, alCarico) : null;
 }
 
 /** Quanto è presente un tassello a questo zoom, tra 0 e 1. */

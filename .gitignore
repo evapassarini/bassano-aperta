@@ -5,3 +5,6 @@ dist
 personale.local.json
 prove-ai/
 public/tasselli/
+# impostazioni locali degli strumenti, mai pubblicate
+.claude/
+.vercel/

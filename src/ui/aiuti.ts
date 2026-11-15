@@ -825,3 +825,26 @@ export function quadroAvvisi(dati: Pick<DatiAvvisi, 'generato' | 'fonti' | 'avvi
     vuoto,
   };
 }
+
+// ---------------------------------------------------------------------------
+// Licenze dei media
+// ---------------------------------------------------------------------------
+
+/** Le versioni che Creative Commons ha pubblicato per le licenze BY e BY-SA. */
+const VERSIONI_CC = new Set(['1.0', '2.0', '2.5', '3.0', '4.0']);
+
+/**
+ * Indirizzo della pagina ufficiale di una licenza Creative Commons, a partire dal nome scritto
+ * nei contenuti («CC BY-SA 4.0», «CC BY 2.5», «CC0», «CC0 1.0»). Riconosce solo le licenze
+ * generiche BY, BY-SA e CC0: per tutto il resto (pubblico dominio, licenze adattate a un
+ * paese, altre varianti, testo libero) restituisce null e il nome resta senza link. Meglio
+ * nessun link che un link alla licenza sbagliata.
+ */
+export function urlLicenza(licenza: string | null | undefined): string | null {
+  if (typeof licenza !== 'string') return null;
+  const nome = licenza.trim().replace(/\s+/g, ' ').toUpperCase();
+  if (nome === 'CC0' || nome === 'CC0 1.0') return 'https://creativecommons.org/publicdomain/zero/1.0/';
+  const trovata = /^CC BY(-SA)? (\d\.\d)$/.exec(nome);
+  if (!trovata || !VERSIONI_CC.has(trovata[2])) return null;
+  return `https://creativecommons.org/licenses/by${trovata[1] ? '-sa' : ''}/${trovata[2]}/`;
+}

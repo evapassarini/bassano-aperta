@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "dati": "node scripts/dati-osm.mjs && node scripts/dati-strati.mjs && node scripts/dati-aria.mjs && node scripts/dati-avvisi.mjs && node scripts/dati-lampioni.mjs",
+    "dati:aria": "node scripts/dati-aria.mjs",
     "dati:avvisi": "node scripts/dati-avvisi.mjs",
     "dati:lampioni": "node scripts/dati-lampioni.mjs",
     "dati:stazioni": "node scripts/dati-stazioni.mjs",
