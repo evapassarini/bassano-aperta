@@ -205,9 +205,9 @@ export interface Landmark {
   copre?: number;
   /**
    * Facoltativo: profondità in metri della fascia davanti al disegno (verso sud-ovest, cioè
-   * verso chi guarda) in cui gli edifici generici vengono nascosti, se il loro centro cade
-   * nella larghezza dell'illustrazione. A differenza di `copre` non tocca le case dietro e
-   * ai lati: serve ai luoghi alti che le case davanti tagliano a metà.
+   * verso chi guarda) in cui gli edifici generici si disegnano bassi (un piano), se il loro
+   * centro cade nella larghezza dell'illustrazione. A differenza di `copre` non toglie nulla
+   * dalla mappa: serve ai luoghi alti che le case davanti tagliano a metà.
    */
   davanti?: number;
   /** Punto dell'SVG che poggia sulle coordinate, in frazioni 0..1 di larghezza e altezza. */

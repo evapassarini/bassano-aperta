@@ -44,6 +44,8 @@ import {
   semeDi,
   soglieDettaglio,
   sostituisce,
+  staDavanti,
+  ALTEZZA_DAVANTI,
 } from '../src/map/scena';
 import { creaCittaFinta } from './fixtures/citta-finta';
 // @ts-expect-error modulo JavaScript degli script, senza tipi
@@ -181,19 +183,33 @@ describe('edifici', () => {
     expect(sostituisce(torre, 0, 71)).toBe(false);
   });
 
-  it('con «davanti» nasconde solo gli edifici più vicini a chi guarda, dentro la larghezza del disegno', () => {
+  it('con «davanti» le case più vicine a chi guarda restano, ma basse', () => {
     const c = creaCittaFinta(300);
     const torre = preparaLandmark({ ...c.landmark[1], davanti: 40 });
     // A sud-ovest, cioè davanti: 35 m di profondità, oltre il rombo di terreno.
-    expect(sostituisce(torre, -25, -25)).toBe(true);
-    // Stessa distanza ma dietro (nord-est): resta.
-    expect(sostituisce(torre, 25, 25)).toBe(false);
-    // Davanti ma oltre la fascia.
-    expect(sostituisce(torre, -35, -35)).toBe(false);
-    // Davanti ma fuori dalla larghezza dell'illustrazione (60 m, ancora a metà).
-    expect(sostituisce(torre, -50, 0)).toBe(false);
+    expect(staDavanti(torre, -25, -25)).toBe(true);
+    expect(sostituisce(torre, -25, -25)).toBe(false);
+    // Stessa distanza ma dietro (nord-est), oltre la fascia, fuori dalla larghezza (60 m).
+    expect(staDavanti(torre, 25, 25)).toBe(false);
+    expect(staDavanti(torre, -35, -35)).toBe(false);
+    expect(staDavanti(torre, -50, 0)).toBe(false);
     // Senza il campo non cambia nulla.
-    expect(sostituisce(preparaLandmark(c.landmark[1]), -25, -25)).toBe(false);
+    expect(staDavanti(preparaLandmark(c.landmark[1]), -25, -25)).toBe(false);
+
+    const casa = (x: number, y: number) => ({
+      p: [x - 3, y - 3, x + 3, y - 3, x + 3, y + 3, x - 3, y + 3],
+      h: 12,
+      t: 'casa' as const,
+    });
+    const edifici = [casa(-25, -25), casa(25, 25)];
+    const luoghi = c.landmark.map((l, i) => (i === 1 ? { ...l, davanti: 40 } : l));
+    const alta = costruisciScena({ ...c.base, edifici }, c.strati, c.landmark);
+    const bassa = costruisciScena({ ...c.base, edifici }, c.strati, luoghi);
+    // Nessuna delle due sparisce; quella davanti occupa meno schermo in altezza.
+    expect(bassa.edifici.map((e) => e.sotto)).toEqual([-1, -1]);
+    expect(JSON.stringify(bassa.edifici[0])).not.toBe(JSON.stringify(alta.edifici[0]));
+    expect(JSON.stringify(bassa.edifici[1])).toBe(JSON.stringify(alta.edifici[1]));
+    expect(ALTEZZA_DAVANTI).toBeLessThan(12);
   });
 
   it('nasconde anche le parti disegnate dentro un edificio nascosto', () => {

@@ -459,7 +459,7 @@ export interface LandmarkPronto {
   semiA: number;
   /** Raggio in metri entro cui nasconde gli edifici generici (0 se non indicato). */
   copre: number;
-  /** Profondità in metri della fascia davanti al disegno liberata dagli edifici (0 se non indicata). */
+  /** Profondità in metri della fascia davanti al disegno in cui gli edifici si abbassano (0 se non indicata). */
   davanti: number;
   /** Bordi sinistro e destro dell'illustrazione sul piano isometrico. */
   bordoSx: number;
@@ -521,8 +521,7 @@ function nomeSemplice(nome: string): string {
 /**
  * true se il luogo simbolo prende il posto dell'edificio, che quindi non va disegnato:
  * il centro dell'impronta cade nel rombo di terreno del disegno, oppure entro il raggio
- * `copre`, oppure sta nella fascia `davanti` (più vicino a chi guarda, dentro la larghezza
- * del disegno), oppure l'edificio ha in OpenStreetMap lo stesso nome del luogo e gli sta
+ * `copre`, oppure l'edificio ha in OpenStreetMap lo stesso nome del luogo e gli sta
  * accanto (altrimenti il luogo comparirebbe due volte: disegnato e come casa generica).
  * `cx`, `cy` sono il centro dell'impronta in metri.
  */
@@ -530,18 +529,28 @@ export function sostituisce(l: LandmarkPronto, cx: number, cy: number, nome?: st
   if (nelRomboDi(l, (cx - cy) * ISO_X, -(cx + cy) * ISO_Y)) return true;
   const distanza = Math.hypot(cx - l.x, cy - l.y);
   if (l.copre > 0 && distanza <= l.copre) return true;
-  if (l.davanti > 0) {
-    // Profondità verso chi guarda (sud-ovest), in metri, e posizione orizzontale sullo schermo.
-    const profondita = (l.x + l.y - (cx + cy)) * ISO_X;
-    const sx = (cx - cy) * ISO_X;
-    if (profondita > 0 && profondita <= l.davanti && sx >= l.bordoSx && sx <= l.bordoDx) return true;
-  }
   return (
     nome !== undefined &&
     distanza <= RAGGIO_OMONIMI &&
     nomeSemplice(nome) !== '' &&
     nomeSemplice(nome) === nomeSemplice(l.dati.nome)
   );
+}
+
+/** Altezza massima, in metri, degli edifici nella fascia `davanti` di un luogo simbolo. */
+export const ALTEZZA_DAVANTI = 3.5;
+
+/**
+ * true se l'edificio sta nella fascia `davanti` del luogo simbolo: più vicino a chi guarda
+ * (sud-ovest) entro quella profondità, con il centro dentro la larghezza del disegno.
+ * Questi edifici restano sulla mappa ma si disegnano bassi, così non tagliano il monumento.
+ * `cx`, `cy` sono il centro dell'impronta in metri.
+ */
+export function staDavanti(l: LandmarkPronto, cx: number, cy: number): boolean {
+  if (l.davanti <= 0) return false;
+  const profondita = (l.x + l.y - (cx + cy)) * ISO_X;
+  const sx = (cx - cy) * ISO_X;
+  return profondita > 0 && profondita <= l.davanti && sx >= l.bordoSx && sx <= l.bordoDx;
 }
 
 /**
@@ -628,7 +637,6 @@ export function costruisciScena(base: DatiBase, strati: DatiStrati, landmark: La
   const centri: number[] = [];
   for (const e of base.edifici) {
     if (!e.p || e.p.length < 6) continue;
-    const pronto = preparaEdificio(e);
     // Centro dell'impronta in metri (la media dei vertici, come cx e cy sul piano).
     let mx = 0;
     let my = 0;
@@ -639,12 +647,18 @@ export function costruisciScena(base: DatiBase, strati: DatiStrati, landmark: La
     }
     mx /= vertici;
     my /= vertici;
+    let sotto = -1;
     for (let l = 0; l < luoghi.length; l++) {
       if (sostituisce(luoghi[l], mx, my, e.n)) {
-        pronto.sotto = l;
+        sotto = l;
         break;
       }
     }
+    // Le case davanti a un luogo simbolo restano, ma basse: così il monumento si vede intero.
+    const basso =
+      sotto < 0 && e.h > ALTEZZA_DAVANTI && luoghi.some((l) => staDavanti(l, mx, my));
+    const pronto = preparaEdificio(basso ? { ...e, h: ALTEZZA_DAVANTI } : e);
+    pronto.sotto = sotto;
     edifici.push(pronto);
     impronte.push(e.p);
     centri.push(mx, my);
