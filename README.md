@@ -48,7 +48,7 @@ Esegue cinque script, in ordine:
 |---|---|---|
 | `scripts/dati-osm.mjs` | `public/data/base.json` | Edifici, strade, acqua, verde e alberi da OpenStreetMap (Overpass API) |
 | `scripts/dati-strati.mjs` | `public/data/strati.json` | Punti e linee di Cultura, Ambiente, Mobilità (OpenStreetMap e ARPAV) |
-| `scripts/dati-aria.mjs` | `public/data/aria.json` | Fotografia della qualità dell'aria (ARPAV, stazione di Bassano) |
+| `scripts/dati-aria.mjs` | `public/data/aria.json` | Fotografia della qualità dell'aria (ARPAV, stazione di Bassano): ultime misure di ozono e PM10 e le serie brevi che servono al giudizio a parole |
 | `scripts/dati-avvisi.mjs` | `public/data/avvisi.json` | Fotografia degli avvisi sulla viabilità (CCISS Viaggiare Informati e Vi.abilità della Provincia di Vicenza) |
 | `scripts/dati-lampioni.mjs` | `public/data/lampioni.json` | Lampioni per la luce della notte: quelli segnati su OpenStreetMap, più altri disposti lungo le strade a scopo illustrativo |
 
@@ -79,6 +79,14 @@ Da sapere:
 - Il livello del Brenta non passa da qui: lo legge il browser, in diretta, dall'API di ARPAV.
 - L'aria invece è una fotografia: resta ferma finché non si rilancia lo script. Il sito mostra
   sempre la data e l'ora della misura.
+- Accanto ai numeri dell'aria il sito scrive un giudizio a parole (buona, accettabile, mediocre,
+  scadente, pessima) per l'ultimo giorno intero, di norma ieri. Lo calcola il sito
+  (`src/live/giudizioAria.ts`) con le fasce dell'indice di qualità dell'aria di ARPAV, su
+  polveri PM10 e ozono. Non è l'indice ufficiale, che considera anche il biossido di azoto e usa
+  dati validati: il sito lo dice e rimanda ai dati validati di ARPAV. Se i dati non bastano non
+  scrive nessuna parola. Perché il giudizio resti di ieri lo script va rilanciato ogni giorno;
+  dopo 3 giorni il sito lo presenta con la sua data. Regole e cose ancora da verificare:
+  `docs/SPEC.md`, «Giudizio a parole sull'aria».
 - Nemmeno i treni passano da qui: il browser li legge in diretta da BusOne. Dagli script viene
   solo la tabella dei nomi delle stazioni.
 - Anche gli avvisi sono una fotografia, e invecchiano in fretta: gli eventi del CCISS durano
@@ -186,6 +194,9 @@ Le regole complete e i contratti tra le parti stanno in `docs/SPEC.md`.
   CC BY 4.0 per i file XML ed elenca lì anche i file JSON dell'aria: che valga anche per quelli
   è una nostra lettura, da confermare. Per i dati dell'idrometro ARPAV non dichiara una licenza
   in modo esplicito: il sito lo dice e aspettiamo una conferma scritta.
+- **Scala del giudizio sull'aria**: le cinque classi e le soglie vengono dalle pagine di ARPAV
+  sull'indice di qualità dell'aria (lette il 15 novembre 2026). Il giudizio è un calcolo nostro,
+  non un dato ARPAV.
 - **Treni**: BusOne (busone.app), che rielabora i dati di Trenitalia, la fonte originale. Uso
   gratuito e non commerciale per privati ed enti non profit, con attribuzione; BusOne può
   sospendere il servizio. Sono i ritardi dichiarati dall'operatore, non un servizio ufficiale.

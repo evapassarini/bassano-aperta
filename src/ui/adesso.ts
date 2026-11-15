@@ -3,6 +3,8 @@
 
 import type { DatiAria, LetturaTreni, Live } from '../types';
 import { leggiAria, leggiBrenta, leggiTreni } from '../live';
+import { giudizioAria, PAGINE_ARPAV_ARIA, RIFERIMENTI_ARIA, SCALA_ARIA } from '../live/giudizioAria';
+import type { InquinanteGiudizio } from '../live/giudizioAria';
 import type { LetturaBrenta } from '../live';
 import { etaInOre, millisDi, tendenza } from '../live/brenta';
 import type { RigaTreno } from './aiuti';
@@ -16,6 +18,7 @@ import {
   formattaOra,
   parolaTendenza,
   tabelloneTreni,
+  tempoGiudizio,
   testoPortata,
   tracciaSerie,
 } from './aiuti';
@@ -291,7 +294,110 @@ export function riquadroTreni(): HTMLElement {
 // Aria
 // ---------------------------------------------------------------------------
 
-function mostraAria(stato: HTMLElement, dove: HTMLElement, fonte: HTMLElement, dati: DatiAria): void {
+const maiuscola = (testo: string): string => testo.charAt(0).toUpperCase() + testo.slice(1);
+
+/** Avvertenze fisse sul giudizio: di chi è, cosa guarda, a quale giorno vale, dov'è quello ufficiale. */
+export const AVVERTENZE_GIUDIZIO_ARIA = [
+  "Giudizio calcolato da questo sito con le fasce dell'indice di qualità dell'aria di ARPAV, su dati ARPAV non validati.",
+  "Guarda solo polveri PM10 e ozono. Manca il biossido di azoto, che l'indice ufficiale considera: il giudizio ufficiale può essere peggiore del nostro. Può anche essere diverso perché ARPAV lo calcola su dati controllati.",
+  "Per il giudizio i valori si arrotondano all'intero.",
+  "Vale per il giorno indicato, non per adesso e non per l'anno.",
+] as const;
+
+export const GIUDIZIO_ARIA_MANCA =
+  "Giudizio a parole non disponibile: servono le polveri PM10 e l'ozono di uno stesso giorno intero, già finito. Restano i numeri.";
+
+/**
+ * Il giudizio a parole nella scheda: la frase, chi decide, i due numeri usati, la scala intera
+ * con la classe del giorno segnata, le avvertenze. null se i dati non bastano.
+ */
+function bloccoGiudizio(dati: DatiAria, adesso: Date): HTMLElement | null {
+  const g = giudizioAria(dati);
+  const tempo = g ? tempoGiudizio(g.giorno, adesso) : null;
+  // Mai oggi (né un giorno che deve ancora venire): il giorno del giudizio deve essere finito.
+  if (!g || !tempo || tempo.giorniFa < 1) return null;
+
+  const segno = (classe: string): HTMLElement => el('span', { class: `aria-segno aria-segno-${classe}`, 'aria-hidden': 'true' });
+  const inizio = tempo.vecchio
+    ? maiuscola(tempo.ilGiorno)
+    : tempo.giorniFa === 1
+      ? `Ieri, ${tempo.giorno},`
+      : maiuscola(tempo.giorno);
+  const frase = el(
+    'p',
+    { class: 'giudizio-frase', 'data-classe': g.classe },
+    segno(g.classe),
+    el(
+      'span',
+      null,
+      `${inizio} l'aria alla centralina era `,
+      el('strong', { class: 'giudizio-parola' }, g.etichetta),
+      ' per polveri PM10 e ozono.',
+    ),
+  );
+  const vecchio = tempo.vecchio
+    ? el('p', { class: 'lettura-avviso' }, `Sono passati ${tempo.giorniFa} giorni: questo giudizio non dice com'è l'aria in questi giorni.`)
+    : null;
+  const senso = el(
+    'p',
+    { class: 'giudizio-senso' },
+    `${g.spiegazione} Il giudizio lo decide il peggiore dei due: ${g.decide === 'ozono' ? "l'ozono" : 'le polveri PM10'}.`,
+  );
+
+  const riga = (quale: InquinanteGiudizio): HTMLElement => {
+    const rif = RIFERIMENTI_ARIA[quale];
+    // Il giudizio usa il valore arrotondato all'intero: se è diverso da quello misurato (che si
+    // legge anche tra le ultime misure) lo si dice, così non restano due numeri senza spiegazione.
+    const intero = formattaMisura(g[quale].valore);
+    const misurato = formattaMisura(g[quale].misurato);
+    return el(
+      'li',
+      { class: quale === g.decide ? 'giudizio-numero giudizio-decide' : 'giudizio-numero' },
+      el('strong', null, `${rif.nome}: ${intero} ${g.unita}`),
+      misurato === intero ? null : ` (${misurato} arrotondato)`,
+      `, ${rif.grandezza} (${rif.cosa} ${rif.soglia})`,
+    );
+  };
+  const numeri = el('ul', { class: 'giudizio-numeri' }, riga('pm10'), riga('ozono'));
+
+  const scala = el('ol', { class: 'scala-aria', 'aria-label': 'La scala, dalla classe migliore alla peggiore' });
+  for (const f of SCALA_ARIA) {
+    const attuale = f.classe === g.classe;
+    const voce = el(
+      'li',
+      { class: attuale ? 'scala-voce scala-attuale' : 'scala-voce', 'aria-current': attuale ? 'true' : null },
+      segno(f.classe),
+      el(
+        'span',
+        null,
+        el('strong', null, maiuscola(f.etichetta)),
+        `: ${f.significato}`,
+        attuale ? el('span', { class: 'scala-qui' }, tempo.giorniFa === 1 && !tempo.vecchio ? ' · ieri' : ` · ${tempo.breve}`) : null,
+      ),
+    );
+    scala.append(voce);
+  }
+
+  const avvertenza = el(
+    'p',
+    { class: 'giudizio-avvertenza' },
+    `${AVVERTENZE_GIUDIZIO_ARIA.join(' ')} Non sostituisce il bollettino ufficiale: `,
+    linkEsterno(PAGINE_ARPAV_ARIA.ufficiale, 'dati validati di ARPAV'),
+    '. La scala: ',
+    linkEsterno(PAGINE_ARPAV_ARIA.scala, "indice di qualità dell'aria di ARPAV"),
+    ', ',
+    linkEsterno(PAGINE_ARPAV_ARIA.calcolo, 'come si calcola'),
+    '.',
+  );
+
+  return el(
+    'div',
+    { class: 'giudizio' },
+    ...soli(frase, vecchio, senso, numeri, el('p', { class: 'giudizio-titolo' }, 'La scala'), scala, avvertenza),
+  );
+}
+
+function mostraAria(stato: HTMLElement, dove: HTMLElement, fonte: HTMLElement, dati: DatiAria, adesso: Date): void {
   if (dati.stazione) dove.textContent = `stazione ${dati.stazione}`;
   const quandoFoto = el(
     'p',
@@ -318,7 +424,13 @@ function mostraAria(stato: HTMLElement, dove: HTMLElement, fonte: HTMLElement, d
         ),
       );
     }
-    stato.replaceChildren(elenco, quandoFoto);
+    const giudizio = bloccoGiudizio(dati, adesso);
+    stato.replaceChildren(
+      giudizio ?? el('p', { class: 'giudizio-manca' }, GIUDIZIO_ARIA_MANCA),
+      el('p', { class: 'giudizio-titolo' }, 'Ultime misure arrivate'),
+      elenco,
+      quandoFoto,
+    );
   }
   if (dati.fonte?.url) {
     const licenza = dati.fonte.licenza ? ` (${dati.fonte.licenza})` : '';
@@ -326,8 +438,8 @@ function mostraAria(stato: HTMLElement, dove: HTMLElement, fonte: HTMLElement, d
   }
 }
 
-/** Riquadro con la fotografia della qualità dell'aria. */
-export function riquadroAria(nota: string): HTMLElement {
+/** Riquadro con la fotografia della qualità dell'aria. `adesso` serve ai test; predefinito: l'ora del dispositivo. */
+export function riquadroAria(nota: string, adesso: () => Date = () => new Date()): HTMLElement {
   const stato = el('div', { class: 'adesso-stato', 'aria-live': 'polite', tabindex: '-1' });
   const dove = el('span', { class: 'adesso-dove' });
   const fonte = el('p', { class: 'adesso-fonte' }, ATTRIBUZIONE);
@@ -339,7 +451,7 @@ export function riquadroAria(nota: string): HTMLElement {
     leggiAria().then(
       (dati) => {
         stato.removeAttribute('aria-busy');
-        mostraAria(stato, dove, fonte, dati);
+        mostraAria(stato, dove, fonte, dati, adesso());
       },
       () => {
         stato.removeAttribute('aria-busy');

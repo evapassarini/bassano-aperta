@@ -42,6 +42,11 @@
   --piano-elenco: 30;
 
   --margine: 16px;
+  /* Altezza riservata al gruppo in basso a sinistra (riquadro Aria a tre righe, più la luce).
+     L'unica misura: la usano la colonna in alto, lo zoom e l'aiuto dei tasti quando devono
+     stare sopra il gruppo. In rem: cresce con il testo, come il riquadro. Il gruppo è alto
+     circa 126 px con il testo normale; qui ce ne sono 136, cioè almeno 8 px di stacco. */
+  --gruppo-basso: 8.5rem;
   /* Larghezza della colonna di sinistra: testata e strati in alto, aria e luce in basso. */
   --colonna: 276px;
 }
@@ -567,6 +572,56 @@ button.aria-breve:hover {
   color: var(--seppia);
 }
 
+/* Il giudizio a parole: la prima cosa che si legge nel riquadro. */
+.aria-breve-giudizio {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 0.9375rem;
+  line-height: 1.3;
+}
+
+.aria-breve-parola {
+  font-weight: 700;
+}
+
+.aria-breve-giudizio .aria-breve-quando {
+  font-size: 0.8125rem;
+}
+
+/* Segno colorato accanto alla parola del giudizio. Non è mai l'unico modo di capire: la parola
+   è sempre scritta. Il bordo scuro lo tiene visibile sulla carta chiara con ogni colore.
+   Tinte nella famiglia di quelle che usa ARPAV per le cinque classi, scurite per la carta. */
+.aria-segno {
+  flex: none;
+  display: inline-block;
+  width: 0.75em;
+  height: 0.75em;
+  border: 1.5px solid var(--inchiostro);
+  border-radius: 50%;
+  background: var(--foglio);
+}
+
+.aria-segno-buona {
+  background: #2f6fb7;
+}
+
+.aria-segno-accettabile {
+  background: #2e7d32;
+}
+
+.aria-segno-mediocre {
+  background: #d98a00;
+}
+
+.aria-segno-scadente {
+  background: #c62828;
+}
+
+.aria-segno-pessima {
+  background: #8e24aa;
+}
+
 .luce {
   display: flex;
   gap: 2px;
@@ -647,7 +702,7 @@ button.aria-breve:hover {
    Se manca il posto (testo molto ingrandito) è la colonna in alto a scorrere. */
 @media (min-width: 720px) and (min-height: 36em) {
   .controlli {
-    max-height: calc(100% - var(--margine) * 2 - 8.5rem);
+    max-height: calc(100% - var(--margine) * 2 - var(--gruppo-basso));
     overflow-y: auto;
     /* Il posto per l'ombra dei fogli e per il segno del fuoco, che lo scorrimento taglierebbe. */
     margin: -8px;
@@ -670,7 +725,7 @@ button.aria-breve:hover {
 
   .aiuto-tasti {
     left: var(--margine);
-    bottom: calc(var(--margine) + 116px);
+    bottom: calc(var(--margine) + var(--gruppo-basso));
   }
 }
 
@@ -679,7 +734,7 @@ button.aria-breve:hover {
   .ba.ba-finestra-aperta .zoom {
     right: auto;
     left: var(--margine);
-    bottom: calc(var(--margine) + 114px);
+    bottom: calc(var(--margine) + var(--gruppo-basso));
     flex-direction: row;
   }
 }
@@ -1144,6 +1199,90 @@ button.aria-breve:hover {
   display: block;
   font-size: 0.75rem;
   line-height: 1.35;
+}
+
+/* Giudizio a parole sull'aria, nella scheda della stazione */
+.giudizio-frase {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: var(--titoli);
+  font-size: 1.1875rem;
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+
+.giudizio-frase .aria-segno {
+  width: 0.7em;
+  height: 0.7em;
+}
+
+.giudizio-parola {
+  font-weight: 700;
+}
+
+.giudizio-senso {
+  margin-top: 8px;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.giudizio-numeri {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
+
+.giudizio-titolo {
+  margin-top: 14px;
+  color: var(--seppia);
+  font-weight: 600;
+  font-size: 0.6875rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.scala-aria {
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.scala-voce {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 3px 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+}
+
+/* La classe del giorno: riquadro, fondo e la data scritta accanto. Non solo il colore. */
+.scala-attuale {
+  border-color: var(--bordo-forte);
+  background: var(--foglio-ombra);
+}
+
+.scala-qui {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.giudizio-avvertenza,
+.giudizio-manca {
+  margin-top: 12px;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.giudizio-titolo + .misure {
+  padding-top: 6px;
 }
 
 .adesso-nota {
@@ -2053,7 +2192,8 @@ button.aria-breve:hover {
   .aiuto-tasti {
     left: var(--margine);
     right: var(--margine);
-    bottom: calc(var(--margine) + 156px + env(safe-area-inset-bottom, 0px));
+    /* Sopra le azioni (44 px più 6 di stacco) e sopra il gruppo con aria e luce. */
+    bottom: calc(var(--margine) + 44px + 6px + var(--gruppo-basso) + env(safe-area-inset-bottom, 0px));
     margin-inline: auto;
   }
 

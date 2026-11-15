@@ -261,6 +261,23 @@ describe("aria (public/data/aria.json)", () => {
       expect(Number.isNaN(Date.parse(m.quando)), m.quando).toBe(false);
     }
   });
+
+  it('se ha le serie per il giudizio, sono in ordine, senza doppioni e con numeri veri', () => {
+    const forme: [keyof NonNullable<DatiAria['serie']>, RegExp][] = [
+      ['ozonoOrario', /^\d{4}-\d{2}-\d{2}T\d{2}:00:00$/],
+      ['pm10Giornaliero', /^\d{4}-\d{2}-\d{2}$/],
+    ];
+    for (const [nome, forma] of forme) {
+      const punti = aria.serie?.[nome];
+      if (!punti) continue;
+      expect(punti.length, nome).toBeGreaterThan(0);
+      for (const [i, p] of punti.entries()) {
+        expect(forma.test(p.quando), `${nome}: ${p.quando}`).toBe(true);
+        expect(numero(p.valore) && p.valore >= 0, `${nome}: ${p.quando}`).toBe(true);
+        if (i > 0) expect(p.quando > punti[i - 1].quando, `${nome}: ${p.quando}`).toBe(true);
+      }
+    }
+  });
 });
 
 describe('avvisi sulla viabilità (public/data/avvisi.json)', () => {

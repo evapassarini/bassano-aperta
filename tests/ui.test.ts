@@ -29,6 +29,7 @@ import {
   parolaTendenza,
   quadroAvvisi,
   riassuntoAria,
+  tempoGiudizio,
   scegliAvvisi,
   sottoPunto,
   statoTreno,
@@ -1353,6 +1354,190 @@ describe('luce della mappa e aria in breve', () => {
       const { radice } = monta();
       await respira();
       expect(radice.conClasse('aria-breve-testa')[0].textContent).toBe('Aria · ARPAV · foto del 14 nov');
+    });
+
+    describe('giudizio a parole', () => {
+      const due = (n: number): string => String(n).padStart(2, '0');
+      const ore = (giorno: string, valore: number) =>
+        [...Array(24).keys()].map((h) => ({ quando: `${giorno}T${due(h)}:00:00`, valore }));
+      /** Fotografia del 15 novembre: PM10 di ieri (14) e ozono per il 13 e il 14. */
+      const conSerie = (pm10: number, ozono: number): DatiAria => ({
+        ...ARIA,
+        generato: '2026-11-15T08:00:00.000Z',
+        misure: [
+          { inquinante: 'Ozono (media oraria)', valore: 31.8, unita: 'µg/m³', quando: '2026-11-15T08:00:00' },
+          { inquinante: 'PM10 (media giornaliera)', valore: pm10, unita: 'µg/m³', quando: '2026-11-14' },
+        ],
+        serie: {
+          pm10Giornaliero: [{ quando: '2026-11-13', valore: 13.4 }, { quando: '2026-11-14', valore: pm10 }],
+          ozonoOrario: [...ore('2026-11-13', ozono), ...ore('2026-11-14', ozono)],
+        },
+      });
+
+      it('tempoGiudizio dice ieri, il giorno per esteso e quando è vecchio', () => {
+        expect(tempoGiudizio('2026-11-14', MATTINA)).toEqual({
+          giorniFa: 1, vecchio: false, giorno: 'sabato 14 novembre', ilGiorno: 'il 14 novembre', breve: '14 nov',
+        });
+        expect(tempoGiudizio('2026-11-12', MATTINA)).toMatchObject({ giorniFa: 3, vecchio: false });
+        expect(tempoGiudizio('2026-11-11', MATTINA)).toMatchObject({ giorniFa: 4, vecchio: true, ilGiorno: "l'11 novembre" });
+        // Il giorno è quello italiano: alle 23:30 UTC del 14 in Italia è già il 15.
+        expect(tempoGiudizio('2026-11-14', new Date('2026-11-14T23:30:00Z'))?.giorniFa).toBe(1);
+        expect(tempoGiudizio('2025-12-30', MATTINA)).toMatchObject({ vecchio: true, ilGiorno: 'il 30 dicembre 2025', breve: '30 dic 2025' });
+        expect(tempoGiudizio('boh', MATTINA)).toBeNull();
+        expect(tempoGiudizio('2026-11-14T10:00:00', MATTINA)).toBeNull();
+      });
+
+      it('nel riquadro la parola viene per prima, poi numero e data; il segno è solo un aiuto', async () => {
+        live.leggiAria.mockResolvedValue(conSerie(14.7, 54));
+        const { radice } = monta();
+        await respira();
+        const [riquadro] = radice.conClasse('aria-breve');
+        const [corpo] = riquadro.conClasse('aria-breve-corpo');
+        const primo = corpo.figli[0] as Finto;
+        expect(primo.getAttribute('class')).toBe('aria-breve-giudizio');
+        expect(primo.textContent).toBe('Aria buona · ieri');
+        expect(primo.getAttribute('data-classe')).toBe('buona');
+        const [segno] = riquadro.conClasse('aria-segno');
+        expect(segno.getAttribute('aria-hidden')).toBe('true');
+        expect(segno.getAttribute('class')).toBe('aria-segno aria-segno-buona');
+        expect(segno.textContent).toBe('');
+        expect(riquadro.conClasse('aria-breve-riga')[0].textContent).toBe('PM10 14,7 µg/m³ · 14 nov');
+        expect(riquadro.conClasse('aria-breve-testa')[0].textContent).toBe('Dati ARPAV · giudizio del sito');
+        // Di chi è il giudizio lo sente anche chi ascolta e lo legge chi passa col mouse.
+        expect(riquadro.getAttribute('title')).toContain('Fonte: ARPAV, dati non validati');
+        expect(riquadro.getAttribute('title')).toContain('Giudizio calcolato da questo sito');
+        expect(riquadro.conClasse('solo-lettori')[0].textContent).toContain('Non è il bollettino ufficiale');
+        expect(riquadro.conClasse('solo-lettori')[0].textContent).toContain('Apri la scheda della stazione');
+      });
+
+      it('scrive la parola giusta per ogni classe', async () => {
+        const casi: [number, number, string][] = [
+          [40, 54, 'accettabile'], [60, 54, 'mediocre'], [14.7, 200, 'scadente'], [120, 54, 'pessima'],
+        ];
+        for (const [pm10, ozono, parola] of casi) {
+          live.leggiAria.mockResolvedValue(conSerie(pm10, ozono));
+          const { radice } = monta();
+          await respira();
+          expect(radice.conClasse('aria-breve-parola')[0].textContent).toBe(parola);
+          expect(radice.conClasse('aria-segno')[0].getAttribute('class')).toBe(`aria-segno aria-segno-${parola}`);
+        }
+      });
+
+      it('se il giorno ha più di tre giorni la data viene prima della parola', async () => {
+        ora = new Date('2026-11-19T08:00:00Z');
+        live.leggiAria.mockResolvedValue(conSerie(14.7, 54));
+        const { radice } = monta();
+        await respira();
+        expect(radice.conClasse('aria-breve-giudizio')[0].textContent).toBe('Aria il 14 novembre: buona');
+        expect(radice.conClasse('aria-breve-testa')[0].textContent).toBe('Dati ARPAV · foto del 15 nov');
+        // Di chi è il giudizio resta detto a chi ascolta e a chi passa col mouse.
+        expect(radice.conClasse('aria-breve')[0].getAttribute('title')).toContain('Giudizio calcolato da questo sito');
+        expect(radice.conClasse('aria-breve')[0].conClasse('solo-lettori')[0].textContent).toContain('Giudizio calcolato da questo sito');
+      });
+
+      it('dopo due o tre giorni non dice «ieri» ma la data', async () => {
+        ora = new Date('2026-11-17T08:00:00Z');
+        live.leggiAria.mockResolvedValue(conSerie(14.7, 54));
+        const { radice } = monta();
+        await respira();
+        expect(radice.conClasse('aria-breve-giudizio')[0].textContent).toBe('Aria buona · 14 nov');
+      });
+
+      it('mai oggi: se il giorno del giudizio non è finito non dà la parola, restano i numeri', async () => {
+        // Il dispositivo dice 14 novembre (o la fotografia ha un PM10 con la data di oggi): giorniFa 0.
+        vi.setSystemTime(new Date('2026-11-14T20:00:00Z'));
+        ora = new Date('2026-11-14T20:00:00Z');
+        expect(tempoGiudizio('2026-11-14', ora)?.giorniFa).toBe(0);
+        live.leggiAria.mockResolvedValue(conSerie(14.7, 54));
+        const { radice } = monta();
+        await respira();
+        expect(radice.conClasse('aria-breve-giudizio')).toHaveLength(0);
+        expect(radice.conClasse('aria-breve')[0].textContent).not.toMatch(/buona|accettabile|mediocre|scadente|pessima/i);
+        expect(radice.conClasse('aria-breve-riga')[0].textContent).toContain('PM10 14,7 µg/m³');
+        radice.conClasse('aria-breve')[0].click();
+        await respira();
+        const [finestra] = radice.conClasse('finestra');
+        expect(finestra.conClasse('giudizio')).toHaveLength(0);
+        expect(finestra.conClasse('giudizio-manca')[0].textContent).toContain('Giudizio a parole non disponibile');
+        expect(finestra.conClasse('misura')).toHaveLength(2);
+      });
+
+      it('se manca un inquinante non dà la parola: restano i numeri', async () => {
+        const senzaOzono = conSerie(14.7, 54);
+        senzaOzono.serie = { pm10Giornaliero: senzaOzono.serie!.pm10Giornaliero };
+        live.leggiAria.mockResolvedValue(senzaOzono);
+        const { radice } = monta();
+        await respira();
+        expect(radice.conClasse('aria-breve-giudizio')).toHaveLength(0);
+        expect(radice.conClasse('aria-breve-testa')[0].textContent).toBe('Aria · ARPAV');
+        expect(radice.conClasse('aria-breve')[0].textContent).not.toMatch(/buona|accettabile|mediocre|scadente|pessima/i);
+        radice.conClasse('aria-breve')[0].click();
+        await respira();
+        const [finestra] = radice.conClasse('finestra');
+        expect(finestra.conClasse('giudizio')).toHaveLength(0);
+        expect(finestra.conClasse('giudizio-manca')[0].textContent).toContain('Giudizio a parole non disponibile');
+        expect(finestra.conClasse('misura')).toHaveLength(2);
+      });
+
+      it('nella scheda: frase, chi decide, numeri usati, scala intera e avvertenze', async () => {
+        live.leggiAria.mockResolvedValue(conSerie(14.7, 54));
+        const { radice } = monta();
+        await respira();
+        radice.conClasse('aria-breve')[0].click();
+        await respira();
+        const [finestra] = radice.conClasse('finestra');
+        expect(finestra.conClasse('giudizio-frase')[0].textContent).toBe(
+          "Ieri, sabato 14 novembre, l'aria alla centralina era buona per polveri PM10 e ozono.",
+        );
+        expect(finestra.conClasse('giudizio-senso')[0].textContent).toContain("Il giudizio lo decide il peggiore dei due: l'ozono.");
+        const numeri = finestra.conClasse('giudizio-numero').map((n) => n.textContent);
+        expect(numeri).toEqual([
+          'Polveri PM10: 15 µg/m³ (14,7 arrotondato), media del giorno (valore di riferimento 50)',
+          'Ozono: 54 µg/m³, media più alta su 8 ore (valore di riferimento 120)',
+        ]);
+        expect(finestra.conClasse('giudizio-decide')[0].textContent).toContain('Ozono');
+        // La scala intera, dalla migliore alla peggiore, con quella del giorno segnata anche a parole.
+        const voci = finestra.conClasse('scala-voce');
+        expect(voci.map((v) => v.textContent.split(':')[0])).toEqual(['Buona', 'Accettabile', 'Mediocre', 'Scadente', 'Pessima']);
+        const attuali = voci.filter((v) => v.getAttribute('aria-current') === 'true');
+        expect(attuali).toHaveLength(1);
+        expect(attuali[0].textContent).toBe('Buona: fino a metà del valore di riferimento · ieri');
+        expect(finestra.conClasse('scala-attuale')).toHaveLength(1);
+        const [avvertenza] = finestra.conClasse('giudizio-avvertenza');
+        expect(avvertenza.textContent).toContain('Giudizio calcolato da questo sito');
+        expect(avvertenza.textContent).toContain('su dati ARPAV non validati');
+        expect(avvertenza.textContent).toContain('Manca il biossido di azoto');
+        expect(avvertenza.textContent).toContain('il giudizio ufficiale può essere peggiore del nostro');
+        expect(avvertenza.textContent).toContain("Per il giudizio i valori si arrotondano all'intero.");
+        // Nessuna promessa che non possiamo mantenere, nessuna parola di legge.
+        expect(finestra.conClasse('giudizio')[0].textContent).not.toMatch(/mai migliore|soglia|limite|di legge|superat/i);
+        expect(avvertenza.textContent).toContain('Non sostituisce il bollettino ufficiale');
+        const indirizzi = avvertenza.querySelectorAll('a').map((a) => a.getAttribute('href'));
+        expect(indirizzi).toContain('https://www.arpa.veneto.it/dati-ambientali/dati-storici/aria/qualita-aria-dati-validati');
+        expect(indirizzi).toContain('https://www.arpa.veneto.it/temi-ambientali/aria/iqa/indice');
+        // Nessun consiglio sanitario.
+        expect(finestra.conClasse('giudizio')[0].textContent).not.toMatch(/salute|evita|consigli|sport|finestre/i);
+        // Le ultime misure restano, senza etichetta di giudizio.
+        expect(finestra.conClasse('misura')).toHaveLength(2);
+      });
+
+      it('nella scheda un giudizio vecchio porta la sua data e lo dice', async () => {
+        vi.setSystemTime(new Date('2026-11-19T08:00:00Z'));
+        ora = new Date('2026-11-19T08:00:00Z');
+        live.leggiAria.mockResolvedValue(conSerie(60, 54));
+        const { radice } = monta();
+        await respira();
+        radice.conClasse('aria-breve')[0].click();
+        await respira();
+        const [finestra] = radice.conClasse('finestra');
+        expect(finestra.conClasse('giudizio-frase')[0].textContent).toBe(
+          "Il 14 novembre l'aria alla centralina era mediocre per polveri PM10 e ozono.",
+        );
+        expect(finestra.conClasse('lettura-avviso')[0].textContent).toContain('Sono passati 5 giorni');
+        expect(finestra.conClasse('scala-attuale')[0].textContent).toContain('Mediocre');
+        expect(finestra.conClasse('scala-attuale')[0].textContent).toContain('· 14 nov');
+        expect(finestra.conClasse('giudizio-senso')[0].textContent).toContain('Le polveri PM10 erano sopra il valore di riferimento, entro una volta e mezzo.');
+      });
     });
 
     it('se il file non si carica lo dice, senza numeri', async () => {

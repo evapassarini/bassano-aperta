@@ -144,6 +144,21 @@ export interface DatiAria {
   stazione: string;
   fonte: { nome: string; url: string; licenza: string };
   misure: { inquinante: string; valore: number; unita: string; quando: string }[];
+  /**
+   * Serie brevi, come le dà ARPAV, dalla più vecchia alla più recente. Servono al giudizio a
+   * parole (src/live/giudizioAria.ts). Facoltative: senza, il sito mostra solo i numeri.
+   */
+  serie?: {
+    /** Ozono, medie orarie (µg/m³), una per ora: `quando` è "2026-11-14T22:00:00", senza fuso. */
+    ozonoOrario?: PuntoSerieAria[];
+    /** PM10, medie giornaliere (µg/m³), una per giorno: `quando` è "2026-11-14". */
+    pm10Giornaliero?: PuntoSerieAria[];
+  };
+}
+
+export interface PuntoSerieAria {
+  quando: string;
+  valore: number;
 }
 
 // ---------------------------------------------------------------------------

@@ -243,7 +243,7 @@ export interface AriaBreve {
 
 /**
  * Il dato da mostrare nel riquadro «Aria»: il PM10 se c'è, altrimenti la prima misura.
- * Nessun giudizio (buona, scarsa): nei dati non c'è una soglia ufficiale. null se non ci sono misure.
+ * Solo il numero: il giudizio a parole sta in src/live/giudizioAria.ts. null se non ci sono misure.
  */
 export function riassuntoAria(dati: Pick<DatiAria, 'generato' | 'misure'>, adesso: Date): AriaBreve | null {
   const valide = (Array.isArray(dati.misure) ? dati.misure : []).filter(
@@ -268,6 +268,43 @@ export function riassuntoAria(dati: Pick<DatiAria, 'generato' | 'misure'>, adess
     unita: typeof misura.unita === 'string' ? misura.unita : '',
     quando,
     fotoVecchia: vecchia ? `foto del ${formattaDataBreve(dati.generato, adesso)}` : null,
+  };
+}
+
+/** Oltre questi giorni il giudizio sull'aria si presenta come riferito alla sua data, non come attuale. */
+const GIUDIZIO_ARIA_VECCHIO_GIORNI = 3;
+
+export interface TempoGiudizio {
+  /** Giorni passati dal giorno del giudizio a oggi (giorno italiano): 1 vuol dire ieri. */
+  giorniFa: number;
+  /** true se il giorno del giudizio ha più di tre giorni. */
+  vecchio: boolean;
+  /** "sabato 14 novembre"; con l'anno se non è quello in corso. */
+  giorno: string;
+  /** "il 14 novembre"; con l'anno se non è quello in corso. */
+  ilGiorno: string;
+  /** "14 nov"; con l'anno se non è quello in corso. */
+  breve: string;
+}
+
+/**
+ * Quanto è vecchio il giorno a cui si riferisce il giudizio sull'aria ("2026-11-14") e come
+ * scriverlo. null se il giorno non si legge.
+ */
+export function tempoGiudizio(giorno: string, adesso: Date): TempoGiudizio | null {
+  const d = SOLO_DATA.test(giorno) ? leggiData(giorno) : null;
+  if (!d) return null;
+  const oggi = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Rome', year: 'numeric', month: '2-digit', day: '2-digit' }).format(adesso);
+  const giorniFa = Math.round((Date.parse(`${oggi}T00:00:00Z`) - d.data.getTime()) / 86_400_000);
+  const altroAnno = giorno.slice(0, 4) !== oggi.slice(0, 4);
+  const anno: Intl.DateTimeFormatOptions = altroAnno ? { year: 'numeric' } : {};
+  return {
+    giorniFa,
+    vecchio: giorniFa > GIUDIZIO_ARIA_VECCHIO_GIORNI,
+    giorno: parti(d, { weekday: 'long', day: 'numeric', month: 'long', ...anno }),
+    // In italiano: "l'8 novembre", "l'11 novembre"; per gli altri giorni "il".
+    ilGiorno: `${[8, 11].includes(d.data.getUTCDate()) ? "l'" : 'il '}${parti(d, { day: 'numeric', month: 'long', ...anno })}`,
+    breve: formattaDataBreve(giorno, adesso),
   };
 }
 

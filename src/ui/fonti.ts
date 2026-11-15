@@ -2,6 +2,7 @@
 
 import type { DatiStrati } from '../types';
 import { leggiAria, leggiAvvisi, leggiDataStazioni } from '../live';
+import { PAGINE_ARPAV_ARIA } from '../live/giudizioAria';
 import { formattaDataOraLunga, formattaNumero, urlSicuro } from './aiuti';
 import { el, icona, idUnico, linkEsterno, soli } from './dom';
 
@@ -109,6 +110,17 @@ export function creaFonti(opzioni: OpzioniFonti): FinestraFonti {
         '.',
       ),
       ariaQuando,
+      el(
+        'li',
+        null,
+        "Il giudizio a parole sull'aria (buona, accettabile, mediocre, scadente, pessima) non è di ARPAV: lo calcola questo sito sulle polveri PM10 e sull'ozono dell'ultimo giorno intero, con le fasce dell'indice di qualità dell'aria di ARPAV. L'indice ufficiale considera anche il biossido di azoto e usa dati validati. ",
+        linkEsterno(PAGINE_ARPAV_ARIA.scala, 'La scala di ARPAV'),
+        ', ',
+        linkEsterno(PAGINE_ARPAV_ARIA.calcolo, 'come si calcola'),
+        ', ',
+        linkEsterno(PAGINE_ARPAV_ARIA.ufficiale, "i dati validati con l'indice ufficiale"),
+        '. Pagine lette il 15 novembre 2026.',
+      ),
     ),
   );
 

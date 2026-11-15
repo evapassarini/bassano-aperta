@@ -21,8 +21,9 @@ cultura 2029", mai "europea").
 8. La mappa si guarda in tre luci: **giorno**, **pomeriggio**, **notte**. Un comando in basso a
    sinistra offre quattro scelte: Adesso, Giorno, Pomeriggio, Notte. Di notte la mappa diventa
    scura e si accendono i lampioni lungo le strade.
-9. Sempre in basso a sinistra, un riquadro **Aria** mostra in breve l'ultima misura della
-   qualità dell'aria, con la data.
+9. Sempre in basso a sinistra, un riquadro **Aria** dice a parole com'era l'aria nell'ultimo
+   giorno misurato (buona, accettabile, mediocre, scadente, pessima) e sotto mostra l'ultima
+   misura, con la data.
 
 Fuori dalla v1: bilancio del Comune (SIOPE), quartieri e servizi, traffico in tempo reale
 strada per strada (code, tempi di percorrenza, strade colorate sulla mappa), posizione dei treni
@@ -67,7 +68,94 @@ sono il traffico: sono testi pubblicati dagli enti, e il sito lo dice.
   Mostrare sempre data e ora della fotografia nella scheda della stazione. Nel riquadro breve
   sulla mappa vale la regola scritta più sotto (data della misura; data della fotografia se è
   vecchia o se la misura non ha una data).
+  Lo script salva anche le serie brevi che ARPAV pubblica per la stazione (`serie`, facoltativo):
+  ozono, circa 48 medie orarie; PM10, circa 7 medie giornaliere. Nel file in diretta la stazione
+  ha solo ozono e PM10. Il biossido di azoto la stazione lo misura, ma compare solo nei dati
+  validati (`https://api.arpa.veneto.it/REST/v1/aria_tabella_cop?codseqst=500000106`, letto il
+  15/11/2026: biossido di azoto 35 µg/m³ il 12/11). Non scrivere mai che a Bassano il biossido
+  di azoto non si misura. Il PM2.5 nel file in diretta non c'è.
+  Il giorno delle medie di PM10 non è una data di misura scritta da ARPAV: le voci hanno tutte
+  l'ora dell'esportazione (il 15/11/2026 alle 11:40: da «2026-11-08 11:40:01» a «2026-11-14
+  11:40:01»). Che sia il giorno misurato è verificato su un solo giorno e a metà giornata (12/11:
+  in diretta 13,4, validato 13). Per questo lo script scarta le medie giornaliere di un giorno
+  non ancora finito e confronta il PM10 in diretta, arrotondato all'intero, con quello validato
+  dello stesso giorno: se sono diversi non salva `serie` e il sito non scrive nessun giudizio. Se
+  la tabella validata non risponde o il suo giorno non è nella serie, il controllo non si fa e lo
+  script lo scrive. Dalla tabella validata non si copia nessun numero.
 - Attribuzione: "Fonte: ARPAV, dati non validati".
+
+### Giudizio a parole sull'aria
+
+Il solo numero dice poco a chi non è del mestiere: accanto ai numeri il sito scrive una parola.
+La calcola `giudizioAria()` in `src/live/giudizioAria.ts`, dove sta l'unica tabella delle
+soglie, con le fonti nel commento.
+
+- **Scala**: le cinque classi dell'indice di qualità dell'aria (IQA) di ARPAV: buona,
+  accettabile, mediocre, scadente, pessima. Fonti, lette il 15/11/2026:
+  [la scala](https://www.arpa.veneto.it/temi-ambientali/aria/iqa/indice),
+  [il calcolo](https://www.arpa.veneto.it/temi-ambientali/aria/iqa/indice-qualita-dellaria-approfondimenti),
+  [i dati validati](https://www.arpa.veneto.it/dati-ambientali/dati-storici/aria/qualita-aria-dati-validati)
+  (i confini delle classi sono nel codice di questa pagina).
+- **Non è l'indice ARPAV** e non si chiama né «indice ARPAV» né «IQA»: ARPAV lo calcola solo su
+  dati validati e solo con tutti e tre gli inquinanti (PM10, ozono, biossido di azoto). Noi
+  abbiamo PM10 e ozono, non validati. Manca il biossido di azoto: il giudizio ufficiale può
+  essere peggiore del nostro, e il sito lo dice. Non si scrive che l'ufficiale non può essere
+  migliore: ARPAV parte da dati controllati e il nostro calcolo dell'ozono non è ancora stato
+  confrontato con il suo, quindi i due giudizi possono differire in tutti e due i sensi.
+- **Giorno**: quello dell'ultima media giornaliera di PM10 nella fotografia (di norma ieri).
+  Mai oggi: il giorno deve essere finito. Lo controllano lo script (scarta le medie di un giorno
+  non finito) e l'interfaccia: se il giorno del giudizio è oggi o dopo, per l'orologio del
+  dispositivo, niente parola, solo i numeri e «Giudizio a parole non disponibile».
+- **Grandezze e valori di riferimento** (µg/m³): PM10, media del giorno, riferimento 50; ozono,
+  la più alta delle medie mobili su 8 ore del giorno (non l'ultima ora, non l'ora più alta),
+  riferimento 120. Ogni valore si arrotonda all'intero e si divide per il suo riferimento; vale
+  il peggiore dei due. Fino a metà del riferimento compresa: buona. Fino al riferimento:
+  accettabile. Fino a una volta e mezzo: mediocre. Fino al doppio: scadente. Oltre: pessima. In
+  concentrazioni: PM10 25, 50, 75, 100; ozono 60, 120, 180, 240.
+- **Una parola sola**: il 50 e il 120 nel sito si chiamano sempre «valore di riferimento», come
+  nella pagina ARPAV sul calcolo. Non «soglia di legge», non «limite», non «ha superato»: per
+  dire che cosa prevede la legge (per esempio se un giorno sopra 50 è già una violazione) serve
+  prima leggere e citare la norma. Non è stato fatto.
+- **Ore dell'ozono**: l'ora scritta nel file è presa come fine dell'ora di misura («01» è l'ora
+  da mezzanotte all'una; «00» del giorno dopo è l'ultima ora del giorno). Le 24 medie su 8 ore
+  di un giorno sono quelle che finiscono dall'ora scritta 01 del giorno all'ora scritta 00 del
+  giorno dopo: la prima va dalle 17 del giorno prima all'una, l'ultima dalle 16 alle 24. ARPAV
+  non lo dichiara. Indizi letti il 15/11/2026: il file esportato alle 11:40 ha come ultima voce
+  l'ora 11; la tabella validata numera le ore da 1 a 24.
+- **Due numeri per lo stesso valore**: il giudizio usa il valore arrotondato all'intero, le
+  misure hanno un decimale. Nella scheda la riga dei valori usati lo dice («15 µg/m³ (14,7
+  arrotondato)») e le avvertenze scrivono «Per il giudizio i valori si arrotondano all'intero».
+- **Dati che non bastano**: una media su 8 ore vale con almeno 6 ore su 8, e servono almeno 18
+  medie valide nel giorno. Se manca il PM10 o l'ozono di quel giorno, nessuna parola: restano
+  solo i numeri e la scheda scrive «Giudizio a parole non disponibile». Mai una parola
+  inventata, mai un giudizio su un inquinante solo.
+- **Giudizio vecchio**: se il giorno ha più di 3 giorni il giudizio si presenta con la sua data
+  («Aria il 10 novembre: buona»), non come attuale, e la scheda dice quanti giorni sono passati.
+- **Avvertenze, sempre scritte nella scheda**: giudizio calcolato da questo sito con le fasce di
+  ARPAV, su dati ARPAV non validati; guarda solo PM10 e ozono, manca il biossido di azoto e il
+  giudizio ufficiale può essere peggiore o comunque diverso; i valori si arrotondano all'intero;
+  vale per il giorno indicato, non per adesso e non per l'anno; non sostituisce il bollettino
+  ufficiale, con il link ai dati validati di ARPAV. Nessun consiglio sanitario.
+- **Colore**: accanto alla parola c'è un tondo colorato con il bordo scuro. La parola è sempre
+  scritta: il colore non è mai l'unico modo di capire.
+- **Scelte nostre, non scritte da ARPAV**: l'arrotondamento all'intero prima del rapporto,
+  verificato su un solo caso e solo per il PM10 (Bassano, 12/11/2026: 13,4 è diventato 13 e
+  l'indice 26); che valga anche per l'ozono e che i mezzi vadano in su (25,5 diventa 26) non è
+  verificato, quindi sul confine tra due classi il nostro giudizio può differire di una classe
+  da quello ufficiale; la regola dei dati minimi (direttiva UE 2024/2881); l'ora scritta nel
+  file presa come fine dell'ora di misura (vedi «Ore dell'ozono»: se fosse l'inizio, le finestre
+  si spostano di un'ora); i confini dell'ozono in concentrazione e il 25 del PM10, che sono
+  aritmetica dai riferimenti ARPAV.
+- **Da fare prima di pubblicare**: in un giorno feriale, quando un giorno validato cade dentro
+  le 48 ore di ozono, confrontare la nostra media mobile con `CONC_MM_O3` e il nostro giudizio
+  con `IQA` della tabella validata (`aria_tabella_cop`). Il 15/11/2026 il confronto per l'ozono
+  non era possibile (validato fermo al 12, orari dal 13). Guardare a mano anche un'esportazione
+  del file in diretta tra le 00:00 e le 02:00, per vedere che giorno portano le voci del PM10
+  subito dopo mezzanotte, e scrivere qui l'esito.
+- **Alternativa aperta**: l'API ARPAV (`api.arpa.veneto.it/REST/v1/aria_tabella_cop`) dà
+  l'indice ufficiale già calcolato per Bassano, con il biossido di azoto, ma in ritardo di
+  alcuni giorni e senza licenza né documentazione dichiarate. Se la licenza si chiarisce,
+  conviene mostrare quello come giudizio principale e tenere il nostro come riserva.
 - **Treni alla stazione di Bassano** (dal browser, CORS aperto, senza chiave):
   `https://proxy.busone.app/trenitalia/gtfs-rt/trip-updates.json`, il feed GTFS-Realtime di
   BusOne in JSON (circa 1 MB, tutte le corse nazionali). Si tengono le corse che fermano al
@@ -205,7 +293,7 @@ stanno in `src/types.ts`.
 | Dati di base | `scripts/dati-osm.mjs` → `public/data/base.json` | Scarica edifici, strade, acqua, verde da Overpass e li converte in metri locali |
 | Dati strati | `scripts/dati-strati.mjs` → `public/data/strati.json` | Punti e linee di Cultura, Ambiente, Mobilità |
 | Dati lampioni | `scripts/dati-lampioni.mjs` (+ `scripts/lib/lampioni.mjs`) → `public/data/lampioni.json` | Lampioni rilevati da OpenStreetMap, più quelli illustrativi disposti lungo le strade |
-| Dati aria | `scripts/dati-aria.mjs` → `public/data/aria.json` | Fotografia della qualità dell'aria |
+| Dati aria | `scripts/dati-aria.mjs` → `public/data/aria.json` | Fotografia della qualità dell'aria: ultime misure e serie brevi per il giudizio |
 | Dati avvisi | `scripts/dati-avvisi.mjs` (+ `scripts/lib/avvisi.mjs`) → `public/data/avvisi.json` | Fotografia degli avvisi sulla viabilità (CCISS, Vi.abilità) |
 | Dati stazioni | `scripts/dati-stazioni.mjs` (+ `scripts/lib/stazioni.mjs`) → `public/data/stazioni-treni.json` | Tabella codice → nome delle stazioni dei treni. Fuori da `npm run dati`: si rilancia a mano |
 | Proiezione | `src/map/proiezione.ts` | Gradi ↔ metri locali ↔ schermo. Funzioni pure, con test |
@@ -214,7 +302,7 @@ stanno in `src/types.ts`.
 | Storie | `content/luoghi/*.json` | Un file per luogo, tipo `Storia` |
 | Luoghi simbolo | `public/landmarks/*.svg` + `indice.json` | Illustrazioni isometriche |
 | Interfaccia | `src/ui/*.ts`, `src/stile.css` | Strati, luce della mappa, aria in breve, finestra-racconto, scheda avvisi, fonti |
-| Live | `src/live/*.ts` | Brenta, aria, treni, avvisi |
+| Live | `src/live/*.ts` | Brenta, aria e giudizio a parole sull'aria, treni, avvisi |
 | Avvio | `index.html`, `src/main.ts` | Collega tutto |
 
 ### Proiezione (vincolante per mappa e illustrazioni)
@@ -290,13 +378,26 @@ ma bassa (sotto 36em di altezza: la soglia cresce con il testo) Aria e luce si s
 alla colonna di sinistra; sopra quella soglia la colonna in alto non scende mai sopra Aria e
 luce e, se manca il posto, scorre.
 
-Il riquadro **Aria** legge `leggiAria()` e mostra una misura sola, senza giudizi: «Aria ·
-ARPAV» e sotto il valore con la data della misura (PM10 se c'è, altrimenti la prima misura
-valida). La data della fotografia («foto del ...») compare se la fotografia ha più di 3 giorni
-oppure se la misura non ha una data propria: il numero non resta mai senza una data. Una data
-di un altro anno porta anche l'anno. L'attribuzione per intero («Fonte: ARPAV, dati non
-validati») sta nel testo per i lettori di schermo e nel suggerimento al passaggio del mouse;
-la scheda che si apre la mostra scritta. Se il file non arriva scrive «Aria: dato non
+Il riquadro **Aria** legge `leggiAria()`. Per prima cosa scrive il giudizio a parole, con il
+tondo colorato: «Aria buona · ieri» (dopo due o tre giorni la data al posto di «ieri»; oltre i
+3 giorni «Aria il 10 novembre: buona»). Sotto, una misura sola: il valore con la data della
+misura (PM10 se c'è, altrimenti la prima misura valida). In fondo, piccolo, «Dati ARPAV ·
+giudizio del sito»; quando c'è anche la data della fotografia la riga si accorcia in «Dati ARPAV
+· foto del 15 nov», per stare su una riga sola (di chi è il giudizio resta nel suggerimento e
+nel testo per i lettori di schermo). Con il giudizio il riquadro ha tre righe ed è alto circa
+66 px; con la luce il gruppo in basso è alto circa 126 px. Lo spazio riservato al gruppo è una
+sola variabile CSS, `--gruppo-basso` (8.5rem): la usano la colonna in alto, lo zoom quando va
+sopra il gruppo e l'aiuto dei tasti. Non scrivere altre altezze fisse. Se i dati non bastano per il giudizio il riquadro resta com'era: «Aria ·
+ARPAV» e sotto il valore. La data della fotografia («foto del ...») compare se la fotografia ha
+più di 3 giorni oppure se la misura non ha una data propria: il numero non resta mai senza una
+data. Una data di un altro anno porta anche l'anno. L'attribuzione per intero («Fonte: ARPAV,
+dati non validati», e con il giudizio anche «Giudizio calcolato da questo sito ... Non è il
+bollettino ufficiale») sta nel testo per i lettori di schermo e nel suggerimento al passaggio
+del mouse; la scheda che si apre la mostra scritta. Nella scheda della stazione il riquadro
+«Qualità dell'aria» mostra: la frase con il giudizio e il giorno, quale inquinante decide, i due
+valori usati con il loro valore di riferimento, la scala intera dalla classe migliore alla peggiore con quella
+del giorno segnata (riquadro e data, non solo colore), le avvertenze con i link ad ARPAV e poi
+le ultime misure arrivate, senza etichetta. Se il file non arriva scrive «Aria: dato non
 disponibile». Nessun numero finto. Al clic apre la scheda della stazione dell'aria (il punto di
 tipo `aria` degli strati), senza spostare la mappa e senza accendere lo strato.
 
@@ -314,6 +415,8 @@ export interface LetturaBrenta { livello: number; portata: number | null;
   quando: string; serie: { quando: string; livello: number }[] }
 export function leggiBrenta(): Promise<LetturaBrenta>;   // rifiuta se la rete fallisce
 export function leggiAria(): Promise<DatiAria>;           // legge public/data/aria.json
+// in src/live/giudizioAria.ts: funzione pura, null se i dati non bastano
+export function giudizioAria(dati: Pick<DatiAria, 'serie'> | null | undefined): GiudizioAria | null;
 export function leggiTreni(): Promise<LetturaTreni>;     // feed BusOne + tabella stazioni; in memoria 2 minuti; rifiuta se la rete fallisce o il feed è malformato
 export function leggiAvvisi(): Promise<DatiAvvisi>;       // legge public/data/avvisi.json
 export function leggiDataStazioni(): Promise<string>;    // `generato` di public/data/stazioni-treni.json, per «Fonti e licenze»
