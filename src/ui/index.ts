@@ -4,15 +4,19 @@
 import type { DatiStrati, IdStrato, LonLat, Media, Punto, Storia } from '../types';
 import { metriInLonLat } from '../map/proiezione';
 import {
+  NOME_AVVISI,
   NOME_STRATO,
+  SOTTO_AVVISI,
+  sottoPunto,
   contaRisultati,
   descriviStrato,
   dividiStorie,
-  etichettaTipo,
   filtraPunti,
   filtraStorie,
+  trovaVoceAvvisi,
   urlSicuro,
 } from './aiuti';
+import { creaSchedaAvvisi } from './avvisi';
 import { el, icona, idUnico, linkEsterno, segnoStrato, soli } from './dom';
 import { creaFonti } from './fonti';
 import { creaRacconto } from './racconto';
@@ -178,13 +182,28 @@ export function creaUI(opzioni: OpzioniUI): UI {
       'button',
       { type: 'button', class: 'elenco-voce' },
       el('span', { class: 'elenco-voce-nome' }, p.nome),
-      el('span', { class: 'elenco-voce-sotto' }, `${etichettaTipo(p.tipo)} · strato ${NOME_STRATO[p.strato] ?? p.strato}`),
+      el('span', { class: 'elenco-voce-sotto' }, sottoPunto(p)),
     );
     bottone.addEventListener('click', () => {
       chiudiElenco(false);
       accendiStrato(p.strato);
       opzioni.alVaiA(metriInLonLat({ x: p.x, y: p.y }));
       apriPunto(p);
+    });
+    return el('li', null, bottone);
+  };
+
+  /** Gli avvisi sulla viabilità non sono un punto della mappa: la voce apre solo la scheda. */
+  const voceAvvisi = (): HTMLElement => {
+    const bottone = el(
+      'button',
+      { type: 'button', class: 'elenco-voce' },
+      el('span', { class: 'elenco-voce-nome' }, NOME_AVVISI),
+      el('span', { class: 'elenco-voce-sotto' }, SOTTO_AVVISI),
+    );
+    bottone.addEventListener('click', () => {
+      chiudiElenco(false);
+      apriAvvisi();
     });
     return el('li', null, bottone);
   };
@@ -207,7 +226,8 @@ export function creaUI(opzioni: OpzioniUI): UI {
     const trovate = filtraStorie(storie, campo.value);
     const { luoghi, temi } = dividiStorie(trovate);
     const punti = filtraPunti(strati.punti, campo.value);
-    const quanti = trovate.length + punti.servizi.length + punti.altri.length;
+    const avvisi = trovaVoceAvvisi(campo.value);
+    const quanti = trovate.length + punti.servizi.length + punti.altri.length + (avvisi ? 1 : 0);
     if (quanti === 0) {
       risultati.replaceChildren(
         el(
@@ -222,7 +242,7 @@ export function creaUI(opzioni: OpzioniUI): UI {
       const blocchi = [
         gruppo('Luoghi', luoghi.map(voceElenco)),
         gruppo('Temi', temi.map(voceElenco)),
-        gruppo('Dati e servizi', punti.servizi.map(vocePunto)),
+        gruppo('Dati e servizi', [...punti.servizi.map(vocePunto), ...(avvisi ? [voceAvvisi()] : [])]),
         gruppo(
           'Altri punti sulla mappa',
           punti.altri.map(vocePunto),
@@ -375,6 +395,13 @@ export function creaUI(opzioni: OpzioniUI): UI {
     mostraFinestra('punto', scheda.nodo, scheda.titolo, `Chiudi la scheda: ${punto.nome}`);
     // Chi avvia spegne l'evidenza del racconto che c'era prima: ora si guarda un altro punto.
     radice.dispatchEvent(new CustomEvent('ba:punto', { detail: { id: punto.id } }));
+  }
+
+  /** Scheda degli avvisi sulla viabilità: si apre dall'elenco, come la scheda di un punto. */
+  function apriAvvisi(): void {
+    const scheda = creaSchedaAvvisi();
+    mostraFinestra('punto', scheda.nodo, scheda.titolo, `Chiudi la scheda: ${NOME_AVVISI}`);
+    radice.dispatchEvent(new CustomEvent('ba:punto', { detail: { id: 'avvisi-viabilita' } }));
   }
 
   function chiudi(): void {

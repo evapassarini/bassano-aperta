@@ -14,6 +14,9 @@ Cosa trovi nel sito:
 - tre strati accendibili: Cultura, Ambiente, Mobilità;
 - diciotto racconti (sedici luoghi e due temi) con linea del tempo, immagini, video e audio, e
   un riquadro «Adesso» con il dato in diretta dove esiste davvero (il livello del Brenta);
+- i prossimi treni alla stazione di Bassano, con i ritardi dichiarati;
+- gli avvisi sulla viabilità pubblicati dagli enti per le strade attorno a Bassano (non è il
+  traffico in tempo reale);
 - una pagina «Fonti e licenze».
 
 È un sito statico: Vite e TypeScript, nessun framework, nessun server.
@@ -39,13 +42,25 @@ funziona da qualunque indirizzo, anche in una sottocartella.
 npm run dati
 ```
 
-Esegue tre script, in ordine:
+Esegue quattro script, in ordine:
 
 | Script | Scrive | Da dove |
 |---|---|---|
 | `scripts/dati-osm.mjs` | `public/data/base.json` | Edifici, strade, acqua, verde e alberi da OpenStreetMap (Overpass API) |
 | `scripts/dati-strati.mjs` | `public/data/strati.json` | Punti e linee di Cultura, Ambiente, Mobilità (OpenStreetMap e ARPAV) |
 | `scripts/dati-aria.mjs` | `public/data/aria.json` | Fotografia della qualità dell'aria (ARPAV, stazione di Bassano) |
+| `scripts/dati-avvisi.mjs` | `public/data/avvisi.json` | Fotografia degli avvisi sulla viabilità (CCISS Viaggiare Informati e Vi.abilità della Provincia di Vicenza) |
+
+Due comandi a parte:
+
+```sh
+npm run dati:avvisi    # rifà solo la fotografia degli avvisi
+npm run dati:stazioni  # rifà la tabella dei nomi delle stazioni dei treni
+```
+
+`dati:stazioni` scrive `public/data/stazioni-treni.json` a partire dagli orari di Trenitalia
+distribuiti da BusOne. Scarica un archivio di circa 25 MB e ha bisogno del comando `unzip`: per
+questo non fa parte di `npm run dati` e si rilancia solo quando cambiano le stazioni.
 
 Da sapere:
 
@@ -55,6 +70,20 @@ Da sapere:
 - Il livello del Brenta non passa da qui: lo legge il browser, in diretta, dall'API di ARPAV.
 - L'aria invece è una fotografia: resta ferma finché non si rilancia lo script. Il sito mostra
   sempre la data e l'ora della misura.
+- Nemmeno i treni passano da qui: il browser li legge in diretta da BusOne. Dagli script viene
+  solo la tabella dei nomi delle stazioni.
+- Anche gli avvisi sono una fotografia, e invecchiano in fretta: gli eventi del CCISS durano
+  poche ore (il sito mostra solo quelli delle ultime 24 ore). `npm run dati:avvisi` va rilanciato
+  spesso; ogni quanto è ancora da decidere. Se la fotografia ha più di 24 ore la scheda lo dice.
+- Se Vi.abilità non risponde lo script tiene le ordinanze della fotografia precedente che
+  valgono ancora; se non risponde CCISS il file esce senza eventi e la scheda dice che mancano.
+  In tutti e due i casi lo script scrive il file ma esce con codice 2: va rilanciato. Se non
+  risponde nessuna delle due esce con codice 1 e lascia intatto il file esistente.
+- Le ordinanze di Vi.abilità con il periodo dei lavori già finito non entrano nella fotografia.
+  Quando il periodo non è scritto in modo leggibile l'ordinanza resta: alcune possono
+  riguardare lavori già finiti.
+- L'elenco dei treni può non essere completo: BusOne pubblica solo le corse seguite in diretta
+  e le corse soppresse arrivano senza fermate, quindi non si possono attribuire a Bassano.
 - Le altezze degli edifici sono quasi tutte stimate (OpenStreetMap ne ha solo 76 su circa 19.000):
   sono un'illustrazione, non un dato.
 - `ORIGINE` e `RIQUADRO` sono copiati a mano in `scripts/lib/geo.mjs` e in
@@ -148,6 +177,13 @@ Le regole complete e i contratti tra le parti stanno in `docs/SPEC.md`.
   CC BY 4.0 per i file XML ed elenca lì anche i file JSON dell'aria: che valga anche per quelli
   è una nostra lettura, da confermare. Per i dati dell'idrometro ARPAV non dichiara una licenza
   in modo esplicito: il sito lo dice e aspettiamo una conferma scritta.
+- **Treni**: BusOne (busone.app), che rielabora i dati di Trenitalia, la fonte originale. Uso
+  gratuito e non commerciale per privati ed enti non profit, con attribuzione; BusOne può
+  sospendere il servizio. Sono i ritardi dichiarati dall'operatore, non un servizio ufficiale.
+  Le posizioni dei treni, che in quei dati sono stime, non si mostrano.
+- **Avvisi sulla viabilità**: CCISS Viaggiare Informati e Vi.abilità (Provincia di Vicenza).
+  Nessuna delle due dichiara una licenza di riuso: il sito riporta solo una citazione breve, con
+  il nome della fonte e il link alla pagina originale.
 - **Immagini e audio**: Wikimedia Commons, ognuno con la propria licenza e il proprio autore,
   scritti nel racconto e mostrati sotto il file.
 - **Video**: incorporati da YouTube, restano dei rispettivi canali.
@@ -173,7 +209,16 @@ Permessi e licenze:
 
 - conferma scritta di ARPAV per l'uso continuo dell'API del Brenta e per la licenza dei dati;
 - permessi per le webcam (oggi solo link);
-- il fuso orario delle date ARPAV non è dichiarato: l'ora mostrata potrebbe sbagliare di un'ora.
+- il fuso orario delle date ARPAV non è dichiarato: l'ora mostrata potrebbe sbagliare di un'ora;
+- BusOne ammette solo privati ed enti non profit, per usi non commerciali: conta chi firma il
+  progetto. Se lo pubblica un'azienda o uno studio, serve prima il consenso scritto di BusOne;
+- BusOne chiede un contatto nell'header `X-BusOne-Client`. Oggi non c'è: va aggiunto in
+  `src/live/index.ts` e in `scripts/dati-stazioni.mjs` quando il progetto avrà un indirizzo per
+  le segnalazioni;
+- i termini di BusOne e la licenza dei dati di Trenitalia vanno riletti alla fonte: qui sono
+  riportati come ci sono stati riferiti;
+- CCISS e Vi.abilità non dichiarano una licenza di riuso: chiedere a entrambi una conferma
+  scritta. Fino ad allora solo citazioni brevi con link.
 
 Media:
 

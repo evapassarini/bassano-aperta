@@ -1,12 +1,12 @@
 // Controlla dati e contenuti veri contro i contratti di src/types.ts:
-// storie, strati, luoghi simbolo, mappa di base, aria.
+// storie, strati, luoghi simbolo, mappa di base, aria, avvisi sulla viabilità, stazioni dei treni.
 
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { RIQUADRO } from '../src/types';
-import type { DatiAria, DatiBase, DatiStrati, Landmark, Storia } from '../src/types';
+import type { DatiAria, DatiAvvisi, DatiBase, DatiStrati, Landmark, Storia } from '../src/types';
 import { lonLatInMetri } from '../src/map/proiezione';
 
 const RADICE = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -19,6 +19,12 @@ const idStorie = new Set(storie.map((s) => s.storia.id));
 const strati = leggi<DatiStrati>('public/data/strati.json');
 const base = leggi<DatiBase>('public/data/base.json');
 const aria = leggi<DatiAria>('public/data/aria.json');
+const avvisi = leggi<DatiAvvisi>('public/data/avvisi.json');
+const stazioniTreni = leggi<{
+  generato: string;
+  fonte: { nome: string; url: string; licenza: string };
+  stazioni: Record<string, string>;
+}>('public/data/stazioni-treni.json');
 const landmark = leggi<Landmark[]>('public/landmarks/indice.json');
 
 /**
@@ -228,6 +234,70 @@ describe("aria (public/data/aria.json)", () => {
     for (const m of aria.misure) {
       expect(stringa(m.inquinante) && numero(m.valore) && stringa(m.unita)).toBe(true);
       expect(Number.isNaN(Date.parse(m.quando)), m.quando).toBe(false);
+    }
+  });
+});
+
+describe('avvisi sulla viabilità (public/data/avvisi.json)', () => {
+  it('ha data e fonti con nome, indirizzo e licenza', () => {
+    expect(Number.isNaN(Date.parse(avvisi.generato))).toBe(false);
+    expect(Array.isArray(avvisi.fonti) && Array.isArray(avvisi.avvisi)).toBe(true);
+    const nomi = avvisi.fonti.map((f) => f.nome);
+    expect(new Set(nomi).size, 'fonti doppie').toBe(nomi.length);
+    for (const f of avvisi.fonti) {
+      expect(stringa(f.nome) && https(f.url) && stringa(f.licenza), f.nome).toBe(true);
+    }
+    // Un avviso senza fonte letta non può esistere.
+    if (avvisi.avvisi.length > 0) expect(avvisi.fonti.length).toBeGreaterThan(0);
+  });
+
+  it('ha avvisi brevi, senza HTML, con data, fonte dichiarata e link https', () => {
+    const fonti = new Set(avvisi.fonti.map((f) => f.nome));
+    const generato = Date.parse(avvisi.generato);
+    for (const a of avvisi.avvisi) {
+      const chi = `${a.strada} (${a.quando})`;
+      expect(['evento', 'ordinanza'].includes(a.tipo), chi).toBe(true);
+      expect(stringa(a.strada) && stringa(a.testo), chi).toBe(true);
+      expect(a.testo.length, `testo lungo: ${chi}`).toBeLessThanOrEqual(280);
+      expect(/<[a-z/!][^>]*>|&[a-z]+;|&#\d+;|&#x[0-9a-f]+;/i.test(a.testo), `HTML o entità nel testo: ${chi}`).toBe(false);
+      expect(/[\u2013\u2014]/.test(a.testo + a.strada), `trattino lungo: ${chi}`).toBe(false);
+      expect(/[\w.+-]+@[\w-]+\.[a-z]{2,}/i.test(a.testo), `indirizzo email nel testo: ${chi}`).toBe(false);
+      const quando = Date.parse(a.quando);
+      expect(Number.isNaN(quando), chi).toBe(false);
+      // Un avviso non può essere stato pubblicato dopo la fotografia (un'ora di margine).
+      expect(quando, chi).toBeLessThanOrEqual(generato + 3_600_000);
+      expect(fonti.has(a.fonte), `fonte non elencata: ${a.fonte}`).toBe(true);
+      expect(https(a.url), chi).toBe(true);
+    }
+  });
+
+  it('tiene al massimo dieci ordinanze, degli ultimi 120 giorni', () => {
+    const ordinanze = avvisi.avvisi.filter((a) => a.tipo === 'ordinanza');
+    expect(ordinanze.length).toBeLessThanOrEqual(10);
+    const limite = Date.parse(avvisi.generato) - 120 * 86_400_000;
+    for (const a of ordinanze) expect(Date.parse(a.quando), a.strada).toBeGreaterThanOrEqual(limite);
+  });
+});
+
+describe('stazioni dei treni (public/data/stazioni-treni.json)', () => {
+  it('ha data e fonte con attribuzione a BusOne', () => {
+    expect(Number.isNaN(Date.parse(stazioniTreni.generato))).toBe(false);
+    const f = stazioniTreni.fonte;
+    expect(stringa(f.nome) && https(f.url) && stringa(f.licenza)).toBe(true);
+    expect(f.nome).toContain('BusOne');
+  });
+
+  it('ha Bassano del Grappa e solo codici di cifre con nomi leggibili', () => {
+    const s = stazioniTreni.stazioni;
+    expect(s !== null && typeof s === 'object' && !Array.isArray(s)).toBe(true);
+    expect(s['02520']).toBe('Bassano del Grappa');
+    const voci = Object.entries(s);
+    expect(voci.length).toBeGreaterThanOrEqual(50);
+    for (const [codice, nome] of voci) {
+      expect(/^\d+$/.test(codice), `codice non valido: ${codice}`).toBe(true);
+      expect(stringa(nome) && nome === nome.trim(), `nome vuoto: ${codice}`).toBe(true);
+      // Un nome di più lettere tutto in maiuscolo non è stato reso leggibile.
+      expect(nome.length > 3 && nome === nome.toUpperCase(), `nome in maiuscolo: ${nome}`).toBe(false);
     }
   });
 });

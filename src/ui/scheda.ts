@@ -1,7 +1,7 @@
 // Scheda breve per i punti della mappa che non hanno un racconto.
 
 import type { Punto } from '../types';
-import { NOTA_ARIA_BASE, NOTA_BRENTA_BASE, riquadroAria, riquadroBrenta } from './adesso';
+import { NOTA_ARIA_BASE, NOTA_BRENTA_BASE, riquadroAria, riquadroBrenta, riquadroTreni } from './adesso';
 import { NOME_STRATO, etichettaTipo, urlSicuro } from './aiuti';
 import { el, idUnico, linkEsterno, segnoStrato } from './dom';
 
@@ -37,6 +37,7 @@ export function creaScheda(punto: Punto, apriStoria?: () => void): Scheda {
   // La nota del punto sta già sopra: nel riquadro non si ripete.
   if (punto.tipo === 'aria') nodo.append(riquadroAria(punto.nota ? '' : NOTA_ARIA_BASE));
   if (punto.tipo === 'idrometro') nodo.append(riquadroBrenta(punto.nota ? '' : NOTA_BRENTA_BASE));
+  if (punto.tipo === 'stazione') nodo.append(riquadroTreni());
 
   const azioni = el('p', { class: 'scheda-azioni' });
   if (apriStoria) {

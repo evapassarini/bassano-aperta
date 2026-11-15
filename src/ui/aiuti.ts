@@ -1,7 +1,7 @@
 // Aiuti puri dell'interfaccia: ricerca, date e numeri in italiano, parole per la
-// tendenza del fiume, indirizzi dei video. Nessun DOM qui dentro: si provano con vitest.
+// tendenza del fiume, indirizzi dei video, tabellone dei treni, scelta degli avvisi. Nessun DOM qui dentro: si provano con vitest.
 
-import type { Fonte, IdStrato, Punto, Storia, TipoPunto } from '../types';
+import type { Avviso, DatiAvvisi, Fonte, IdStrato, LetturaTreni, Punto, Storia, TipoPunto, Treno } from '../types';
 
 // ---------------------------------------------------------------------------
 // Ricerca nei luoghi
@@ -43,6 +43,25 @@ export function filtraStorie(storie: Storia[], domanda: string): Storia[] {
 
 /** Tipi di punto che danno un dato o un servizio: stanno sempre nell'elenco «Luoghi». */
 const TIPI_SERVIZIO: TipoPunto[] = ['aria', 'idrometro', 'webcam', 'stazione'];
+/**
+ * Parole in più con cui si trova un tipo di punto: quello che la sua scheda fa vedere, anche
+ * se non sta nel nome. La stazione mostra i prossimi treni.
+ */
+const PAROLE_TIPO: Partial<Record<TipoPunto, string>> = {
+  stazione: 'treni treno ritardi ritardo partenze arrivi orari ferrovia',
+};
+/** Quello che la scheda di un tipo di punto offre in più, da scrivere accanto al tipo nell'elenco. */
+const OFFRE_TIPO: Partial<Record<TipoPunto, string>> = {
+  stazione: 'prossimi treni',
+};
+
+/** Seconda riga di una voce dell'elenco «Luoghi»: "Stazione, prossimi treni · strato Mobilità". */
+export function sottoPunto(punto: Pick<Punto, 'tipo' | 'strato'>): string {
+  const offre = OFFRE_TIPO[punto.tipo];
+  const tipo = etichettaTipo(punto.tipo);
+  return `${offre ? `${tipo}, ${offre}` : tipo} · strato ${NOME_STRATO[punto.strato] ?? punto.strato}`;
+}
+
 /** Quanti altri punti della mappa mostrare al massimo tra i risultati di una ricerca. */
 export const MASSIMO_ALTRI_PUNTI = 40;
 
@@ -61,7 +80,7 @@ export function filtraPunti(
   const perNome = (a: Punto, b: Punto): number =>
     chiaveOrdine(a.nome).localeCompare(chiaveOrdine(b.nome), 'it') || a.id.localeCompare(b.id);
   const contiene = (p: Punto): boolean => {
-    const testo = normalizza(`${p.nome} ${NOME_TIPO[p.tipo] ?? ''}`);
+    const testo = normalizza(`${p.nome} ${NOME_TIPO[p.tipo] ?? ''} ${PAROLE_TIPO[p.tipo] ?? ''}`);
     return parole.every((parola) => testo.includes(parola));
   };
   const servizi = punti.filter((p) => TIPI_SERVIZIO.includes(p.tipo) && contiene(p)).sort(perNome);
@@ -496,4 +515,213 @@ export function descriviStrato(
     if (nome && !visti.includes(nome)) visti.push(nome);
   }
   return visti.length > 0 ? visti.join(', ') : LEGENDA_BASE[id];
+}
+
+// ---------------------------------------------------------------------------
+// Treni alla stazione
+// ---------------------------------------------------------------------------
+
+/** Quante righe mostra al massimo il riquadro dei treni. */
+export const MASSIMO_TRENI = 8;
+/** Un treno resta in elenco ancora per qualche minuto dopo la sua ora. */
+const TOLLERANZA_TRENO_MS = 3 * 60 * 1000;
+/** Oltre questa età l'emissione dei dati non si considera più recente. */
+const TRENI_VECCHI_MS = 15 * 60 * 1000;
+
+const MINUTO_MS = 60 * 1000;
+
+export interface RigaTreno {
+  /**
+   * Ora dell'orario ufficiale, in ora italiana ("07:35"): è quella dei tabelloni di stazione,
+   * a cui il ritardo si somma. Si ricava da `Treno.quando` togliendo il ritardo.
+   */
+  ora: string;
+  /** Con un ritardo o un anticipo, l'ora prevista: "previsto alle 07:42". Altrimenti vuoto. */
+  previsto: string;
+  /** "per Padova", "da Venezia S. Lucia", oppure la frase per quando il nome manca. */
+  direzione: string;
+  /** "treno 16313", oppure "numero non indicato" se il numero non si è potuto leggere. */
+  treno: string;
+  /** "in orario", "+7 min", "2 min in anticipo", "soppresso". */
+  stato: string;
+  /** La stessa cosa detta per intero, per chi ascolta: "7 minuti di ritardo, previsto alle 07:42". */
+  statoPerEsteso: string;
+  tono: 'orario' | 'ritardo' | 'anticipo' | 'soppresso';
+}
+
+/** Lo stato di un treno a parole: mai affidato solo al colore. */
+export function statoTreno(treno: Pick<Treno, 'ritardoMinuti' | 'soppresso'>): Pick<RigaTreno, 'stato' | 'statoPerEsteso' | 'tono'> {
+  if (treno.soppresso) return { stato: 'soppresso', statoPerEsteso: 'soppresso', tono: 'soppresso' };
+  const minuti = Math.round(treno.ritardoMinuti);
+  if (minuti >= 1) {
+    return {
+      stato: `+${minuti} min`,
+      statoPerEsteso: minuti === 1 ? '1 minuto di ritardo' : `${minuti} minuti di ritardo`,
+      tono: 'ritardo',
+    };
+  }
+  if (minuti <= -1) {
+    const n = -minuti;
+    return {
+      stato: `${n} min in anticipo`,
+      statoPerEsteso: n === 1 ? '1 minuto di anticipo' : `${n} minuti di anticipo`,
+      tono: 'anticipo',
+    };
+  }
+  return { stato: 'in orario', statoPerEsteso: 'in orario', tono: 'orario' };
+}
+
+function rigaTreno(treno: Treno): RigaTreno {
+  const direzione =
+    treno.verso === 'arrivo'
+      ? treno.da
+        ? `da ${treno.da}`
+        : 'provenienza non indicata'
+      : treno.a
+        ? `per ${treno.a}`
+        : 'destinazione non indicata';
+  const stato = statoTreno(treno);
+  // `quando` ha già il ritardo dentro. Sui tabelloni di stazione si legge l'orario ufficiale
+  // con il ritardo accanto: qui si fa lo stesso, e l'ora prevista si scrive a parte, così
+  // nessuno somma il ritardo due volte.
+  const minuti = Number.isFinite(treno.ritardoMinuti) ? Math.round(treno.ritardoMinuti) : 0;
+  const prevista = Date.parse(treno.quando);
+  const ufficiale = Number.isNaN(prevista)
+    ? treno.quando
+    : new Date(Math.round((prevista - minuti * MINUTO_MS) / MINUTO_MS) * MINUTO_MS).toISOString();
+  const previsto = minuti !== 0 && !treno.soppresso ? `previsto alle ${formattaOra(treno.quando)}` : '';
+  return {
+    ora: formattaOra(ufficiale),
+    previsto,
+    direzione,
+    treno: treno.numero ? `treno ${treno.numero}` : 'numero non indicato',
+    stato: stato.stato,
+    statoPerEsteso: previsto ? `${stato.statoPerEsteso}, ${previsto}` : stato.statoPerEsteso,
+    tono: stato.tono,
+  };
+}
+
+export interface TabelloneTreni {
+  /** Treni che partono da Bassano o ci passano, in ordine di ora. */
+  partenze: RigaTreno[];
+  /** Treni che finiscono la corsa a Bassano. */
+  arrivi: RigaTreno[];
+  /** true se l'emissione dei dati è più vecchia di un quarto d'ora. */
+  vecchio: boolean;
+}
+
+/**
+ * I prossimi treni per il riquadro della stazione: al massimo `massimo` in tutto, i più
+ * vicini nel tempo, divisi tra partenze (transiti compresi) e arrivi. I treni la cui ora è
+ * passata da più di qualche minuto non si mostrano.
+ */
+export function tabelloneTreni(lettura: LetturaTreni, adesso: Date, massimo = MASSIMO_TRENI): TabelloneTreni {
+  const ora = adesso.getTime();
+  const prossimi = lettura.treni
+    .filter((t) => {
+      const ms = Date.parse(t.quando);
+      return !Number.isNaN(ms) && ms >= ora - TOLLERANZA_TRENO_MS;
+    })
+    .sort((a, b) => Date.parse(a.quando) - Date.parse(b.quando))
+    .slice(0, Math.max(0, massimo));
+  const emissione = Date.parse(lettura.quando);
+  return {
+    partenze: prossimi.filter((t) => t.verso !== 'arrivo').map(rigaTreno),
+    arrivi: prossimi.filter((t) => t.verso === 'arrivo').map(rigaTreno),
+    vecchio: Number.isNaN(emissione) || ora - emissione > TRENI_VECCHI_MS,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Avvisi sulla viabilità
+// ---------------------------------------------------------------------------
+
+export const NOME_AVVISI = 'Avvisi sulla viabilità';
+export const SOTTO_AVVISI = 'Chiusure e lavori sulle strade attorno a Bassano · strato Mobilità';
+const PAROLE_AVVISI = `${NOME_AVVISI} ${SOTTO_AVVISI} traffico ordinanze ordinanza code coda incidenti incidente chiusure chiusura cantieri cantiere`;
+
+/** true se la voce «Avvisi sulla viabilità» va mostrata nell'elenco per questa ricerca. */
+export function trovaVoceAvvisi(domanda: string): boolean {
+  const testo = normalizza(PAROLE_AVVISI);
+  return normalizza(domanda)
+    .split(' ')
+    .filter(Boolean)
+    .every((parola) => testo.includes(parola));
+}
+
+const DURATA_EVENTO_MS = 24 * 60 * 60 * 1000;
+
+/**
+ * Gli avvisi da mostrare. Gli eventi di traffico valgono solo se pubblicati nelle ultime
+ * 24 ore rispetto ad `adesso`: più vecchi non dicono più nulla di certo e non si mostrano.
+ * Le ordinanze restano tutte. In ogni gruppo, prima i più recenti.
+ */
+export function scegliAvvisi(avvisi: Avviso[], adesso: Date): { eventi: Avviso[]; ordinanze: Avviso[] } {
+  const ora = adesso.getTime();
+  const validi = avvisi.filter(
+    (a) => a !== null && typeof a === 'object' && typeof a.testo === 'string' && typeof a.quando === 'string',
+  );
+  const perData = (a: Avviso, b: Avviso): number => (Date.parse(b.quando) || 0) - (Date.parse(a.quando) || 0);
+  const eventi = validi
+    .filter((a) => {
+      if (a.tipo !== 'evento') return false;
+      const ms = Date.parse(a.quando);
+      return !Number.isNaN(ms) && ms >= ora - DURATA_EVENTO_MS;
+    })
+    .sort(perData);
+  const ordinanze = validi.filter((a) => a.tipo === 'ordinanza').sort(perData);
+  return { eventi, ordinanze };
+}
+
+/** Oltre questa età la fotografia degli avvisi non si considera più recente. */
+const AVVISI_VECCHI_MS = 24 * 60 * 60 * 1000;
+/** Lo script tiene le ordinanze pubblicate negli ultimi 120 giorni (scripts/lib/avvisi.mjs). */
+const GIORNI_ORDINANZE = 120;
+
+/** Le due fonti degli avvisi, come le scrive lo script in DatiAvvisi.fonti. */
+export const FONTI_AVVISI = [
+  { tipo: 'evento', nome: 'CCISS Viaggiare Informati', breve: 'CCISS', url: 'https://www.cciss.it/', cosa: 'gli eventi di traffico' },
+  { tipo: 'ordinanza', nome: 'Vi.abilità (Provincia di Vicenza)', breve: 'Vi.abilità', url: 'https://vi-abilita.it/', cosa: 'le ordinanze sulle strade provinciali' },
+] as const;
+
+export interface QuadroAvvisi {
+  eventi: Avviso[];
+  ordinanze: Avviso[];
+  /** true se la fotografia ha più di 24 ore, o una data che non si legge. */
+  vecchia: boolean;
+  /** Fonti che lo script non è riuscito a leggere quando ha fatto la fotografia. */
+  mancanti: (typeof FONTI_AVVISI)[number][];
+  /** Frase breve per chi ascolta: "3 avvisi nella fotografia del 15 novembre 2026, ore 08:30." */
+  riassunto: string;
+  /** Frase da mostrare se non c'è nessun avviso: parla della fotografia, non di adesso. */
+  vuoto: string;
+}
+
+/**
+ * Tutto quello che la scheda degli avvisi deve dire, deciso senza DOM. La fotografia si
+ * rigenera a mano: può essere vecchia, o fatta mentre una fonte non rispondeva. In quei casi
+ * la scheda lo dice, e non afferma mai nulla su "questo momento". Le ordinanze pubblicate
+ * da più di 120 giorni rispetto ad `adesso` non si mostrano.
+ */
+export function quadroAvvisi(dati: Pick<DatiAvvisi, 'generato' | 'fonti' | 'avvisi'>, adesso: Date): QuadroAvvisi {
+  const scelti = scegliAvvisi(Array.isArray(dati.avvisi) ? dati.avvisi : [], adesso);
+  const ora = adesso.getTime();
+  const limite = ora - GIORNI_ORDINANZE * 24 * 60 * 60 * 1000;
+  const ordinanze = scelti.ordinanze.filter((a) => {
+    const ms = Date.parse(a.quando);
+    return !Number.isNaN(ms) && ms >= limite;
+  });
+  const fatta = Date.parse(dati.generato);
+  const nomi = new Set((Array.isArray(dati.fonti) ? dati.fonti : []).map((f) => f?.nome));
+  const quanti = scelti.eventi.length + ordinanze.length;
+  const data = formattaDataOraLunga(dati.generato);
+  const vuoto = `Nella fotografia del ${data} non ci sono avvisi per la zona di Bassano.`;
+  return {
+    eventi: scelti.eventi,
+    ordinanze,
+    vecchia: Number.isNaN(fatta) || ora - fatta > AVVISI_VECCHI_MS,
+    mancanti: FONTI_AVVISI.filter((f) => !nomi.has(f.nome)),
+    riassunto: quanti === 0 ? vuoto : `${quanti === 1 ? '1 avviso' : `${quanti} avvisi`} nella fotografia del ${data}.`,
+    vuoto,
+  };
 }

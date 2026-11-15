@@ -85,16 +85,30 @@ export function segnoStrato(id: 'cultura' | 'ambiente' | 'mobilita', lato = 16):
 }
 
 /** Link verso un altro sito: scheda nuova, senza referrer, con l'avviso per chi non vede. */
-export function linkEsterno(url: string, testo: string, classe?: string): HTMLElement {
+export function linkEsterno(url: string, testo: string, classe?: string, perLettori?: string): HTMLElement {
   const sicuro = urlSicuro(url);
   if (!sicuro) return el('span', { class: classe }, testo);
   return el(
     'a',
     { class: classe ? `esterno ${classe}` : 'esterno', href: sicuro, target: '_blank', rel: 'noopener noreferrer' },
     el('span', null, testo),
+    // Per chi ascolta: distingue tra loro i link che a vista hanno lo stesso testo.
+    perLettori ? el('span', { class: 'solo-lettori' }, perLettori) : null,
     icona('esterno', 14),
     el('span', { class: 'solo-lettori' }, ' (si apre in una nuova scheda)'),
   );
+}
+
+/**
+ * Da chiamare prima di sostituire i figli di `contenitore` (che deve avere tabindex="-1").
+ * Se il fuoco sta su uno dei figli, per esempio sul bottone «Riprova» appena premuto, lo
+ * sposta sul contenitore: altrimenti finirebbe sul body e chi usa la tastiera dovrebbe
+ * riattraversare tutta la pagina.
+ */
+export function tieniFuoco(contenitore: HTMLElement): void {
+  const attivo = typeof document === 'undefined' ? null : document.activeElement;
+  if (!attivo || attivo === contenitore || !contenitore.contains(attivo)) return;
+  contenitore.focus({ preventScroll: true });
 }
 
 /** true se chi guarda ha chiesto meno movimento. */

@@ -1,0 +1,41 @@
+{
+  "generato": "2026-11-15T09:10:15.756Z",
+  "fonti": [
+    {
+      "nome": "CCISS Viaggiare Informati",
+      "url": "https://www.cciss.it/",
+      "licenza": "Non dichiarata: citazione breve con link alla fonte"
+    },
+    {
+      "nome": "Vi.abilità (Provincia di Vicenza)",
+      "url": "https://vi-abilita.it/",
+      "licenza": "Non dichiarata: citazione breve con link alla fonte"
+    }
+  ],
+  "avvisi": [
+    {
+      "tipo": "evento",
+      "strada": "SS47 della Valsugana",
+      "testo": "Mezzi spargisale in azione tra 834 m dopo Incrocio Bassano Del Grappa - SS141 Strada Cadorna e Incrocio Martincelli",
+      "quando": "2026-11-15T05:04:00.000Z",
+      "fonte": "CCISS Viaggiare Informati",
+      "url": "https://www.cciss.it/"
+    },
+    {
+      "tipo": "ordinanza",
+      "strada": "S.P. 75 Volon",
+      "testo": "Dal km 3+775 al km 4+266 all’esterno dei centri abitati in comune di Mussolente. Periodo: dal 16/11/2026 al 18/12/2026, dalle ore 8:30 alle ore 16:30. Senso unico alternato. Per posa linea elettrica MT in attraversamento e parallelismo.",
+      "quando": "2026-11-11T08:50:25.000Z",
+      "fonte": "Vi.abilità (Provincia di Vicenza)",
+      "url": "https://vi-abilita.it/servizi/ufficio-concessioni-e-autorizzazioni/ordinanze-temporanee/s-p-75-volon-dal-km-3775-al-km-4266-allesterno-dei-centri-abitati-in-comune-di-mussolente/"
+    },
+    {
+      "tipo": "ordinanza",
+      "strada": "S.P. 72 Fratellanza",
+      "testo": "Al km 8+650 circa, in comune di Marostica. Periodo: dal 09/11/2026 al 27/11/2026, dalle ore 0:00 alle ore 24. Senso unico alternato. Interventi di consolidamento e messa in sicurezza di scarpate stradali, muri di sostegno e cordoli.",
+      "quando": "2026-10-28T09:44:56.000Z",
+      "fonte": "Vi.abilità (Provincia di Vicenza)",
+      "url": "https://vi-abilita.it/servizi/ufficio-concessioni-e-autorizzazioni/ordinanze-temporanee/s-p-72-fratellanza-al-km-8650-circa-in-comune-di-marostica/"
+    }
+  ]
+}
