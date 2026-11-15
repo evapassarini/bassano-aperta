@@ -1,6 +1,7 @@
 // Disegno della mappa su canvas 2D. Ordine: carta, aree, strade, linee tematiche,
 // poi tutto ciò che sta in piedi dal più lontano al più vicino, infine i segnaposto.
 
+import type { Tasselli } from './tasselli';
 import type { IdStrato, Luce, TipoArea, TipoStrada } from '../types';
 import {
   marcatoriInVista,
@@ -454,6 +455,8 @@ export class Disegnatore {
    * non c'era tempo di prepararli: chi disegna chiede un altro fotogramma.
    */
   incompleto = false;
+  /** Tasselli dipinti facoltativi, stesi sopra gli edifici di giorno. */
+  tasselli: Tasselli | null = null;
   /** Presenza degli strati di dettaglio nel fotogramma in corso (vedi DETTAGLI). */
   private pLuce = 0;
   private pSpigoli = 0;
@@ -827,6 +830,12 @@ export class Disegnatore {
       this.daLontano(ctx, visibile, z, dettaglio === 'piatto');
       inPixel();
       for (const sp of sprite) this.illustrazione(ctx, sp, densita);
+    }
+
+    // I tasselli dipinti coprono la loro zona, sotto etichette e segnaposto. Solo di giorno.
+    if (this.tasselli && this.luceAttiva === 'giorno') {
+      inIso();
+      this.tasselli.disegna(ctx, z);
     }
 
     inPixel();

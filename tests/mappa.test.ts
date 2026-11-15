@@ -1022,3 +1022,14 @@ describe('doppioni tra gli edifici (scripts/lib/doppioni.mjs)', () => {
     expect(togliDoppioni(edifici).tolti).toBe(0);
   });
 });
+
+import { presenzaTassello } from '../src/map/tasselli';
+
+describe('tasselli dipinti', () => {
+  it('entrano sfumando dallo zoom indicato', () => {
+    expect(presenzaTassello(3, 3.2)).toBe(0);
+    expect(presenzaTassello(3.2, 3.2)).toBe(0);
+    expect(presenzaTassello(3.55, 3.2)).toBeCloseTo(0.5, 5);
+    expect(presenzaTassello(6, 3.2)).toBe(1);
+  });
+});

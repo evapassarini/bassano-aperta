@@ -4,3 +4,4 @@ dist
 # segnaposto personali, mai pubblicati
 personale.local.json
 prove-ai/
+public/tasselli/

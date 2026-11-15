@@ -561,6 +561,15 @@ porte, portici. Nessuna dipendenza in più. I dieci luoghi simbolo restano SVG a
   portici hanno una luce calda. I luoghi simbolo di notte prendono un velo blu-viola chiaro,
   vicino a quello dei muri.
 
+### Tasselli dipinti (prova)
+
+Facoltativi: se esiste `public/tasselli/indice.json`, `src/map/tasselli.ts` stende sopra gli
+edifici, sotto etichette e segnaposto, le immagini elencate (centro in metri locali, lati sul
+piano isometrico, zoom da cui compaiono), con i bordi sfumati. Sono versioni dipinte dello
+stesso scorcio disegnato dal codice e si mostrano solo con la luce di giorno. La cartella è
+fuori da git finché non è chiarita la licenza delle immagini generate: senza tasselli la mappa
+è quella disegnata dal codice.
+
 ## Prestazioni
 
 Gli edifici sono migliaia: disegnare solo ciò che è nel riquadro visibile, ordinare una volta
