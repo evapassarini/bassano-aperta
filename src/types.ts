@@ -125,6 +125,60 @@ export interface DatiAria {
 }
 
 // ---------------------------------------------------------------------------
+// Treni alla stazione di Bassano: letti in diretta dal browser (src/live/treni.ts)
+// dal feed GTFS-Realtime di BusOne. Solo ritardi dichiarati: le posizioni dei treni
+// in quel feed sono stime, non si usano.
+// ---------------------------------------------------------------------------
+
+export interface Treno {
+  /** Numero del treno, es. "16313". */
+  numero: string;
+  /** 'partenza' se Bassano è la prima fermata, 'arrivo' se è l'ultima, 'transito' altrimenti. */
+  verso: 'partenza' | 'arrivo' | 'transito';
+  /** Stazione di origine e di destinazione (nomi leggibili, es. "Venezia S. Lucia"), se noti. */
+  da: string | null;
+  a: string | null;
+  /** Ora prevista a Bassano con il ritardo già dentro (ISO 8601): partenza, o arrivo se termina qui. */
+  quando: string;
+  /** Ritardo a Bassano in minuti (0 = in orario, negativo = in anticipo). */
+  ritardoMinuti: number;
+  /** true se la corsa è soppressa. */
+  soppresso: boolean;
+}
+
+export interface LetturaTreni {
+  /** Momento dell'emissione del feed (ISO 8601). */
+  quando: string;
+  /** Treni che passano da Bassano, ordinati per `quando`, da un'ora fa in avanti. */
+  treni: Treno[];
+}
+
+// ---------------------------------------------------------------------------
+// Avvisi sulla viabilità (fotografia fatta dallo script): public/data/avvisi.json
+// ---------------------------------------------------------------------------
+
+export interface Avviso {
+  /** 'evento' = evento di traffico in corso (CCISS); 'ordinanza' = lavori o limitazioni (Vi.abilità). */
+  tipo: 'evento' | 'ordinanza';
+  /** Strada, es. "SS47 della Valsugana" o "S.P. 52 Bassanese". */
+  strada: string;
+  /** Testo breve, senza HTML, al massimo 280 caratteri. */
+  testo: string;
+  /** Data di pubblicazione (ISO 8601). */
+  quando: string;
+  /** Nome breve della fonte, uguale a un `nome` in DatiAvvisi.fonti. */
+  fonte: string;
+  /** Pagina dove leggere l'avviso completo. */
+  url: string;
+}
+
+export interface DatiAvvisi {
+  generato: string;
+  fonti: { nome: string; url: string; licenza: string }[];
+  avvisi: Avviso[];
+}
+
+// ---------------------------------------------------------------------------
 // Storie dei luoghi: content/luoghi/<id>.json
 // ---------------------------------------------------------------------------
 
