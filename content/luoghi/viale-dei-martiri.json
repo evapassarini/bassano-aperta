@@ -14,7 +14,8 @@
       "fonte": {
         "titolo": "Regione del Veneto, Veneto Around Me, scheda di Viale dei Martiri",
         "url": "https://venetoaroundme.regione.veneto.it/en/node/96247"
-      }
+      },
+      "media": 2
     },
     {
       "anno": "Inizio settembre 1944",
@@ -117,6 +118,15 @@
       "autore": "Rino Porrovecchio",
       "licenza": "CC BY-SA 2.0",
       "alt": "Il filare degli alberi del viale lungo un prato e un vialetto in mattoni, con i palazzi e le auto parcheggiate sul lato opposto."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "La vista dal viale verso la valle e le montagne",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_z10.JPG?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_z10.JPG",
+      "autore": "Zyance",
+      "licenza": "CC BY 3.0",
+      "alt": "Tra le chiome tonde di due alberi potati, oltre una siepe, si vedono i tetti rossi delle case, un campanile e la valle stretta tra le montagne, un po' velate dalla foschia, sotto un cielo azzurro."
     }
   ],
   "live": [],

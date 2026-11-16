@@ -70,7 +70,8 @@
       "fonte": {
         "titolo": "Wikipedia, voce «Duomo di Bassano del Grappa»",
         "url": "https://it.wikipedia.org/wiki/Duomo_di_Bassano_del_Grappa"
-      }
+      },
+      "media": 14
     },
     {
       "anno": "1688-1689",
@@ -180,6 +181,60 @@
       "pagina": "https://www.youtube.com/watch?v=bmJv2sGn704",
       "autore": "Rete Veneta",
       "licenza": "Licenza non indicata: video solo incorporato da YouTube"
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il piazzale interno del castello",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Piazzale_inteerno_al_Castello_di_Bassano_del_Grappa.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Piazzale_inteerno_al_Castello_di_Bassano_del_Grappa.jpg",
+      "autore": "Ezio1937",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Un piazzale di ciottoli con una corsia di lastre di pietra: a sinistra un edificio giallo a due piani, in fondo il fianco del Duomo con il portale, a destra due alti cipressi."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "L'entrata al castello accanto alla Torre di Ser Ivano",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Entrata_al_Castelo_a_lato_della_Torre_di_ser_Ivano.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Entrata_al_Castelo_a_lato_della_Torre_di_ser_Ivano.jpg",
+      "autore": "Ezio1937",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Una porta ad arco in un muro intonacato e scrostato, con un piccolo campanile a vela in cima; a destra un'alta torre in mattoni e ciottoli con una bandiera gialla e rossa."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "La Torre di Ser Ivano vista dal basso",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Torre_di_Ser_Ivano.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Torre_di_Ser_Ivano.jpg",
+      "autore": "Ezio1937",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Una torre quadrata in mattoni rossi vista dal basso, tra muri di ciottoli di fiume, con ciuffi d'erba in cima e il cielo azzurro."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il fianco del Duomo con il campanile",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa%2C_chiesa_di_Santa_Maria_in_Colle_05.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa%2C_chiesa_di_Santa_Maria_in_Colle_05.jpg",
+      "autore": "Syrio",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Il lungo fianco intonacato della chiesa, con finestre a mezzaluna in alto e un portale in pietra; sul fondo il campanile in mattoni."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "L'organo del Duomo",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Organo_S.Maria_in_Colle.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Organo_S.Maria_in_Colle.jpg",
+      "autore": "GiaEsse",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "L'interno della chiesa verso la cantoria: l'organo con le canne in una cornice dorata, sopra un balcone decorato retto da colonne, tra pareti bianche e due altari laterali."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Duomo, l'altare della Madonna del Rosario",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Altare_della_Madonna_del_Rosario_vista_generale.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Altare_della_Madonna_del_Rosario_vista_generale.jpg",
+      "autore": "Ezio1937",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Un grande altare in marmi bianchi e rossi con colonne e statue; al centro una pala dipinta scura e, davanti, una statua bianca della Madonna con il Bambino."
     }
   ],
   "live": [],

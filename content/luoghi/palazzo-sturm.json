@@ -23,7 +23,8 @@
       "fonte": {
         "titolo": "Wikipedia, voce «Remondini»",
         "url": "https://it.wikipedia.org/wiki/Remondini"
-      }
+      },
+      "media": 9
     },
     {
       "anno": "Metà XVIII secolo",
@@ -154,6 +155,78 @@
       "pagina": "https://www.youtube.com/watch?v=4XlHujvWO_c",
       "autore": "Musei Civici Bassano del Grappa",
       "licenza": "Licenza non indicata: video solo incorporato da YouTube"
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Palazzo Sturm, una sala con pareti rivestite di legno e dipinti",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Palazzo_Sturm_int%C3%A9rieur_05.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Palazzo_Sturm_int%C3%A9rieur_05.jpg",
+      "autore": "Peccadille",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Una sala in penombra con le pareti rivestite di legno: al centro un grande dipinto con figure sotto gli alberi, ai lati dipinti più piccoli ovali e rettangolari, in alto un soffitto dipinto."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Museo della Stampa Remondini, una sala con ritratti e vetrine",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Musee_Remondini_01.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Musee_Remondini_01.jpg",
+      "autore": "Peccadille",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Una sala con il pavimento di legno scuro e il soffitto a travi bianche, con una colonna bianca al centro: a destra ritratti a olio in cornici dorate, in fondo un busto di marmo su un piedistallo, a sinistra vetrine con stampe e attrezzi."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "La casa dei Remondini in un disegno di fine Settecento (dal Catastico Remondini, secondo Commons)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Musee_Remondini_03.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Musee_Remondini_03.jpg",
+      "autore": "Autore sconosciuto, riproduzione di Peccadille",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Disegno acquerellato della facciata di un lungo palazzo a più piani, con tetti rossi, balconi e una fila di portici ad arco al piano terra."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Museo Remondini, una stampa di Sant'Antonio di Padova e la sua matrice di legno",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Musee_Remondini_05.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Musee_Remondini_05.jpg",
+      "autore": "Peccadille",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "In una teca, a sinistra una stampa colorata di Sant'Antonio di Padova con il Bambino in braccio, a destra la tavola di legno scuro incisa da cui è stata stampata."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Museo Remondini, cataloghi e una stampa di San Rocco",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Musee_Remondini_13.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Musee_Remondini_13.jpg",
+      "autore": "Peccadille",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "In una teca quattro libretti aperti, cataloghi a stampa con elenchi e prezzi, e accanto una stampa colorata di San Rocco con il cane tra ghirlande di fiori."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "«Discritione del Paese di Chucagna», foglio volante dei Remondini (1770 circa, secondo Commons)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Discritione_del_Paese_di_Chucagna_dove_chi_manco_lavora_pi%C3%B9_guadagna._Bassano%2C_Remondini%2C_1770_circa.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Discritione_del_Paese_di_Chucagna_dove_chi_manco_lavora_pi%C3%B9_guadagna._Bassano%2C_Remondini%2C_1770_circa.jpg",
+      "autore": "Remondini, riproduzione di Argonitros",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Stampa colorata a mano del Paese di Cuccagna: al centro un monte con un pentolone, attorno navi, una fontana, una tavola imbandita, forni e tante piccole figure vestite di rosso, con scritte accanto a ogni scena."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Due pagine di un campionario di carte decorate dei Remondini (XVIII secolo, secondo Commons)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Remondini_carta_parati.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Remondini_carta_parati.jpg",
+      "autore": "Autore sconosciuto",
+      "licenza": "Pubblico dominio",
+      "alt": "Due fogli affiancati con tanti riquadri numerati di carta decorata a motivi di fiori, righe, cuori e rombi, in giallo, rosso, azzurro e verde, con il prezzo scritto in basso."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Museo Remondini, un foglio di carta decorata",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dominot%C3%A9_Musee_Remondini_17.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Dominot%C3%A9_Musee_Remondini_17.jpg",
+      "autore": "Peccadille",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Un foglio di carta decorata visto da vicino: una rete di rombi bianchi su fondo grigio scuro, con un fiore a quattro petali al centro di ogni rombo."
     }
   ],
   "live": [

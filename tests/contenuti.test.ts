@@ -121,6 +121,11 @@ describe('storie (content/luoghi)', () => {
         expect(Number.isInteger(t.media) && t.media >= 0 && t.media < s.media.length, `indice media: ${t.titolo}`).toBe(true);
         expect(s.media[t.media].tipo).toBe('immagine');
       }
+      // Nessun file due volte nello stesso racconto, e nessuna immagine legata a due tappe.
+      const pagine = s.media.map((m) => m.pagina);
+      expect(new Set(pagine).size, 'file ripetuto nei media').toBe(pagine.length);
+      const legate = s.tappe.map((t) => t.media).filter((i) => i !== undefined);
+      expect(new Set(legate).size, 'immagine legata a due tappe').toBe(legate.length);
     });
 
     it('ha i riquadri "Adesso" ben formati', () => {
@@ -139,9 +144,19 @@ describe('storie (content/luoghi)', () => {
 
   it('rispetta la regola sul King Kong Rhino: nessuna fotografia della scultura', () => {
     const rino = storie.find((s) => s.storia.id === 'king-kong-rhino')!.storia;
-    for (const m of rino.media.filter((x) => x.tipo === 'immagine')) {
-      expect(`${m.titolo} ${m.autore}`.toLowerCase()).toMatch(/dürer|durer/);
+    const immagini = rino.media.filter((x) => x.tipo === 'immagine');
+    // Le immagini ammesse: stampe e disegni del Cinquecento (autori morti da secoli) e le
+    // sale di Palazzo Sturm fotografate senza la scultura. Chi ne aggiunge una la mette qui
+    // dopo averla guardata.
+    const ammessi = /dürer|durer|burgkmair|enea vico|peccadille/;
+    for (const m of immagini) {
+      expect(m.autore.toLowerCase(), `autore non previsto: ${m.titolo}`).toMatch(ammessi);
+      // Nessuna didascalia e nessun file parla della scultura o del suo autore.
+      expect(`${m.titolo} ${m.alt ?? ''} ${decodeURIComponent(m.pagina)}`.toLowerCase(), m.titolo).not.toMatch(
+        /king.?kong|li-?jen|shih|scultura/,
+      );
     }
+    expect(immagini.some((m) => /dürer|durer/i.test(m.autore))).toBe(true);
   });
 });
 

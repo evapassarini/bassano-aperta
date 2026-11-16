@@ -162,6 +162,69 @@
       "pagina": "https://www.youtube.com/watch?v=n1AMWOF650s",
       "autore": "MagicoVeneto ~ MV Gianni Pasquale ~",
       "licenza": "Licenza non indicata: video solo incorporato da YouTube"
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il Brenta a Bassano nella luce della sera (7 agosto 2006)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_Abendstimmung.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_Abendstimmung.jpg",
+      "autore": "Museshare",
+      "licenza": "CC BY-SA 3.0",
+      "alt": "Il fiume calmo riflette come uno specchio le case dorate dal sole basso; in primo piano il greto di ghiaia, a sinistra il ponte coperto, in alto le torri della città e dietro i monti."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "La Calà del Sasso (27 aprile 2008)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cal%C3%A0_del_Sasso.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Cal%C3%A0_del_Sasso.jpg",
+      "autore": "fabryr",
+      "licenza": "CC BY-SA 2.0",
+      "alt": "Una scalinata di pietra grigia sale nel bosco spoglio: a destra i gradini bassi e larghi, a sinistra una fascia lastricata senza gradini, un po' incavata. Intorno rocce coperte di muschio e foglie secche."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il Brenta a Valstagna (20 novembre 2022)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Brenta_a_Valstagna.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Brenta_a_Valstagna.jpg",
+      "autore": "Syrio",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Il fiume scorre veloce tra lastre di roccia chiara e massi; sopra l'acqua sono tesi alcuni cavi con paline appese. Sull'altra riva alberi gialli d'autunno e, sopra, le pareti ripide e rocciose della valle."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "La valle del Brenta verso Bassano, veduta aerea (6 maggio 2023)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Valle_del_Brenta_verso_Bassano.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Valle_del_Brenta_verso_Bassano.jpg",
+      "autore": "Syrio",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Veduta dall'alto: il fondovalle con i paesi dai tetti rossi è chiuso tra due versanti coperti di boschi; in fondo la valle si apre e la pianura sfuma nella foschia."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "La valle del Brenta a Bassano, xilografia (1901)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa%2C_valle_del_Brenta_%28xilografia%29.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa%2C_valle_del_Brenta_%28xilografia%29.jpg",
+      "autore": "Autore sconosciuto",
+      "licenza": "Pubblico dominio",
+      "alt": "Xilografia in bianco e nero: il fiume fa un'ampia curva tra campi, filari e case sparse; in primo piano un palazzo tra gli alberi, a destra un campanile, sullo sfondo i monti che chiudono la valle."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il percorso di canoa slalom sul Brenta a Valstagna (25 gennaio 2009)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Percorso_di_canoa_slalom_sul_Brenta_a_Valstagna.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Percorso_di_canoa_slalom_sul_Brenta_a_Valstagna.jpg",
+      "autore": "N.Fioretti",
+      "licenza": "Pubblico dominio",
+      "alt": "Il fiume azzurro e mosso corre tra massi chiari; sopra l'acqua pendono da cavi le paline colorate di un percorso di slalom e, in lontananza, si vede una canoa con un canoista in giacca rossa. Ai lati le case del paese e i monti."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Le case sulla riva del Brenta sotto il castello (2012)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_di_Grappa%2C_Brenta_North-east.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_di_Grappa%2C_Brenta_North-east.jpg",
+      "autore": "Oursana",
+      "licenza": "CC0",
+      "alt": "Dall'acqua si alza una fila di case rosa, gialle e bianche; sopra, tra i cipressi, le mura e le torri della parte alta della città, sotto un cielo grigio di temporale."
     }
   ],
   "live": [

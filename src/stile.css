@@ -1573,11 +1573,37 @@ button.aria-breve:hover {
   color: var(--seppia);
 }
 
+/* Quante immagini e quanti video: piccolo, accanto al titolo della sezione. */
+.sezione-conto {
+  margin-left: 4px;
+  color: var(--seppia);
+  font-family: var(--testi);
+  font-weight: 400;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+/* La galleria è una griglia di miniature tutte uguali: due colonne quando il foglio è
+   stretto (telefono), tre quando è largo. Conta la larghezza del foglio, non dello schermo. */
+.sezione-media {
+  container-type: inline-size;
+}
+
 .galleria {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 14px 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 12px;
   align-items: start;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@container (min-width: 420px) {
+  .galleria {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px 10px;
+  }
 }
 
 .galleria-figura {

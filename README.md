@@ -196,7 +196,9 @@ nel commento in testa al generatore.
 - Viale dei Martiri e Tempio Ossario: tono sobrio, nessun dettaglio crudo, nessuna foto delle
   vittime.
 - King Kong Rhino: nessuna fotografia della scultura (artista vivente, in Italia non c'è libertà
-  di panorama). Solo la nostra illustrazione e la xilografia di Dürer.
+  di panorama). Nel racconto ci sono solo la nostra illustrazione, stampe e disegni del
+  Cinquecento (Dürer, Burgkmair, Enea Vico) e due sale di Palazzo Sturm fotografate senza la
+  scultura.
 - Niente orari, prezzi o calendari scritti a mano: si rimanda alla pagina ufficiale.
 - La dicitura è «candidata a Capitale italiana della Cultura 2029». Mai «Città della cultura»,
   mai «europea».
@@ -385,10 +387,26 @@ Media:
     File: `https://commons.wikimedia.org/wiki/Special:FilePath/ICBSA_Coro_ex_combattenti_-_Sul_ponte_di_Bassano.oga`
     Pagina: `https://commons.wikimedia.org/wiki/File:ICBSA_Coro_ex_combattenti_-_Sul_ponte_di_Bassano.oga`
 - l'anno del cinegiornale Luce sul Tempio Ossario;
-- per sei file di Commons autore e licenza vengono solo dalla ricerca, non da un secondo
-  controllo sull'API di Commons;
-- Nardini al Ponte, Garage Nardini e Bolle non hanno immagini libere: i loro racconti sono solo
-  testo.
+- per sei file di Commons, tra quelli già presenti prima del 15 novembre 2026, autore e licenza
+  vengono solo dalla ricerca, non da un secondo controllo sull'API di Commons;
+- le 88 immagini aggiunte il 15 novembre 2026 (in 16 racconti) sono state invece verificate una
+  per una con l'API di Commons (autore, licenza, nessuna segnalazione di cancellazione) e
+  guardate. Alcune sono al limite e chi cura il sito può toglierle senza perdere nulla: tre
+  sono larghe appena 1024 px (`Calà_del_Sasso.jpg` nel Brenta, `Bassano_z10.JPG` nel Viale dei
+  Martiri, `Bassano_Ponte_vecchio_07feb08_05.jpg` in Nardini al Ponte); una del Ponte Vecchio,
+  `Bassano_del_Grappa,_dal_Ponte_degli_Alpini_(12292723636).jpg`, ha colori molto elaborati;
+  la torre nord-est nel racconto delle mura si vede già dietro Porta delle Grazie; nel racconto
+  della grappa due foto non sono di Bassano, e la didascalia lo dice. Nel Viale dei Martiri
+  una foto è stata tolta in revisione: `Uno_dei_lecci_di_viale_dei_martiri_(6072742587).jpg`
+  (Rino Porrovecchio, CC BY-SA 2.0) mostra la croce con il nome di un caduto, un cappio in
+  rilievo e un piccolo ritratto. È in regola con le licenze, ma si rimette solo con un sì
+  esplicito di chi cura il sito;
+- le cinque foto del Sacrario del Monte Grappa già presenti prima del 15 novembre 2026: il
+  Sacrario è del 1935, opera di Giovanni Greppi (morto nel 1960) e Giannino Castiglioni (morto
+  nel 1971), e in Italia non c'è libertà di panorama. Chi cura il sito deve decidere se tenerle;
+- Garage Nardini e Bolle non hanno immagini libere: i loro racconti sono solo testo. Nardini al
+  Ponte ha due foto di contesto: nessuna pagina di Commons dice quale edificio sia la grapperia,
+  quindi le didascalie non lo affermano.
 
 Nomi e posizioni sulla mappa:
 

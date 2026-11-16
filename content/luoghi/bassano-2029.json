@@ -96,7 +96,62 @@
       }
     }
   ],
-  "media": [],
+  "media": [
+    {
+      "tipo": "immagine",
+      "titolo": "Il centro storico di Bassano visto dall'alto, con il Brenta e il ponte coperto (2019)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_Vista_Aerea.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_Vista_Aerea.jpg",
+      "autore": "Paolo Fiorese",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Veduta aerea: una distesa di tetti rossi, il fiume verde in primo piano attraversato dal ponte coperto di legno, le piazze al centro e la pianura sullo sfondo."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Le case sul Brenta e il Ponte Vecchio di sera (2013)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa%2C_linkes_Brenta-Ufer_mit_Ponte_Vecchio.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa%2C_linkes_Brenta-Ufer_mit_Ponte_Vecchio.jpg",
+      "autore": "Im Fokus",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Il fiume largo e calmo, a sinistra una fila di case colorate che salgono verso una torre, a destra il ponte coperto di legno rosso sui suoi piloni."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Le case sul Brenta e la città alta viste dal Ponte degli Alpini (2006)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dal_Ponte_degli_Alpini_-_Flickr_-_fedewild.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Dal_Ponte_degli_Alpini_-_Flickr_-_fedewild.jpg",
+      "autore": "fedewild from Rome, ITALY",
+      "licenza": "CC BY-SA 2.0",
+      "alt": "Il fiume con riflessi verdi, case gialle e rosa lungo la riva, in alto le mura e una torre di pietra, sullo sfondo le montagne sotto un cielo di nuvole."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Piazza Libertà, con la torre civica sullo sfondo (2022)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Piazza_Libert%C3%A0_%28Bassano_del_Grappa%29_01.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Piazza_Libert%C3%A0_%28Bassano_del_Grappa%29_01.jpg",
+      "autore": "Superchilum",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Una grande piazza lastricata quasi vuota: palazzi con portici a sinistra, sul fondo una torre merlata di mattoni, a destra la facciata bianca di una chiesa con colonne."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Piazza Garibaldi con la fontana e la torre con l'orologio (2025)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_-_Piazza_Garibaldi.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Piazza_Garibaldi.jpg",
+      "autore": "Syrio",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Piazza con una fontana e gli ombrelloni bianchi di un caffè, palazzi chiari e, a destra, un'alta torre di mattoni con l'orologio sotto un cielo di nuvole."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il chiostro all'ingresso del Museo Civico (2009)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Chiostro_Museo_Civico.JPG?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Chiostro_Museo_Civico.JPG",
+      "autore": "Museicivici",
+      "licenza": "CC BY-SA 3.0",
+      "alt": "Un chiostro con prato verde e portici ad archi su due lati, un pozzo di pietra in primo piano e una torre rotonda che spunta sopra i tetti."
+    }
+  ],
   "live": [
     {
       "tipo": "link",

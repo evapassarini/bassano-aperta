@@ -98,7 +98,26 @@
       }
     }
   ],
-  "media": [],
+  "media": [
+    {
+      "tipo": "immagine",
+      "titolo": "La casa con l'insegna della distilleria Nardini, accanto all'arco che porta al Ponte Vecchio (agosto 2011)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/La_distilleria_Nardini_%286073240844%29.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:La_distilleria_Nardini_%286073240844%29.jpg",
+      "autore": "Rino Porrovecchio",
+      "licenza": "CC BY-SA 2.0",
+      "alt": "Una casa d'angolo color ocra con le imposte scure; sul portone ad arco una lunetta nera con la scritta bianca «Distilleria di Aquavite, Ditta B. Nardini». A destra un grande arco di pietra, davanti una strada di porfido con qualche passante."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il Ponte Vecchio dove si attacca alle case della riva (7 febbraio 2008)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_Ponte_vecchio_07feb08_05.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_Ponte_vecchio_07feb08_05.jpg",
+      "autore": "Roberto Pozzi",
+      "licenza": "CC BY-SA 3.0",
+      "alt": "Il ponte coperto di legno rosso visto dal fiume, con i piloni a forma di prua nell'acqua verde; a destra finisce contro una casa rossa con le imposte, sopra un muro di mattoni e pietra che scende nel Brenta."
+    }
+  ],
   "live": [],
   "incertezze": [
     "Distruzione del ponte nel 1945: Wikipedia parla di un sabotaggio partigiano il 17 febbraio 1945; Difford's Guide attribuisce la distruzione ai tedeschi, senza data, e la ricostruzione agli Alpini.",

@@ -45,7 +45,9 @@ sono il traffico: sono testi pubblicati dagli enti, e il sito lo dice.
   vittime.
 - King Kong Rhino (Li-Jen Shih, Palazzo Sturm): la scultura c'è ancora (confermato di persona
   da chi cura il sito, novembre 2026). Niente fotografie della scultura (artista vivente, in Italia non c'è libertà
-  di panorama): solo la nostra illustrazione e la xilografia di Dürer.
+  di panorama): solo la nostra illustrazione, stampe e disegni del Cinquecento (Dürer,
+  Burgkmair, Enea Vico) e sale di Palazzo Sturm fotografate senza la scultura. Il test dei
+  contenuti ha l'elenco degli autori ammessi per questo racconto.
 - Niente orari, prezzi o calendari scritti a mano: si rimanda alla pagina ufficiale.
 - Lingua: italiano, frasi semplici, niente gergo.
 
@@ -60,6 +62,20 @@ sono il traffico: sono testi pubblicati dagli enti, e il sito lo dice.
   paese come «3.0 IT», testo libero) restano testo senza link. La riga dei crediti è una sola
   funzione, `creditiMedia()` in `src/ui/racconto.ts`, usata sotto immagini, audio, video e
   nell'immagine ingrandita.
+- Le immagini stanno nell'elenco `media` di ogni racconto e le tappe le indicano per indice:
+  le nuove si aggiungono sempre in coda, senza spostare le altre. Un file compare una volta
+  sola per racconto e un'immagine è legata al massimo a una tappa (lo controlla il test dei
+  contenuti). Quelle non legate a una tappa finiscono nella galleria in fondo: una griglia di
+  miniature tutte uguali (ritaglio 4:3), due colonne quando il foglio è stretto e tre quando
+  è largo almeno 420 px, caricate solo quando servono (`loading="lazy"`), con titolo, autore
+  e licenza sempre visibili sotto ogni miniatura; il clic apre l'immagine in grande. Accanto
+  al titolo della sezione c'è il conto, per esempio «13 immagini e 3 video» (`contoMedia()` in
+  `src/ui/aiuti.ts`).
+- Il 15 novembre 2026 sono state aggiunte 88 immagini in 16 racconti (da 66 a 154 in tutto).
+  Ognuna è stata verificata con l'API di Commons (autore, licenza, nessuna segnalazione di
+  cancellazione) e guardata; ogni indirizzo è stato provato. `Special:FilePath` oggi rimanda a
+  `thumb.wikimedia.org` o a `upload.wikimedia.org`: tutti e due stanno dentro
+  `https://*.wikimedia.org` della Content-Security-Policy.
 - Audio: oggi nessun racconto ne ha. Le due registrazioni di «Sul ponte di Bassano» su Commons
   sono state tolte dal Ponte Vecchio perché nessuno le ha ascoltate e non si sa quale delle due
   canzoni con quel titolo contengano; i loro dati sono nel README, «Da confermare prima di
@@ -781,7 +797,10 @@ Ancora aperto: distruzione del ponte nel 1945; ruolo degli Alpini nel 1948; nume
 settembre 1944; conferma scritta di ARPAV per l'uso continuo dell'API e per la licenza;
 conferma scritta di CCISS e Vi.abilità per il riuso degli avvisi; rilettura alla fonte dei
 termini di BusOne; confronto del giudizio sull'aria con quello di ARPAV in un giorno feriale;
-17 video mai guardati per intero; sei file di Commons non ricontrollati; inquadrature delle due
+17 video mai guardati per intero; sei file di Commons, tra quelli precedenti al 15 novembre
+2026, non ricontrollati (le 88 immagini aggiunte quel giorno sono verificate una per una); le cinque foto del
+Sacrario del Monte Grappa già presenti (opera del 1935 di Greppi e Castiglioni, morti da meno
+di 70 anni: senza libertà di panorama va deciso se tenerle); inquadrature delle due
 webcam; permessi per le webcam; testi che scadono il 12 e il 16 dicembre 2026; dominio
 definitivo al posto del segnaposto; licenza di testi, illustrazioni e documentazione; chi firma
 i commit e quale storia git si pubblica; controllo che Vercel ripubblichi dopo i commit

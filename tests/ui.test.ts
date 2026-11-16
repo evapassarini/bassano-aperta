@@ -25,6 +25,7 @@ import {
   formattaPortata,
   idYouTube,
   immagineDellaTappa,
+  contoMedia,
   mediaResidui,
   normalizza,
   parolaTendenza,
@@ -392,6 +393,15 @@ describe('contenuto di una storia', () => {
     expect(mediaResidui(s, 'immagine')).toEqual([1, 4]);
     expect(mediaResidui(s, 'audio')).toEqual([2]);
     expect(mediaResidui(s, 'video')).toEqual([3]);
+  });
+
+  it('dice a parole quante immagini e quanti video ci sono', () => {
+    expect(contoMedia(0)).toBe('');
+    expect(contoMedia(1)).toBe('1 immagine');
+    expect(contoMedia(13)).toBe('13 immagini');
+    expect(contoMedia(13, 3)).toBe('13 immagini e 3 video');
+    expect(contoMedia(0, 2)).toBe('2 video');
+    expect(contoMedia(4, 2, 1)).toBe('4 immagini, 1 registrazione e 2 video');
   });
 });
 

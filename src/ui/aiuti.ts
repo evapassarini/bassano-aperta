@@ -518,6 +518,19 @@ export function mediaResidui(storia: Storia, tipo: 'immagine' | 'video' | 'audio
   return indici;
 }
 
+/**
+ * Quante cose ci sono nella sezione dei media, a parole: «13 immagini e 3 video».
+ * Stringa vuota se non c'è niente da contare.
+ */
+export function contoMedia(immagini: number, video = 0, audio = 0): string {
+  const voci: string[] = [];
+  if (immagini > 0) voci.push(immagini === 1 ? '1 immagine' : `${immagini} immagini`);
+  if (audio > 0) voci.push(audio === 1 ? '1 registrazione' : `${audio} registrazioni`);
+  if (video > 0) voci.push(`${video} video`);
+  if (voci.length <= 1) return voci.join('');
+  return `${voci.slice(0, -1).join(', ')} e ${voci[voci.length - 1]}`;
+}
+
 /** Una voce dell'osservatore delle tappe, ridotta a ciò che serve per decidere. */
 export interface VoceTappa<T extends object> {
   bersaglio: T;

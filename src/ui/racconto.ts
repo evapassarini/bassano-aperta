@@ -4,6 +4,7 @@
 import type { Media, Storia } from '../types';
 import { creaAdesso } from './adesso';
 import {
+  contoMedia,
   decidiTappe,
   fontiUniche,
   immagineDellaTappa,
@@ -215,7 +216,18 @@ export function creaRacconto(storia: Storia, opzioni: OpzioniRacconto): Racconto
   const audio = mediaResidui(storia, 'audio');
   const video = mediaResidui(storia, 'video');
   if (immagini.length + audio.length + video.length > 0) {
-    const sezione = el('section', { class: 'sezione sezione-media' }, el('h3', null, 'Da vedere e da ascoltare'));
+    // Accanto al titolo, quante immagini e quanti video ci sono: con molte foto aiuta a
+    // capire quanto è lunga la galleria. Se una miniatura non si carica il numero scende.
+    const conto = el('span', { class: 'sezione-conto' });
+    let inGalleria = 0;
+    const scriviConto = (): void => {
+      conto.textContent = contoMedia(inGalleria, video.length, audio.length);
+    };
+    const sezione = el(
+      'section',
+      { class: 'sezione sezione-media' },
+      el('h3', null, 'Da vedere e da ascoltare', ' ', conto),
+    );
 
     if (immagini.length > 0) {
       const griglia = el('ul', { class: 'galleria' });
@@ -223,10 +235,17 @@ export function creaRacconto(storia: Storia, opzioni: OpzioniRacconto): Racconto
         const m = storia.media[i];
         const url = urlSicuro(m.url);
         if (!url) continue;
+        inGalleria += 1;
         const voce: HTMLElement = el('li', { class: 'galleria-elemento' });
         const bottone = el('button', { type: 'button', class: 'galleria-voce' });
         bottone.setAttribute('aria-label', `Ingrandisci: ${m.titolo}`);
-        bottone.append(immagine(m, urlMiniatura(url), () => voce));
+        bottone.append(
+          immagine(m, urlMiniatura(url), () => {
+            inGalleria -= 1;
+            scriviConto();
+            return voce;
+          }),
+        );
         bottone.addEventListener('click', () => opzioni.apriLente(m, bottone));
         // Autore, licenza e link stanno sotto la miniatura, non solo dentro la lente.
         voce.append(el('figure', { class: 'galleria-figura' }, bottone, didascalia(m)));
@@ -234,6 +253,7 @@ export function creaRacconto(storia: Storia, opzioni: OpzioniRacconto): Racconto
       }
       sezione.append(griglia);
     }
+    scriviConto();
 
     for (const i of audio) {
       const figura = figuraAudio(storia.media[i]);

@@ -215,6 +215,60 @@
       "pagina": "https://www.youtube.com/watch?v=SPREnPFTbnQ",
       "autore": "Rete Veneta",
       "licenza": "Licenza non indicata: video solo incorporato da YouTube"
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Sotto la copertura del Ponte Vecchio (11 agosto 2012)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_Ponte_Veccio_05.JPG?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_Ponte_Veccio_05.JPG",
+      "autore": "BKP",
+      "licenza": "CC BY-SA 3.0",
+      "alt": "L'interno del ponte visto in prospettiva: il tetto a travi di legno, le due file di colonne rosse con il parapetto e, a terra, le fasce di ciottoli tra le lastre di pietra. A metà del ponte camminano alcuni passanti."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il fianco del ponte e i piloni visti da vicino (11 agosto 2012)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_Ponte_Veccio_06.JPG?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_Ponte_Veccio_06.JPG",
+      "autore": "BKP",
+      "licenza": "CC BY-SA 3.0",
+      "alt": "Il fianco del ponte in scorcio: la balaustra di colonnine rosse, le colonne che reggono il tetto e, sotto, i piloni rivestiti di tavole che scendono a punta nell'acqua verde. Sul ponte si vedono alcune persone, piccole; dietro, le case sulla riva."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "L'ingresso del ponte (9 agosto 2011)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/L%27accesso_al_ponte_di_Bassano_%286073240856%29.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:L%27accesso_al_ponte_di_Bassano_%286073240856%29.jpg",
+      "autore": "Rino Porrovecchio",
+      "licenza": "CC BY-SA 2.0",
+      "alt": "Un grande arco di pietra chiara si apre in un edificio color ocra: oltre l'arco si intravede in penombra la corsia coperta del ponte. Davanti, una piazzetta lastricata a cubetti con due fioriere e alcuni passanti vicino all'arco."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il ponte illuminato di notte (25 aprile 2012)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/PontediBassanonotte.JPG?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:PontediBassanonotte.JPG",
+      "autore": "Dario Rettore",
+      "licenza": "Pubblico dominio",
+      "alt": "Il ponte di notte, con le luci accese sotto la copertura e i piloni scuri nell'acqua; a destra le case gialle illuminate sulla riva, sopra un cielo nero."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il ponte e il Brenta visti dall'alto (data indicata su Commons: 2018)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ponte_degli_alpini._Bassano_del_Grappa.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Ponte_degli_alpini._Bassano_del_Grappa.jpg",
+      "autore": "Wikimaruz",
+      "licenza": "CC BY-SA 4.0",
+      "alt": "Veduta aerea: il ponte coperto attraversa il fiume verde tra i tetti rossi delle due rive; il Brenta risale verso nord e sullo sfondo si alzano i monti."
+    },
+    {
+      "tipo": "immagine",
+      "titolo": "Il Brenta visto dall'interno del ponte (3 febbraio 2014)",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa%2C_dal_Ponte_degli_Alpini_%2812292723636%29.jpg?width=960",
+      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa%2C_dal_Ponte_degli_Alpini_%2812292723636%29.jpg",
+      "autore": "decar66 (Salva Barbera)",
+      "licenza": "CC BY 2.0",
+      "alt": "Dall'interno del ponte, tra due colonne rosse e sopra la balaustra a colonnine, si vede il fiume che risale tra le case colorate verso i monti, sotto un cielo carico di nuvole. Il pavimento è bagnato."
     }
   ],
   "live": [
