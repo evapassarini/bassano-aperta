@@ -1,11 +1,11 @@
 {
   "id": "palazzo-sturm",
   "nome": "Palazzo Sturm",
-  "sottotitolo": "Il palazzo sul Brenta, la ceramica e gli stampatori Remondini",
+  "sottotitolo": "Il palazzo sulla Brenta, la ceramica e gli stampatori Remondini",
   "genere": "luogo",
   "lat": 45.76633,
   "lon": 11.73167,
-  "intro": "Affacciato sul Brenta, Palazzo Sturm è la casa che un mercante di seta si fece costruire nel Settecento: sette livelli e più di settanta stanze. Oggi ospita due musei, quello della Ceramica e quello dedicato ai Remondini, la famiglia di stampatori che da una bottega in piazza arrivò a dare lavoro a più di mille operai.",
+  "intro": "Affacciato sulla Brenta, Palazzo Sturm è la casa che un mercante di seta si fece costruire nel Settecento: sette livelli e più di settanta stanze. Oggi ospita due musei, quello della Ceramica e quello dedicato ai Remondini, la famiglia di stampatori che da una bottega in piazza arrivò a dare lavoro a più di mille operai.",
   "tappe": [
     {
       "anno": "1657",
@@ -29,7 +29,7 @@
     {
       "anno": "Metà XVIII secolo",
       "titolo": "Il palazzo del mercante",
-      "testo": "Vincenzo Ferrari, mercante e industriale della seta, fa costruire il palazzo sul Brenta su progetto di Daniello Bernardi: sette livelli e oltre settanta stanze.",
+      "testo": "Vincenzo Ferrari, mercante e industriale della seta, fa costruire il palazzo sulla Brenta su progetto di Daniello Bernardi: sette livelli e oltre settanta stanze.",
       "fonte": {
         "titolo": "Musei Civici di Bassano del Grappa, pagina «Palazzo Sturm»",
         "url": "https://www.museibassano.it/it/pagina/palazzo-sturm"
@@ -243,6 +243,7 @@
       "nota": "Il calendario ufficiale di Musei, Biblioteca e Archivio. Mescola eventi di sedi diverse e non sempre indica dove si tengono."
     }
   ],
+  "curiosita": [],
   "incertezze": [
     "Passaggio del palazzo al Comune: per il sito dei Musei «fu donato» nel 1943; la voce italiana di Wikipedia parla di un lascito del barone Sturm von Hirschfeld (1895-1943) e non dà la data del passaggio."
   ],

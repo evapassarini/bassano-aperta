@@ -33,7 +33,7 @@ export interface Illustrazione {
   /** Opacità campionata su una griglia MASCHERA x MASCHERA; null se non disponibile. */
   maschera: Uint8Array | null;
   /**
-   * Solo per i disegni che contengono una pezza d'acqua (il Brenta sotto il Ponte Vecchio): il
+   * Solo per i disegni che contengono una pezza d'acqua (la Brenta sotto il Ponte Vecchio): il
    * disegno senza la pezza e la pezza da sola. Servono quando la luce cambia, perché la pezza
    * deve prendere il colore dell'acqua della mappa e non quello del giorno scurito dal velo.
    */

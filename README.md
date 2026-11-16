@@ -21,7 +21,7 @@ Cosa trovi nel sito:
   Bolle di Nardini);
 - tre strati accendibili: Cultura, Ambiente, Mobilità;
 - diciotto racconti (sedici luoghi e due temi) con linea del tempo, immagini e video, e
-  un riquadro «Adesso» con il dato in diretta dove esiste davvero (il livello del Brenta);
+  un riquadro «Adesso» con il dato in diretta dove esiste davvero (il livello della Brenta);
 - i prossimi treni alla stazione di Bassano, con i ritardi dichiarati;
 - gli avvisi sulla viabilità pubblicati dagli enti per le strade attorno a Bassano (non è il
   traffico in tempo reale);
@@ -91,7 +91,7 @@ Da sapere:
 - Overpass è spesso sovraccarico: gli script riprovano su più server e possono impiegare alcuni
   minuti. Se non ci riescono si fermano con un errore e lasciano intatti i file esistenti.
 - `OSM_CACHE=<cartella> npm run dati` salva le risposte di Overpass e le riusa al giro dopo.
-- Il livello del Brenta non passa da qui: lo legge il browser, in diretta, dall'API di ARPAV.
+- Il livello della Brenta non passa da qui: lo legge il browser, in diretta, dall'API di ARPAV.
 - L'aria invece è una fotografia: resta ferma finché non gira di nuovo lo script (sul sito
   pubblicato ogni 6 ore, in automatico). Il sito mostra sempre la data e l'ora della misura.
 - Accanto ai numeri dell'aria il sito scrive un giudizio a parole (buona, accettabile, mediocre,
@@ -137,9 +137,16 @@ npm test
 ```
 
 `tests/contenuti.test.ts` controlla che l'`id` sia uguale al nome del file, che ogni tappa abbia
-la sua fonte, che gli indici `tappa.media` puntino a un'immagine esistente, che i media abbiano
-autore, licenza e testo alternativo, che le coordinate stiano dentro la mappa e che i disegni
-citati esistano.
+la sua fonte (e così ogni voce di `fontiCuriosita`), che gli indici `tappa.media` puntino a un'immagine esistente, che i media abbiano
+autore, licenza e testo alternativo, che le coordinate stiano dentro la mappa, che i disegni
+citati esistano, che `curiosita` e `incertezze` siano elenchi di testi, che i testi mostrati
+scrivano «la Brenta» al femminile e che nessuno rimandi a «Le fonti non concordano».
+
+Ogni racconto ha `curiosita` (anche vuoto, `[]`) e `incertezze` (nota interna, non mostrata).
+Le fonti delle curiosità che non sono già fonti di una tappa vanno in `fontiCuriosita`
+(facoltativo, elenco di `{titolo, url}`) e compaiono nell'elenco «Fonti» del racconto.
+Le `incertezze` non si vedono sul sito ma non sono segrete: restano leggibili nei file del
+repository e nel JavaScript pubblicato.
 
 Per un racconto nuovo:
 
@@ -190,8 +197,20 @@ nel commento in testa al generatore.
 
 - Ogni fatto ha una fonte letta davvero. La base è `ricerca/ricerca-verificata-2026-11-14.json`:
   non si aggiunge nulla a memoria.
-- Dove le fonti non concordano non si sceglie: il punto va in `incertezze` e il sito lo mostra
-  come «Le fonti non concordano».
+- Dove le fonti non concordano non si sceglie a memoria: il punto va in `incertezze`, che è una
+  nota interna di redazione e non si mostra sul sito (decisione della curatrice del 16 novembre
+  2026: la sezione «Le fonti non concordano» non c'è più). Nessun testo mostrato rimanda a
+  quella sezione.
+- `curiosita` è un elenco di frasi brevi, con la fonte tra quelle delle tappe, tra i media o in
+  `fontiCuriosita`, mostrato nella sezione «Curiosità» dopo la linea del tempo. Un fatto
+  curioso su cui le fonti non sono del
+  tutto coerenti (succede soprattutto sul Ponte Vecchio) si racconta come curiosità, con «si
+  racconta» o «secondo ...», non come elenco di discordanze.
+- Sulla rappresaglia del febbraio 1945 sul Ponte Vecchio si scrive «nazifascisti».
+- Il fiume è femminile: «la Brenta», «della Brenta», «sulla Brenta». Restano come sono i nomi
+  propri e le citazioni: «Riviera del Brenta», «Consorzio di Bonifica Brenta», i nomi dei comuni
+  («Tezze sul Brenta»), i nomi presi da OpenStreetMap («Ciclopista del Brenta»), i titoli delle
+  fonti, i nomi dei file di Commons e gli indirizzi.
 - Le affermazioni delle aziende (Nardini, Poli) si attribuiscono: «secondo l'azienda».
 - Viale dei Martiri e Tempio Ossario: tono sobrio, nessun dettaglio crudo, nessuna foto delle
   vittime.
@@ -339,7 +358,7 @@ Già deciso:
 
 Permessi e licenze, ancora aperti:
 
-- ARPAV: manca una conferma scritta per l'uso continuo dell'API del Brenta e per la licenza dei
+- ARPAV: manca una conferma scritta per l'uso continuo dell'API della Brenta e per la licenza dei
   dati (idrometro e file JSON dell'aria);
 - CCISS e Vi.abilità: nessuna delle due dichiara una licenza di riuso e manca una conferma
   scritta da entrambe. Il sito riporta solo citazioni brevi con link;
@@ -360,7 +379,7 @@ Aria:
   in un giorno feriale, quando un giorno validato cade dentro le 48 ore di ozono: il come è in
   `docs/SPEC.md`, «Giudizio a parole sull'aria», alla voce «Ancora da fare».
 
-Fatti storici (oggi sono tra le incertezze, non affermati):
+Fatti storici (oggi sono nelle note interne `incertezze`, non affermati come certi):
 
 - la distruzione del Ponte Vecchio nel 1945 e chi la compì;
 - il ruolo degli Alpini nella ricostruzione del 1948;
@@ -392,7 +411,7 @@ Media:
 - le 88 immagini aggiunte il 15 novembre 2026 (in 16 racconti) sono state invece verificate una
   per una con l'API di Commons (autore, licenza, nessuna segnalazione di cancellazione) e
   guardate. Alcune sono al limite e chi cura il sito può toglierle senza perdere nulla: tre
-  sono larghe appena 1024 px (`Calà_del_Sasso.jpg` nel Brenta, `Bassano_z10.JPG` nel Viale dei
+  sono larghe appena 1024 px (`Calà_del_Sasso.jpg` nel racconto della Brenta, `Bassano_z10.JPG` nel Viale dei
   Martiri, `Bassano_Ponte_vecchio_07feb08_05.jpg` in Nardini al Ponte); una del Ponte Vecchio,
   `Bassano_del_Grappa,_dal_Ponte_degli_Alpini_(12292723636).jpg`, ha colori molto elaborati;
   la torre nord-est nel racconto delle mura si vede già dietro Porta delle Grazie; nel racconto
@@ -414,8 +433,8 @@ Nomi e posizioni sulla mappa:
   OpenStreetMap (relazione 32302). Un'altra relazione di OpenStreetMap, «Ciclovia della
   Valsugana», ha lo stesso nome come nome alternativo. Come si chiama davvero il tratto di
   Bassano va chiesto a chi è del posto;
-- «Nardini Basso» e «Nardini Alto» sono nomi d'uso riportati da fonti non ufficiali: i due
-  racconti lo dicono tra le incertezze;
+- «Nardini Basso» e «Nardini Alto» sono nomi d'uso riportati da fonti non ufficiali: è annotato
+  nelle note interne `incertezze` dei due racconti;
 - le due webcam (Piazza Libertà e Via Matteotti): nessuno ha aperto le pagine per vedere che
   cosa inquadrano davvero. Il punto sulla mappa vuole segnare il luogo inquadrato, non la
   telecamera;

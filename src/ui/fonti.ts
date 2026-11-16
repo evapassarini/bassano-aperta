@@ -120,7 +120,7 @@ export function creaFonti(opzioni: OpzioniFonti): FinestraFonti {
     el(
       'p',
       null,
-      "Il livello e la portata del Brenta e le misure della qualità dell'aria sono di ARPAV, l'agenzia per l'ambiente del Veneto. ",
+      "Il livello e la portata della Brenta e le misure della qualità dell'aria sono di ARPAV, l'agenzia per l'ambiente del Veneto. ",
       el('strong', null, 'Fonte: ARPAV, dati non validati.'),
     ),
     el(
@@ -129,7 +129,7 @@ export function creaFonti(opzioni: OpzioniFonti): FinestraFonti {
       el(
         'li',
         null,
-        'Brenta: letto in diretta dal tuo browser ogni volta che apri il riquadro, stazione Brenta a Barzizza, circa 1 km a monte del Ponte Vecchio. ',
+        'Livello della Brenta: letto in diretta dal tuo browser ogni volta che apri il riquadro, stazione Brenta a Barzizza, circa 1 km a monte del Ponte Vecchio. ',
         linkEsterno(
           'https://www.arpa.veneto.it/dati-ambientali/dati-in-diretta/meteo-idro-nivo/variabili_idro',
           'Pagina ARPAV dei dati idrometrici',
@@ -228,7 +228,7 @@ export function creaFonti(opzioni: OpzioniFonti): FinestraFonti {
   // --- Testi ---------------------------------------------------------------
   const testi = voce(
     'I testi: fatti con cura, ma possono sbagliare',
-    'I racconti storici sono stati compilati nel novembre 2026 a partire da fonti pubbliche, indicate tappa per tappa. Non sono il lavoro di uno storico e possono contenere errori. Dove le fonti non concordano non abbiamo scelto: lo diciamo.',
+    'I racconti storici sono stati compilati nel novembre 2026 a partire da fonti pubbliche, indicate tappa per tappa. Non sono il lavoro di uno storico e possono contenere errori. Quando un fatto viene da una sola fonte, o le fonti lo raccontano in modo diverso, lo scriviamo con «secondo ...».',
     el(
       'p',
       null,

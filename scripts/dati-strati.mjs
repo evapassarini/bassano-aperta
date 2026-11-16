@@ -98,7 +98,7 @@ const LUOGHI = [
   },
   {
     // Non è un luogo puntuale: punto scelto sul fiume, subito a valle del ponte.
-    storia: 'brenta', nome: 'Il Brenta', tipo: 'luogo-storico',
+    storia: 'brenta', nome: 'La Brenta', tipo: 'luogo-storico',
     lat: 45.7668, lon: 11.731, stima: true,
   },
   {
@@ -577,7 +577,7 @@ async function puntiAmbiente(perId, avvisi) {
       x: tondo(ix),
       y: tondo(iy),
       storia: 'brenta',
-      nota: `Misura livello e portata del Brenta. È circa ${km.toFixed(1).replace('.', ',')} km a monte del Ponte Vecchio. Fonte: ARPAV, dati non validati.`,
+      nota: `Misura livello e portata della Brenta. È circa ${km.toFixed(1).replace('.', ',')} km a monte del Ponte Vecchio. Fonte: ARPAV, dati non validati.`,
       url: URL_PAGINA_IDRO,
     },
     {

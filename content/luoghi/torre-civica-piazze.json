@@ -20,7 +20,7 @@
     {
       "anno": "1349",
       "titolo": "Una campana di 500 chili",
-      "testo": "È la prima notizia documentata della torre: vi viene collocata una campana di 500 chili. Da allora la torre risulta intestata al Comune, che ne paga manutenzione e custodi. Su quando sia stata costruita, le fonti non concordano.",
+      "testo": "È la prima notizia documentata della torre: vi viene collocata una campana di 500 chili. Da allora la torre risulta intestata al Comune, che ne paga manutenzione e custodi. Secondo il Ministero della Cultura la data di costruzione più probabile è il 1312, quando viene allungata la seconda cinta muraria.",
       "fonte": {
         "titolo": "Ministero della Cultura, scheda «Torre Civica»",
         "url": "https://cultura.gov.it/luogo/torre-civica"
@@ -257,6 +257,7 @@
       "nota": "Pagina ufficiale dei Musei Civici. La torre apre solo in alcuni periodi dell'anno: date e orari aggiornati si leggono lì."
     }
   ],
+  "curiosita": [],
   "incertezze": [
     "Sull'origine della torre le fonti divergono: per i Musei Civici la tradizione la attribuisce a Ezzelino da Romano, a metà del Duecento; per il Ministero della Cultura la data più probabile è il 1312, quando viene allungata la seconda cinta muraria.",
     "L'altezza della torre è di 43 metri per il Ministero della Cultura e per Wikipedia, di 42 metri per un altro sito che non è stato ricontrollato."

@@ -5,7 +5,7 @@
   "genere": "luogo",
   "lat": 45.76751,
   "lon": 11.73111,
-  "intro": "Ponte Vecchio, Ponte di Bassano, Ponte degli Alpini: tre nomi per lo stesso ponte coperto di legno sul Brenta. Piene, incendi e guerre lo hanno abbattuto più volte, e ogni volta la città lo ha rifatto com'era, seguendo il disegno che Andrea Palladio consegnò nel 1569.",
+  "intro": "Ponte Vecchio, Ponte di Bassano, Ponte degli Alpini: tre nomi per lo stesso ponte coperto di legno sulla Brenta. Piene, incendi e guerre lo hanno abbattuto più volte, e ogni volta la città lo ha rifatto com'era, seguendo il disegno che Andrea Palladio consegnò nel 1569.",
   "tappe": [
     {
       "anno": "1209",
@@ -28,7 +28,7 @@
     {
       "anno": "1567-1569",
       "titolo": "Palladio e il no alla pietra",
-      "testo": "Nell'ottobre 1567 una piena del Brenta porta via il ponte. Palladio propone tre arcate in pietra, come i ponti romani, ma il Consiglio cittadino boccia l'idea e gli chiede di restare fedele alla struttura di sempre. Nell'estate del 1569 arriva il progetto definitivo: un ponte di legno con colonne tuscaniche a reggere il tetto, che l'anno dopo Palladio pubblica nei Quattro libri dell'architettura.",
+      "testo": "Nell'ottobre 1567 una piena della Brenta porta via il ponte. Palladio propone tre arcate in pietra, come i ponti romani, ma il Consiglio cittadino boccia l'idea e gli chiede di restare fedele alla struttura di sempre. Nell'estate del 1569 arriva il progetto definitivo: un ponte di legno con colonne tuscaniche a reggere il tetto, che l'anno dopo Palladio pubblica nei Quattro libri dell'architettura.",
       "fonte": {
         "titolo": "Palladio Museum (CISA), scheda del ponte di Bassano",
         "url": "https://mediateca.palladiomuseum.org/palladio/opera.php?id=29"
@@ -66,7 +66,7 @@
     {
       "anno": "1945",
       "titolo": "Il ponte distrutto",
-      "testo": "Negli ultimi mesi della guerra il ponte viene distrutto. Su quando, come e per mano di chi le fonti raccontano cose diverse: lo spieghiamo più sotto, in «Le fonti non concordano».",
+      "testo": "Il 17 febbraio 1945 un sabotaggio partigiano fa saltare il ponte. Per rappresaglia i nazifascisti fucilano lì tre partigiani.",
       "fonte": {
         "titolo": "Wikipedia, voce «Ponte Vecchio (Bassano del Grappa)»",
         "url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
@@ -75,7 +75,7 @@
     {
       "anno": "1948",
       "titolo": "Di nuovo in piedi",
-      "testo": "Il 3 ottobre il ponte, ricostruito secondo il disegno di Palladio, viene inaugurato alla presenza di Alcide De Gasperi. Su chi lo abbia materialmente ricostruito e pagato le fonti non concordano.",
+      "testo": "Il 3 ottobre il ponte, ricostruito secondo il disegno di Palladio, viene inaugurato alla presenza di Alcide De Gasperi.",
       "fonte": {
         "titolo": "Wikipedia, voce «Ponte Vecchio (Bassano del Grappa)»",
         "url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
@@ -136,7 +136,7 @@
       "pagina": "https://commons.wikimedia.org/wiki/File:Ponte_di_Bassano_(incisione).jpg",
       "autore": "Francesco Corsi (incisore)",
       "licenza": "CC BY 4.0",
-      "alt": "Incisione ottocentesca: il ponte coperto attraversa il Brenta sopra una traversa d'acqua bassa, con le case, le torri della città e i monti sullo sfondo."
+      "alt": "Incisione ottocentesca: il ponte coperto attraversa la Brenta sopra una traversa d'acqua bassa, con le case, le torri della città e i monti sullo sfondo."
     },
     {
       "tipo": "immagine",
@@ -149,12 +149,12 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "Il ponte coperto sul Brenta e il castello, xilografia di Giuseppe Barberis (1903)",
+      "titolo": "Il ponte coperto sulla Brenta e il castello, xilografia di Giuseppe Barberis (1903)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_ponte_coperto_sul_Brenta_e_Castello.jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_ponte_coperto_sul_Brenta_e_Castello.jpg",
       "autore": "Giuseppe Barberis",
       "licenza": "Pubblico dominio",
-      "alt": "Xilografia in bianco e nero: il ponte coperto sul Brenta visto da valle, due piccole figure in mezzo all'acqua bassa, le case sulla riva e le torri in alto."
+      "alt": "Xilografia in bianco e nero: il ponte coperto sulla Brenta visto da valle, due piccole figure in mezzo all'acqua bassa, le case sulla riva e le torri in alto."
     },
     {
       "tipo": "immagine",
@@ -163,7 +163,7 @@
       "pagina": "https://commons.wikimedia.org/wiki/File:Lavori_Ponte_Vecchio.jpg",
       "autore": "Slapmysalami",
       "licenza": "CC BY-SA 4.0",
-      "alt": "Veduta aerea di Bassano: il Brenta attraversa i tetti rossi della città e al centro si vede il ponte in cantiere, con il letto del fiume in parte all'asciutto."
+      "alt": "Veduta aerea di Bassano: la Brenta attraversa i tetti rossi della città e al centro si vede il ponte in cantiere, con il letto del fiume in parte all'asciutto."
     },
     {
       "tipo": "immagine",
@@ -172,7 +172,7 @@
       "pagina": "https://commons.wikimedia.org/wiki/File:Ponte_Vecchio_(Bassano_del_Grappa)_01.jpg",
       "autore": "Superchilum",
       "licenza": "CC BY-SA 4.0",
-      "alt": "Il ponte coperto, rosso scuro, si specchia nel Brenta calmo; ai lati le case affacciate sull'acqua, sullo sfondo i monti."
+      "alt": "Il ponte coperto, rosso scuro, si specchia nella Brenta calma; ai lati le case affacciate sull'acqua, sullo sfondo i monti."
     },
     {
       "tipo": "immagine",
@@ -254,16 +254,16 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "Il ponte e il Brenta visti dall'alto (data indicata su Commons: 2018)",
+      "titolo": "Il ponte e la Brenta visti dall'alto (data indicata su Commons: 2018)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ponte_degli_alpini._Bassano_del_Grappa.jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Ponte_degli_alpini._Bassano_del_Grappa.jpg",
       "autore": "Wikimaruz",
       "licenza": "CC BY-SA 4.0",
-      "alt": "Veduta aerea: il ponte coperto attraversa il fiume verde tra i tetti rossi delle due rive; il Brenta risale verso nord e sullo sfondo si alzano i monti."
+      "alt": "Veduta aerea: il ponte coperto attraversa il fiume verde tra i tetti rossi delle due rive; la Brenta risale verso nord e sullo sfondo si alzano i monti."
     },
     {
       "tipo": "immagine",
-      "titolo": "Il Brenta visto dall'interno del ponte (3 febbraio 2014)",
+      "titolo": "La Brenta vista dall'interno del ponte (3 febbraio 2014)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa%2C_dal_Ponte_degli_Alpini_%2812292723636%29.jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa%2C_dal_Ponte_degli_Alpini_%2812292723636%29.jpg",
       "autore": "decar66 (Salva Barbera)",
@@ -274,15 +274,35 @@
   "live": [
     {
       "tipo": "brenta",
-      "nota": "Il livello del Brenta è misurato dall'idrometro ARPAV «Brenta a Barzizza», circa 1 km a monte del ponte: non è il livello sotto il ponte. I dati non sono validati. Sul Ponte Vecchio non esiste una webcam funzionante: per questo qui non trovi immagini in diretta."
+      "nota": "Il livello della Brenta è misurato dall'idrometro ARPAV «Brenta a Barzizza», circa 1 km a monte del ponte: non è il livello sotto il ponte. I dati non sono validati. Sul Ponte Vecchio non esiste una webcam funzionante: per questo qui non trovi immagini in diretta."
+    }
+  ],
+  "curiosita": [
+    "Si racconta che nel 1948 il ponte sia stato «rifatto dagli Alpini». Secondo Wikipedia è una leggenda: i lavori furono dell'impresa Giulio Tessarolo & Figli di Rosà, ma molti operai erano reduci alpini e lavoravano con il cappello con la penna. Il Dolomiti invece scrive che a ricostruirlo furono proprio gli Alpini, e che furono loro a pagare i 38 milioni di lire dei lavori.",
+    "Perché «Ponte degli Alpini»? Secondo Wikipedia nel 1928 il ponte fu dedicato alla memoria dei soldati, e in particolare degli Alpini. Si dice anche che il nome venga dalla ricostruzione del 1948.",
+    "Le canzoni intitolate «Sul ponte di Bassano» sono due: un lamento alpino e una canzone d'amore. Su Wikimedia Commons se ne trovano anche due vecchie registrazioni.",
+    "Una lapide di marmo sul ponte ricorda i canti che vi risuonarono un tempo."
+  ],
+  "fontiCuriosita": [
+    {
+      "titolo": "il Dolomiti, «Dopo 7 anni di restauro gli Alpini tornano a sfilare sul loro ponte» (3 ottobre 2021)",
+      "url": "https://www.ildolomiti.it/cronaca/2021/dopo-7-anni-di-restauro-gli-alpini-tornano-a-sfilare-sul-loro-ponte-video-oltre-800-penne-nere-in-festa-a-bassano"
+    },
+    {
+      "titolo": "Wikimedia Commons, «ICBSA Coro ex combattenti - Sul ponte di Bassano.oga»",
+      "url": "https://commons.wikimedia.org/wiki/File:ICBSA_Coro_ex_combattenti_-_Sul_ponte_di_Bassano.oga"
+    },
+    {
+      "titolo": "Wikimedia Commons, «ICBSA Coro ICAM - Sul ponte di Bassano.oga»",
+      "url": "https://commons.wikimedia.org/wiki/File:ICBSA_Coro_ICAM_-_Sul_ponte_di_Bassano.oga"
     }
   ],
   "incertezze": [
-    "Distruzione del 1945: Wikipedia, che cita l'Enciclopedia dell'Antifascismo e la targa sul ponte, parla di un sabotaggio partigiano il 17 febbraio 1945; il Dolomiti e la scheda del Palladio Museum attribuiscono la distruzione alle truppe tedesche in ritirata, il primo con la data del 29 aprile 1945; un altro articolo cita bombardamenti alleati. Potrebbero essere due episodi distinti, ma non è confermato.",
-    "Wikipedia riporta anche che, dopo l'esplosione di febbraio, tre partigiani furono fucilati sul ponte per rappresaglia: la voce in italiano la attribuisce ai fascisti, quella in inglese ai nazisti.",
-    "Ricostruzione del 1948: secondo Wikipedia i lavori furono dell'impresa Giulio Tessarolo & Figli di Rosà, con molti operai reduci alpini, e il ponte «rifatto dagli Alpini» è una leggenda; il Dolomiti scrive invece che fu ricostruito e pagato dagli Alpini.",
-    "Nome «degli Alpini»: la dedica del 1928 alla memoria dei soldati, e in particolare degli Alpini, è riportata da Wikipedia senza nota e ripresa da il Dolomiti; manca una fonte primaria. Che il nome venga anche dalla ricostruzione del 1948 è una lettura corrente, non un dato documentato.",
-    "«Sul ponte di Bassano»: esistono due canzoni con questo titolo, un lamento alpino e una canzone d'amore. Autore e data del canto alpino non sono verificati (le fonti dicono «durante» o «alla fine» della Prima guerra mondiale, una indica il 1916). Su Wikimedia Commons ci sono due registrazioni storiche con questo titolo: non le pubblichiamo qui finché qualcuno non le avrà ascoltate e non sarà chiaro quale delle due canzoni contengano, e di che anno siano.",
+    "Distruzione del 1945: Wikipedia, che cita l'Enciclopedia dell'Antifascismo e la targa sul ponte, parla di un sabotaggio partigiano il 17 febbraio 1945, e l'articolo del Dolomiti del 15 maggio 2021 va nello stesso senso (il ponte fu prima bombardato dagli aerei alleati e poi fatto saltare dai partigiani). Un altro articolo del Dolomiti, del 3 ottobre 2021, scrive invece che fu «raso al suolo dalle truppe naziste in fuga il 29 aprile 1945», e la scheda del Palladio Museum parla di «demolizione per mano delle truppe tedesche», senza data. Potrebbero essere due episodi distinti, ma non è confermato: sul sito compare solo la versione di Wikipedia, senza la discordanza.",
+    "Rappresaglia di febbraio: Wikipedia riporta che dopo l'esplosione tre partigiani furono fucilati sul ponte per rappresaglia; la voce italiana dice dai fascisti, quella inglese dai nazisti. Sul sito scriviamo «nazifascisti» (decisione della curatrice).",
+    "Ricostruzione del 1948: secondo Wikipedia i lavori furono dell'impresa Giulio Tessarolo & Figli di Rosà, con molti operai reduci alpini, e il ponte «rifatto dagli Alpini» è una leggenda. Il Dolomiti scrive invece che fu ricostruito «dalle Penne Nere» (15 maggio 2021) e parla di «un restauro da 38 milioni di lire pagati dagli Alpini» (3 ottobre 2021). Sul sito è una curiosità, con le due versioni attribuite.",
+    "Nome «degli Alpini»: la dedica del 1928 alla memoria dei soldati, e in particolare degli Alpini, è riportata da Wikipedia senza nota e ripresa dal Dolomiti (3 ottobre 2021); manca una fonte primaria. Che il nome venga anche dalla ricostruzione del 1948 è una lettura corrente, non un dato documentato.",
+    "«Sul ponte di Bassano»: esistono due canzoni con questo titolo, un lamento alpino e una canzone d'amore. Autore e data del canto alpino non sono verificati (le fonti dicono «durante» o «alla fine» della Prima guerra mondiale, una indica il 1916). Su Wikimedia Commons ci sono due registrazioni storiche con questo titolo: non le mettiamo tra i media da ascoltare finché qualcuno non le avrà ascoltate e non sarà chiaro quale delle due canzoni contengano, e di che anno siano.",
     "Restauro 2015-2021: durata e costo cambiano da un articolo all'altro (sei o sette anni). Non c'è una fonte del Comune, quindi qui il costo non è indicato.",
     "Cinegiornale dell'Archivio Luce: la pagina del video non indica la data originale del filmato."
   ],

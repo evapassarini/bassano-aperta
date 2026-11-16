@@ -1,5 +1,5 @@
 // Tutti i colori della mappa stanno qui: una cartolina illustrata, carta crema,
-// tetti in cotto, intonaci veneziani, Brenta verde-azzurro, contorni seppia.
+// tetti in cotto, intonaci veneziani, Brenta verde-azzurra, contorni seppia.
 
 import type { IdStrato, Luce, TipoArea, TipoStrada } from '../types';
 
@@ -269,7 +269,7 @@ export const PALETTE_POMERIGGIO: Palette = {
 };
 
 // Notte: carta blu scuro, case un poco più chiare del terreno perché si distinguano,
-// strade leggibili, Brenta scuro. La luce calda la portano lampioni e finestre.
+// strade leggibili, Brenta scura. La luce calda la portano lampioni e finestre.
 const tettoDiNotte = ritinta([0.31, 0.32, 0.4], [16, 16, 34]);
 const muroDiNotte = ritinta([0.33, 0.36, 0.5], [8, 10, 24]);
 

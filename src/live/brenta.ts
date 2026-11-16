@@ -1,4 +1,4 @@
-// Lettura del Brenta: interpreta la risposta dell'API ARPAV. Funzioni pure, con test.
+// Lettura della Brenta: interpreta la risposta dell'API ARPAV. Funzioni pure, con test.
 //
 // Forma reale della risposta (verificata il 14 novembre 2026):
 //   { success: true,

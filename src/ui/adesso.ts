@@ -1,4 +1,4 @@
-// Riquadri "Adesso": il livello del Brenta in diretta, i treni alla stazione, la fotografia
+// Riquadri "Adesso": il livello della Brenta in diretta, i treni alla stazione, la fotografia
 // dell'aria, i link alle pagine ufficiali. Se un dato non arriva lo si dice, senza numeri inventati.
 
 import type { DatiAria, LetturaTreni, Live } from '../types';
@@ -118,7 +118,7 @@ function mostraBrenta(stato: HTMLElement, lettura: LetturaBrenta): void {
   ));
 }
 
-/** Riquadro con il livello del Brenta letto adesso da ARPAV. */
+/** Riquadro con il livello della Brenta letto adesso da ARPAV. */
 export function riquadroBrenta(nota: string): HTMLElement {
   const stato = el('div', { class: 'adesso-stato', 'aria-live': 'polite', tabindex: '-1' });
 
@@ -139,7 +139,7 @@ export function riquadroBrenta(nota: string): HTMLElement {
           el(
             'p',
             { class: 'adesso-errore' },
-            'In questo momento non riusciamo a leggere il livello del Brenta. Non mostriamo numeri che non abbiamo: puoi guardarlo sul sito di ARPAV.',
+            'In questo momento non riusciamo a leggere il livello della Brenta. Non mostriamo numeri che non abbiamo: puoi guardarlo sul sito di ARPAV.',
           ),
           riprova,
         );
@@ -151,7 +151,7 @@ export function riquadroBrenta(nota: string): HTMLElement {
   return el(
     'div',
     { class: 'adesso adesso-brenta' },
-    intestazione('Livello del Brenta', 'stazione Brenta a Barzizza'),
+    intestazione('Livello della Brenta', 'stazione Brenta a Barzizza'),
     stato,
     nota ? el('p', { class: 'adesso-nota' }, nota) : null,
     el('p', { class: 'adesso-fonte' }, linkEsterno(PAGINA_ARPAV_IDRO, ATTRIBUZIONE)),

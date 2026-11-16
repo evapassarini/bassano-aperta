@@ -19,7 +19,7 @@
     {
       "anno": "1779",
       "titolo": "L'osteria in capo al ponte",
-      "testo": "Bortolo Nardini compra l'Osteria al Ponte, all'ingresso del ponte sul Brenta, e vi sistema in modo stabile il suo alambicco. Secondo l'azienda è la più antica distilleria d'Italia.",
+      "testo": "Bortolo Nardini compra l'Osteria al Ponte, all'ingresso del ponte sulla Brenta, e vi sistema in modo stabile il suo alambicco. Secondo l'azienda è la più antica distilleria d'Italia.",
       "fonte": {
         "titolo": "Visit Italy, «Distilleria Nardini» (contenuto in collaborazione con l'azienda)",
         "url": "https://www.visititaly.eu/it/luoghi-e-itinerari/distilleria-nardini-grappa-italiana"
@@ -64,7 +64,7 @@
     {
       "anno": "1945",
       "titolo": "Il ponte distrutto accanto",
-      "testo": "Il Ponte Vecchio viene distrutto, e su come sia andata le fonti non concordano. Secondo Difford's Guide la grapperia e il reparto produttivo annesso ne escono senza danni gravi.",
+      "testo": "Il Ponte Vecchio, proprio accanto, viene distrutto. Secondo Difford's Guide la grapperia e il reparto produttivo annesso ne escono senza danni gravi.",
       "fonte": {
         "titolo": "Difford's Guide, storia della distilleria Nardini",
         "url": "https://www.diffordsguide.com/producers/642/nardini-distillery/history"
@@ -115,10 +115,11 @@
       "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_Ponte_vecchio_07feb08_05.jpg",
       "autore": "Roberto Pozzi",
       "licenza": "CC BY-SA 3.0",
-      "alt": "Il ponte coperto di legno rosso visto dal fiume, con i piloni a forma di prua nell'acqua verde; a destra finisce contro una casa rossa con le imposte, sopra un muro di mattoni e pietra che scende nel Brenta."
+      "alt": "Il ponte coperto di legno rosso visto dal fiume, con i piloni a forma di prua nell'acqua verde; a destra finisce contro una casa rossa con le imposte, sopra un muro di mattoni e pietra che scende nella Brenta."
     }
   ],
   "live": [],
+  "curiosita": [],
   "incertezze": [
     "Distruzione del ponte nel 1945: Wikipedia parla di un sabotaggio partigiano il 17 febbraio 1945; Difford's Guide attribuisce la distruzione ai tedeschi, senza data, e la ricostruzione agli Alpini.",
     "«La più antica distilleria d'Italia» è un primato dichiarato dall'azienda, non verificato in modo indipendente.",

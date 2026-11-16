@@ -1,16 +1,16 @@
 {
   "id": "brenta",
-  "nome": "Il Brenta",
+  "nome": "La Brenta",
   "sottotitolo": "Il fiume delle zattere, tra la valle e la pianura",
   "genere": "luogo",
   "lat": 45.7668,
   "lon": 11.731,
-  "intro": "A Bassano il Brenta esce dalla sua valle stretta, passa sotto il Ponte Vecchio ed entra in pianura. Per secoli è stato una strada d'acqua: ci scendevano i tronchi dell'Altopiano diretti a Venezia, guidati dagli zattieri. E più di una volta, in piena, si è portato via il ponte.",
+  "intro": "A Bassano la Brenta esce dalla sua valle stretta, passa sotto il Ponte Vecchio ed entra in pianura. Per secoli è stata una strada d'acqua: ci scendevano i tronchi dell'Altopiano diretti a Venezia, guidati dagli zattieri. E più di una volta, in piena, si è portata via il ponte.",
   "tappe": [
     {
       "anno": "Il fiume",
       "titolo": "Dai laghi alla pianura",
-      "testo": "Il Brenta nasce dai laghi di Levico e Caldonazzo, in Trentino, ed è lungo 174 chilometri. Percorre la Valsugana, entra nel Canale di Brenta a Primolano e a Bassano passa sotto il Ponte Vecchio ed entra in pianura. Qui la sua portata media è di 71 metri cubi al secondo.",
+      "testo": "La Brenta nasce dai laghi di Levico e Caldonazzo, in Trentino, ed è lunga 174 chilometri. Percorre la Valsugana, entra nel Canale di Brenta a Primolano e a Bassano passa sotto il Ponte Vecchio ed entra in pianura. Qui la sua portata media è di 71 metri cubi al secondo.",
       "fonte": {
         "titolo": "Wikipedia, voce «Brenta»",
         "url": "https://it.wikipedia.org/wiki/Brenta"
@@ -20,7 +20,7 @@
     {
       "anno": "XIV secolo",
       "titolo": "Una scala per i tronchi",
-      "testo": "A monte di Bassano, a Valstagna, viene costruita la Calà del Sasso: una scalinata di 4.444 gradini con accanto una canaletta di pietra, per far scivolare i tronchi dall'Altopiano fino al Brenta.",
+      "testo": "A monte di Bassano, a Valstagna, viene costruita la Calà del Sasso: una scalinata di 4.444 gradini con accanto una canaletta di pietra, per far scivolare i tronchi dall'Altopiano fino alla Brenta.",
       "fonte": {
         "titolo": "Wikipedia, voce «Calà del Sasso»",
         "url": "https://it.wikipedia.org/wiki/Cal%C3%A0_del_Sasso"
@@ -30,7 +30,7 @@
     {
       "anno": "XV-XVIII secolo",
       "titolo": "Legname per l'Arsenale",
-      "testo": "I veneziani usano molto la Calà del Sasso per rifornire di legname l'Arsenale: da Valstagna i tronchi scendono lungo il Brenta, sull'acqua, fino a Venezia.",
+      "testo": "I veneziani usano molto la Calà del Sasso per rifornire di legname l'Arsenale: da Valstagna i tronchi scendono lungo la Brenta, sull'acqua, fino a Venezia.",
       "fonte": {
         "titolo": "Wikipedia, voce «Calà del Sasso»",
         "url": "https://it.wikipedia.org/wiki/Cal%C3%A0_del_Sasso"
@@ -48,7 +48,7 @@
     {
       "anno": "1567 e 1748",
       "titolo": "Le piene contro il ponte",
-      "testo": "Due volte il Brenta in piena distrugge il ponte di Bassano: nell'ottobre 1567, e da lì nasce il progetto di Palladio, e il 19 agosto 1748, quando a ricostruirlo è Bartolomeo Ferracina.",
+      "testo": "Due volte la Brenta in piena distrugge il ponte di Bassano: nell'ottobre 1567, e da lì nasce il progetto di Palladio, e il 19 agosto 1748, quando a ricostruirlo è Bartolomeo Ferracina.",
       "fonte": {
         "titolo": "Wikipedia, voce «Ponte Vecchio (Bassano del Grappa)»",
         "url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
@@ -84,7 +84,7 @@
     {
       "anno": "1966",
       "titolo": "L'alluvione di novembre",
-      "testo": "L'alluvione del 1966 sconvolge quasi tutto il bacino del Brenta e dei suoi affluenti.",
+      "testo": "L'alluvione del 1966 sconvolge quasi tutto il bacino della Brenta e dei suoi affluenti.",
       "fonte": {
         "titolo": "Wikipedia, voce «Brenta»",
         "url": "https://it.wikipedia.org/wiki/Brenta"
@@ -103,7 +103,7 @@
   "media": [
     {
       "tipo": "immagine",
-      "titolo": "Il Brenta verso nord visto dal Ponte Vecchio (2012)",
+      "titolo": "La Brenta verso nord vista dal Ponte Vecchio (2012)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Brenta_north_from_Ponte_Vecchio_Bassani_di_Grappa.jpeg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Brenta_north_from_Ponte_Vecchio_Bassani_di_Grappa.jpeg",
       "autore": "oursana",
@@ -112,7 +112,7 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "Il Brenta a Bassano del Grappa (13 giugno 2021)",
+      "titolo": "La Brenta a Bassano del Grappa (13 giugno 2021)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Brenta_Bassano_del_Grappa.jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Brenta_Bassano_del_Grappa.jpg",
       "autore": "Wikipedian Spy",
@@ -121,7 +121,7 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "Bassano lungo il Brenta (1 ottobre 2019)",
+      "titolo": "Bassano lungo la Brenta (1 ottobre 2019)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_entlang_der_Brenta_01.jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_entlang_der_Brenta_01.jpg",
       "autore": "Zairon",
@@ -130,7 +130,7 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "Il Brenta a Bassano (9 agosto 2011)",
+      "titolo": "La Brenta a Bassano (9 agosto 2011)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Il_Brenta_(6073221500).jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Il_Brenta_(6073221500).jpg",
       "autore": "Rino Porrovecchio",
@@ -139,7 +139,7 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "Valstagna, la Riviera Garibaldi sul Brenta (11 agosto 2018)",
+      "titolo": "Valstagna, la Riviera Garibaldi sulla Brenta (11 agosto 2018)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Valstangna%2C_Riviera_Garibaldi.jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Valstangna%2C_Riviera_Garibaldi.jpg",
       "autore": "Dedaperli",
@@ -148,7 +148,7 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "Gara di zattere sul Brenta a Valstagna (Palio delle Zattere)",
+      "titolo": "Gara di zattere sulla Brenta a Valstagna (Palio delle Zattere)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Out%26About_-_Raft_Race_in_Valstagna_(Veneto)_(4571358).jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Out%26About_-_Raft_Race_in_Valstagna_(Veneto)_(4571358).jpg",
       "autore": "U.S. Army USAG-V, Anna Terracino",
@@ -165,7 +165,7 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "Il Brenta a Bassano nella luce della sera (7 agosto 2006)",
+      "titolo": "La Brenta a Bassano nella luce della sera (7 agosto 2006)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_Abendstimmung.jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_Abendstimmung.jpg",
       "autore": "Museshare",
@@ -183,7 +183,7 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "Il Brenta a Valstagna (20 novembre 2022)",
+      "titolo": "La Brenta a Valstagna (20 novembre 2022)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Brenta_a_Valstagna.jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Brenta_a_Valstagna.jpg",
       "autore": "Syrio",
@@ -192,7 +192,7 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "La valle del Brenta verso Bassano, veduta aerea (6 maggio 2023)",
+      "titolo": "La valle della Brenta verso Bassano, veduta aerea (6 maggio 2023)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Valle_del_Brenta_verso_Bassano.jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Valle_del_Brenta_verso_Bassano.jpg",
       "autore": "Syrio",
@@ -201,7 +201,7 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "La valle del Brenta a Bassano, xilografia (1901)",
+      "titolo": "La valle della Brenta a Bassano, xilografia (1901)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa%2C_valle_del_Brenta_%28xilografia%29.jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa%2C_valle_del_Brenta_%28xilografia%29.jpg",
       "autore": "Autore sconosciuto",
@@ -210,7 +210,7 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "Il percorso di canoa slalom sul Brenta a Valstagna (25 gennaio 2009)",
+      "titolo": "Il percorso di canoa slalom sulla Brenta a Valstagna (25 gennaio 2009)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Percorso_di_canoa_slalom_sul_Brenta_a_Valstagna.jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Percorso_di_canoa_slalom_sul_Brenta_a_Valstagna.jpg",
       "autore": "N.Fioretti",
@@ -219,7 +219,7 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "Le case sulla riva del Brenta sotto il castello (2012)",
+      "titolo": "Le case sulla riva della Brenta sotto il castello (2012)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_di_Grappa%2C_Brenta_North-east.jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_di_Grappa%2C_Brenta_North-east.jpg",
       "autore": "Oursana",
@@ -231,6 +231,26 @@
     {
       "tipo": "brenta",
       "nota": "Il livello è misurato dall'idrometro ARPAV «Brenta a Barzizza», circa 1 km a monte del Ponte Vecchio: non è il livello sotto il ponte. I dati non sono validati. Non risulta nessuna webcam verificata che inquadri il fiume a Bassano."
+    }
+  ],
+  "curiosita": [
+    "Si dice «la Brenta», al femminile. È la forma antica, come per la Piave e la Livenza. Anche Dante, nell'Inferno, scrive «e quali Padoan lungo la Brenta». E in dialetto veneto il fiume è ancora «la Brenta».",
+    "Perché allora quasi tutti lo dicono al maschile? Secondo l'Accademia della Crusca, alla Brenta è toccata la stessa sorte della Piave: il maschile compare qua e là dall'inizio del Settecento e nella seconda metà dell'Ottocento diventa quasi l'unica forma. A diffonderlo sono la scuola, con la regola per cui i nomi di fiume prendono il genere della parola «fiume», e il bisogno di nomi uniformi nella scienza, nella tecnica e nel commercio. Chi scriveva in italiano usava il maschile, anche se in dialetto continuava a dire «la Brenta».",
+    "Nel 1918, in piena guerra e nella polemica sul nome della Piave, il presidente della Crusca Isidoro Del Lungo diede la colpa all'Austria. Nel 2015 Massimo Fanfani, in un articolo per la Crusca, giudica debole questa tesi: il cambiamento era cominciato prima che arrivassero gli austriaci.",
+    "Al tempo dei Romani il fiume non si chiamava Brenta ma Medoacus o Meduacus: così lo chiamano Livio e Plinio. Secondo ArcheoVeneto dell'Università di Padova, il nome Brinta compare solo tra la tarda età romana e l'alto Medioevo. Da dove venga «Brenta» non si sa con certezza: ci sono solo ipotesi."
+  ],
+  "fontiCuriosita": [
+    {
+      "titolo": "Accademia della Crusca, Massimo Fanfani, «Fiumi femminili, fiumi maschili» (2015)",
+      "url": "https://accademiadellacrusca.it/it/contenuti/fiumi-femminili-fiumi-maschili/69"
+    },
+    {
+      "titolo": "Wikisource, Dante Alighieri, «Divina Commedia, Inferno, Canto XV»",
+      "url": "https://it.wikisource.org/wiki/Divina_Commedia/Inferno/Canto_XV"
+    },
+    {
+      "titolo": "ArcheoVeneto, Università di Padova, «The rivers»",
+      "url": "https://archeoveneto.beniculturali.unipd.it/en/geography/the-rivers/"
     }
   ],
   "incertezze": [

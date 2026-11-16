@@ -64,8 +64,44 @@ const piattoNelRiquadro = (p: number[]): boolean => {
 };
 
 const CHIAVI_STORIA = new Set([
-  'id', 'nome', 'sottotitolo', 'genere', 'lat', 'lon', 'intro', 'tappe', 'media', 'live', 'incertezze', 'landmark',
+  'id', 'nome', 'sottotitolo', 'genere', 'lat', 'lon', 'intro', 'tappe', 'media', 'live', 'curiosita', 'fontiCuriosita',
+  'incertezze', 'landmark',
 ]);
+
+/**
+ * I testi di una storia che il sito mostra: nome, sottotitolo, apertura, tappe, curiosità,
+ * riquadri "Adesso", titoli e alt dei media. Restano fuori le fonti (titoli e indirizzi, da
+ * citare come sono) e le "incertezze", che sono una nota interna di redazione e non si mostrano.
+ */
+const testiMostrati = (s: Storia): string[] => [
+  s.nome,
+  s.sottotitolo,
+  s.intro,
+  ...s.tappe.flatMap((t) => [t.anno, t.titolo, t.testo]),
+  ...(Array.isArray(s.curiosita) ? s.curiosita : []),
+  ...s.live.flatMap((l) => (l.tipo === 'link' ? [l.etichetta, l.nota] : [l.nota])),
+  ...s.media.flatMap((m) => [m.titolo, m.alt ?? '']),
+];
+
+/**
+ * Sul sito si scrive "la Brenta", al femminile. Restano come sono i nomi propri che hanno già
+ * l'articolo dentro: chi ne aggiunge uno lo mette qui.
+ */
+const BRENTA_MASCHILE = /\b(?:il|del|nel|al|dal|sul|lungo il) Brenta\b/gi;
+const NOMI_PROPRI_BRENTA = [
+  'Riviera del Brenta',
+  'Consorzio di Bonifica Brenta',
+  // Comuni e nomi presi da OpenStreetMap.
+  'Tezze sul Brenta',
+  'Piazzola sul Brenta',
+  'Campolongo sul Brenta',
+  'Ciclopista del Brenta',
+];
+const brentaAlMaschile = (testo: string): string[] => {
+  let pulito = testo;
+  for (const nome of NOMI_PROPRI_BRENTA) pulito = pulito.split(nome).join(' ');
+  return pulito.match(BRENTA_MASCHILE) ?? [];
+};
 
 describe('storie (content/luoghi)', () => {
   it('ci sono tutte e 18 le storie previste', () => {
@@ -81,7 +117,22 @@ describe('storie (content/luoghi)', () => {
       expect(['luogo', 'tema']).toContain(s.genere);
       expect(stringa(s.intro)).toBe(true);
       expect(Array.isArray(s.tappe) && Array.isArray(s.media) && Array.isArray(s.live)).toBe(true);
+      expect(Array.isArray(s.curiosita) && s.curiosita.every(stringa), 'curiosita: elenco di testi').toBe(true);
       expect(Array.isArray(s.incertezze) && s.incertezze.every(stringa)).toBe(true);
+    });
+
+    it('scrive "la Brenta" al femminile in tutti i testi mostrati', () => {
+      for (const testo of testiMostrati(s)) {
+        expect(brentaAlMaschile(testo), testo.slice(0, 120)).toEqual([]);
+      }
+    });
+
+    it('non rimanda a sezioni che non ci sono più', () => {
+      // "Le fonti non concordano" non si mostra più: nessun testo ci rimanda, nemmeno con "più sotto".
+      for (const testo of testiMostrati(s)) {
+        expect(testo, testo.slice(0, 120)).not.toMatch(/le fonti non concordano/i);
+        expect(testo, testo.slice(0, 120)).not.toMatch(/più sotto/i);
+      }
     });
 
     it('ha le coordinate giuste per il suo genere', () => {
@@ -100,6 +151,14 @@ describe('storie (content/luoghi)', () => {
       for (const t of s.tappe) {
         expect(stringa(t.anno) && stringa(t.titolo) && stringa(t.testo), `tappa incompleta: ${t.titolo}`).toBe(true);
         expect(stringa(t.fonte?.titolo) && https(t.fonte?.url), `fonte della tappa: ${t.titolo}`).toBe(true);
+      }
+    });
+
+    it('ha le fonti delle curiosità complete, se ci sono', () => {
+      if (s.fontiCuriosita === undefined) return;
+      expect(Array.isArray(s.fontiCuriosita), 'fontiCuriosita: elenco di fonti').toBe(true);
+      for (const f of s.fontiCuriosita) {
+        expect(stringa(f?.titolo) && https(f?.url), `fonte di una curiosità: ${f?.titolo}`).toBe(true);
       }
     });
 

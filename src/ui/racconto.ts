@@ -1,5 +1,5 @@
 // Il contenuto della finestra-racconto: apertura, riquadro "Adesso", linea del tempo a
-// tappe, immagini, audio e video, punti incerti, fonti.
+// tappe, curiosità, immagini, audio e video, fonti.
 
 import type { Media, Storia } from '../types';
 import { creaAdesso } from './adesso';
@@ -211,6 +211,16 @@ export function creaRacconto(storia: Storia, opzioni: OpzioniRacconto): Racconto
     );
   }
 
+  // --- Curiosità -----------------------------------------------------------
+  // Le "incertezze" della storia restano una nota interna di redazione: non si mostrano.
+  // Un file senza il campo non deve rompere la finestra: si comporta come un elenco vuoto.
+  const curiosita = storia.curiosita ?? [];
+  if (curiosita.length > 0) {
+    const elenco = el('ul', null);
+    for (const punto of curiosita) elenco.append(el('li', null, punto));
+    nodo.append(el('section', { class: 'sezione sezione-curiosita' }, el('h3', null, 'Curiosità'), elenco));
+  }
+
   // --- Immagini, audio, video ---------------------------------------------
   const immagini = mediaResidui(storia, 'immagine');
   const audio = mediaResidui(storia, 'audio');
@@ -274,25 +284,6 @@ export function creaRacconto(storia: Storia, opzioni: OpzioniRacconto): Racconto
       }
     }
     nodo.append(sezione);
-  }
-
-  // --- Le fonti non concordano --------------------------------------------
-  if (storia.incertezze.length > 0) {
-    const elenco = el('ul', null);
-    for (const punto of storia.incertezze) elenco.append(el('li', null, punto));
-    nodo.append(
-      el(
-        'section',
-        { class: 'sezione sezione-incertezze' },
-        el('h3', null, 'Le fonti non concordano'),
-        el(
-          'p',
-          { class: 'incertezze-premessa' },
-          'Su questi punti le fonti che abbiamo letto dicono cose diverse, o non dicono abbastanza. Non abbiamo scelto una versione: le riportiamo come sono.',
-        ),
-        elenco,
-      ),
-    );
   }
 
   // --- Fonti ---------------------------------------------------------------

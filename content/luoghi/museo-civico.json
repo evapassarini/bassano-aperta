@@ -19,7 +19,7 @@
     {
       "anno": "1828",
       "titolo": "Nasce il museo",
-      "testo": "Secondo il sito dei Musei Civici, il Museo Civico di Bassano nasce nel 1828. Altre fonti indicano il 1840: lo spieghiamo più sotto, in «Le fonti non concordano». La voce di Wikipedia sul museo aggiunge che molti dei libri vengono dal lascito del naturalista Giambattista Brocchi.",
+      "testo": "Secondo il sito dei Musei Civici, il Museo Civico di Bassano nasce nel 1828. La voce di Wikipedia sul museo aggiunge che molti dei libri vengono dal lascito del naturalista Giambattista Brocchi.",
       "fonte": {
         "titolo": "Musei Civici di Bassano del Grappa, pagina del Museo Civico",
         "url": "https://www.museibassano.it/it/pagina/museo-civico"
@@ -265,6 +265,7 @@
       "nota": "Il calendario ufficiale di Musei, Biblioteca e Archivio. Mescola eventi di sedi diverse e non sempre indica dove si tengono."
     }
   ],
+  "curiosita": [],
   "incertezze": [
     "Anno di nascita del museo: il sito dei Musei e il testo della voce italiana di Wikipedia dicono 1828; il riquadro della stessa voce e la Wikipedia in inglese riportano il 1840.",
     "Il trasferimento nell'ex convento di San Francesco nel 1840 è indicato solo dalla voce italiana di Wikipedia.",

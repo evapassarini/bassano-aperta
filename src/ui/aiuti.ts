@@ -17,7 +17,7 @@ export function normalizza(testo: string): string {
     .trim();
 }
 
-/** Il nome senza l'articolo davanti: "Il Brenta" va sotto la B. */
+/** Il nome senza l'articolo davanti: "La Brenta" va sotto la B. */
 export function chiaveOrdine(nome: string): string {
   return normalizza(nome).replace(/^(il|lo|la|i|gli|le|l|un|una) (?=.)/, '');
 }
@@ -483,14 +483,18 @@ export function urlMiniatura(url: string, larghezza = 500): string {
 // Storie
 // ---------------------------------------------------------------------------
 
-/** Tutte le fonti delle tappe, una volta sola ciascuna, nell'ordine in cui compaiono. */
+/**
+ * Tutte le fonti del racconto, una volta sola ciascuna: prima quelle delle tappe, nell'ordine
+ * in cui compaiono, poi quelle delle curiosità.
+ */
 export function fontiUniche(storia: Storia): Fonte[] {
   const viste = new Set<string>();
   const fonti: Fonte[] = [];
-  for (const t of storia.tappe) {
-    if (!t.fonte || !t.fonte.url || viste.has(t.fonte.url)) continue;
-    viste.add(t.fonte.url);
-    fonti.push(t.fonte);
+  const candidate = [...storia.tappe.map((t) => t.fonte), ...(storia.fontiCuriosita ?? [])];
+  for (const f of candidate) {
+    if (!f || !f.url || viste.has(f.url)) continue;
+    viste.add(f.url);
+    fonti.push(f);
   }
   return fonti;
 }
@@ -601,7 +605,7 @@ const PLURALE_TIPO: Record<string, string> = {
   chiesa: 'chiese',
   'luogo-storico': 'luoghi storici',
   aria: "qualità dell'aria",
-  idrometro: 'livello del Brenta',
+  idrometro: 'livello della Brenta',
   webcam: 'webcam',
   'fermata-bus': "fermate dell'autobus",
   stazione: 'stazione',
@@ -612,7 +616,7 @@ const PLURALE_TIPO: Record<string, string> = {
 
 const LEGENDA_BASE: Record<IdStrato, string> = {
   cultura: 'musei, monumenti, luoghi storici',
-  ambiente: "qualità dell'aria, livello del Brenta",
+  ambiente: "qualità dell'aria, livello della Brenta",
   mobilita: 'fermate, stazione, piste ciclabili',
 };
 

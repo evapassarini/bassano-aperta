@@ -50,7 +50,7 @@ import { creaSchedaAvvisi } from '../src/ui/avvisi';
 import { tieniFuoco } from '../src/ui/dom';
 import { creaFonti } from '../src/ui/fonti';
 import { TESTO_CREDITO_OSM, URL_CREDITO_OSM, creaUI } from '../src/ui/index';
-import { creditiMedia } from '../src/ui/racconto';
+import { creaRacconto, creditiMedia } from '../src/ui/racconto';
 import { CHIAVE_LUCE, PASSO_LUCE_MS, creaSelettoreLuce } from '../src/ui/luce';
 import { creaScheda } from '../src/ui/scheda';
 
@@ -72,14 +72,15 @@ function storia(parziale: Partial<Storia> & { id: string; nome: string }): Stori
     tappe: [],
     media: [],
     live: [],
+    curiosita: [],
     incertezze: [],
     ...parziale,
   };
 }
 
 const STORIE: Storia[] = [
-  storia({ id: 'ponte-vecchio', nome: 'Ponte Vecchio', sottotitolo: 'Il ponte degli Alpini, di legno, sul Brenta' }),
-  storia({ id: 'brenta', nome: 'Il Brenta', sottotitolo: 'Il fiume delle zattere' }),
+  storia({ id: 'ponte-vecchio', nome: 'Ponte Vecchio', sottotitolo: 'Il ponte degli Alpini, di legno, sulla Brenta' }),
+  storia({ id: 'brenta', nome: 'La Brenta', sottotitolo: 'Il fiume delle zattere' }),
   storia({ id: 'grappa', nome: 'La grappa', sottotitolo: 'Dalle vinacce al bicchierino', genere: 'tema' }),
   storia({ id: 'museo-civico', nome: 'Museo Civico', sottotitolo: 'Canova, Jacopo Bassano e la città' }),
   storia({ id: 'mura-porte', nome: 'Mura e porte', sottotitolo: 'La città murata' }),
@@ -93,7 +94,8 @@ describe('ricerca nei luoghi', () => {
   });
 
   it('ordina senza contare gli articoli', () => {
-    expect(chiaveOrdine('Il Brenta')).toBe('brenta');
+    expect(chiaveOrdine('La Brenta')).toBe('brenta');
+    expect(chiaveOrdine('Il Ponte Vecchio')).toBe('ponte vecchio');
     expect(chiaveOrdine("L'Ossario")).toBe('ossario');
     expect(chiaveOrdine('La grappa')).toBe('grappa');
     expect(chiaveOrdine('Largo Parolini')).toBe('largo parolini');
@@ -382,6 +384,21 @@ describe('contenuto di una storia', () => {
     ]);
   });
 
+  it('aggiunge in fondo le fonti delle curiosità, senza ripetere quelle delle tappe', () => {
+    const conCuriosita = storia({
+      ...s,
+      fontiCuriosita: [
+        { titolo: 'Fonte uno, ancora', url: 'https://uno.it/' },
+        { titolo: 'Fonte tre', url: 'https://tre.it/' },
+      ],
+    });
+    expect(fontiUniche(conCuriosita)).toEqual([
+      { titolo: 'Fonte uno', url: 'https://uno.it/' },
+      { titolo: 'Fonte due', url: 'https://due.it/' },
+      { titolo: 'Fonte tre', url: 'https://tre.it/' },
+    ]);
+  });
+
   it('lega a una tappa solo immagini che esistono davvero', () => {
     expect(immagineDellaTappa(s, 0)).toBe(0);
     expect(immagineDellaTappa(s, 1)).toBeNull();
@@ -420,7 +437,7 @@ describe('etichette', () => {
     ];
     expect(descriviStrato('cultura', elementi)).toBe('musei, chiese');
     expect(descriviStrato('mobilita', elementi)).toBe('piste ciclabili');
-    expect(descriviStrato('ambiente', elementi)).toBe("qualità dell'aria, livello del Brenta");
+    expect(descriviStrato('ambiente', elementi)).toBe("qualità dell'aria, livello della Brenta");
   });
 });
 
@@ -1706,6 +1723,12 @@ describe('crediti, fonti e indirizzi del progetto', () => {
     expect(link(fonti, 'Segnala un errore')).toBeUndefined();
   });
 
+  it('«Fonti e licenze» non promette più la sezione «Le fonti non concordano»', () => {
+    const testo = comeFinto(creaFonti({ strati: STRATI }).nodo).textContent;
+    expect(testo).not.toMatch(/fonti non concordano/i);
+    expect(testo).toContain('Livello della Brenta: letto in diretta');
+  });
+
   it('«Fonti e licenze» parla delle illustrazioni dei luoghi simbolo', () => {
     const testo = comeFinto(creaFonti({ strati: STRATI }).nodo).textContent;
     expect(testo).toContain('Le illustrazioni dei luoghi simbolo');
@@ -1764,6 +1787,60 @@ describe('crediti, fonti e indirizzi del progetto', () => {
       const riga = comeFinto(creditiMedia(media({}), 'https://commons.wikimedia.org/wiki/File:Ponte.jpg', 'Pagina del file'));
       expect(riga.conTag('a')).toHaveLength(1);
       expect(riga.textContent.startsWith('Pagina del file')).toBe(true);
+    });
+  });
+
+  describe('sezioni del racconto', () => {
+    const tappa = {
+      anno: '1569',
+      titolo: 'Il progetto di Palladio',
+      testo: 'Un testo di prova.',
+      fonte: { titolo: 'Fonte di prova', url: 'https://example.org/fonte' },
+    };
+    const immagine: Media = {
+      tipo: 'immagine',
+      titolo: 'Il ponte',
+      alt: 'Il ponte di legno',
+      url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ponte.jpg?width=960',
+      pagina: 'https://commons.wikimedia.org/wiki/File:Ponte.jpg',
+      autore: 'Autore di prova',
+      licenza: 'CC BY-SA 4.0',
+    };
+    const racconto = (parziale: Partial<Storia>): Finto =>
+      comeFinto(
+        creaRacconto(storia({ id: 'ponte-vecchio', nome: 'Ponte Vecchio', tappe: [tappa], media: [immagine], ...parziale }), {
+          apriLente: () => {},
+        }).nodo,
+      );
+    /** Le classi delle sezioni, nell'ordine in cui stanno nel racconto. */
+    const ordine = (nodo: Finto): string[] =>
+      nodo.figli
+        .filter((f): f is Finto => typeof f !== 'string')
+        .map((f) => (f.getAttribute('class') ?? '').split(' ').find((c) => c.startsWith('sezione-')) ?? f.tag);
+
+    it('mostra le curiosità in un elenco, dopo la linea del tempo e prima di «Da vedere e da ascoltare»', () => {
+      const nodo = racconto({ curiosita: ['Si racconta una prima cosa.', 'Secondo una guida, una seconda.'] });
+      const [sezione] = nodo.conClasse('sezione-curiosita');
+      expect(sezione).toBeDefined();
+      expect(sezione.conTag('h3')[0].textContent).toBe('Curiosità');
+      expect(sezione.conTag('li').map((li) => li.textContent)).toEqual([
+        'Si racconta una prima cosa.',
+        'Secondo una guida, una seconda.',
+      ]);
+      expect(ordine(nodo)).toEqual(['header', 'sezione-tappe', 'sezione-curiosita', 'sezione-media', 'sezione-fonti']);
+    });
+
+    it('senza curiosità la sezione non c\'è', () => {
+      const nodo = racconto({ curiosita: [] });
+      expect(nodo.conClasse('sezione-curiosita')).toHaveLength(0);
+      expect(nodo.textContent).not.toContain('Curiosità');
+    });
+
+    it('«Le fonti non concordano» non si mostra più: le incertezze restano una nota interna', () => {
+      const nodo = racconto({ incertezze: ['Una nota interna di redazione.'] });
+      expect(nodo.conClasse('sezione-incertezze')).toHaveLength(0);
+      expect(nodo.textContent).not.toContain('Le fonti non concordano');
+      expect(nodo.textContent).not.toContain('Una nota interna di redazione.');
     });
   });
 });

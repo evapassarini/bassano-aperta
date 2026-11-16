@@ -12,8 +12,8 @@ cultura 2029", mai "europea").
    in stile illustrato. Si trascina, si zooma, la posizione sta nell'indirizzo (`#@x,y,zoom`).
 2. Sopra la base ci sono i luoghi simbolo, disegnati a parte come SVG.
 3. Tre strati accendibili: **Cultura**, **Ambiente**, **Mobilità**.
-4. Clic su un luogo: si apre la **finestra-racconto** con una linea del tempo a tappe, immagini
-   e video (l'audio è previsto, oggi nessun racconto ne ha), e un riquadro **Adesso** con il dato live dove esiste davvero.
+4. Clic su un luogo: si apre la **finestra-racconto** con una linea del tempo a tappe, le
+   curiosità, immagini e video (l'audio è previsto, oggi nessun racconto ne ha), e un riquadro **Adesso** con il dato live dove esiste davvero.
 5. Nello strato Mobilità, la scheda della stazione mostra i **prossimi treni** con i ritardi
    dichiarati, letti in diretta.
 6. Dall'elenco «Luoghi» si apre la scheda **Avvisi sulla viabilità**: gli avvisi pubblicati
@@ -37,9 +37,26 @@ sono il traffico: sono testi pubblicati dagli enti, e il sito lo dice.
 
 - Ogni fatto ha una fonte letta davvero. La base è `ricerca/ricerca-verificata-2026-11-14.json`:
   non si aggiunge nulla a memoria.
-- Dove le fonti non concordano non si sceglie: il punto va in `incertezze` e la finestra lo
-  mostra come "Le fonti non concordano". Esempi: distruzione del ponte nel 1945, "ricostruito
-  dagli Alpini", numeri del 26 settembre 1944, origine del nome "degli Ezzelini".
+- Dove le fonti non concordano non si sceglie a memoria: il punto va in `incertezze`, che è una
+  nota interna di redazione e NON si mostra sul sito (decisione della curatrice del 16 novembre
+  2026: la sezione "Le fonti non concordano" è stata tolta). Nessun testo mostrato rimanda a
+  quella sezione o a un "più sotto". Esempi di note: distruzione del ponte nel 1945,
+  "ricostruito dagli Alpini", numeri del 26 settembre 1944, origine del nome "degli Ezzelini".
+- `curiosita` è un elenco di frasi brevi, mostrato nella sezione "Curiosità" della finestra,
+  dopo la linea del tempo e prima di "Da vedere e da ascoltare" (se l'elenco è vuoto la sezione
+  non c'è). Ogni curiosità ha una fonte: tra quelle delle tappe, tra i media del racconto
+  (per esempio la foto di una lapide), oppure nel campo `fontiCuriosita` (elenco di
+  `{titolo, url}`), che entra nell'elenco "Fonti" del racconto. Un fatto curioso su cui le
+  fonti non sono del tutto coerenti può restare, ma si racconta come curiosità ("si racconta",
+  "secondo ..."), non come elenco di discordanze. Vale soprattutto per il Ponte Vecchio.
+- Sulla rappresaglia dopo l'esplosione sul ponte del febbraio 1945 (tre partigiani fucilati sul
+  ponte) si scrive "nazifascisti": la Wikipedia italiana dice fascisti, quella inglese nazisti.
+- Il fiume si scrive al femminile: "la Brenta", "della Brenta", "sulla Brenta", come si dice a
+  Bassano. Restano come sono i nomi propri e i titoli che hanno già l'articolo dentro o sono
+  citazioni: "Riviera del Brenta", "Consorzio di Bonifica Brenta", i nomi dei comuni ("Tezze sul
+  Brenta"), i nomi presi da OpenStreetMap ("Ciclopista del Brenta"), i titoli delle fonti, i
+  nomi dei file di Commons e gli indirizzi. `tests/contenuti.test.ts` controlla i testi
+  mostrati dei racconti (elenco delle eccezioni in `NOMI_PROPRI_BRENTA`).
 - Le affermazioni aziendali (Nardini, Poli) si attribuiscono: "secondo l'azienda".
 - Viale dei Martiri e Tempio Ossario: tono sobrio, nessun dettaglio crudo, nessuna foto delle
   vittime.
@@ -282,8 +299,8 @@ soglie, con le fonti nel commento.
   memoria la pagina funziona lo stesso). Alla prima visita, o con un valore sconosciuto, vale
   «Adesso».
 - **Giorno** è l'aspetto di sempre. **Pomeriggio**: luce calda e bassa, toni dorati, pareti in
-  ombra più marcate e più fredde, ombre degli alberi e delle case più lunghe, Brenta più caldo. **Notte**: carta blu
-  scuro, case e strade ancora distinguibili, Brenta scuro, lampioni accesi con un alone caldo,
+  ombra più marcate e più fredde, ombre degli alberi e delle case più lunghe, Brenta più calda. **Notte**: carta blu
+  scuro, case e strade ancora distinguibili, Brenta scura, lampioni accesi con un alone caldo,
   qualche finestra illuminata, nomi chiari con alone scuro. I luoghi simbolo si scuriscono
   insieme alla mappa e prendono una luce calda dal basso. Segnaposto ed evidenza non cambiano.
 - I pannelli dell'interfaccia restano di carta crema in ogni luce.
@@ -311,7 +328,7 @@ soglie, con le fonti nel commento.
 - Luoghi simbolo nelle luci diverse dal giorno (`src/map/immagini.ts`): il velo si moltiplica
   sul disegno steso su fondo nero, così le ombre a terra degli SVG restano ombre; la luce calda
   della notte cade solo sulle parti piene. Un elemento dell'SVG con `fill` uguale al colore
-  dell'acqua di giorno (`#7fb8ad`, oggi solo il Brenta sotto il Ponte Vecchio) è una pezza
+  dell'acqua di giorno (`#7fb8ad`, oggi solo la Brenta sotto il Ponte Vecchio) è una pezza
   d'acqua: prende il colore dell'acqua della luce in corso (`illustrazioni.acqua` nella
   tavolozza). Le pezze vanno scritte come elementi chiusi in se stessi, fuori da gruppi con
   trasformazioni.
@@ -539,7 +556,7 @@ solo quando porta ancora con sé la fermata di Bassano e il suo orario: nel feed
 
 Una cartolina illustrata, non una dashboard: una veduta dipinta ad acquerello e china. Carta
 crema calda, tetti in cotto profondo, intonaci ocra, gialli e crema (poco rosa, niente bianco
-freddo), Brenta verde-azzurro, verde dei colli morbido. Contorni a china color seppia scuro. Titoli in Fraunces, testi in Inter (pacchetti `@fontsource`, niente font da server
+freddo), Brenta verde-azzurra, verde dei colli morbido. Contorni a china color seppia scuro. Titoli in Fraunces, testi in Inter (pacchetti `@fontsource`, niente font da server
 esterni). Niente gradienti viola, niente vetro sfocato, niente emoji. Deve funzionare su
 telefono (la finestra-racconto diventa un foglio dal basso) e da tastiera; rispettare
 `prefers-reduced-motion`. Di notte la cartolina resta una cartolina: blu notte e luci calde,

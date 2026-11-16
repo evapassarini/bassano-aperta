@@ -1,4 +1,4 @@
-// Dati live: il livello del Brenta (API ARPAV, dal browser), i treni alla stazione (feed
+// Dati live: il livello della Brenta (API ARPAV, dal browser), i treni alla stazione (feed
 // BusOne, dal browser), la fotografia dell'aria e quella degli avvisi sulla viabilità
 // (file statici preparati dagli script).
 
@@ -30,7 +30,7 @@ async function scarica(url: string, intestazioni: Record<string, string> = {}): 
 
 let brentaInMemoria: { quando: number; promessa: Promise<LetturaBrenta> } | null = null;
 
-/** Livello del Brenta a Barzizza. Tiene il risultato in memoria per 5 minuti. Rifiuta se la rete fallisce. */
+/** Livello della Brenta a Barzizza. Tiene il risultato in memoria per 5 minuti. Rifiuta se la rete fallisce. */
 export function leggiBrenta(): Promise<LetturaBrenta> {
   const adesso = Date.now();
   if (brentaInMemoria && adesso - brentaInMemoria.quando < DURATA_MEMORIA_MS) {

@@ -270,7 +270,17 @@ export interface Storia {
   tappe: Tappa[];
   media: Media[];
   live: Live[];
-  /** Punti su cui le fonti non concordano: mostrati come "Le fonti non concordano". */
+  /** Fatti curiosi del luogo, mostrati nella sezione "Curiosità". Può essere vuoto. */
+  curiosita: string[];
+  /**
+   * Fonti delle curiosità che non sono già tra le fonti delle tappe. Compaiono nell'elenco
+   * "Fonti" del racconto insieme a quelle delle tappe.
+   */
+  fontiCuriosita?: Fonte[];
+  /**
+   * Nota interna di redazione: punti su cui le fonti non concordano. NON è mostrata sul sito
+   * (decisione della curatrice del 16 novembre 2026); serve a chi scrive e rivede i testi.
+   */
   incertezze: string[];
   /** Id del disegno in public/landmarks/<id>.svg, se esiste. */
   landmark?: string;
