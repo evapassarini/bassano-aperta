@@ -1,5 +1,5 @@
 {
-  "generato": "2026-11-15T21:46:02.845Z",
+  "generato": "2026-11-16T06:34:51.255Z",
   "fonti": [
     {
       "nome": "CCISS Viaggiare Informati",
@@ -13,14 +13,6 @@
     }
   ],
   "avvisi": [
-    {
-      "tipo": "evento",
-      "strada": "SS47 della Valsugana",
-      "testo": "Corsia chiusa causa incidente a Incrocio Bassano Del Grappa - SS248 Schiavonesca in direzione Incrocio Padova - SS11 Padana Superiore",
-      "quando": "2026-11-15T21:34:00.000Z",
-      "fonte": "CCISS Viaggiare Informati",
-      "url": "https://www.cciss.it/"
-    },
     {
       "tipo": "ordinanza",
       "strada": "S.P. 75 Volon",
