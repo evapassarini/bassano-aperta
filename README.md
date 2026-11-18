@@ -24,7 +24,7 @@ Cosa trovi nel sito:
   un riquadro «Adesso» con il dato in diretta dove esiste davvero (il livello della Brenta);
 - i prossimi treni alla stazione di Bassano, con i ritardi dichiarati;
 - gli avvisi sulla viabilità pubblicati dagli enti per le strade attorno a Bassano (non è il
-  traffico in tempo reale);
+  traffico in tempo reale: il riquadro «Traffico adesso» porta ai siti dove vederlo);
 - una pagina «Fonti e licenze», con i link al codice e alle segnalazioni;
 - il credito «© OpenStreetMap contributors», sempre scritto sulla mappa.
 
@@ -106,12 +106,14 @@ Da sapere:
   `docs/SPEC.md`, «Giudizio a parole sull'aria».
 - Nemmeno i treni passano da qui: il browser li legge in diretta da BusOne. Dagli script viene
   solo la tabella dei nomi delle stazioni.
-- Anche gli avvisi sono una fotografia, e invecchiano in fretta: gli eventi del CCISS durano
-  poche ore (il sito mostra solo quelli delle ultime 24 ore). Sul sito pubblicato
+- Anche gli avvisi sono una fotografia, e invecchiano in fretta. Gli eventi del CCISS si
+  leggono per la zona di Bassano e la fonte li dà come validi (in corso o programmati); se quella lettura non riesce si
+  usa l'RSS nazionale, e allora il sito mostra solo gli eventi delle ultime 24 ore. Sul sito pubblicato
   `npm run dati:avvisi` gira in automatico più volte al giorno. Se la fotografia ha più di 24 ore la
   scheda lo dice.
 - Se Vi.abilità non risponde lo script tiene le ordinanze della fotografia precedente che
-  valgono ancora; se non risponde CCISS il file esce senza eventi e la scheda dice che mancano.
+  valgono ancora; se non risponde CCISS (né per zona né con l'RSS) il file esce senza eventi
+  e la scheda dice che mancano.
   In tutti e due i casi lo script scrive il file ma esce con codice 2: va rilanciato. Se non
   risponde nessuna delle due esce con codice 1 e lascia intatto il file esistente.
   L'aggiornamento automatico scarta anche la fotografia incompleta (codice 2) e tiene il file

@@ -9,11 +9,17 @@
 // serve lo script. Nessuna delle due dichiara una licenza: riportiamo solo un
 // testo breve (280 caratteri al massimo) e sempre il link alla fonte.
 //
-//   CCISS Viaggiare Informati, https://www.cciss.it/rss
-//     100 eventi di traffico in corso in tutta Italia. Teniamo: SS47 o Valsugana
-//     insieme a Bassano, Pove, Romano, Cassola, Rosà, Marostica, Solagna,
+//   CCISS Viaggiare Informati, eventi per zona (urlCcissZona in scripts/lib/avvisi.mjs)
+//     Gli eventi validi (in corso o programmati) in un riquadro attorno a Bassano, quelli della mappa di
+//     https://www.cciss.it/web/cciss/situazione-della-viabilita. Teniamo quelli con
+//     almeno un punto entro 12 km dal centro, al massimo 15. Tipo 'evento', con
+//     `attivo: true`: la fonte li dava come validi al momento della fotografia.
+//     Se questa lettura non riesce (non è un servizio documentato) si ripiega su
+//     https://www.cciss.it/rss: 100 eventi in tutta Italia, di cui teniamo SS47 o
+//     Valsugana insieme a Bassano, Pove, Romano, Cassola, Rosà, Marostica, Solagna,
 //     Cartigliano o Nove; la SS248; la Pedemontana Veneta (SPV) con gli stessi
-//     comuni; qualunque evento che nomina Bassano. Tipo 'evento'.
+//     comuni; qualunque evento che nomina Bassano. Senza `attivo`: il sito li mostra
+//     solo se pubblicati nelle ultime 24 ore.
 //   Vi.abilità (Provincia di Vicenza), https://vi-abilita.it/feed/
 //     160 voci: ordinanze sulle strade provinciali e notizie d'ufficio. Teniamo le
 //     ordinanze che toccano Bassano del Grappa, Romano d'Ezzelino, Cassola, Rosà,
@@ -41,6 +47,9 @@ import {
   FONTE_VIABILITA,
   controllaVoci,
   filtraCciss,
+  filtraCcissZona,
+  leggiCcissZona,
+  urlCcissZona,
   filtraViabilita,
   leggiRss,
   ordinanzePrecedenti,
@@ -59,16 +68,19 @@ const INTESTAZIONI = {
 
 const pausa = (ms) => new Promise((r) => setTimeout(r, ms));
 
-/** Scarica un feed: un tentativo, più uno solo di riserva dopo qualche secondo. */
-async function scaricaFeed(url) {
+/**
+ * Scarica un indirizzo: un tentativo, più uno solo di riserva dopo qualche secondo.
+ * `controlla(testo)` lancia un errore se la risposta non è quella attesa.
+ */
+async function scarica(url, intestazioni, controlla) {
   let ultimo;
   for (let i = 0; i < 2; i++) {
     if (i > 0) await pausa(5000);
     try {
-      const r = await fetch(url, { headers: INTESTAZIONI, signal: AbortSignal.timeout(45_000) });
+      const r = await fetch(url, { headers: intestazioni, signal: AbortSignal.timeout(45_000) });
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       const testo = await r.text();
-      if (!/<rss[\s>]/i.test(testo) && !/<channel[\s>]/i.test(testo)) throw new Error('la risposta non è un feed RSS');
+      controlla(testo);
       return testo;
     } catch (e) {
       ultimo = e;
@@ -76,6 +88,31 @@ async function scaricaFeed(url) {
     }
   }
   throw new Error(`non riesco a scaricare ${url}: ${ultimo.message}`);
+}
+
+function eFeed(testo) {
+  if (!/<rss[\s>]/i.test(testo) && !/<channel[\s>]/i.test(testo)) throw new Error('la risposta non è un feed RSS');
+}
+
+/** Scarica un feed RSS. */
+const scaricaFeed = (url) => scarica(url, INTESTAZIONI, eFeed);
+
+/**
+ * Eventi del CCISS: prima quelli della zona di Bassano, se non si riesce quelli dell'RSS
+ * nazionale. Restituisce null se non risponde nessuno dei due.
+ */
+async function leggiCciss() {
+  try {
+    const testo = await scarica(urlCcissZona(), { ...INTESTAZIONI, Accept: 'application/json, text/plain;q=0.9, */*;q=0.1' }, leggiCcissZona);
+    const eventi = leggiCcissZona(testo);
+    const avvisi = filtraCcissZona(eventi);
+    console.log(`[avvisi] ${FONTE_CCISS.nome} (zona di Bassano): ${eventi.length} eventi letti, ${avvisi.length} tenuti`);
+    return avvisi;
+  } catch (e) {
+    // Si vede nei log del lavoro automatico, ma la fotografia resta buona: c'è l'RSS.
+    console.error(`[avvisi] ATTENZIONE: eventi per zona del CCISS non disponibili (${e.message}). Uso l'RSS nazionale.`);
+  }
+  return leggiFonte(FONTE_CCISS, URL_CCISS, filtraCciss);
 }
 
 /** Scarica e filtra una fonte. Restituisce null se la fonte non risponde. */
@@ -103,7 +140,7 @@ async function fotografiaPrecedente() {
 async function main() {
   const adesso = new Date();
   const [cciss, lette] = await Promise.all([
-    leggiFonte(FONTE_CCISS, URL_CCISS, filtraCciss),
+    leggiCciss(),
     leggiFonte(FONTE_VIABILITA, URL_VIABILITA, (voci) => filtraViabilita(voci, adesso)),
   ]);
 

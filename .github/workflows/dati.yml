@@ -6,7 +6,9 @@
 # - Ogni file ha il suo script. Se lo script non esce con codice 0, il suo file
 #   torna com'era nell'ultimo commit e non entra nel commit.
 #   (dati-avvisi.mjs esce con codice 2 quando una delle due fonti non risponde e
-#   scrive una fotografia incompleta: qui anche quella si scarta.)
+#   scrive una fotografia incompleta: qui anche quella si scarta. Se il CCISS non
+#   risponde per zona ma risponde l'RSS la fotografia è buona: esce con 0 e lo
+#   scrive nel log come ATTENZIONE.)
 # - Poi girano i test. Se non passano non si fa nessun commit.
 # - Il commit contiene solo i due file, e solo se sono cambiati.
 # - Se una fonte non ha risposto il lavoro finisce in rosso, così si vede.

@@ -1860,6 +1860,44 @@ button.aria-breve:hover {
   margin-top: 20px;
 }
 
+/* «Traffico adesso»: in cima alla scheda, prima della fotografia. */
+.traffico-adesso {
+  margin: 14px 0 18px;
+  padding: 14px 16px;
+  border: 1px solid var(--bordo);
+  border-radius: 6px;
+  background: var(--foglio-ombra);
+}
+
+.ba .traffico-link {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.traffico-link li {
+  padding: 6px 0;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+
+.traffico-link li + li {
+  border-top: 1px solid var(--bordo);
+}
+
+.traffico-cosa {
+  display: block;
+  color: var(--seppia);
+  font-size: 0.8125rem;
+}
+
+.traffico-nota {
+  margin-top: 8px;
+  color: var(--seppia);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
 .avvisi-titolo {
   font-family: var(--titoli);
   font-weight: 600;

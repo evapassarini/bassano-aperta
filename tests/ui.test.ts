@@ -33,6 +33,8 @@ import {
   riassuntoAria,
   tempoGiudizio,
   scegliAvvisi,
+  LINK_TRAFFICO,
+  TRAFFICO_ADESSO,
   sottoPunto,
   statoTreno,
   tabelloneTreni,
@@ -685,7 +687,42 @@ describe('scelta degli avvisi', () => {
     expect(scegliAvvisi([], ORA)).toEqual({ eventi: [], ordinanze: [] });
   });
 
+  it('tiene gli eventi dati in corso dalla fonte, anche vecchi, solo se la fotografia è recente', () => {
+    const lungo: Avviso = { ...avviso('evento', 'SP73 (VI) Campesana Valvecchia', '2026-10-12T08:41:00Z'), attivo: true };
+    const ieri: Avviso = { ...avviso('evento', 'SS245 Castellana', '2026-11-13T00:00:00Z'), attivo: true };
+    const fresca = new Date(ORA.getTime() - 60 * 60 * 1000).toISOString();
+    const vecchia = new Date(ORA.getTime() - 25 * 60 * 60 * 1000).toISOString();
+    expect(scegliAvvisi([lungo, ieri], ORA, fresca).eventi.map((a) => a.strada)).toEqual(['SS245 Castellana', 'SP73 (VI) Campesana Valvecchia']);
+    expect(scegliAvvisi([lungo, ieri], ORA, vecchia).eventi).toEqual([]);
+    expect(scegliAvvisi([lungo, ieri], ORA).eventi).toEqual([]);
+    expect(scegliAvvisi([lungo], ORA, 'ieri').eventi).toEqual([]);
+    // `attivo` vale solo se è proprio true.
+    const finto = { ...lungo, attivo: 'sì' } as unknown as Avviso;
+    expect(scegliAvvisi([finto], ORA, fresca).eventi).toEqual([]);
+  });
+
+  it('con una fotografia vecchia non dice che non ci sono avvisi se ne nasconde', () => {
+    const lungo: Avviso = { ...avviso('evento', 'SP73 (VI) Campesana Valvecchia', '2026-10-12T08:41:00Z'), attivo: true };
+    const vecchia = new Date(ORA.getTime() - 25 * 60 * 60 * 1000).toISOString();
+    const q = quadroAvvisi({ generato: vecchia, fonti: [], avvisi: [lungo] }, ORA);
+    expect(q.eventi).toEqual([]);
+    expect(q.eventiNascosti).toBe(1);
+    expect(q.nascosti).toBe("C'è 1 evento sulle strade che non mostriamo: la fotografia ha più di 24 ore e non sappiamo se vale ancora.");
+    expect(q.vuoto).toContain('non ci sono avvisi che possiamo ancora mostrare');
+    expect(q.vuoto).not.toContain('non ci sono avvisi per la zona di Bassano');
+    expect(q.riassunto).toContain(q.nascosti);
+    const due = quadroAvvisi({ generato: vecchia, fonti: [], avvisi: [lungo, { ...lungo, strada: 'SS47 della Valsugana', testo: 'Altro' }] }, ORA);
+    expect(due.nascosti).toBe('Ci sono 2 eventi sulle strade che non mostriamo: la fotografia ha più di 24 ore e non sappiamo se valgono ancora.');
+    // Con la fotografia fresca lo stesso evento si mostra e non c'è nulla di nascosto.
+    const fresca = quadroAvvisi({ generato: new Date(ORA.getTime() - 3600_000).toISOString(), fonti: [], avvisi: [lungo] }, ORA);
+    expect(fresca.eventi).toHaveLength(1);
+    expect(fresca.eventiNascosti).toBe(0);
+    expect(fresca.nascosti).toBe('');
+  });
+
   it("fa trovare la voce dell'elenco con le parole giuste", () => {
+    expect(trovaVoceAvvisi('traffico adesso')).toBe(true);
+    expect(trovaVoceAvvisi('tempo reale')).toBe(true);
     expect(trovaVoceAvvisi('')).toBe(true);
     expect(trovaVoceAvvisi('avvisi')).toBe(true);
     expect(trovaVoceAvvisi('Viabilità')).toBe(true);
@@ -1018,15 +1055,15 @@ describe('schede con dati in diretta', () => {
       ],
     };
 
-    it('mostra prima gli eventi delle ultime 24 ore, poi le ordinanze, con il link alla fonte', async () => {
+    it('mostra prima gli eventi, poi le ordinanze, con il link alla fonte', async () => {
       live.leggiAvvisi.mockResolvedValue(DATI);
       const scheda = comeFinto(creaSchedaAvvisi().nodo);
       expect(scheda.textContent).toContain('Sono avvisi pubblicati dagli enti, non il traffico in tempo reale.');
       await respira();
       expect(scheda.textContent).toContain('Fotografia del 15 novembre 2026, ore 08:30.');
       expect(scheda.conClasse('avviso-strada').map((s) => s.textContent)).toEqual(['SS47 della Valsugana', 'S.P. 52 Bassanese']);
-      // L'evento di due giorni fa non si mostra.
-      expect(scheda.textContent).not.toContain('SS248');
+      // L'evento di due giorni fa non si mostra (la SS248 compare solo nel riquadro dei link).
+      expect(scheda.conClasse('avvisi-stato')[0].textContent).not.toContain('SS248');
       const [primo] = scheda.conClasse('avviso');
       expect(primo.textContent).toContain('Testo finto per SS47 della Valsugana');
       expect(primo.textContent).toContain('CCISS Viaggiare Informati');
@@ -1052,6 +1089,35 @@ describe('schede con dati in diretta', () => {
         expect(link.getAttribute('rel')).toContain('noopener');
       }
       expect(scheda.conClasse('avviso')[1].conTag('a')[0].getAttribute('href')).toBe('https://vi-abilita.it/finta/');
+    });
+
+    it('in cima c\'è «Traffico adesso»: dice cosa non mostriamo e porta ai servizi esterni', async () => {
+      live.leggiAvvisi.mockRejectedValue(new Error('rete'));
+      const scheda = comeFinto(creaSchedaAvvisi().nodo);
+      await respira();
+      // Il riquadro resta anche se la fotografia non arriva.
+      const [riquadro] = scheda.conClasse('traffico-adesso');
+      expect(riquadro.textContent).toContain('Traffico adesso');
+      expect(riquadro.textContent).toContain(TRAFFICO_ADESSO);
+      expect(riquadro.textContent).toContain('siti esterni');
+      const link = riquadro.conTag('a');
+      expect(link.map((a) => a.getAttribute('href'))).toEqual(LINK_TRAFFICO.map((l) => l.url));
+      for (const a of link) {
+        expect(a.getAttribute('target')).toBe('_blank');
+        expect(a.getAttribute('rel')).toContain('noreferrer');
+      }
+    });
+
+    it('gli eventi dati in corso dal CCISS si mostrano anche se pubblicati da settimane', async () => {
+      live.leggiAvvisi.mockResolvedValue({
+        ...DATI,
+        avvisi: [{ ...avviso('evento', 'SP73 (VI) Campesana Valvecchia', '2026-10-12T08:41:00Z'), attivo: true }],
+      });
+      const scheda = comeFinto(creaSchedaAvvisi().nodo);
+      await respira();
+      expect(scheda.conClasse('avviso-strada').map((s) => s.textContent)).toEqual(['SP73 (VI) Campesana Valvecchia']);
+      expect(scheda.textContent).toContain('quando è stata fatta la fotografia');
+      expect(scheda.textContent).not.toContain('nelle ultime 24 ore');
     });
 
     it('senza avvisi validi lo dice, e la data della fotografia resta', async () => {

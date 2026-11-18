@@ -1,5 +1,5 @@
 {
-  "generato": "2026-11-18T07:33:31.890Z",
+  "generato": "2026-11-18T19:05:00.943Z",
   "fonti": [
     {
       "nome": "CCISS Viaggiare Informati",
@@ -14,6 +14,33 @@
   ],
   "avvisi": [
     {
+      "tipo": "evento",
+      "strada": "SS47 della Valsugana",
+      "testo": "Riduzione di carreggiata causa lavori dalle 08:00 del 23 novembre 2026 alle 18:00 del 4 dicembre 2026 tra Incrocio Bassano Del Grappa - SS141 Strada Cadorna e Incrocio Solagna",
+      "quando": "2026-11-18T17:43:00.000Z",
+      "fonte": "CCISS Viaggiare Informati",
+      "url": "https://www.cciss.it/web/cciss/situazione-della-viabilita",
+      "attivo": true
+    },
+    {
+      "tipo": "evento",
+      "strada": "SS245 Castellana",
+      "testo": "Chiusura notturna, tratto chiuso causa lavori dalle 20:30 del 19 alle 06:00 del 21 novembre 2026 tra Incrocio Castelfranco Veneto/Incrocio SS53 Postumia e Incrocio Castione",
+      "quando": "2026-11-18T00:04:00.000Z",
+      "fonte": "CCISS Viaggiare Informati",
+      "url": "https://www.cciss.it/web/cciss/situazione-della-viabilita",
+      "attivo": true
+    },
+    {
+      "tipo": "evento",
+      "strada": "SP70 Via Don Girolamo Carli",
+      "testo": "Senso unico alternato causa lavori dalle 08:30 del 23 novembre 2026 alle 16:30 del 18 dicembre 2026 tra Via Collalto e Via Mazzarina",
+      "quando": "2026-11-16T10:46:00.000Z",
+      "fonte": "CCISS Viaggiare Informati",
+      "url": "https://www.cciss.it/web/cciss/situazione-della-viabilita",
+      "attivo": true
+    },
+    {
       "tipo": "ordinanza",
       "strada": "S.P. 75 Volon",
       "testo": "Dal km 3+775 al km 4+266 all’esterno dei centri abitati in comune di Mussolente. Periodo: dal 16/11/2026 al 18/12/2026, dalle ore 8:30 alle ore 16:30. Senso unico alternato. Per posa linea elettrica MT in attraversamento e parallelismo.",
@@ -22,12 +49,57 @@
       "url": "https://vi-abilita.it/servizi/ufficio-concessioni-e-autorizzazioni/ordinanze-temporanee/s-p-75-volon-dal-km-3775-al-km-4266-allesterno-dei-centri-abitati-in-comune-di-mussolente/"
     },
     {
+      "tipo": "evento",
+      "strada": "SP72 (VI) Fratellanza",
+      "testo": "Senso unico alternato causa lavori dalle 00:00 del 9 alle 23:59 del 27 novembre 2026 tra Incrocio Pradipaldo e Incrocio Bressani-Fodati-Pozza",
+      "quando": "2026-10-28T12:46:00.000Z",
+      "fonte": "CCISS Viaggiare Informati",
+      "url": "https://www.cciss.it/web/cciss/situazione-della-viabilita",
+      "attivo": true
+    },
+    {
       "tipo": "ordinanza",
       "strada": "S.P. 72 Fratellanza",
       "testo": "Al km 8+650 circa, in comune di Marostica. Periodo: dal 09/11/2026 al 27/11/2026, dalle ore 0:00 alle ore 24. Senso unico alternato. Interventi di consolidamento e messa in sicurezza di scarpate stradali, muri di sostegno e cordoli.",
       "quando": "2026-10-28T09:44:56.000Z",
       "fonte": "Vi.abilità (Provincia di Vicenza)",
       "url": "https://vi-abilita.it/servizi/ufficio-concessioni-e-autorizzazioni/ordinanze-temporanee/s-p-72-fratellanza-al-km-8650-circa-in-comune-di-marostica/"
+    },
+    {
+      "tipo": "evento",
+      "strada": "SS47 della Valsugana",
+      "testo": "Riduzione di carreggiata causa lavori dalle 00:01 del 26 ottobre alle 23:55 del 21 novembre 2026 tra Incrocio Bassano Del Grappa - SS141 Strada Cadorna e Incrocio Pianello confine VI-TN",
+      "quando": "2026-10-26T12:22:00.000Z",
+      "fonte": "CCISS Viaggiare Informati",
+      "url": "https://www.cciss.it/web/cciss/situazione-della-viabilita",
+      "attivo": true
+    },
+    {
+      "tipo": "evento",
+      "strada": "SP73 (VI) Campesana Valvecchia",
+      "testo": "Tratto chiuso causa lavori dalle 08:30 del 2 alle 16:30 del 20 novembre 2026 tra Incrocio Bassano del Grappa Localita Contra dei Cani e Incrocio SP76-Cruni-Labental",
+      "quando": "2026-10-12T08:41:00.000Z",
+      "fonte": "CCISS Viaggiare Informati",
+      "url": "https://www.cciss.it/web/cciss/situazione-della-viabilita",
+      "attivo": true
+    },
+    {
+      "tipo": "evento",
+      "strada": "SP54 Via Villa",
+      "testo": "Senso unico alternato causa lavori dalle 08:30 del 26 ottobre 2026 alle 16:30 del 4 dicembre 2026 tra Via Iolanda e Viale Brenta",
+      "quando": "2026-10-06T11:16:00.000Z",
+      "fonte": "CCISS Viaggiare Informati",
+      "url": "https://www.cciss.it/web/cciss/situazione-della-viabilita",
+      "attivo": true
+    },
+    {
+      "tipo": "evento",
+      "strada": "SS47 della Valsugana",
+      "testo": "Senso unico alternato causa lavori dalle 07:00 del 7 settembre 2026 alle 17:00 del 31 dicembre 2026 tra Incrocio Rosa - Raccordo Bassano-Thiene e Incrocio Pianello confine VI-TN",
+      "quando": "2026-09-05T09:20:00.000Z",
+      "fonte": "CCISS Viaggiare Informati",
+      "url": "https://www.cciss.it/web/cciss/situazione-della-viabilita",
+      "attivo": true
     }
   ]
 }

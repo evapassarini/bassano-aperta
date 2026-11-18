@@ -1,9 +1,20 @@
 // Scheda «Avvisi sulla viabilità»: la fotografia degli avvisi pubblicati da CCISS e da
-// Vi.abilità per le strade attorno a Bassano. Non è il traffico in tempo reale.
+// Vi.abilità per le strade attorno a Bassano. Non è il traffico in tempo reale: in cima,
+// il riquadro «Traffico adesso» lo dice e porta ai servizi dove vederlo.
 
 import type { Avviso, DatiAvvisi } from '../types';
 import { leggiAvvisi } from '../live';
-import { NOME_AVVISI, NOME_STRATO, formattaDataOra, formattaDataOraLunga, quadroAvvisi, urlSicuro } from './aiuti';
+import {
+  LINK_TRAFFICO,
+  NOME_AVVISI,
+  NOME_STRATO,
+  TRAFFICO_ADESSO,
+  TRAFFICO_PRIVACY,
+  formattaDataOra,
+  formattaDataOraLunga,
+  quadroAvvisi,
+  urlSicuro,
+} from './aiuti';
 import { el, idUnico, linkEsterno, segnoStrato, soli, tieniFuoco } from './dom';
 import type { Scheda } from './scheda';
 
@@ -25,6 +36,23 @@ function voceAvviso(a: Avviso): HTMLElement {
       // di schermo: a chi ascolta si dice anche la strada.
       urlSicuro(a.url) ? linkEsterno(a.url, 'Leggi alla fonte', undefined, a.strada ? `: ${a.strada}` : undefined) : null,
     ),
+  );
+}
+
+/** Riquadro «Traffico adesso»: dice cosa non mostriamo e dove guardarlo. Non dipende dalla fotografia. */
+export function riquadroTraffico(): HTMLElement {
+  const idTitolo = idUnico('traffico');
+  return el(
+    'section',
+    { class: 'traffico-adesso', 'aria-labelledby': idTitolo },
+    el('h3', { class: 'avvisi-titolo', id: idTitolo }, 'Traffico adesso'),
+    el('p', { class: 'avvisi-spiegazione' }, TRAFFICO_ADESSO),
+    el(
+      'ul',
+      { class: 'traffico-link' },
+      ...LINK_TRAFFICO.map((l) => el('li', null, linkEsterno(l.url, l.nome), el('span', { class: 'traffico-cosa' }, ` ${l.cosa}`))),
+    ),
+    el('p', { class: 'traffico-nota' }, TRAFFICO_PRIVACY),
   );
 }
 
@@ -67,11 +95,20 @@ function mostraAvvisi(stato: HTMLElement, dati: DatiAvvisi): string {
           linkEsterno('https://vi-abilita.it/', 'Vi.abilità'),
         )
       : null,
+    quadro.nascosti
+      ? el('p', { class: 'lettura-avviso' }, `${quadro.nascosti} `, linkEsterno('https://www.cciss.it/web/cciss/situazione-della-viabilita', 'Guarda la mappa del CCISS'))
+      : null,
     ...quadro.mancanti.map((f) =>
       el('p', { class: 'lettura-avviso' }, `In questa fotografia mancano ${f.cosa}: non siamo riusciti a leggere ${f.breve}. `, linkEsterno(f.url, `Guarda sul sito di ${f.breve}`)),
     ),
     eventi.length + ordinanze.length === 0 ? el('p', { class: 'avvisi-vuoto' }, quadro.vuoto) : null,
-    gruppoAvvisi('Nelle ultime 24 ore', 'Eventi segnalati da CCISS Viaggiare Informati.', eventi),
+    gruppoAvvisi(
+      'Eventi sulle strade',
+      eventi.every((a) => a.attivo === true)
+        ? 'Eventi che CCISS Viaggiare Informati segnalava nella zona di Bassano quando è stata fatta la fotografia. Alcuni possono essere lavori programmati: il testo dice quando. La data è quella di pubblicazione.'
+        : 'Eventi segnalati da CCISS Viaggiare Informati nelle ultime 24 ore.',
+      eventi,
+    ),
     gruppoAvvisi(
       'Ordinanze degli ultimi mesi',
       'Ordinanze pubblicate da Vi.abilità negli ultimi 120 giorni, fino al giorno della fotografia, per le strade provinciali. La data è quella di pubblicazione: alcuni lavori possono essere già finiti.',
@@ -148,6 +185,7 @@ export function creaSchedaAvvisi(): Scheda {
     ),
     titolo,
     el('p', { class: 'scheda-nota' }, NOTA_AVVISI),
+    riquadroTraffico(),
     annuncio,
     stato,
   );

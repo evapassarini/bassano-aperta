@@ -209,9 +209,9 @@ export function riguardaBassaneseViabilita(titolo) {
 
 const maiuscolaIniziale = (t) => (t ? t[0].toLocaleUpperCase('it') + t.slice(1) : t);
 
-/** "SS47 Della Valsugana" → "SS47 della Valsugana". */
+/** "SS47 Della Valsugana" → "SS47 della Valsugana"; "SP73(VI)" → "SP73 (VI)". */
 function stradaCciss(titolo) {
-  return titolo.replace(/(?<=\S\s)(Della|Dello|Delle|Degli|Del|Dei|Di|Da|Dal)(?=\s)/g, (p) => p.toLowerCase());
+  return titolo.replace(/(\d)\((\p{Lu}{2})\)/u, '$1 ($2)').replace(/(?<=\S\s)(Della|Dello|Delle|Degli|Del|Dei|Di|Da|Dal)(?=\s)/g, (p) => p.toLowerCase());
 }
 
 function chiaveDoppione(t) {
@@ -249,6 +249,174 @@ export function filtraCciss(voci) {
     });
   }
   return avvisi.sort(perDataDecrescente);
+}
+
+// ---------------------------------------------------------------------------
+// CCISS per zona: gli eventi validi (in corso o programmati) in un riquadro attorno a Bassano
+// ---------------------------------------------------------------------------
+//
+// La mappa di https://www.cciss.it/web/cciss/situazione-della-viabilita chiede gli eventi
+// di un riquadro (angolo sud-ovest `so` e nord-est `ne`, in ordine lat,lon) a un indirizzo
+// della pagina stessa. Risponde JSON (anche se dichiara text/html):
+//   { "eventiTrafficoList": [ { titolo, evento, trattoEvento, dettaglio, stato,
+//       dataPubblicazione: "12/10/2026 10:41" (ora italiana), fonte, priorita,
+//       percorsoTO: { coordinateMappaInizioTO: { coordinateMappaCX: lon, coordinateMappaCY: lat },
+//                     coordinateMappaFineTO: { ... } } }, ... ], "html": "..." }
+// Controllato il 18/11/2026. Non è un servizio documentato: se cambia, lo script torna
+// all'RSS nazionale (filtraCciss), che però tiene solo 100 eventi in tutta Italia.
+// Rispetto all'RSS dà anche gli eventi lunghi (un tratto chiuso per lavori per settimane)
+// e quelli sulle strade provinciali. Lo stato ACTIVE vuol dire avviso valido: l'evento può
+// essere in corso o programmato (una chiusura che comincia domani), il testo dice quando.
+// Attenzione allo zoom (`_z`): fa da filtro sulla priorità. Fino a 14 il CCISS manda solo gli
+// eventi di priorità Alta e Molto Alta; da 16 arrivano anche Normale e Bassa, come i lavori
+// sulla SS47 a Bassano (provato il 18/11/2026: 2 eventi a z=11 e z=14, 12 a z=16 e z=18).
+
+/** Centro di Bassano (Ponte Vecchio, circa) e raggio entro cui un evento ci riguarda. */
+export const CENTRO_BASSANO = { lat: 45.7665, lon: 11.7345 };
+export const RAGGIO_EVENTI_KM = 12;
+export const MASSIMO_EVENTI = 15;
+/** Zoom chiesto al CCISS: almeno 16, altrimenti arrivano solo gli eventi più gravi. */
+export const ZOOM_CCISS = 16;
+/** Il riquadro chiesto al CCISS: poco più largo del raggio, in ordine lat,lon. */
+export const RIQUADRO_CCISS = { so: '45.65,11.58', ne: '45.88,11.89' };
+export const PAGINA_CCISS = 'https://www.cciss.it/web/cciss/situazione-della-viabilita';
+
+/** Indirizzo da cui si scaricano gli eventi del riquadro attorno a Bassano. */
+export function urlCcissZona() {
+  const p = '_2_WAR_ccissservizimapsportlet_';
+  const q = new URLSearchParams({
+    p_p_id: '2_WAR_ccissservizimapsportlet',
+    p_p_lifecycle: '2',
+    [`${p}so`]: RIQUADRO_CCISS.so,
+    [`${p}ne`]: RIQUADRO_CCISS.ne,
+    [`${p}z`]: String(ZOOM_CCISS),
+  });
+  return `${PAGINA_CCISS}?${q}`;
+}
+
+/** Scarto in millisecondi tra l'ora italiana e UTC in un certo istante (1 o 2 ore). */
+function scartoRoma(ms) {
+  const parti = Object.fromEntries(
+    new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Europe/Rome',
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23',
+    })
+      .formatToParts(new Date(ms))
+      .map((p) => [p.type, p.value]),
+  );
+  const comeUtc = Date.UTC(+parti.year, +parti.month - 1, +parti.day, +parti.hour, +parti.minute, +parti.second);
+  return comeUtc - Math.floor(ms / 1000) * 1000;
+}
+
+/** "12/10/2026 10:41" in ora italiana → ISO 8601 in UTC, o null se non si legge. */
+export function oraItaliana(testo) {
+  const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2})[:.](\d{2})$/.exec(String(testo ?? '').trim());
+  if (!m) return null;
+  const [g, me, a, h, mi] = m.slice(1).map(Number);
+  if (me < 1 || me > 12 || g < 1 || g > 31 || h > 23 || mi > 59) return null;
+  const locale = Date.UTC(a, me - 1, g, h, mi);
+  const controllo = new Date(locale);
+  if (controllo.getUTCDate() !== g || controllo.getUTCMonth() !== me - 1) return null; // 31/11 e simili
+  // Due passate: la prima stima lo scarto, la seconda lo corregge vicino al cambio dell'ora.
+  let utc = locale - scartoRoma(locale);
+  utc = locale - scartoRoma(utc);
+  return new Date(utc).toISOString();
+}
+
+/** Distanza in km tra due punti (formula dell'emisenoverso). */
+export function distanzaKm(a, b) {
+  const rad = Math.PI / 180;
+  const dLat = (b.lat - a.lat) * rad;
+  const dLon = (b.lon - a.lon) * rad;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * rad) * Math.cos(b.lat * rad) * Math.sin(dLon / 2) ** 2;
+  return 2 * 6371 * Math.asin(Math.min(1, Math.sqrt(h)));
+}
+
+function puntoCciss(c) {
+  const lat = Number(c?.coordinateMappaCY);
+  const lon = Number(c?.coordinateMappaCX);
+  if (c?.coordinateMappaCY == null || c?.coordinateMappaCX == null) return null;
+  if (!Number.isFinite(lat) || !Number.isFinite(lon) || Math.abs(lat) > 90 || Math.abs(lon) > 180) return null;
+  return { lat, lon };
+}
+
+/** I punti di un evento: inizio, fine e il punto di mezzo, quelli che ci sono. */
+function puntiEvento(e) {
+  const inizio = puntoCciss(e?.percorsoTO?.coordinateMappaInizioTO);
+  const fine = puntoCciss(e?.percorsoTO?.coordinateMappaFineTO);
+  const punti = [inizio, fine].filter(Boolean);
+  if (inizio && fine) punti.push({ lat: (inizio.lat + fine.lat) / 2, lon: (inizio.lon + fine.lon) / 2 });
+  return punti;
+}
+
+/**
+ * Dal testo scaricato alla lista degli eventi. Lancia un errore se la risposta non è il
+ * JSON atteso (struttura cambiata, pagina d'errore): in quel caso lo script torna all'RSS.
+ * Una lista vuota è una risposta valida: vuol dire che nella zona non c'è nessun evento.
+ */
+export function leggiCcissZona(testo) {
+  let dati;
+  try {
+    dati = JSON.parse(String(testo ?? ''));
+  } catch {
+    throw new Error('la risposta del CCISS per zona non è JSON: struttura cambiata?');
+  }
+  const lista = dati?.eventiTrafficoList;
+  if (!Array.isArray(lista)) throw new Error('nella risposta del CCISS per zona manca eventiTrafficoList: struttura cambiata?');
+  if (lista.length > 0 && !lista.some((e) => e && typeof e.titolo === 'string' && oraItaliana(e.dataPubblicazione))) {
+    throw new Error(`${lista.length} eventi del CCISS per zona ma nessuno con titolo e data leggibili: formato cambiato?`);
+  }
+  return lista;
+}
+
+/**
+ * Eventi del CCISS per zona → avvisi di tipo 'evento' con `attivo: true` (la fonte li dava
+ * come validi, in corso o programmati, quando è stata fatta la fotografia). Teniamo gli
+ * eventi ACTIVE con almeno un punto entro 12 km dal centro di Bassano, oppure che nominano
+ * Bassano o le sue strade con i comuni vicini (stesse regole dell'RSS). Se sono più di 15
+ * restano i 15 più vicini al centro; poi si ordinano dal più recente.
+ */
+export function filtraCcissZona(eventi) {
+  const avvisi = [];
+  const visti = new Set();
+  for (const e of eventi || []) {
+    if (!e || typeof e.titolo !== 'string') continue;
+    if (e.stato != null && e.stato !== 'ACTIVE') continue;
+    const quando = oraItaliana(e.dataPubblicazione);
+    if (!quando) continue;
+    const titolo = testoSemplice(e.titolo);
+    if (!titolo) continue;
+    let corpo = testoSemplice(e.dettaglio);
+    if (corpo.toLowerCase().startsWith(titolo.toLowerCase())) corpo = corpo.slice(titolo.length).trim();
+    if (!corpo) corpo = testoSemplice(`${e.evento ?? ''} ${e.trattoEvento ?? ''}`);
+    const distanze = puntiEvento(e).map((p) => distanzaKm(p, CENTRO_BASSANO));
+    const distanza = distanze.length > 0 ? Math.min(...distanze) : Infinity;
+    if (distanza > RAGGIO_EVENTI_KM && !riguardaBassanoCciss(titolo, corpo)) continue;
+    const strada = stradaCciss(titolo);
+    const testo = tronca(maiuscolaIniziale(corpo || titolo));
+    const chiave = chiaveDoppione(`${strada} ${testo}`);
+    if (visti.has(chiave)) continue;
+    visti.add(chiave);
+    avvisi.push({
+      distanza,
+      avviso: {
+        tipo: 'evento',
+        strada,
+        testo,
+        quando,
+        fonte: FONTE_CCISS.nome,
+        url: PAGINA_CCISS,
+        attivo: true,
+      },
+    });
+  }
+  return avvisi
+    // A pari distanza, i più recenti.
+    .sort((a, b) => a.distanza - b.distanza || perDataDecrescente(a.avviso, b.avviso))
+    .slice(0, MASSIMO_EVENTI)
+    .map((x) => x.avviso)
+    .sort(perDataDecrescente);
 }
 
 /** Dove finisce il nome della strada nel titolo di un'ordinanza. */

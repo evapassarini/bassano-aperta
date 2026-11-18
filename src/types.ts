@@ -213,6 +213,12 @@ export interface Avviso {
   fonte: string;
   /** Pagina dove leggere l'avviso completo. */
   url: string;
+  /**
+   * Solo per gli eventi del CCISS letti per zona: true se la fonte li dava come validi (in
+   * corso o programmati) quando è stata fatta la fotografia. Allora contano anche se
+   * pubblicati da tempo (un tratto chiuso per settimane), finché la fotografia ha meno di 24 ore.
+   */
+  attivo?: boolean;
 }
 
 export interface DatiAvvisi {

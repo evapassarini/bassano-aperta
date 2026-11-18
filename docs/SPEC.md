@@ -33,6 +33,17 @@ strada per strada (code, tempi di percorrenza, strade colorate sulla mappa), pos
 lungo la linea, rilievo, tasselli dipinti con AI. Gli avvisi sulla viabilità non
 sono il traffico: sono testi pubblicati dagli enti, e il sito lo dice.
 
+Traffico in tempo reale, ricerca del 18/11/2026: per Bassano nessuna fonte con licenza aperta
+dà code o velocità. ANAS VAI ha le velocità sulle statali ma senza licenza e senza CORS; il
+CCISS dà solo eventi; tra i servizi commerciali solo HERE permette di disegnare il traffico
+su una mappa non sua, ma vuole un account con carta di credito e una chiave che starebbe nel
+codice pubblico. Decisione di Eva: nessun servizio a pagamento. La scheda degli avvisi apre
+con il riquadro «Traffico adesso» (`LINK_TRAFFICO` in `src/ui/aiuti.ts`), che dice cosa non
+mostriamo e porta a Waze, Google Maps, ANAS VAI, Pedemontana e CCISS (ognuno descritto per
+quello che offre davvero, controllato il 18/11/2026), avvisando che sono
+siti esterni. I link sono indirizzi fissi: non portano nessun dato di chi legge. Si può
+riaprire la questione se ANAS o il Comune concedono per iscritto i loro dati.
+
 ## Regole editoriali (valgono per ogni testo del sito)
 
 - Ogni fatto ha una fonte letta davvero. La base è `ricerca/ricerca-verificata-2026-11-14.json`:
@@ -243,10 +254,19 @@ soglie, con le fonti nel commento.
   `public/data/avvisi.json`, tipo `DatiAvvisi`; il browser li legge dal repository su GitHub,
   con ripiego sulla copia del sito, vedi «Pubblicazione»). È una fotografia, non il traffico in tempo
   reale: mostrare sempre data e ora di `generato`. Due fonti:
-  - CCISS Viaggiare Informati, `https://www.cciss.it/rss`: eventi sulla SS47 Valsugana, sulla
-    SS248 e sulla Pedemontana Veneta vicino a Bassano (`tipo: 'evento'`). Durano poche ore: la
-    scheda mostra solo quelli delle ultime 24 ore. Non hanno una pagina propria: il link porta a
-    `https://www.cciss.it/`.
+  - CCISS Viaggiare Informati, eventi per zona (`urlCcissZona` in `scripts/lib/avvisi.mjs`):
+    gli eventi che la mappa di `https://www.cciss.it/web/cciss/situazione-della-viabilita`
+    mostra in un riquadro attorno a Bassano, con almeno un punto entro 12 km dal centro o che
+    nominano Bassano, al massimo 15, i più vicini (`tipo: 'evento'`, `attivo: true`). La fonte
+    li dà come validi, in corso o programmati: anche un tratto chiuso da settimane resta, finché
+    la fotografia ha meno di 24 ore. Lo zoom chiesto (`ZOOM_CCISS`, 16) fa da filtro: sotto 16
+    il CCISS manda solo gli eventi di priorità Alta e Molto Alta. Se la fotografia contiene
+    eventi troppo vecchi per mostrarli, la scheda lo dice e non scrive che non ci sono avvisi.
+    `quando` è la data di pubblicazione (ora italiana convertita in UTC). Non è un servizio
+    documentato: se non risponde o cambia forma lo script ripiega su `https://www.cciss.it/rss`
+    (100 eventi in tutta Italia; teniamo SS47 Valsugana, SS248 e Pedemontana Veneta vicino a
+    Bassano, senza `attivo`, e la scheda mostra solo quelli delle ultime 24 ore). Gli eventi
+    non hanno una pagina propria: il link porta alla mappa del CCISS.
   - Vi.abilità (Provincia di Vicenza), `https://vi-abilita.it/feed/`: ordinanze sulle strade
     provinciali nei comuni del bassanese (`tipo: 'ordinanza'`), ultimi 120 giorni, al massimo
     dieci. `quando` è la data di pubblicazione, non il periodo dei lavori: vanno presentate come

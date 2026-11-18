@@ -12,8 +12,12 @@ const {
   controllaVoci,
   decodificaEntita,
   filtraCciss,
+  filtraCcissZona,
   filtraViabilita,
+  leggiCcissZona,
   leggiRss,
+  oraItaliana,
+  urlCcissZona,
   ordinanzePrecedenti,
   periodoOrdinanza,
   pulisciTesto,
@@ -221,6 +225,141 @@ describe('filtraCciss', () => {
   it('non ripete lo stesso evento e non tiene voci senza data', () => {
     const v = voce('SS47 Della Valsugana', 'coda a Incrocio Bassano Del Grappa');
     expect(filtraCciss([v, v, { ...v, quando: null }])).toHaveLength(1);
+  });
+});
+
+describe('CCISS per zona', () => {
+  // Risposta vera del 18 novembre 2026, zoom 16 (tests/fixtures/cciss-zona.json).
+  const VERA = readFileSync(new URL('./fixtures/cciss-zona.json', import.meta.url), 'utf8');
+
+  it("chiede il riquadro attorno a Bassano all'indirizzo della mappa del CCISS", () => {
+    const u = new URL(urlCcissZona());
+    expect(u.origin + u.pathname).toBe('https://www.cciss.it/web/cciss/situazione-della-viabilita');
+    expect(u.searchParams.get('p_p_id')).toBe('2_WAR_ccissservizimapsportlet');
+    const [sLat, sLon] = u.searchParams.get('_2_WAR_ccissservizimapsportlet_so')!.split(',').map(Number);
+    const [nLat, nLon] = u.searchParams.get('_2_WAR_ccissservizimapsportlet_ne')!.split(',').map(Number);
+    // Sotto lo zoom 16 il CCISS manda solo gli eventi di priorità Alta e Molto Alta.
+    expect(Number(u.searchParams.get('_2_WAR_ccissservizimapsportlet_z'))).toBeGreaterThanOrEqual(16);
+    // Il centro di Bassano sta dentro il riquadro.
+    expect(sLat).toBeLessThan(45.7665);
+    expect(nLat).toBeGreaterThan(45.7665);
+    expect(sLon).toBeLessThan(11.7345);
+    expect(nLon).toBeGreaterThan(11.7345);
+  });
+
+  it("legge l'ora italiana, con l'ora legale e quella solare", () => {
+    expect(oraItaliana('12/10/2026 10:41')).toBe('2026-10-12T08:41:00.000Z');
+    expect(oraItaliana('18/11/2026 01:04')).toBe('2026-11-18T00:04:00.000Z');
+    expect(oraItaliana('1/3/2027 9:05')).toBe('2027-03-01T08:05:00.000Z');
+    // Il giorno del cambio d'ora (25 ottobre 2026): prima e dopo le 3.
+    expect(oraItaliana('25/10/2026 01:30')).toBe('2026-10-24T23:30:00.000Z');
+    expect(oraItaliana('25/10/2026 12:00')).toBe('2026-10-25T11:00:00.000Z');
+    for (const rotto of ['', 'ieri', '31/11/2026 10:00', '12/13/2026 10:00', '12/10/2026 25:00', null, undefined]) {
+      expect(oraItaliana(rotto), String(rotto)).toBeNull();
+    }
+  });
+
+  it('dalla risposta vera (zoom 16) tiene gli 8 eventi vicini, anche quelli di priorità bassa', () => {
+    const lista = leggiCcissZona(VERA);
+    expect(lista).toHaveLength(12);
+    const tenuti: Avviso[] = filtraCcissZona(lista);
+    expect(tenuti.map((a) => a.strada)).toEqual([
+      'SS47 della Valsugana',
+      'SS245 Castellana',
+      'SP70 Via Don Girolamo Carli',
+      'SP72 (VI) Fratellanza',
+      'SS47 della Valsugana',
+      'SP73 (VI) Campesana Valvecchia',
+      'SP54 Via Villa',
+      'SS47 della Valsugana',
+    ]);
+    // I lavori sulla SS47 a Bassano sono di priorità Bassa: con lo zoom 11 non arrivavano.
+    expect(tenuti[0].testo).toContain('Incrocio Bassano Del Grappa - SS141 Strada Cadorna e Incrocio Solagna');
+    for (const a of tenuti) expect(a.attivo).toBe(true);
+    const sp73 = tenuti.find((a) => a.strada.startsWith('SP73'));
+    expect(sp73).toEqual({
+      tipo: 'evento',
+      strada: 'SP73 (VI) Campesana Valvecchia',
+      testo:
+        'Tratto chiuso causa lavori dalle 08:30 del 2 alle 16:30 del 20 novembre 2026 tra Incrocio Bassano del Grappa Localita Contra dei Cani e Incrocio SP76-Cruni-Labental',
+      quando: '2026-10-12T08:41:00.000Z',
+      fonte: 'CCISS Viaggiare Informati',
+      url: 'https://www.cciss.it/web/cciss/situazione-della-viabilita',
+      attivo: true,
+    });
+  });
+
+  const evento = (o: Record<string, unknown> = {}) => ({
+    titolo: 'SS47 Della Valsugana',
+    evento: 'coda',
+    trattoEvento: ' tra Incrocio A e Incrocio B ',
+    dettaglio: 'SS47 Della Valsugana\n coda tra Incrocio A e Incrocio B ',
+    stato: 'ACTIVE',
+    dataPubblicazione: '18/11/2026 07:30',
+    percorsoTO: {
+      coordinateMappaInizioTO: { coordinateMappaCX: 11.70, coordinateMappaCY: 45.80 },
+      coordinateMappaFineTO: { coordinateMappaCX: 11.72, coordinateMappaCY: 45.78 },
+    },
+    ...o,
+  });
+  const lontano = {
+    coordinateMappaInizioTO: { coordinateMappaCX: 11.91, coordinateMappaCY: 45.62 },
+    coordinateMappaFineTO: { coordinateMappaCX: 11.95, coordinateMappaCY: 45.60 },
+  };
+
+  it('tiene gli eventi vicini e quelli lontani che nominano Bassano, scarta gli altri', () => {
+    expect(filtraCcissZona([evento()])).toHaveLength(1);
+    expect(filtraCcissZona([evento({ percorsoTO: lontano })])).toHaveLength(0);
+    expect(filtraCcissZona([evento({ percorsoTO: lontano, dettaglio: 'SS47 Della Valsugana\n coda verso Bassano' })])).toHaveLength(1);
+    // Senza coordinate decide il testo.
+    expect(filtraCcissZona([evento({ percorsoTO: null })])).toHaveLength(0);
+    expect(filtraCcissZona([evento({ percorsoTO: null, dettaglio: 'SS47 Della Valsugana\n coda a Incrocio Solagna' })])).toHaveLength(1);
+    // Coordinate rotte non contano come vicine.
+    expect(filtraCcissZona([evento({ percorsoTO: { coordinateMappaInizioTO: { coordinateMappaCX: null, coordinateMappaCY: null } } })])).toHaveLength(0);
+  });
+
+  it('scarta gli eventi non in corso, senza data o senza titolo, e i doppioni', () => {
+    expect(filtraCcissZona([evento({ stato: 'CLOSED' })])).toHaveLength(0);
+    expect(filtraCcissZona([evento({ dataPubblicazione: 'ieri' })])).toHaveLength(0);
+    expect(filtraCcissZona([evento({ titolo: null }), null, 7])).toHaveLength(0);
+    expect(filtraCcissZona([evento(), evento()])).toHaveLength(1);
+  });
+
+  it('pulisce il testo, ripiega su evento e tratto, e non supera i 15 eventi', () => {
+    const [a] = filtraCcissZona([evento({ dettaglio: '<b>SS47 Della Valsugana</b> &amp; coda — lunga' })]);
+    expect(a.testo).toBe('& coda - lunga');
+    const [b] = filtraCcissZona([evento({ dettaglio: '' })]);
+    expect(b.testo).toBe('Coda tra Incrocio A e Incrocio B');
+    const molti = Array.from({ length: 20 }, (_, i) => evento({ evento: `coda ${i}`, dettaglio: `coda numero ${i}`, dataPubblicazione: `18/11/2026 ${String(i).padStart(2, '0')}:00` }));
+    const tenuti = filtraCcissZona(molti);
+    expect(tenuti).toHaveLength(15);
+    expect(tenuti[0].testo).toBe('Coda numero 19');
+  });
+
+  it('oltre i 15 eventi tiene i più vicini al centro, non i più recenti', () => {
+    const vicino = evento({ evento: 'lavori', dettaglio: 'lavori lunghi in centro', dataPubblicazione: '01/09/2026 08:00' });
+    const lontani = Array.from({ length: 15 }, (_, i) =>
+      evento({
+        dettaglio: `coda lontana ${i}`,
+        dataPubblicazione: `18/11/2026 ${String(i).padStart(2, '0')}:30`,
+        percorsoTO: {
+          coordinateMappaInizioTO: { coordinateMappaCX: 11.85, coordinateMappaCY: 45.80 },
+          coordinateMappaFineTO: { coordinateMappaCX: 11.86, coordinateMappaCY: 45.80 },
+        },
+      }),
+    );
+    const tenuti: Avviso[] = filtraCcissZona([...lontani, vicino]);
+    expect(tenuti).toHaveLength(15);
+    expect(tenuti.map((a) => a.testo)).toContain('Lavori lunghi in centro');
+    // Dopo il taglio l'ordine torna dal più recente.
+    expect(tenuti[tenuti.length - 1].testo).toBe('Lavori lunghi in centro');
+  });
+
+  it('accetta una zona senza eventi, rifiuta le risposte che non sono quelle attese', () => {
+    expect(leggiCcissZona('{"eventiTrafficoList":[],"html":""}')).toEqual([]);
+    expect(() => leggiCcissZona('<html>errore</html>')).toThrow(/non è JSON/);
+    expect(() => leggiCcissZona('{"altro":[]}')).toThrow(/eventiTrafficoList/);
+    expect(() => leggiCcissZona('{"eventiTrafficoList":[{"titolo":"X","dataPubblicazione":"ieri"}]}')).toThrow(/formato cambiato/);
   });
 });
 
@@ -544,6 +683,10 @@ describe('file prodotti dagli script', () => {
       expect(a.testo.length).toBeLessThanOrEqual(280);
       expect(a.testo, a.testo).not.toMatch(/[<>]|&#?\w+;|[–—]|@/);
       expect(a.url).toMatch(/^https:\/\/(www\.cciss\.it|vi-abilita\.it)\//);
+      if (a.attivo !== undefined) {
+        expect(a.attivo).toBe(true);
+        expect(a.tipo).toBe('evento');
+      }
       expect(Number.isNaN(Date.parse(a.quando))).toBe(false);
     }
   });

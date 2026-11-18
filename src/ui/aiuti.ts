@@ -755,7 +755,7 @@ export function tabelloneTreni(lettura: LetturaTreni, adesso: Date, massimo = MA
 
 export const NOME_AVVISI = 'Avvisi sulla viabilità';
 export const SOTTO_AVVISI = 'Chiusure e lavori sulle strade attorno a Bassano · strato Mobilità';
-const PAROLE_AVVISI = `${NOME_AVVISI} ${SOTTO_AVVISI} traffico ordinanze ordinanza code coda incidenti incidente chiusure chiusura cantieri cantiere`;
+const PAROLE_AVVISI = `${NOME_AVVISI} ${SOTTO_AVVISI} traffico adesso diretta tempo reale ordinanze ordinanza code coda incidenti incidente chiusure chiusura cantieri cantiere`;
 
 /** true se la voce «Avvisi sulla viabilità» va mostrata nell'elenco per questa ricerca. */
 export function trovaVoceAvvisi(domanda: string): boolean {
@@ -769,12 +769,15 @@ export function trovaVoceAvvisi(domanda: string): boolean {
 const DURATA_EVENTO_MS = 24 * 60 * 60 * 1000;
 
 /**
- * Gli avvisi da mostrare. Gli eventi di traffico valgono solo se pubblicati nelle ultime
- * 24 ore rispetto ad `adesso`: più vecchi non dicono più nulla di certo e non si mostrano.
+ * Gli avvisi da mostrare. Gli eventi di traffico valgono se pubblicati nelle ultime 24 ore
+ * rispetto ad `adesso`, oppure se la fonte li dava come validi (`attivo`, in corso o programmati) in una fotografia
+ * (`generato`) di meno di 24 ore: più vecchi non dicono più nulla di certo e non si mostrano.
  * Le ordinanze restano tutte. In ogni gruppo, prima i più recenti.
  */
-export function scegliAvvisi(avvisi: Avviso[], adesso: Date): { eventi: Avviso[]; ordinanze: Avviso[] } {
+export function scegliAvvisi(avvisi: Avviso[], adesso: Date, generato?: string): { eventi: Avviso[]; ordinanze: Avviso[] } {
   const ora = adesso.getTime();
+  const fatta = typeof generato === 'string' ? Date.parse(generato) : NaN;
+  const fotografiaRecente = !Number.isNaN(fatta) && ora - fatta <= DURATA_EVENTO_MS && fatta <= ora + DURATA_EVENTO_MS;
   const validi = avvisi.filter(
     (a) => a !== null && typeof a === 'object' && typeof a.testo === 'string' && typeof a.quando === 'string',
   );
@@ -783,7 +786,9 @@ export function scegliAvvisi(avvisi: Avviso[], adesso: Date): { eventi: Avviso[]
     .filter((a) => {
       if (a.tipo !== 'evento') return false;
       const ms = Date.parse(a.quando);
-      return !Number.isNaN(ms) && ms >= ora - DURATA_EVENTO_MS;
+      if (Number.isNaN(ms)) return false;
+      if (a.attivo === true && fotografiaRecente) return true;
+      return ms >= ora - DURATA_EVENTO_MS;
     })
     .sort(perData);
   const ordinanze = validi.filter((a) => a.tipo === 'ordinanza').sort(perData);
@@ -806,6 +811,14 @@ export interface QuadroAvvisi {
   ordinanze: Avviso[];
   /** true se la fotografia ha più di 24 ore, o una data che non si legge. */
   vecchia: boolean;
+  /**
+   * Eventi che il CCISS dava come validi (`attivo`) e che non mostriamo perché la fotografia
+   * ha più di 24 ore: non sappiamo se valgono ancora. Gli eventi dell'RSS più vecchi di 24 ore
+   * non si contano: per regola non dicono più nulla.
+   */
+  eventiNascosti: number;
+  /** Frase che spiega gli eventi nascosti, vuota se non ce ne sono. */
+  nascosti: string;
   /** Fonti che lo script non è riuscito a leggere quando ha fatto la fotografia. */
   mancanti: (typeof FONTI_AVVISI)[number][];
   /** Frase breve per chi ascolta: "3 avvisi nella fotografia del 15 novembre 2026, ore 08:30." */
@@ -821,7 +834,7 @@ export interface QuadroAvvisi {
  * da più di 120 giorni rispetto ad `adesso` non si mostrano.
  */
 export function quadroAvvisi(dati: Pick<DatiAvvisi, 'generato' | 'fonti' | 'avvisi'>, adesso: Date): QuadroAvvisi {
-  const scelti = scegliAvvisi(Array.isArray(dati.avvisi) ? dati.avvisi : [], adesso);
+  const scelti = scegliAvvisi(Array.isArray(dati.avvisi) ? dati.avvisi : [], adesso, dati.generato);
   const ora = adesso.getTime();
   const limite = ora - GIORNI_ORDINANZE * 24 * 60 * 60 * 1000;
   const ordinanze = scelti.ordinanze.filter((a) => {
@@ -832,16 +845,80 @@ export function quadroAvvisi(dati: Pick<DatiAvvisi, 'generato' | 'fonti' | 'avvi
   const nomi = new Set((Array.isArray(dati.fonti) ? dati.fonti : []).map((f) => f?.nome));
   const quanti = scelti.eventi.length + ordinanze.length;
   const data = formattaDataOraLunga(dati.generato);
-  const vuoto = `Nella fotografia del ${data} non ci sono avvisi per la zona di Bassano.`;
+  const tuttiGliEventi = (Array.isArray(dati.avvisi) ? dati.avvisi : []).filter(
+    (a) =>
+      a !== null && typeof a === 'object' && a.tipo === 'evento' && a.attivo === true && typeof a.testo === 'string' &&
+      typeof a.quando === 'string' && !Number.isNaN(Date.parse(a.quando)),
+  ).length;
+  const eventiNascosti = Math.max(0, tuttiGliEventi - scelti.eventi.filter((a) => a.attivo === true).length);
+  const nascosti =
+    eventiNascosti === 0
+      ? ''
+      : eventiNascosti === 1
+        ? "C'è 1 evento sulle strade che non mostriamo: la fotografia ha più di 24 ore e non sappiamo se vale ancora."
+        : `Ci sono ${eventiNascosti} eventi sulle strade che non mostriamo: la fotografia ha più di 24 ore e non sappiamo se valgono ancora.`;
+  // Se la fotografia contiene eventi che non mostriamo, non si può dire che non ci sono avvisi.
+  const vuoto =
+    eventiNascosti > 0
+      ? `Nella fotografia del ${data} non ci sono avvisi che possiamo ancora mostrare.`
+      : `Nella fotografia del ${data} non ci sono avvisi per la zona di Bassano.`;
   return {
     eventi: scelti.eventi,
     ordinanze,
     vecchia: Number.isNaN(fatta) || ora - fatta > AVVISI_VECCHI_MS,
+    eventiNascosti,
+    nascosti,
     mancanti: FONTI_AVVISI.filter((f) => !nomi.has(f.nome)),
-    riassunto: quanti === 0 ? vuoto : `${quanti === 1 ? '1 avviso' : `${quanti} avvisi`} nella fotografia del ${data}.`,
+    riassunto: [quanti === 0 ? vuoto : `${quanti === 1 ? '1 avviso' : `${quanti} avvisi`} nella fotografia del ${data}.`, nascosti]
+      .filter(Boolean)
+      .join(' '),
     vuoto,
   };
 }
+
+/**
+ * Dove guardare il traffico di adesso. Bassano Aperta non lo mostra: per Bassano nessun ente
+ * pubblica code e velocità in tempo reale con una licenza che ne permetta il riuso, e i
+ * servizi commerciali chiedono una chiave a pagamento (verificato il 18/11/2026, vedi
+ * docs/SPEC.md). Gli indirizzi sono fissi e centrati su Bassano: nessun dato di chi legge.
+ */
+// Controllati il 18/11/2026. Waze non apre la mappa centrata su un punto senza metterlo come
+// destinazione: la pagina mostra le indicazioni, ma non parte nessuna navigazione. ANAS VAI dà
+// le velocità tratta per tratta sulla SS47 e sulla SS248 (getlinearmap?strada=SS248 risponde con
+// le tratte della Schiavonesca-Marosticana). La pagina della Pedemontana ha notizie e il numero
+// per le segnalazioni, non un elenco di code.
+export const LINK_TRAFFICO = [
+  {
+    nome: 'Waze, mappa con il traffico',
+    url: 'https://www.waze.com/it/live-map/directions?to=ll.45.7665%2C11.7345',
+    cosa: 'si apre con Bassano come destinazione, senza partire; mostra code e incidenti segnalati da chi guida',
+  },
+  {
+    nome: 'Google Maps, livello Traffico',
+    url: 'https://www.google.com/maps/@45.7665,11.7345,14z/data=!5m1!1e1',
+    cosa: 'traffico stimato dai telefoni in movimento',
+  },
+  {
+    nome: 'ANAS, VAI traffico in tempo reale',
+    url: 'https://www.stradeanas.it/it/vai-traffico-in-tempo-reale',
+    cosa: 'velocità medie sulle strade ANAS, tra cui SS47 e SS248',
+  },
+  {
+    nome: 'Superstrada Pedemontana Veneta',
+    url: 'https://superstradapedemontanaveneta.it/segnalazioni-viabilita-e-informazioni/',
+    cosa: 'notizie sulla superstrada e numero per le segnalazioni',
+  },
+  {
+    nome: 'CCISS Viaggiare Informati',
+    url: 'https://www.cciss.it/web/cciss/situazione-della-viabilita',
+    cosa: 'mappa di incidenti, code e lavori segnalati in tutta Italia',
+  },
+] as const;
+
+export const TRAFFICO_ADESSO =
+  'Qui non mostriamo code e velocità in tempo reale: per Bassano nessun ente le pubblica con una licenza che ci permetta di riusarle. Per il traffico di adesso guarda questi servizi:';
+export const TRAFFICO_PRIVACY =
+  'Sono siti esterni: aprendoli, la tua visita arriva a loro e vale la loro informativa sulla privacy.';
 
 // ---------------------------------------------------------------------------
 // Licenze dei media
