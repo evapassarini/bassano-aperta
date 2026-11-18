@@ -10,7 +10,8 @@
 # - Poi girano i test. Se non passano non si fa nessun commit.
 # - Il commit contiene solo i due file, e solo se sono cambiati.
 # - Se una fonte non ha risposto il lavoro finisce in rosso, così si vede.
-# Il push sul ramo principale fa ricostruire il sito a Vercel.
+# Il push sul ramo principale non ripubblica il sito (Vercel non è collegato al repository):
+# il sito pubblicato legge i due file da raw.githubusercontent.com (src/live/index.ts).
 name: Dati
 
 on:

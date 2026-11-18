@@ -150,6 +150,7 @@ describe('etaInOre', () => {
 describe('leggiBrenta e leggiAria', () => {
   afterEach(() => {
     vi.unstubAllGlobals();
+    vi.unstubAllEnvs();
     vi.useRealTimers();
     vi.resetModules();
   });
@@ -194,7 +195,7 @@ describe('leggiBrenta e leggiAria', () => {
     expect(finto).toHaveBeenCalledTimes(3);
   });
 
-  it('legge data/aria.json sotto BASE_URL e controlla la forma', async () => {
+  it('legge data/aria.json sotto BASE_URL e controlla la forma (in sviluppo: solo la copia locale)', async () => {
     const aria = {
       generato: '2026-11-14T05:00:00Z',
       stazione: 'Bassano del Grappa',
@@ -203,10 +204,174 @@ describe('leggiBrenta e leggiAria', () => {
     };
     const finto = vi.fn().mockResolvedValueOnce(rispostaOk({ sbagliato: true })).mockResolvedValueOnce(rispostaOk(aria));
     vi.stubGlobal('fetch', finto);
+    vi.stubEnv('DEV', true);
     const { leggiAria } = await import('../src/live/index');
 
     await expect(leggiAria()).rejects.toThrow();
     await expect(leggiAria()).resolves.toEqual(aria);
+    expect(String(finto.mock.calls[0]![0])).toBe(`${import.meta.env.BASE_URL}data/aria.json`);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Aria e avvisi: copia su GitHub con ripiego sulla copia pubblicata con il sito.
+// Sul sito costruito import.meta.env.DEV è falso: qui si finge lo stesso con vi.stubEnv.
+// ---------------------------------------------------------------------------
+
+describe('leggiAria e leggiAvvisi, copia remota con ripiego', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.unstubAllEnvs();
+    vi.useRealTimers();
+    vi.resetModules();
+  });
+
+  const REMOTO = 'https://raw.githubusercontent.com/evapassarini/bassano-aperta/main/public/data/';
+  const rispostaOk = (corpo: unknown) => ({ ok: true, status: 200, json: async () => corpo });
+  const aria = (generato: string) => ({
+    generato,
+    stazione: 'Bassano del Grappa',
+    misure: [{ inquinante: 'PM10', valore: 23, unita: 'µg/m³', quando: '2026-11-13' }],
+  });
+  const avvisi = (generato: string) => ({ generato, fonti: [], avvisi: [] });
+
+  /** fetch finto che risponde secondo l'indirizzo: `remoto` e `locale` decidono le due risposte. */
+  function fetchFinto(remoto: (url: string, init?: RequestInit) => Promise<unknown>, locale: () => Promise<unknown>) {
+    const finto = vi.fn((url: string, init?: RequestInit) => (String(url).startsWith(REMOTO) ? remoto(String(url), init) : locale()));
+    vi.stubGlobal('fetch', finto);
+    return finto;
+  }
+
+  async function carica() {
+    vi.stubEnv('DEV', false);
+    return import('../src/live/index');
+  }
+
+  it("l'indirizzo remoto è quello del ramo main del repository pubblico", async () => {
+    const { URL_FOTOGRAFIE_REMOTE, ATTESA_REMOTO_MS } = await carica();
+    expect(URL_FOTOGRAFIE_REMOTE).toBe(REMOTO);
+    expect(ATTESA_REMOTO_MS).toBe(4000);
+  });
+
+  it('la copia remota valida e più recente vince, per aria e per avvisi', async () => {
+    const finto = fetchFinto(
+      async (url) => rispostaOk(url.endsWith('aria.json') ? aria('2026-11-18T06:17:00Z') : avvisi('2026-11-18T06:18:00Z')),
+      async () => rispostaOk({ ...aria('2026-11-15T06:17:00Z'), ...avvisi('2026-11-15T06:17:00Z') }),
+    );
+    const { leggiAria, leggiAvvisi } = await carica();
+
+    await expect(leggiAria()).resolves.toMatchObject({ generato: '2026-11-18T06:17:00Z' });
+    await expect(leggiAvvisi()).resolves.toMatchObject({ generato: '2026-11-18T06:18:00Z' });
+    const indirizzi = finto.mock.calls.map((c) => String(c[0]));
+    expect(indirizzi).toContain(`${REMOTO}aria.json`);
+    expect(indirizzi).toContain(`${REMOTO}avvisi.json`);
+    expect(indirizzi).toContain(`${import.meta.env.BASE_URL}data/aria.json`);
+    expect(indirizzi).toContain(`${import.meta.env.BASE_URL}data/avvisi.json`);
+
+    // La cache in memoria resta: la seconda lettura non chiede nulla alla rete.
+    await leggiAria();
+    await leggiAvvisi();
+    expect(finto).toHaveBeenCalledTimes(4);
+  });
+
+  it('se la copia remota non arriva si usa la locale', async () => {
+    fetchFinto(
+      async () => {
+        throw new TypeError('rete assente');
+      },
+      async () => rispostaOk(aria('2026-11-15T06:17:00Z')),
+    );
+    const { leggiAria } = await carica();
+    await expect(leggiAria()).resolves.toMatchObject({ generato: '2026-11-15T06:17:00Z' });
+  });
+
+  it('se GitHub risponde con un errore si usa la locale', async () => {
+    fetchFinto(
+      async () => ({ ok: false, status: 404, json: async () => ({}) }),
+      async () => rispostaOk(avvisi('2026-11-15T06:17:00Z')),
+    );
+    const { leggiAvvisi } = await carica();
+    await expect(leggiAvvisi()).resolves.toMatchObject({ generato: '2026-11-15T06:17:00Z' });
+  });
+
+  it('se la copia remota ha una forma sbagliata si usa la locale, anche se si dice più recente', async () => {
+    fetchFinto(
+      async () => rispostaOk({ generato: '2026-11-18T06:17:00Z', sbagliato: true }),
+      async () => rispostaOk(aria('2026-11-15T06:17:00Z')),
+    );
+    const { leggiAria } = await carica();
+    await expect(leggiAria()).resolves.toMatchObject({ generato: '2026-11-15T06:17:00Z' });
+  });
+
+  it('se la copia locale è più recente vince la locale (a parità di data, pure)', async () => {
+    fetchFinto(async () => rispostaOk(aria('2026-11-15T06:17:00Z')), async () => rispostaOk(aria('2026-11-18T06:17:00Z')));
+    const primo = await carica();
+    await expect(primo.leggiAria()).resolves.toMatchObject({ generato: '2026-11-18T06:17:00Z' });
+
+    vi.resetModules();
+    const remotaUguale = { ...aria('2026-11-18T06:17:00Z'), stazione: 'remota' };
+    fetchFinto(async () => rispostaOk(remotaUguale), async () => rispostaOk(aria('2026-11-18T06:17:00Z')));
+    const secondo = await carica();
+    await expect(secondo.leggiAria()).resolves.toMatchObject({ stazione: 'Bassano del Grappa' });
+  });
+
+  it('se la data remota non si legge vince la locale', async () => {
+    fetchFinto(async () => rispostaOk(aria('ieri sera')), async () => rispostaOk(aria('2026-11-15T06:17:00Z')));
+    const { leggiAria } = await carica();
+    await expect(leggiAria()).resolves.toMatchObject({ generato: '2026-11-15T06:17:00Z' });
+  });
+
+  it('se manca la locale basta la remota; se mancano tutte e due rifiuta e poi riprova', async () => {
+    const finto = vi
+      .fn()
+      .mockImplementationOnce(async () => {
+        throw new TypeError('rete assente');
+      })
+      .mockImplementationOnce(async () => {
+        throw new TypeError('rete assente');
+      })
+      .mockImplementation(async (url: string) =>
+        String(url).startsWith(REMOTO) ? rispostaOk(aria('2026-11-18T06:17:00Z')) : { ok: false, status: 404, json: async () => ({}) },
+      );
+    vi.stubGlobal('fetch', finto);
+    const { leggiAria } = await carica();
+
+    await expect(leggiAria()).rejects.toThrow();
+    await expect(leggiAria()).resolves.toMatchObject({ generato: '2026-11-18T06:17:00Z' });
+    expect(finto).toHaveBeenCalledTimes(4);
+  });
+
+  it('oltre 4 secondi la copia remota si lascia perdere e si usa la locale', async () => {
+    vi.useFakeTimers();
+    let segnaleRemoto: AbortSignal | undefined;
+    fetchFinto(
+      (_url, init) =>
+        new Promise((_risolvi, rifiuta) => {
+          segnaleRemoto = init?.signal ?? undefined;
+          segnaleRemoto?.addEventListener('abort', () => rifiuta(new DOMException('tempo scaduto', 'AbortError')));
+        }),
+      async () => rispostaOk(aria('2026-11-15T06:17:00Z')),
+    );
+    const { leggiAria } = await carica();
+
+    let risultato: unknown;
+    const lettura = leggiAria().then((d) => (risultato = d));
+    await vi.advanceTimersByTimeAsync(3999);
+    expect(risultato).toBeUndefined();
+    expect(segnaleRemoto?.aborted).toBe(false);
+
+    await vi.advanceTimersByTimeAsync(1);
+    await lettura;
+    expect(segnaleRemoto?.aborted).toBe(true);
+    expect(risultato).toMatchObject({ generato: '2026-11-15T06:17:00Z' });
+  });
+
+  it('in sviluppo legge solo la copia locale', async () => {
+    const finto = fetchFinto(async () => rispostaOk(aria('2026-11-18T06:17:00Z')), async () => rispostaOk(aria('2026-11-15T06:17:00Z')));
+    vi.stubEnv('DEV', true);
+    const { leggiAria } = await import('../src/live/index');
+    await expect(leggiAria()).resolves.toMatchObject({ generato: '2026-11-15T06:17:00Z' });
+    expect(finto).toHaveBeenCalledTimes(1);
     expect(String(finto.mock.calls[0]![0])).toBe(`${import.meta.env.BASE_URL}data/aria.json`);
   });
 });

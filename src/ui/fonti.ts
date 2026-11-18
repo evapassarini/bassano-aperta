@@ -27,6 +27,15 @@ export interface FinestraFonti {
   apri(): void;
 }
 
+/**
+ * Come arrivano le due fotografie (aria e avvisi): uno script le rifà più volte al giorno nel
+ * repository pubblico; il browser chiede la copia su GitHub e quella pubblicata con il sito e
+ * tiene la più recente. `quando` dice in quale momento parte la richiesta.
+ */
+function comeArrivaLaFotografia(quando: string): string {
+  return `Più volte al giorno uno script prova a rifare questa fotografia e la salva nel repository pubblico del progetto su GitHub (GitHub a volte ritarda o salta un giro). ${quando} il tuo browser chiede questa fotografia a GitHub (raw.githubusercontent.com) e alla copia pubblicata con il sito, e mostra la più recente delle due. Come qualunque server, GitHub riceve l'indirizzo IP di chi visita. Se GitHub non risponde entro pochi secondi, si usa la copia del sito, che può essere più vecchia.`;
+}
+
 function voce(titolo: string, ...corpo: (Node | string | null)[]): HTMLElement {
   const sezione = el('section', { class: 'fonti-voce' }, el('h3', null, titolo));
   for (const c of corpo) {
@@ -137,6 +146,7 @@ export function creaFonti(opzioni: OpzioniFonti): FinestraFonti {
         '.',
       ),
       ariaQuando,
+      el('li', null, comeArrivaLaFotografia('Appena apri il sito')),
       el(
         'li',
         null,
@@ -192,6 +202,7 @@ export function creaFonti(opzioni: OpzioniFonti): FinestraFonti {
       { class: 'fonti-date' },
       el('li', null, 'Nessuna delle due fonti dichiara una licenza: riportiamo solo citazioni brevi, ognuna con il link alla pagina della fonte.'),
       el('li', null, 'Non è il traffico in tempo reale: è una fotografia scaricata di tanto in tanto.'),
+      el('li', null, comeArrivaLaFotografia('Quando apri gli avvisi o questa pagina')),
       avvisiQuando,
     ),
   );

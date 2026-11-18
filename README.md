@@ -28,8 +28,9 @@ Cosa trovi nel sito:
 - una pagina «Fonti e licenze», con i link al codice e alle segnalazioni;
 - il credito «© OpenStreetMap contributors», sempre scritto sulla mappa.
 
-È un sito statico: Vite e TypeScript, nessun framework, nessun server. Sta su Vercel e due dei
-suoi file di dati si aggiornano da soli ogni 6 ore (vedi «Pubblicazione»).
+È un sito statico: Vite e TypeScript, nessun framework, nessun server. Sta su Vercel. Due file
+di dati (aria e avvisi) si aggiornano da soli più volte al giorno nel repository su GitHub, e il
+sito pubblicato li legge da lì anche senza essere ripubblicato (vedi «Pubblicazione»).
 
 ## Come avviarlo
 
@@ -75,9 +76,10 @@ npm run dati:stazioni  # rifà la tabella dei nomi delle stazioni dei treni
 distribuiti da BusOne. Scarica un archivio di circa 25 MB e ha bisogno del comando `unzip`: per
 questo non fa parte di `npm run dati` e si rilancia solo quando cambiano le stazioni.
 
-Aria e avvisi non vanno rilanciati a mano: sul sito pubblicato li aggiorna da solo, ogni 6 ore,
-il workflow `.github/workflows/dati.yml` (vedi «Pubblicazione»). Gli altri file si rigenerano
-solo a mano.
+Aria e avvisi non vanno rilanciati a mano: li aggiorna da solo, più volte al giorno, il workflow
+`.github/workflows/dati.yml` nel repository su GitHub, e il sito pubblicato legge da lì la
+versione più recente (vedi «Pubblicazione»). Gli altri file si rigenerano solo a mano e
+arrivano sul sito solo quando lo si ripubblica.
 
 `dati:lampioni` scarica da OpenStreetMap i lampioni rilevati (pochi, a Bassano) e ne aggiunge
 altri lungo le strade e sul bordo delle piazze di `base.json`, con regole fisse e senza caso: a
@@ -92,8 +94,8 @@ Da sapere:
   minuti. Se non ci riescono si fermano con un errore e lasciano intatti i file esistenti.
 - `OSM_CACHE=<cartella> npm run dati` salva le risposte di Overpass e le riusa al giro dopo.
 - Il livello della Brenta non passa da qui: lo legge il browser, in diretta, dall'API di ARPAV.
-- L'aria invece è una fotografia: resta ferma finché non gira di nuovo lo script (sul sito
-  pubblicato ogni 6 ore, in automatico). Il sito mostra sempre la data e l'ora della misura.
+- L'aria invece è una fotografia: resta ferma finché non gira di nuovo lo script (per il sito
+  pubblicato più volte al giorno, in automatico, su GitHub). Il sito mostra sempre la data e l'ora della misura.
 - Accanto ai numeri dell'aria il sito scrive un giudizio a parole (buona, accettabile, mediocre,
   scadente, pessima) per l'ultimo giorno intero, di norma ieri. Lo calcola il sito
   (`src/live/giudizioAria.ts`) con le fasce dell'indice di qualità dell'aria di ARPAV, su
@@ -106,7 +108,7 @@ Da sapere:
   solo la tabella dei nomi delle stazioni.
 - Anche gli avvisi sono una fotografia, e invecchiano in fretta: gli eventi del CCISS durano
   poche ore (il sito mostra solo quelli delle ultime 24 ore). Sul sito pubblicato
-  `npm run dati:avvisi` gira in automatico ogni 6 ore. Se la fotografia ha più di 24 ore la
+  `npm run dati:avvisi` gira in automatico più volte al giorno. Se la fotografia ha più di 24 ore la
   scheda lo dice.
 - Se Vi.abilità non risponde lo script tiene le ordinanze della fotografia precedente che
   valgono ancora; se non risponde CCISS il file esce senza eventi e la scheda dice che mancano.
@@ -293,27 +295,52 @@ Nel repository non c'è una licenza sola. Il dettaglio è nel file `NOTICE`; in 
   <https://github.com/evapassarini/bassano-aperta/issues>. I due indirizzi sono scritti in
   `index.html`, negli attributi `data-codice` e `data-segnalazioni` di `<div id="ui">`, e
   compaiono in «Fonti e licenze» come «Vai al codice» e «Segnala un errore».
-- **Dove sta il sito**: su Vercel, collegato al repository. A ogni push sul ramo principale
-  Vercel esegue `npm ci` e `npm run build` e pubblica la cartella `dist`. Le impostazioni sono in
-  `vercel.json`. La versione di Node su Vercel si sceglie nelle impostazioni del progetto (24 o
-  superiore; il progetto è provato con la 26).
+- **Dove sta il sito**: su Vercel, pubblicato a mano con `vercel deploy --prod --yes` dalla
+  cartella del progetto. Vercel non è collegato al repository GitHub: un push, anche quello
+  automatico dei dati, non ripubblica il sito. Vercel esegue `npm ci` e `npm run build` e
+  pubblica la cartella `dist`. Le impostazioni sono in `vercel.json`. La versione di Node su
+  Vercel si sceglie nelle impostazioni del progetto (24 o superiore; il progetto è provato con
+  la 26).
 - **Indirizzo del sito**: il dominio definitivo non è ancora noto. Oggi c'è un indirizzo
   segnaposto, scritto in un punto solo: in `index.html`, nelle tre righe sotto il commento
   «Indirizzo del sito» (`canonical`, `og:url`, `og:image`). Quando il dominio è deciso si cambia
   lì e in nessun altro file.
-- **Aggiornamento automatico dei dati**: `.github/workflows/dati.yml` gira ogni 6 ore e si può
-  avviare a mano dalla scheda Actions di GitHub. Esegue `npm run dati:aria` e
+- **Aggiornamento automatico dei dati**: `.github/workflows/dati.yml` è programmato ogni 6 ore
+  e si può avviare a mano dalla scheda Actions di GitHub. GitHub però ritarda e salta i lavori
+  programmati: a novembre 2026 è girato circa due volte al giorno. Per questo i testi del sito
+  dicono «più volte al giorno» e non promettono una cadenza. Esegue `npm run dati:aria` e
   `npm run dati:avvisi`, poi le prove. Se le prove passano e `public/data/aria.json` o
-  `public/data/avvisi.json` sono cambiati, li salva nel repository e Vercel ricostruisce il
-  sito. Se una fonte non risponde, il suo file resta quello di prima e il lavoro finisce in
+  `public/data/avvisi.json` sono cambiati, li salva nel ramo `main` del repository. Il sito
+  pubblicato non viene ricostruito: legge i due file da lì (vedi il punto dopo). Se una fonte
+  non risponde, il suo file resta quello di prima e il lavoro finisce in
   rosso nella scheda Actions: sul sito non arrivano dati rotti o a metà. Vale anche per gli
   avvisi quando risponde una sola delle due fonti (codice di uscita 2): la fotografia
   incompleta si scarta. La data mostrata dal sito dice sempre quanto è vecchia la fotografia.
+- **Come il sito legge aria e avvisi** (`leggiFotografia` in `src/live/index.ts`): il browser
+  chiede insieme la copia su GitHub,
+  `https://raw.githubusercontent.com/evapassarini/bassano-aperta/main/public/data/aria.json` (e
+  `avvisi.json`), e la copia pubblicata con il sito, `data/aria.json` (e `data/avvisi.json`).
+  GitHub risponde con `access-control-allow-origin: *` e tiene i file in memoria 5 minuti.
+  ARPAV invece non si può leggere dal browser (niente CORS): per questo esistono le fotografie.
+  Una copia che non arriva, che va oltre 4 secondi (solo la remota) o che non ha la forma
+  attesa si scarta. Se sono valide tutte e due vince quella con `generato` più recente; a
+  parità vince la locale. Con `npm run dev` si legge solo la copia locale. L'indirizzo di
+  GitHub sta in un punto solo, `URL_FOTOGRAFIE_REMOTE`. Leggendo da GitHub, il browser di chi
+  visita manda a GitHub il proprio indirizzo IP, come con ogni server: «Fonti e licenze» lo
+  dice. Se il repository cambiasse nome,
+  diventasse privato o il ramo non si chiamasse più `main`, il sito userebbe solo la copia
+  pubblicata con sé.
+- **Se cambia la forma di aria.json o avvisi.json** (script e `src/types.ts`): il sito
+  pubblicato legge il file da `main`, che può essere più avanti del codice pubblicato.
+  `controllaAria` e `controllaAvvisi` guardano solo `generato` e l'elenco `misure` o `avvisi`:
+  un campo rinominato più in profondità passerebbe, e il codice vecchio riceverebbe il formato
+  nuovo. Un cambio di forma va quindi pubblicato su Vercel nello stesso giro del push, prima
+  del successivo giro di `dati.yml`.
 - **Controllo automatico**: `.github/workflows/controllo.yml` esegue tipi, prove e costruzione
   del sito a ogni push e a ogni pull request.
 - **Indirizzi esterni permessi**: `vercel.json` contiene una Content-Security-Policy con gli
-  unici indirizzi esterni che il sito può usare: `api.arpa.veneto.it` e `proxy.busone.app` per i
-  dati, `commons.wikimedia.org` e `*.wikimedia.org` per le immagini e gli audio,
+  unici indirizzi esterni che il sito può usare: `api.arpa.veneto.it`, `proxy.busone.app` e
+  `raw.githubusercontent.com` per i dati, `commons.wikimedia.org` e `*.wikimedia.org` per le immagini e gli audio,
   `www.youtube-nocookie.com` per i video. Chi aggiunge una fonte esterna nuova deve aggiungerla
   anche lì, altrimenti il browser la blocca senza avvisare. Il sito non si può incorporare in
   una cornice su altri siti.
@@ -453,20 +480,24 @@ Testi che scadono:
 Pubblicazione:
 
 - chi firma i commit e quale storia si pubblica: vedi «Pubblicazione», «Prima del primo push»;
-- dopo il primo commit automatico dei dati (`dati.yml`, firmato `github-actions[bot]`) va
-  controllato su Vercel che sia partita una nuova pubblicazione. Con il repository pubblico
-  dovrebbe partire. Secondo la guida di Vercel letta a novembre 2026, con un repository privato
-  e il piano Hobby i commit di chi non è il proprietario dell'account non vengono pubblicati:
-  se il repository diventasse privato, i dati sul sito smetterebbero di aggiornarsi;
+- Vercel non è collegato al repository: i commit automatici dei dati (`dati.yml`, firmati
+  `github-actions[bot]`) non ripubblicano il sito, che legge aria e avvisi da
+  raw.githubusercontent.com (vedi «Pubblicazione»). Se un giorno si collega Vercel, secondo la
+  guida di Vercel letta a novembre 2026 con un repository privato e il piano Hobby i commit di
+  chi non è il proprietario dell'account non vengono pubblicati. Se il repository diventasse
+  privato, raw.githubusercontent.com smetterebbe comunque di rispondere e aria e avvisi
+  resterebbero fermi alla copia pubblicata con il sito;
 - il dominio definitivo va scritto al posto del segnaposto in `index.html` (vedi
   «Pubblicazione»);
-- i due workflow di GitHub non sono mai girati su GitHub: le versioni delle azioni e di Node si
-  vedono al primo avvio;
-- avvisi: se CCISS o Vi.abilità rifiutano le richieste che partono dai server di GitHub, la
-  fotografia degli avvisi non si aggiorna mai e il lavoro resta rosso a ogni giro. Si capisce
-  solo al primo avvio vero. In quel caso si può scegliere di accettare anche la fotografia
-  incompleta (codice 2) nel passo degli avvisi di `dati.yml`;
-- la Content-Security-Policy è stata provata in locale, non su Vercel;
+- i due workflow girano su GitHub dal novembre 2026 e finora sono sempre finiti in verde; al
+  primo giro di `dati.yml` CCISS e Vi.abilità hanno risposto tutte e due;
+- avvisi: se un giorno CCISS o Vi.abilità cominciano a rifiutare le richieste che partono dai
+  server di GitHub, la fotografia degli avvisi non si aggiorna più e il lavoro resta rosso a
+  ogni giro. In quel caso si può scegliere di accettare anche la fotografia incompleta
+  (codice 2) nel passo degli avvisi di `dati.yml`;
+- la Content-Security-Policy è stata provata in locale, non su Vercel; dopo la prossima
+  pubblicazione va controllato nel browser che la lettura da raw.githubusercontent.com non sia
+  bloccata;
 - l'anteprima per i social è uno scatto del sito di metà novembre 2026: va rifatta se l'aspetto
   cambia.
 

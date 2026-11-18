@@ -109,7 +109,8 @@ sono il traffico: sono testi pubblicati dagli enti, e il sito lo dice.
   restituisce circa tre giorni di livello (m) e portata (m³/s) ogni 10 minuti per la stazione
   "Brenta a Barzizza". Dire sempre che la stazione è circa 1 km a monte del ponte e che i dati
   non sono validati. Se la chiamata fallisce: messaggio chiaro, nessun numero finto.
-- **Aria** (nessun CORS: la scarica uno script e salva `public/data/aria.json`):
+- **Aria** (nessun CORS: la scarica uno script e salva `public/data/aria.json`; il browser la
+  legge dal repository su GitHub, con ripiego sulla copia del sito, vedi «Pubblicazione»):
   `https://www2.arpa.veneto.it/aria-json/exported/aria/data.json`, stazione `codseqst 500000106`.
   Mostrare sempre data e ora della fotografia nella scheda della stazione. Nel riquadro breve
   sulla mappa vale la regola scritta più sotto (data della misura; data della fotografia se è
@@ -239,7 +240,8 @@ soglie, con le fonti nel commento.
     Se un nome manca non si mostra il codice: si tace. Se la tabella non arriva i treni si
     mostrano senza nomi. La data della tabella (`generato`) si legge in «Fonti e licenze».
 - **Avvisi sulla viabilità** (nessun CORS: li scarica uno script e salva
-  `public/data/avvisi.json`, tipo `DatiAvvisi`). È una fotografia, non il traffico in tempo
+  `public/data/avvisi.json`, tipo `DatiAvvisi`; il browser li legge dal repository su GitHub,
+  con ripiego sulla copia del sito, vedi «Pubblicazione»). È una fotografia, non il traffico in tempo
   reale: mostrare sempre data e ora di `generato`. Due fonti:
   - CCISS Viaggiare Informati, `https://www.cciss.it/rss`: eventi sulla SS47 Valsugana, sulla
     SS248 e sulla Pedemontana Veneta vicino a Bassano (`tipo: 'evento'`). Durano poche ore: la
@@ -265,10 +267,11 @@ soglie, con le fonti nel commento.
     due i casi scrive il file ed esce con codice 2. Un feed senza voci, o senza nessuna data
     leggibile, vale come fonte che non risponde. Se mancano tutte e due esce con codice 1 e non
     tocca il file.
-  - Sul sito pubblicato lo script gira ogni 6 ore dentro `.github/workflows/dati.yml` (vedi
-    «Pubblicazione»). Lì anche il codice 2 vale come errore: la fotografia incompleta si scarta
-    e resta il file di prima. Se una delle due fonti rifiuta le richieste dai server di GitHub
-    la fotografia non si aggiorna più: si vede solo al primo avvio vero.
+  - Sul sito pubblicato lo script gira più volte al giorno dentro `.github/workflows/dati.yml`
+    (vedi «Pubblicazione»). Lì anche il codice 2 vale come errore: la fotografia incompleta si
+    scarta e resta il file di prima. Al primo giro su GitHub (novembre 2026) hanno risposto
+    tutte e due le fonti. Se un giorno una delle due comincia a rifiutare le richieste dai
+    server di GitHub, la fotografia non si aggiorna più e il lavoro resta rosso.
   - La scheda non dice mai nulla su «questo momento»: se non ci sono avvisi scrive «Nella
     fotografia del ... non ci sono avvisi per la zona di Bassano». Se la fotografia ha più di 24
     ore lo dice e rimanda ai siti delle fonti. Le ordinanze pubblicate da più di 120 giorni
@@ -358,7 +361,7 @@ stanno in `src/types.ts`.
 | Interfaccia | `src/ui/*.ts`, `src/stile.css` | Strati, luce della mappa, aria in breve, finestra-racconto, scheda avvisi, fonti |
 | Live | `src/live/*.ts` | Brenta, aria e giudizio a parole sull'aria, treni, avvisi |
 | Avvio | `index.html`, `src/main.ts` | Collega tutto |
-| Pubblicazione | `vercel.json`, `.github/workflows/*.yml` | Sito su Vercel, intestazioni di sicurezza, aggiornamento di aria e avvisi ogni 6 ore, controllo a ogni push |
+| Pubblicazione | `vercel.json`, `.github/workflows/*.yml` | Sito su Vercel, intestazioni di sicurezza, aggiornamento di aria e avvisi più volte al giorno, controllo a ogni push |
 
 ### Proiezione (vincolante per mappa e illustrazioni)
 
@@ -478,11 +481,11 @@ export interface LetturaBrenta { livello: number; portata: number | null;
   quandoPortata: string | null; // spesso un passo prima del livello: se è diversa si mostra
   quando: string; serie: { quando: string; livello: number }[] }
 export function leggiBrenta(): Promise<LetturaBrenta>;   // rifiuta se la rete fallisce
-export function leggiAria(): Promise<DatiAria>;           // legge public/data/aria.json
+export function leggiAria(): Promise<DatiAria>;           // aria.json: la più recente tra GitHub e la copia del sito
 // in src/live/giudizioAria.ts: funzione pura, null se i dati non bastano
 export function giudizioAria(dati: Pick<DatiAria, 'serie'> | null | undefined): GiudizioAria | null;
 export function leggiTreni(): Promise<LetturaTreni>;     // feed BusOne + tabella stazioni; in memoria 2 minuti; rifiuta se la rete fallisce o il feed è malformato
-export function leggiAvvisi(): Promise<DatiAvvisi>;       // legge public/data/avvisi.json
+export function leggiAvvisi(): Promise<DatiAvvisi>;       // avvisi.json: la più recente tra GitHub e la copia del sito
 export function leggiDataStazioni(): Promise<string>;    // `generato` di public/data/stazioni-treni.json, per «Fonti e licenze»
 ```
 
@@ -760,33 +763,53 @@ restano a 60 al secondo prima e dopo e il tempo di disegno nel codice non cambia
   condizioni di BusOne (solo privati ed enti non profit).
 - **Repository**: `https://github.com/evapassarini/bassano-aperta`, pubblico. Segnalazioni:
   `https://github.com/evapassarini/bassano-aperta/issues`.
-- **Sito**: statico, su Vercel, collegato al repository. A ogni push sul ramo principale Vercel
-  esegue `npm ci` e `npm run build` e pubblica `dist` (`vercel.json`). `/assets/*` resta in
+- **Sito**: statico, su Vercel, pubblicato a mano (`vercel deploy --prod --yes`). Vercel non è
+  collegato al repository: un push non ripubblica il sito. Vercel esegue `npm ci` e
+  `npm run build` e pubblica `dist` (`vercel.json`). `/assets/*` resta in
   memoria un anno; `/data/*` e `/landmarks/*` 5 minuti. La versione di Node si sceglie nelle
   impostazioni del progetto Vercel (24 o superiore; il progetto è provato con la 26).
 - **Dominio**: quello definitivo non è ancora noto. Il segnaposto sta in un punto solo, in
   `index.html` (vedi «Avvio»).
 - **Intestazioni di sicurezza** (`vercel.json`): `X-Content-Type-Options`, `Referrer-Policy`,
   `Permissions-Policy` e una Content-Security-Policy. Indirizzi esterni permessi:
-  `api.arpa.veneto.it` e `proxy.busone.app` per i dati; `commons.wikimedia.org` e
+  `api.arpa.veneto.it`, `proxy.busone.app` e `raw.githubusercontent.com` per i dati; `commons.wikimedia.org` e
   `*.wikimedia.org` per immagini e audio; `www.youtube-nocookie.com` per i video. Una fonte
   esterna nuova va aggiunta anche lì, altrimenti il browser la blocca. Il sito non si può
   incorporare in una cornice su altri siti (`frame-ancestors 'self'`). La regola è stata
   provata in locale, non su Vercel.
-- **Aggiornamento automatico** (`.github/workflows/dati.yml`): ogni 6 ore, al minuto 17 (ora
-  UTC), e a mano dalla scheda Actions. Esegue `npm run dati:aria` e `npm run dati:avvisi`, poi
+- **Aggiornamento automatico** (`.github/workflows/dati.yml`): programmato ogni 6 ore, al
+  minuto 17 (ora UTC), e a mano dalla scheda Actions. GitHub ritarda e salta i lavori
+  programmati (a novembre 2026 circa due giri al giorno): i testi del sito dicono «più volte
+  al giorno», senza promettere una cadenza. Esegue `npm run dati:aria` e `npm run dati:avvisi`, poi
   `npm test`. Regola: niente dati rotti. Se uno script non esce con codice 0 il suo file torna
   com'era e non si pubblica; l'altro, se è riuscito, si pubblica lo stesso. Se le prove
   falliscono non si pubblica nulla. Se una fonte non ha risposto il lavoro finisce in rosso. Il
   commit, fatto da `github-actions[bot]`, contiene solo `public/data/aria.json` e
-  `public/data/avvisi.json`, e solo se sono cambiati; poi Vercel ricostruisce il sito. Gli
-  altri file di dati si rigenerano solo a mano.
+  `public/data/avvisi.json`, e solo se sono cambiati, sul ramo `main`. Il sito non viene
+  ricostruito. Gli altri file di dati si rigenerano solo a mano e arrivano sul sito solo con
+  una nuova pubblicazione.
+- **Lettura di aria e avvisi** (`leggiFotografia` in `src/live/index.ts`): il browser chiede
+  insieme `https://raw.githubusercontent.com/evapassarini/bassano-aperta/main/public/data/<file>`
+  (CORS aperto, `access-control-allow-origin: *`, in memoria 5 minuti) e la copia pubblicata con
+  il sito, `${BASE_URL}data/<file>`. Una copia che non arriva, che non passa `controllaAria` o
+  `controllaAvvisi` o (solo la remota) che va oltre 4 secondi (`AbortController`) si scarta. Se
+  sono valide tutte e due vince quella con `generato` più recente; a parità, o se la data
+  remota non si legge, vince la locale. Rifiuta solo se mancano tutte e due. In sviluppo
+  (`import.meta.env.DEV`) si legge solo la copia locale. Il risultato resta in memoria finché la
+  pagina è aperta; un errore no. L'indirizzo remoto sta solo in `URL_FOTOGRAFIE_REMOTE`.
+  GitHub riceve l'indirizzo IP di chi visita: «Fonti e licenze» lo dice.
+- **Cambio di forma di aria.json o avvisi.json**: il sito pubblicato legge il file da `main`,
+  che può essere più avanti del codice pubblicato, e `controllaAria` e `controllaAvvisi`
+  guardano solo `generato` e l'elenco `misure` o `avvisi`. Un cambio di forma (script e
+  `src/types.ts`) va pubblicato su Vercel nello stesso giro del push, prima del successivo
+  giro di `dati.yml`.
 - **Controllo automatico** (`.github/workflows/controllo.yml`): a ogni push e pull request
   `npm ci`, `npx tsc --noEmit`, `npm test`, `npm run build`.
 - **Anteprima per i social**: `public/anteprima.jpg`, 1200x630, scatto del sito costruito (non
   del server di sviluppo). Icona per iPhone: `public/apple-touch-icon.png`, 180x180. Come
   rifarle è nel README.
-- I due workflow non sono ancora mai girati su GitHub.
+- I due workflow girano su GitHub dal novembre 2026; al primo giro di `dati.yml` CCISS e
+  Vi.abilità hanno risposto tutte e due.
 
 ## Licenze
 
@@ -820,5 +843,5 @@ Sacrario del Monte Grappa già presenti (opera del 1935 di Greppi e Castiglioni,
 di 70 anni: senza libertà di panorama va deciso se tenerle); inquadrature delle due
 webcam; permessi per le webcam; testi che scadono il 12 e il 16 dicembre 2026; dominio
 definitivo al posto del segnaposto; licenza di testi, illustrazioni e documentazione; chi firma
-i commit e quale storia git si pubblica; controllo che Vercel ripubblichi dopo i commit
-automatici dei dati.
+i commit e quale storia git si pubblica; controllo, dopo la prossima pubblicazione, che la
+Content-Security-Policy lasci passare la lettura da raw.githubusercontent.com.
