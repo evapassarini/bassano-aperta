@@ -38,6 +38,12 @@ export interface Palette {
   tronco: string;
   ombra: string;
   strati: Record<IdStrato, { fondo: string; segno: string }>;
+  /** Il cartello degli avvisi sulla viabilità (strato Mobilità). */
+  avviso: { fondo: string; segno: string };
+  /** Il treno decorativo: fianchi in luce e in ombra, tetto, finestrini. */
+  treno: { luce: string; ombra: string; tetto: string; finestrini: string };
+  /** Le figurine decorative: pelle, capelli e otto colori di vestiti. */
+  gente: { pelle: string; capelli: string; gambe: string; vesti: string[] };
   ciclabile: string;
   ferroviaTematica: string;
   evidenza: string;
@@ -167,6 +173,9 @@ export const PALETTE: Palette = {
     ambiente: { fondo: '#3f7d4e', segno: '#fff6e0' },
     mobilita: { fondo: '#2f5f7e', segno: '#fff6e0' },
   },
+  avviso: { fondo: '#e8a23a', segno: '#3d2c20' },
+  treno: { luce: '#b9493a', ombra: '#8c3429', tetto: '#ddd4c2', finestrini: '#3f4b52' },
+  gente: { pelle: '#e3b48f', capelli: '#4a3324', gambe: '#4b4a58', vesti: ['#2f5f7e', '#a8392b', '#3f7d4e', '#e8a23a', '#7b5aa0', '#d9cfb8', '#8a6c50', '#c45f7a'] },
   ciclabile: '#3f7d4e',
   ferroviaTematica: '#2f5f7e',
   evidenza: '#f0a92e',
@@ -247,6 +256,9 @@ export const PALETTE_POMERIGGIO: Palette = {
   acquaBordo: '#5f8672',
   ombra: 'rgba(96, 52, 24, 0.3)',
   strati: PALETTE.strati,
+  avviso: PALETTE.avviso,
+  treno: { luce: '#bf5a40', ombra: '#8f3c2c', tetto: '#e6cfae', finestrini: '#4a4a4c' },
+  gente: { pelle: '#e0a882', capelli: '#4a3324', gambe: '#4f4a52', vesti: ['#3a6a80', '#b44a32', '#4f8150', '#e5a03f', '#80609c', '#e2d2b4', '#94704f', '#c86a74'] },
   ciclabile: PALETTE.ciclabile,
   ferroviaTematica: PALETTE.ferroviaTematica,
   evidenza: PALETTE.evidenza,
@@ -307,6 +319,9 @@ export const PALETTE_NOTTE: Palette = {
   tronco: '#1c1a22',
   ombra: 'rgba(5, 8, 20, 0.32)',
   strati: PALETTE.strati,
+  avviso: PALETTE.avviso,
+  treno: { luce: '#5b3036', ombra: '#3a2026', tetto: '#4b4858', finestrini: '#ffd58a' },
+  gente: { pelle: '#8a6d68', capelli: '#2a2028', gambe: '#262838', vesti: ['#2c3e60', '#5c2c36', '#2e4a48', '#7a6040', '#463c64', '#6e6a78', '#4e4038', '#64404e'] },
   ciclabile: '#74c389',
   ferroviaTematica: '#7db4dc',
   evidenza: PALETTE.evidenza,

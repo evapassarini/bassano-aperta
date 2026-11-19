@@ -1,5 +1,5 @@
 # Controllo a ogni push e a ogni pull request: tipi, test e build.
-# Non scarica dati e non pubblica nulla: il sito lo ricostruisce Vercel.
+# Non scarica dati e non pubblica nulla: il sito si pubblica a parte, su Vercel.
 name: Controllo
 
 on:

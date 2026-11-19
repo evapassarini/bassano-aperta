@@ -1,5 +1,5 @@
 {
-  "generato": "2026-11-19T07:30:01.009Z",
+  "generato": "2026-11-19T09:07:02.972Z",
   "fonti": [
     {
       "nome": "CCISS Viaggiare Informati",
@@ -20,7 +20,15 @@
       "quando": "2026-11-19T05:22:00.000Z",
       "fonte": "CCISS Viaggiare Informati",
       "url": "https://www.cciss.it/web/cciss/situazione-della-viabilita",
-      "attivo": true
+      "attivo": true,
+      "inizio": {
+        "lon": 11.8,
+        "lat": 45.7089
+      },
+      "fine": {
+        "lon": 11.76279,
+        "lat": 45.72439
+      }
     },
     {
       "tipo": "evento",
@@ -29,7 +37,15 @@
       "quando": "2026-11-18T17:43:00.000Z",
       "fonte": "CCISS Viaggiare Informati",
       "url": "https://www.cciss.it/web/cciss/situazione-della-viabilita",
-      "attivo": true
+      "attivo": true,
+      "inizio": {
+        "lon": 11.76446,
+        "lat": 45.77201
+      },
+      "fine": {
+        "lon": 11.71809,
+        "lat": 45.80629
+      }
     },
     {
       "tipo": "evento",
@@ -38,7 +54,15 @@
       "quando": "2026-11-18T00:04:00.000Z",
       "fonte": "CCISS Viaggiare Informati",
       "url": "https://www.cciss.it/web/cciss/situazione-della-viabilita",
-      "attivo": true
+      "attivo": true,
+      "inizio": {
+        "lon": 11.91285,
+        "lat": 45.67657
+      },
+      "fine": {
+        "lon": 11.8285,
+        "lat": 45.69716
+      }
     },
     {
       "tipo": "evento",
@@ -47,7 +71,15 @@
       "quando": "2026-11-16T10:46:00.000Z",
       "fonte": "CCISS Viaggiare Informati",
       "url": "https://www.cciss.it/web/cciss/situazione-della-viabilita",
-      "attivo": true
+      "attivo": true,
+      "inizio": {
+        "lon": 11.61476,
+        "lat": 45.74497
+      },
+      "fine": {
+        "lon": 11.61107,
+        "lat": 45.7427
+      }
     },
     {
       "tipo": "ordinanza",
@@ -64,7 +96,15 @@
       "quando": "2026-10-28T12:46:00.000Z",
       "fonte": "CCISS Viaggiare Informati",
       "url": "https://www.cciss.it/web/cciss/situazione-della-viabilita",
-      "attivo": true
+      "attivo": true,
+      "inizio": {
+        "lon": 11.65998,
+        "lat": 45.78321
+      },
+      "fine": {
+        "lon": 11.65407,
+        "lat": 45.79097
+      }
     },
     {
       "tipo": "ordinanza",
@@ -81,7 +121,15 @@
       "quando": "2026-10-26T12:22:00.000Z",
       "fonte": "CCISS Viaggiare Informati",
       "url": "https://www.cciss.it/web/cciss/situazione-della-viabilita",
-      "attivo": true
+      "attivo": true,
+      "inizio": {
+        "lon": 11.76446,
+        "lat": 45.77201
+      },
+      "fine": {
+        "lon": 11.68538,
+        "lat": 45.96831
+      }
     },
     {
       "tipo": "evento",
@@ -90,7 +138,15 @@
       "quando": "2026-10-12T08:41:00.000Z",
       "fonte": "CCISS Viaggiare Informati",
       "url": "https://www.cciss.it/web/cciss/situazione-della-viabilita",
-      "attivo": true
+      "attivo": true,
+      "inizio": {
+        "lon": 11.72676,
+        "lat": 45.77569
+      },
+      "fine": {
+        "lon": 11.62982,
+        "lat": 45.90025
+      }
     },
     {
       "tipo": "evento",
@@ -99,7 +155,15 @@
       "quando": "2026-10-06T11:16:00.000Z",
       "fonte": "CCISS Viaggiare Informati",
       "url": "https://www.cciss.it/web/cciss/situazione-della-viabilita",
-      "attivo": true
+      "attivo": true,
+      "inizio": {
+        "lon": 11.7177,
+        "lat": 45.68377
+      },
+      "fine": {
+        "lon": 11.70341,
+        "lat": 45.68297
+      }
     },
     {
       "tipo": "evento",
@@ -108,7 +172,15 @@
       "quando": "2026-09-05T09:20:00.000Z",
       "fonte": "CCISS Viaggiare Informati",
       "url": "https://www.cciss.it/web/cciss/situazione-della-viabilita",
-      "attivo": true
+      "attivo": true,
+      "inizio": {
+        "lon": 11.75983,
+        "lat": 45.73665
+      },
+      "fine": {
+        "lon": 11.68538,
+        "lat": 45.96831
+      }
     }
   ]
 }

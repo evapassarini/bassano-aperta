@@ -230,7 +230,10 @@ export function creaUI(opzioni: OpzioniUI): UI {
     return el('li', null, bottone);
   };
 
-  /** Gli avvisi sulla viabilità non sono un punto della mappa: la voce apre solo la scheda. */
+  /**
+   * La voce degli avvisi apre la scheda con tutti gli avvisi. Sulla mappa ci sono solo i cartelli
+   * degli eventi con un incrocio in vista (quelli della stessa strada vicini fanno un cartello solo).
+   */
   const voceAvvisi = (): HTMLElement => {
     const bottone = el(
       'button',
@@ -317,7 +320,6 @@ export function creaUI(opzioni: OpzioniUI): UI {
   // =========================================================================
   const fonti = creaFonti({
     strati,
-    baseGenerato: radice.dataset.baseGenerato,
     lampioniVeri: radice.dataset.lampioniVeri,
     lampioniTutti: radice.dataset.lampioniTutti,
     alberiVeri: radice.dataset.alberiVeri,
@@ -426,7 +428,7 @@ export function creaUI(opzioni: OpzioniUI): UI {
 
   function apriPunto(punto: Punto): void {
     const haStoria = punto.storia !== undefined && storie.some((s) => s.id === punto.storia);
-    const scheda = creaScheda(punto, haStoria ? () => apriStoria(punto.storia!) : undefined);
+    const scheda = creaScheda(punto, haStoria ? () => apriStoria(punto.storia!) : undefined, apriAvvisi);
     mostraFinestra('punto', scheda.nodo, scheda.titolo, `Chiudi la scheda: ${punto.nome}`);
     // Chi avvia spegne l'evidenza del racconto che c'era prima: ora si guarda un altro punto.
     radice.dispatchEvent(new CustomEvent('ba:punto', { detail: { id: punto.id } }));

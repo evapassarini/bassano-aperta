@@ -25,7 +25,7 @@
         "titolo": "Wikipedia, voce «Calà del Sasso»",
         "url": "https://it.wikipedia.org/wiki/Cal%C3%A0_del_Sasso"
       },
-      "media": 4
+      "media": 1
     },
     {
       "anno": "XV-XVIII secolo",
@@ -112,33 +112,6 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "La Brenta a Bassano del Grappa (13 giugno 2021)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Brenta_Bassano_del_Grappa.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Brenta_Bassano_del_Grappa.jpg",
-      "autore": "Wikipedian Spy",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Il greto del fiume con ciottoli bianchi e ciuffi d'erba in primo piano, l'acqua che corre tra i sassi, una riva alberata e i monti sullo sfondo."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Bassano lungo la Brenta (1 ottobre 2019)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_entlang_der_Brenta_01.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_entlang_der_Brenta_01.jpg",
-      "autore": "Zairon",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Il fiume calmo con una traversa di pietra in primo piano; sull'altra riva una lunga fila di case chiare e, in alto, i tetti e le torri della città."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "La Brenta a Bassano (9 agosto 2011)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Il_Brenta_(6073221500).jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Il_Brenta_(6073221500).jpg",
-      "autore": "Rino Porrovecchio",
-      "licenza": "CC BY-SA 2.0",
-      "alt": "Il fiume verde sotto un cielo azzurro con nuvole bianche, case color ocra sulla riva destra e i monti in lontananza."
-    },
-    {
-      "tipo": "immagine",
       "titolo": "Valstagna, la Riviera Garibaldi sulla Brenta (11 agosto 2018)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Valstangna%2C_Riviera_Garibaldi.jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Valstangna%2C_Riviera_Garibaldi.jpg",
@@ -147,90 +120,18 @@
       "alt": "Il paese di Valstagna con le case colorate in fila lungo il fiume, un ponte decorato di rosa e, dietro, le pareti boscose e rocciose della valle."
     },
     {
-      "tipo": "immagine",
-      "titolo": "Gara di zattere sulla Brenta a Valstagna (Palio delle Zattere)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Out%26About_-_Raft_Race_in_Valstagna_(Veneto)_(4571358).jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Out%26About_-_Raft_Race_in_Valstagna_(Veneto)_(4571358).jpg",
-      "autore": "U.S. Army USAG-V, Anna Terracino",
-      "licenza": "Pubblico dominio",
-      "alt": "Squadre in costumi colorati, gialli e rossi, in piedi su zattere di tronchi: spingono con lunghe pertiche in mezzo alla corrente."
-    },
-    {
       "tipo": "video",
       "titolo": "Bassano del Grappa: il Ponte degli Alpini e il fiume Brenta",
       "url": "https://www.youtube-nocookie.com/embed/n1AMWOF650s",
       "pagina": "https://www.youtube.com/watch?v=n1AMWOF650s",
       "autore": "MagicoVeneto ~ MV Gianni Pasquale ~",
       "licenza": "Licenza non indicata: video solo incorporato da YouTube"
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "La Brenta a Bassano nella luce della sera (7 agosto 2006)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_Abendstimmung.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_Abendstimmung.jpg",
-      "autore": "Museshare",
-      "licenza": "CC BY-SA 3.0",
-      "alt": "Il fiume calmo riflette come uno specchio le case dorate dal sole basso; in primo piano il greto di ghiaia, a sinistra il ponte coperto, in alto le torri della città e dietro i monti."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "La Calà del Sasso (27 aprile 2008)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cal%C3%A0_del_Sasso.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Cal%C3%A0_del_Sasso.jpg",
-      "autore": "fabryr",
-      "licenza": "CC BY-SA 2.0",
-      "alt": "Una scalinata di pietra grigia sale nel bosco spoglio: a destra i gradini bassi e larghi, a sinistra una fascia lastricata senza gradini, un po' incavata. Intorno rocce coperte di muschio e foglie secche."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "La Brenta a Valstagna (20 novembre 2022)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Brenta_a_Valstagna.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Brenta_a_Valstagna.jpg",
-      "autore": "Syrio",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Il fiume scorre veloce tra lastre di roccia chiara e massi; sopra l'acqua sono tesi alcuni cavi con paline appese. Sull'altra riva alberi gialli d'autunno e, sopra, le pareti ripide e rocciose della valle."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "La valle della Brenta verso Bassano, veduta aerea (6 maggio 2023)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Valle_del_Brenta_verso_Bassano.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Valle_del_Brenta_verso_Bassano.jpg",
-      "autore": "Syrio",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Veduta dall'alto: il fondovalle con i paesi dai tetti rossi è chiuso tra due versanti coperti di boschi; in fondo la valle si apre e la pianura sfuma nella foschia."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "La valle della Brenta a Bassano, xilografia (1901)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa%2C_valle_del_Brenta_%28xilografia%29.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa%2C_valle_del_Brenta_%28xilografia%29.jpg",
-      "autore": "Autore sconosciuto",
-      "licenza": "Pubblico dominio",
-      "alt": "Xilografia in bianco e nero: il fiume fa un'ampia curva tra campi, filari e case sparse; in primo piano un palazzo tra gli alberi, a destra un campanile, sullo sfondo i monti che chiudono la valle."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Il percorso di canoa slalom sulla Brenta a Valstagna (25 gennaio 2009)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Percorso_di_canoa_slalom_sul_Brenta_a_Valstagna.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Percorso_di_canoa_slalom_sul_Brenta_a_Valstagna.jpg",
-      "autore": "N.Fioretti",
-      "licenza": "Pubblico dominio",
-      "alt": "Il fiume azzurro e mosso corre tra massi chiari; sopra l'acqua pendono da cavi le paline colorate di un percorso di slalom e, in lontananza, si vede una canoa con un canoista in giacca rossa. Ai lati le case del paese e i monti."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Le case sulla riva della Brenta sotto il castello (2012)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_di_Grappa%2C_Brenta_North-east.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_di_Grappa%2C_Brenta_North-east.jpg",
-      "autore": "Oursana",
-      "licenza": "CC0",
-      "alt": "Dall'acqua si alza una fila di case rosa, gialle e bianche; sopra, tra i cipressi, le mura e le torri della parte alta della città, sotto un cielo grigio di temporale."
     }
   ],
   "live": [
     {
       "tipo": "brenta",
-      "nota": "Il livello è misurato dall'idrometro ARPAV «Brenta a Barzizza», circa 1 km a monte del Ponte Vecchio: non è il livello sotto il ponte. I dati non sono validati. Non risulta nessuna webcam verificata che inquadri il fiume a Bassano."
+      "nota": "Il livello è misurato dall'idrometro ARPAV «Brenta a Barzizza», circa 1 km a monte del Ponte Vecchio: non è il livello sotto il ponte. I dati non sono validati."
     }
   ],
   "curiosita": [
@@ -256,7 +157,7 @@
   "incertezze": [
     "Porto di Brenta: che Bassano avesse un porto fluviale sulla sponda sinistra, poco a valle del ponte, dove con le zattere arrivavano anche altre merci, poggia su una sola fonte, un pannello divulgativo del Consorzio di Bonifica Brenta senza data né bibliografia. Il pieghevole della mostra del 2011 cita il porto senza dire dov'era.",
     "Bocchiero: lo stesso pannello dice che sulla diga di derivazione del canale Medoaco, a valle del ponte, si vede ancora la bocca per il passaggio del legname. Non è stato verificato sul posto.",
-    "Palio delle Zattere di Valstagna: «dal 1986, l'ultima domenica di luglio» viene da una riga senza nota di Wikipedia, e non è verificato che si tenga ancora in quella data. Per questo non compare tra le tappe; la fotografia della gara non è datata con certezza.",
+    "Palio delle Zattere di Valstagna: «dal 1986, l'ultima domenica di luglio» viene da una riga senza nota di Wikipedia, e non è verificato che si tenga ancora in quella data. Per questo non compare tra le tappe.",
     "Il punto sulla mappa è una scelta redazionale: il fiume non è un luogo preciso."
   ]
 }

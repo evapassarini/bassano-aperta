@@ -1,7 +1,7 @@
 // Rigenera le illustrazioni dei luoghi simbolo: esegue ogni generatore in luoghi/*.mjs, che
 // scrive public/landmarks/<id>.svg. Uso: npm run illustrazioni [id ...]
 // Con uno o più id rigenera solo quelli. Non tocca indice.json: larghezzaMetri e ancora
-// vanno aggiornati a mano quando cambia il viewBox (vedi README).
+// vanno aggiornati a mano quando cambia il viewBox (vedi docs/SVILUPPO.md).
 import { execFileSync } from 'node:child_process';
 import { readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';

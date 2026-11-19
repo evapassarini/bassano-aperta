@@ -63,15 +63,15 @@ export function creaAriaBreve(opzioni: OpzioniAriaBreve = {}): HTMLElement {
       const foto = r.fotoVecchia ? el('span', { class: 'aria-breve-foto' }, ` · ${r.fotoVecchia}`) : null;
       const g = giudizioAria(dati);
       const tempo = g ? tempoGiudizio(g.giorno, adesso()) : null;
-      // Mai oggi: se il giorno del giudizio non è finito (o la data del dispositivo è indietro)
+      // Se il giorno del giudizio non è finito (o la data del dispositivo è indietro)
       // i dati non bastano, e restano solo i numeri.
       if (!g || !tempo || tempo.giorniFa < 1) {
         // Lo spazio serve a chi ascolta: senza, le due righe si attaccano.
         corpo.replaceChildren(el('span', { class: 'aria-breve-testa' }, 'Aria · ARPAV', foto), ' ', numero);
         return;
       }
-      // Il giudizio è la prima cosa che si legge. La parola c'è sempre: il segno colorato
-      // la accompagna, non la sostituisce. Se il giorno è vecchio la data viene prima della parola.
+      // Il giudizio è la prima cosa che si legge: la parola, con accanto il segno colorato.
+      // Il segno è solo grafico (aria-hidden). Se il giorno è vecchio la data viene prima della parola.
       const parola = el('strong', { class: 'aria-breve-parola' }, g.etichetta);
       const segno = el('span', { class: `aria-segno aria-segno-${g.classe}`, 'aria-hidden': 'true' });
       const scritta = tempo.vecchio

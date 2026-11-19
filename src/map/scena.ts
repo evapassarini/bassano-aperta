@@ -15,6 +15,8 @@ import type {
   TipoEdificio,
   TipoStrada,
 } from '../types';
+import { passeggiate, percorsoTreno } from './animazioni';
+import type { Passeggiata, Percorso } from './animazioni';
 import { ISO_X, ISO_Y, ISO_Z, lonLatInMetri, profondita } from './proiezione';
 import type { Rettangolo, Vista } from './proiezione';
 import { TIMPANO, TIMPANO_DESTRO, TIMPANO_SINISTRO, tettoInMetri } from './tetti';
@@ -745,6 +747,10 @@ export interface Scena {
    * scelta non dipende da che cosa è in vista, quindi trascinando la mappa le luci non cambiano.
    */
   rangoLampioni: Float32Array;
+  /** Il percorso del treno decorativo lungo i binari (metri locali), se i binari bastano. */
+  binari: Percorso | null;
+  /** Le passeggiate decorative nelle piazze del centro (metri locali). */
+  passeggiate: Passeggiata[];
 }
 
 /** Rango di un lampione: la parte frazionaria di (numero + 1) per la sezione aurea. */
@@ -950,23 +956,7 @@ export function costruisciScena(
     linee.push({ dati: l, linea: proiettaPiatto(l.p) });
   }
 
-  const chiaviPunti = strati.punti.map((p) => profondita(p.x, p.y));
-  const punti: PuntoPronto[] = [];
-  for (const i of ordinePerProfondita(chiaviPunti)) {
-    const p = strati.punti[i];
-    let sulLuogo = -1;
-    if (p.storia !== undefined) {
-      for (let l = 0; l < luoghi.length; l++) {
-        const luogo = luoghi[l];
-        if (luogo.dati.storia !== p.storia) continue;
-        if (Math.hypot(p.x - luogo.x, p.y - luogo.y) <= raggioSegnaposto(luogo)) {
-          sulLuogo = l;
-          break;
-        }
-      }
-    }
-    punti.push({ dati: p, sx: (p.x - p.y) * ISO_X, sy: -(p.x + p.y) * ISO_Y, landmark: sulLuogo });
-  }
+  const punti = preparaPunti(strati.punti, luoghi);
 
   return {
     edifici,
@@ -983,7 +973,34 @@ export function costruisciScena(
     lampioni,
     grigliaLampioni: new Griglia(riquadriLampioni, nLampioni, LATO_GRIGLIA),
     rangoLampioni,
+    binari: percorsoTreno(base.strade ?? []),
+    passeggiate: passeggiate(base.aree ?? [], base.edifici ?? []),
   };
+}
+
+/**
+ * I segnaposto pronti da disegnare, dal più lontano al più vicino. Si rifà anche dopo l'avvio,
+ * quando arrivano i segnali degli avvisi (vedi `mostraAvvisi` in index.ts).
+ */
+export function preparaPunti(elenco: Punto[], luoghi: LandmarkPronto[]): PuntoPronto[] {
+  const chiaviPunti = elenco.map((p) => profondita(p.x, p.y));
+  const punti: PuntoPronto[] = [];
+  for (const i of ordinePerProfondita(chiaviPunti)) {
+    const p = elenco[i];
+    let sulLuogo = -1;
+    if (p.storia !== undefined) {
+      for (let l = 0; l < luoghi.length; l++) {
+        const luogo = luoghi[l];
+        if (luogo.dati.storia !== p.storia) continue;
+        if (Math.hypot(p.x - luogo.x, p.y - luogo.y) <= raggioSegnaposto(luogo)) {
+          sulLuogo = l;
+          break;
+        }
+      }
+    }
+    punti.push({ dati: p, sx: (p.x - p.y) * ISO_X, sy: -(p.x + p.y) * ISO_Y, landmark: sulLuogo });
+  }
+  return punti;
 }
 
 /** Stato di visibilità degli strati. */

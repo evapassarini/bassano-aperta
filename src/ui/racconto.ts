@@ -213,7 +213,7 @@ export function creaRacconto(storia: Storia, opzioni: OpzioniRacconto): Racconto
 
   // --- Curiosità -----------------------------------------------------------
   // Le "incertezze" della storia restano una nota interna di redazione: non si mostrano.
-  // Un file senza il campo non deve rompere la finestra: si comporta come un elenco vuoto.
+  // Se manca il campo curiosita, vale come un elenco vuoto.
   const curiosita = storia.curiosita ?? [];
   if (curiosita.length > 0) {
     const elenco = el('ul', null);
@@ -309,8 +309,8 @@ export function creaRacconto(storia: Storia, opzioni: OpzioniRacconto): Racconto
         const traguardo = cornice.top + cornice.height * 0.66;
         const quota = Math.max(0, Math.min(1, (traguardo - r.top) / r.height));
         barra.style.transform = `scaleY(${quota.toFixed(4)})`;
-        // Rete di sicurezza: una tappa ormai ben dentro l'area visibile non resta mai
-        // nascosta, anche se l'osservatore qui sotto ha perso il passaggio.
+        // Una tappa già ben dentro l'area visibile si mostra comunque, anche se l'osservatore
+        // qui sotto ha perso il passaggio.
         const dentro = cornice.top + cornice.height * 0.85;
         for (const t of tappe) {
           const alto = t.getBoundingClientRect().top;

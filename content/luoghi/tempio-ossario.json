@@ -51,7 +51,7 @@
         "titolo": "Wikipedia, voce «Tempio ossario di Bassano del Grappa»",
         "url": "https://it.wikipedia.org/wiki/Tempio_ossario_di_Bassano_del_Grappa"
       },
-      "media": 2
+      "media": 1
     },
     {
       "anno": "Maggio 1934",
@@ -80,7 +80,7 @@
         "titolo": "Wikipedia, voce «Tempio ossario di Bassano del Grappa»",
         "url": "https://it.wikipedia.org/wiki/Tempio_ossario_di_Bassano_del_Grappa"
       },
-      "media": 3
+      "media": 2
     },
     {
       "anno": "Oggi",
@@ -101,15 +101,6 @@
       "autore": "Syrio",
       "licenza": "CC BY-SA 4.0",
       "alt": "La facciata in mattoni rossi del Tempio Ossario, con il grande rosone al centro, tre portali e una croce in cima."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Il Tempio Ossario visto di lato",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa%2C_tempio_ossario_02.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa%2C_tempio_ossario_02.jpg",
-      "autore": "Syrio",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Il fianco e la facciata della chiesa in mattoni rossi visti di scorcio, con le finestre ad arco acuto e un campanile sul fondo."
     },
     {
       "tipo": "immagine",
@@ -136,15 +127,6 @@
       "pagina": "https://www.youtube.com/watch?v=JrTxc6y6QiM",
       "autore": "Archivio Luce Cinecittà",
       "licenza": "Licenza non indicata: video solo incorporato da YouTube"
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "L'altro fianco del Tempio Ossario, con i due campanili",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa%2C_tempio_ossario_03.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa%2C_tempio_ossario_03.jpg",
-      "autore": "Syrio",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Il lato lungo della chiesa in mattoni rossi, con le finestre ad arco acuto, le finestre rotonde in alto, un rosone e i due campanili. A sinistra, in primo piano, un edificio moderno in mattoni; davanti un parcheggio con alcune auto, sotto un cielo nuvoloso."
     }
   ],
   "live": [],

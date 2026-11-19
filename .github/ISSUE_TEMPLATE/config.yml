@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Problema di sicurezza
+    url: https://github.com/evapassarini/bassano-aperta/security/advisories/new
+    about: Segnalalo in privato, non con una issue pubblica.

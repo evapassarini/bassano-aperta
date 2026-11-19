@@ -804,25 +804,6 @@ describe('leggiTreni e leggiAvvisi', () => {
     expect(finto).toHaveBeenCalledTimes(3);
   });
 
-  it('dice quando è stata generata la tabella delle stazioni, senza scaricarla due volte', async () => {
-    const finto = vi.fn(async (_url: unknown) => rispostaOk(tabella));
-    vi.stubGlobal('fetch', finto);
-    const { leggiDataStazioni } = await import('../src/live/index');
-    expect(await leggiDataStazioni()).toBe('2026-11-15T06:00:00Z');
-    expect(await leggiDataStazioni()).toBe('2026-11-15T06:00:00Z');
-    expect(finto).toHaveBeenCalledTimes(1);
-  });
-
-  it('rifiuta la data della tabella se il file manca o non la dichiara, e poi riprova', async () => {
-    const risposte: unknown[] = [{ ok: false, status: 404, json: async () => ({}) }, rispostaOk({ stazioni: STAZIONI }), rispostaOk(tabella)];
-    const finto = vi.fn(async (_url: unknown) => risposte.shift());
-    vi.stubGlobal('fetch', finto);
-    const { leggiDataStazioni } = await import('../src/live/index');
-    await expect(leggiDataStazioni()).rejects.toThrow(/404/);
-    await expect(leggiDataStazioni()).rejects.toThrow(/non dichiara/);
-    expect(finto).toHaveBeenCalledTimes(2);
-  });
-
   it('se la tabella delle stazioni non si carica mostra i treni lo stesso, senza nomi', async () => {
     vi.useFakeTimers({ toFake: ['Date'] });
     vi.setSystemTime(ADESSO);

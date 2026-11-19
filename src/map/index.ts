@@ -18,7 +18,7 @@ import {
   zoomPerContenere,
 } from './proiezione';
 import type { Camera, Vista } from './proiezione';
-import { costruisciScena } from './scena';
+import { costruisciScena, preparaPunti } from './scena';
 import type { StratiVisibili } from './scena';
 
 export interface OpzioniMappa {
@@ -42,6 +42,11 @@ export interface Mappa {
    * Sul canvas resta scritto l'attributo data-luce, per chi vuole intonare la pagina.
    */
   impostaLuce(luce: Luce): void;
+  /**
+   * Aggiunge ai segnaposto i segnali degli avvisi sulla viabilità (punti in metri locali,
+   * di solito strato 'mobilita', tipo 'avviso'). Una nuova chiamata sostituisce quelli di prima.
+   */
+  mostraAvvisi(punti: Punto[]): void;
   distruggi(): void;
 }
 
@@ -62,6 +67,11 @@ const ZOOM_ARRIVO = Math.max(2.4, ZOOM_NOMI + 0.2);
 const ATTESA_HASH = 300;
 /** Durata della dissolvenza tra una luce e l'altra, in millisecondi. */
 const DURATA_DISSOLVENZA = 420;
+/**
+ * Intervallo minimo tra due fotogrammi delle animazioni decorative: ogni fotogramma ridisegna
+ * tutta la mappa. Il Disegnatore dice quanto serve (acqua 100 ms, treno 40 ms); mai sotto questo.
+ */
+const INTERVALLO_ANIMAZIONE_MS = 40;
 const LUCI: Luce[] = ['giorno', 'pomeriggio', 'notte'];
 
 /**
@@ -90,6 +100,10 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
   let vivo = true;
   let daDisegnare = false;
   let fotogramma = 0;
+  let sveglia = 0;
+  // Animazioni decorative solo se chi guarda non ha chiesto meno movimento e la pagina si vede.
+  const animazioniPermesse = (): boolean =>
+    !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches && document.visibilityState !== 'hidden';
 
   const richiedi = (): void => {
     daDisegnare = true;
@@ -234,9 +248,11 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
     }
     if (dissolvenza && volo) chiudiDissolvenza();
     if (dissolvenza) daDisegnare = true;
+    const anima = animazioniPermesse();
     if (!daDisegnare) return;
     daDisegnare = false;
     disegnata = true;
+    window.clearTimeout(sveglia);
     disegnatore.disegna(ctx, {
       camera,
       vista,
@@ -246,7 +262,20 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
       puntoSopra,
       landmarkSopra,
       area,
+      // Il tempo dell'orologio, non quello della pagina: chi apre il sito alla stessa ora vede
+      // il treno nello stesso punto. Con meno movimento o la pagina nascosta, tutto sta fermo.
+      tempo: anima ? Date.now() : undefined,
     });
+    if (anima) {
+      if (disegnatore.animato) {
+        // Qualcosa si muove: il prossimo fotogramma tra quanto chiede il Disegnatore (acqua 100 ms,
+        // treno 40 ms), con un timer e non a ogni giro dello schermo.
+        sveglia = window.setTimeout(richiedi, Math.max(INTERVALLO_ANIMAZIONE_MS, disegnatore.intervalloAnimazione));
+      } else if (Number.isFinite(disegnatore.prossimoMovimento)) {
+        // Il treno è in sosta o fuori vista: ci si risveglia quando serve, senza ridisegnare prima.
+        sveglia = window.setTimeout(richiedi, Math.max(INTERVALLO_ANIMAZIONE_MS, disegnatore.prossimoMovimento));
+      }
+    }
     // I dettagli degli edifici si preparano un poco per fotogramma: finché ne mancano, si ridisegna.
     if (disegnatore.incompleto) richiedi();
     if (dissolvenza && telaDissolvenza) {
@@ -483,6 +512,9 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
   // --- tastiera ---------------------------------------------------------------
 
   const menoMovimento = window.matchMedia?.('(prefers-reduced-motion: reduce)') ?? null;
+  // Tornando sulla pagina, o cambiando la preferenza sul movimento, le animazioni ripartono o si fermano.
+  document.addEventListener('visibilitychange', richiedi);
+  menoMovimento?.addEventListener?.('change', richiedi);
 
   function vola(a: Camera, durata = DURATA_VOLO): void {
     const meta = limitaCamera(a, area, zoomMinimo, ZOOM_MASSIMO, vista);
@@ -605,6 +637,12 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
       evidenziata = storia;
       richiedi();
     },
+    mostraAvvisi(punti) {
+      if (!vivo) return;
+      scena.punti = preparaPunti([...opzioni.strati.punti, ...punti], scena.landmark);
+      puntoSopra = -1;
+      richiedi();
+    },
     impostaLuce(luce) {
       if (!vivo || bloccata || luce === disegnatore.luce || !LUCI.includes(luce)) return;
       avviaDissolvenza();
@@ -624,6 +662,9 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
       if (fotogramma) cancelAnimationFrame(fotogramma);
       fotogramma = 0;
       window.clearTimeout(timerHash);
+      window.clearTimeout(sveglia);
+      document.removeEventListener('visibilitychange', richiedi);
+      menoMovimento?.removeEventListener?.('change', richiedi);
       osservatore?.disconnect();
       window.removeEventListener('resize', alRidimensionamento);
       window.removeEventListener('hashchange', alCambioHash);

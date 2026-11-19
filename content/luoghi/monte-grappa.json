@@ -51,7 +51,7 @@
         "titolo": "Wikipedia, voce «Seconda battaglia del monte Grappa»",
         "url": "https://it.wikipedia.org/wiki/Seconda_battaglia_del_monte_Grappa"
       },
-      "media": 5
+      "media": 2
     },
     {
       "anno": "Dopo il 1918",
@@ -122,111 +122,12 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "Il Portale Roma",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sacrario_militare_del_monte_Grappa_-_Portale_Roma.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Sacrario_militare_del_monte_Grappa_-_Portale_Roma.jpg",
-      "autore": "Syrio",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Un edificio monumentale in pietra grigia, squadrato, con un portone scuro al centro e gradinate ai lati."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "La Via Eroica sotto la neve",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sacrario_militare_del_monte_Grappa%2C_innevato_-_Via_Eroica_02.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Sacrario_militare_del_monte_Grappa%2C_innevato_-_Via_Eroica_02.jpg",
-      "autore": "Syrio",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Il pendio della cima coperto di neve, con una costruzione in pietra sulla destra e il cielo sereno."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "L'ossario di Cima Grappa innevato",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ossario_di_cima_Grappa.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Ossario_di_cima_Grappa.jpg",
-      "autore": "Favarin Matteo",
-      "licenza": "Pubblico dominio",
-      "alt": "Una distesa di neve sulla cima, una costruzione in pietra sulla destra e grandi nuvole bianche all'orizzonte."
-    },
-    {
-      "tipo": "immagine",
       "titolo": "Il Monte Grappa visto da Col Moschino, sopra la valle di Santa Felicita, dipinto di Giulio Aristide Sartorio (1918)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Mount_Grappa_as_seen_from_Col_Moschino_over_the_Santa_Felicita_valley_%281918%29%2C_by_Giulio_Aristide_Sartorio.jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Mount_Grappa_as_seen_from_Col_Moschino_over_the_Santa_Felicita_valley_%281918%29%2C_by_Giulio_Aristide_Sartorio.jpg",
       "autore": "Giulio Aristide Sartorio",
       "licenza": "Pubblico dominio",
       "alt": "Dipinto dai toni scuri: il profilo massiccio della montagna sotto un cielo blu cupo."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Trincee austriache sull'Asolone, fotografia aerea della Grande Guerra",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/WWI_-_Battle_of_the_Piave_River_-_Monte_Grappa_area_-_Austrian_trenches_on_the_Asolone.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:WWI_-_Battle_of_the_Piave_River_-_Monte_Grappa_area_-_Austrian_trenches_on_the_Asolone.jpg",
-      "autore": "Fotografi dell'Esercito Italiano 1915-1918 (da esercito.difesa.it)",
-      "licenza": "CC BY 2.5",
-      "alt": "Fotografia aerea in bianco e nero: le linee chiare delle trincee segnano i crinali e i pendii della montagna."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Soldati sulle pendici del Grappa innevato, da «L'Illustration» del 5 gennaio 1918",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/No_3905_Page_5%2C_Sur_le_pentes_du_mont_Grappa_photo-1.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:No_3905_Page_5%2C_Sur_le_pentes_du_mont_Grappa_photo-1.jpg",
-      "autore": "Autore sconosciuto, da «L'Illustration» n. 3905 del 5 gennaio 1918",
-      "licenza": "Pubblico dominio",
-      "alt": "Fotografia in bianco e nero: in alto una fila di soldati carichi cammina sul pendio coperto di neve. In basso, davanti a un muro di pietra, altri soldati con l'elmetto e il mantello accanto a un autocarro telonato."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Una colonna di soldati su un sentiero nella neve del Grappa, da «L'Illustration» del 5 gennaio 1918",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/No_3905_Page_5%2C_Sur_le_pentes_du_mont_Grappa_photo-2.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:No_3905_Page_5%2C_Sur_le_pentes_du_mont_Grappa_photo-2.jpg",
-      "autore": "Autore sconosciuto, da «L'Illustration» n. 3905 del 5 gennaio 1918",
-      "licenza": "Pubblico dominio",
-      "alt": "Fotografia in bianco e nero: soldati visti di spalle, carichi di zaini e coperte arrotolate, camminano in fila lungo un sentiero stretto scavato nel pendio innevato."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Il massiccio del Grappa in una fotografia del servizio stampa di guerra austro-ungarico, 3 giugno 1918",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ansicht_des_Grappastockes_%28BildID_15634912%29.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Ansicht_des_Grappastockes_%28BildID_15634912%29.jpg",
-      "autore": "K.u.k. Kriegspressequartier, Lichtbildstelle - Wien",
-      "licenza": "Pubblico dominio",
-      "alt": "Fotografia in bianco e nero: tra due abeti scuri si vede un dosso spoglio con resti di muri, e dietro la montagna con chiazze di roccia chiara e la cima sotto le nuvole."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "L'ingresso della Galleria Vittorio Emanuele III",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Monte_Grappa_-_Galleria_Vittorio_Emanuele_III_-_Ingresso.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Monte_Grappa_-_Galleria_Vittorio_Emanuele_III_-_Ingresso.jpg",
-      "autore": "Syrio",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Un portale ad arco chiuso da un cancello con alcuni avvisi appesi, in un muro di pietra chiara sotto un pendio di erba secca. Sopra, una lapide con la scritta «Galleria Vittorio Emanuele III» e la data 1918; ai lati due proiettili d'artiglieria come ornamento. A terra, chiazze di neve."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Dentro la Galleria Vittorio Emanuele III",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Monte_Grappa_-_Galleria_Vittorio_Emanuele_III_01.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Monte_Grappa_-_Galleria_Vittorio_Emanuele_III_01.jpg",
-      "autore": "Syrio",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Un cunicolo stretto con le pareti di pietra grezza e il soffitto a volta, con larghi gradini che scendono. Una lampada illumina le pareti umide; a sinistra una corda fa da corrimano, a destra corrono due tubi."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "La Caserma Milano, con la targa del museo storico",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Monte_Grappa_-_Caserma_Milano.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Monte_Grappa_-_Caserma_Milano.jpg",
-      "autore": "Syrio",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "La facciata bassa in blocchi di pietra chiara con la scritta «Caserma Milano» e uno stemma in alto, le imposte verdi, una targa «Museo storico» e la neve sul tetto. Dietro, abeti e alberi spogli sotto un cielo sereno."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "La vista dalla cima del Grappa verso le Prealpi e le Dolomiti",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Vista_dal_monte_grappa.JPG?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Vista_dal_monte_grappa.JPG",
-      "autore": "Rics1299",
-      "licenza": "CC BY-SA 3.0",
-      "alt": "Dall'alto si vedono dossi erbosi, boschi di abeti, una parete di roccia e una strada bianca che serpeggia nella conca. All'orizzonte una lunga catena di montagne azzurre dietro una fascia di nuvole basse."
     }
   ],
   "live": [

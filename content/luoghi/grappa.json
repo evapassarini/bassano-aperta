@@ -31,7 +31,7 @@
         "titolo": "Poli Museo della Grappa (grappa.com), «Chi ha inventato la grappa?»",
         "url": "https://grappa.com/en/news/who-invented-grappa"
       },
-      "media": 9
+      "media": 4
     },
     {
       "anno": "1779",
@@ -41,7 +41,7 @@
         "titolo": "Linkiesta, articolo su Nardini (luglio 2026)",
         "url": "https://www.linkiesta.it/2026/07/nardini-piu-antica-distilleria-italia-futuro-tempo/"
       },
-      "media": 7
+      "media": 3
     },
     {
       "anno": "1860",
@@ -87,7 +87,7 @@
         "titolo": "Museimpresa, scheda «Poli Museo della Grappa»",
         "url": "https://museimpresa.com/?p=31780"
       },
-      "media": 3
+      "media": 2
     },
     {
       "anno": "2008",
@@ -100,15 +100,6 @@
     }
   ],
   "media": [
-    {
-      "tipo": "immagine",
-      "titolo": "L'alambicco artigianale delle Distillerie Poli a Schiavon, non a Bassano (2000)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Poli_Distillerie_Alambic_2000_ok.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Poli_Distillerie_Alambic_2000_ok.jpg",
-      "autore": "GrappaCom",
-      "licenza": "CC BY-SA 3.0",
-      "alt": "Interno di una distilleria: alte colonne e caldaie di rame lucido, un fornello in mattoni e una fila di recipienti scuri lungo la parete, sopra un pavimento rosso."
-    },
     {
       "tipo": "video",
       "titolo": "Chi ha inventato la Grappa?",
@@ -136,33 +127,6 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "Un alambicco di rame esposto al Poli Museo della Grappa (2022)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Poli_Museo_della_Grappa_07.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Poli_Museo_della_Grappa_07.jpg",
-      "autore": "Superchilum",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Alambicco di rame con caldaia cilindrica e un collo altissimo a cono che in cima si piega in un tubo sottile, posato su un fornello di mattoni rossi in un corridoio a volta."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Un apparecchio di rame esposto al Poli Museo della Grappa (2022)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Poli_Museo_della_Grappa_09.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Poli_Museo_della_Grappa_09.jpg",
-      "autore": "Superchilum",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Due grandi recipienti di rame su gambe di ferro, uno sferico con oblò e rubinetti e uno cilindrico, uniti in alto da un grosso tubo curvo."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Una vetrina di piccole bottiglie al Poli Museo della Grappa (2022)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Poli_Museo_della_Grappa_17.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Poli_Museo_della_Grappa_17.jpg",
-      "autore": "Superchilum",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Grande vetrina illuminata da dietro con una decina di ripiani di vetro pieni di centinaia di piccole bottiglie di forme e colori diversi."
-    },
-    {
-      "tipo": "immagine",
       "titolo": "La casa con l'insegna della distilleria Nardini all'imbocco del Ponte Vecchio (2011)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/La_distilleria_Nardini_%286073240844%29.jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:La_distilleria_Nardini_%286073240844%29.jpg",
@@ -172,30 +136,12 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "Vinacce di uva rossa dopo la spremitura (foto generica, non scattata a Bassano)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Red_wine_grape_pomace.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Red_wine_grape_pomace.jpg",
-      "autore": "davitydave",
-      "licenza": "CC BY 2.0",
-      "alt": "Primo piano di vinacce color porpora: bucce d'uva schiacciate e vinaccioli lucidi, ammassati."
-    },
-    {
-      "tipo": "immagine",
       "titolo": "Ritratto di Michele Savonarola, acquaforte di Pieter van der Borcht (1574 o 1612). Rijksmuseum, Amsterdam",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Portret_van_Michele_Savanorola_Portretten_van_klassieke_en_recente_filosofen_en_geneesheren_%28serietitel%29%2C_RP-P-1909-4289.jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Portret_van_Michele_Savanorola_Portretten_van_klassieke_en_recente_filosofen_en_geneesheren_%28serietitel%29%2C_RP-P-1909-4289.jpg",
       "autore": "Pieter van der Borcht (I); riproduzione del Rijksmuseum",
       "licenza": "CC0",
       "alt": "Stampa in bianco e nero: busto di un uomo con un copricapo a turbante dentro una cornice rotonda ornata di frutti e mascheroni, con il nome «Savanorela» in alto e quattro righe in latino sotto."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Un bicchierino di grappa (foto generica, non scattata a Bassano)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/A_glass_of_tasty_grappa.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:A_glass_of_tasty_grappa.jpg",
-      "autore": "Carsten Tolkmit from Kiel, Germany",
-      "licenza": "CC BY-SA 2.0",
-      "alt": "Un piccolo calice a tulipano con un po' di grappa chiara sul fondo, davanti a uno sfondo sfocato di luci calde."
     }
   ],
   "live": [],

@@ -25,7 +25,7 @@
         "titolo": "Wikipedia, voce «Palazzo Bonaguro»",
         "url": "https://it.wikipedia.org/wiki/Palazzo_Bonaguro"
       },
-      "media": 4
+      "media": 2
     },
     {
       "anno": "Inizio XVII secolo",
@@ -86,39 +86,12 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "Palazzo Bonaguro, una statua sul muro di cinta (settembre 2025)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_-_Palazzo_Bonaguro_-_Marcok_2025-09-13_20-55-15_005.jpeg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Palazzo_Bonaguro_-_Marcok_2025-09-13_20-55-15_005.jpeg",
-      "autore": "Marco Chemello (WMIT)",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Una statua in pietra di figura femminile in cima a un pilastro del muro di cinta; dietro, un prato e grandi alberi, e sul muretto un gatto bianco seduto."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Palazzo Bonaguro visto lungo via Angarano",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Via_Angarano%2C_Palazzo_Bonaguro%2C_Bassano_del_Grappa.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Via_Angarano%2C_Palazzo_Bonaguro%2C_Bassano_del_Grappa.jpg",
-      "autore": "Oursana",
-      "licenza": "CC0",
-      "alt": "Una via con case in fila: al centro la facciata gialla e scrostata del palazzo vista di scorcio, con balconi in pietra e un frontone in alto; a destra le fronde di un albero e, in basso, una persona di spalle."
-    },
-    {
-      "tipo": "immagine",
       "titolo": "Palazzo Bonaguro, le due statue all'inizio del viale (settembre 2025)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_-_Palazzo_Bonaguro_-_Marcok_2025-09-13_20-55-15_007.jpeg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Palazzo_Bonaguro_-_Marcok_2025-09-13_20-55-15_007.jpeg",
       "autore": "Marco Chemello (WMIT)",
       "licenza": "CC BY-SA 4.0",
       "alt": "Due statue di pietra su pilastri, una femminile e una maschile, ai lati di un viale alberato che si allontana tra i prati."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Palazzo Bonaguro, il parco visto da un balcone (settembre 2025)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_-_Palazzo_Bonaguro_-_Marcok_2025-09-13_20-55-15_009.jpeg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Palazzo_Bonaguro_-_Marcok_2025-09-13_20-55-15_009.jpeg",
-      "autore": "Marco Chemello (WMIT)",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Da una portafinestra con le imposte verdi aperte, oltre una ringhiera di ferro ad archi, si vedono il cortile, le due statue sul muro di cinta e il viale alberato tra i prati."
     }
   ],
   "live": [

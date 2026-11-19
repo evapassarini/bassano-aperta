@@ -306,7 +306,7 @@ describe('public/data/lampioni.json', () => {
   it('esiste ed è nella forma di DatiLampioni', () => {
     expect(dati).not.toBeNull();
     if (!dati) return;
-    expect(Number.isNaN(Date.parse(dati.generato))).toBe(false);
+    expect('generato' in dati).toBe(false);
     expect(dati.fonte).toMatch(/OpenStreetMap/);
     expect(dati.fonte).toMatch(/illustrativo/);
     expect(dati.fonte).not.toMatch(/[—–]/);

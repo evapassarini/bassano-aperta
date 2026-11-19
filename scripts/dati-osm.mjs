@@ -8,9 +8,10 @@
 // Overpass e le riusa alla corsa successiva, senza riscaricare.
 //
 // Se qualcosa va storto lo script esce con codice diverso da zero e non
-// tocca il file esistente: mai un base.json a metà.
+// tocca il base.json esistente.
 
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
+import { passoAlberi, puntiDiGriglia, TETTO_ALBERI } from './lib/alberi.mjs';
 import { togliDoppioni } from './lib/doppioni.mjs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -61,7 +62,6 @@ const AREA_MINIMA_EDIFICIO = 12; // m²
 const AREA_MINIMA = { acqua: 15, parco: 60, bosco: 150, prato: 120, piazza: 40, coltivo: 400 };
 const RAGGIO_CENTRO = 400; // metri da Piazza Libertà: centro storico, edifici più alti
 const RAGGIO_PEDONALE = 800; // i vialetti (footway) si tengono solo entro questo raggio
-const TETTO_ALBERI = 6000;
 const QUOTA_ALBERI_VERI = 4500;
 
 // Ponte Vecchio: serve per il controllo finale.
@@ -558,25 +558,18 @@ function costruisciAlberi(nodi, aree, edifici) {
   }
   veri.sort((a, b) => a.id - b.id);
 
-  // Punti campionati in boschi e parchi: una griglia fissa con uno spostamento
-  // che dipende solo dalla cella, così a ogni corsa gli alberi sono gli stessi.
-  const PASSI = { bosco: 13, parco: 24 };
+  // Punti campionati in boschi e parchi: una griglia fissa con uno spostamento che dipende
+  // solo dalla cella, così a ogni corsa gli alberi sono gli stessi. Parchi e giardini del
+  // centro hanno la griglia più fitta (scripts/lib/alberi.mjs).
   const candidati = new Map();
   for (const a of aree) {
-    const passo = PASSI[a.t];
-    if (!passo) continue;
     const anello = daPiatto(a.p);
-    const l = limiti(anello);
-    for (let i = Math.floor(l.minX / passo); i <= Math.floor(l.maxX / passo); i++) {
-      for (let j = Math.floor(l.minY / passo); j <= Math.floor(l.maxY / passo); j++) {
-        const seme = (Math.imul(i, 73856093) ^ Math.imul(j, 19349663) ^ passo) | 0;
-        const k = `${passo}:${i}:${j}`;
-        if (candidati.has(k)) continue;
-        const p = [(i + 0.15 + 0.7 * casuale(seme, 1)) * passo, (j + 0.15 + 0.7 * casuale(seme, 2)) * passo];
-        if (!dentroRiquadro(p) || !puntoInPoligono(p, anello)) continue;
-        if (suEdificio(p) || inAcqua(p)) continue;
-        candidati.set(k, { p, r: casuale(seme, 3), k });
-      }
+    const passo = passoAlberi(a.t, anello);
+    if (!passo) continue;
+    for (const c of puntiDiGriglia(anello, passo)) {
+      if (candidati.has(c.k)) continue;
+      if (!dentroRiquadro(c.p) || suEdificio(c.p) || inAcqua(c.p)) continue;
+      candidati.set(c.k, c);
     }
   }
   const posto = Math.max(0, TETTO_ALBERI - veri.length);
@@ -598,7 +591,7 @@ function appiattisciPunti(punti) {
 }
 
 // ---------------------------------------------------------------------------
-// Controlli finali: meglio fermarsi che scrivere un file sbagliato
+// Controlli finali prima di scrivere il file
 // ---------------------------------------------------------------------------
 
 function controlla(dati) {
@@ -697,7 +690,6 @@ async function principale() {
   console.log(`  ${al.alberi.length / 2} alberi: ${al.veri} veri (su ${al.veriTotali} in OSM), ${al.campionati} campionati in boschi e parchi (su ${al.campionatiTotali} possibili)`);
 
   const dati = {
-    generato: new Date().toISOString(),
     fonte: '© OpenStreetMap contributors, licenza ODbL 1.0',
     edifici: e.edifici,
     strade: s.strade,

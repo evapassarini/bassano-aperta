@@ -1819,6 +1819,14 @@ button.aria-breve:hover {
   text-wrap: pretty;
 }
 
+.scheda-sotto {
+  margin-top: 12px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--seppia);
+  text-wrap: pretty;
+}
+
 .scheda .adesso {
   margin-top: 16px;
 }

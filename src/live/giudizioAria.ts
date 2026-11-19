@@ -1,13 +1,13 @@
 // Giudizio a parole sulla qualità dell'aria (buona, accettabile, mediocre, scadente, pessima).
 //
 // Lo calcola questo sito, dalle misure ARPAV non validate della stazione di Bassano, con le
-// fasce dell'indice di qualità dell'aria (IQA) di ARPAV. NON è l'indice di ARPAV: quello
+// fasce dell'indice di qualità dell'aria (IQA) di ARPAV. Non è l'indice di ARPAV: quello
 // considera anche il biossido di azoto, che nei dati in diretta di Bassano non c'è, e si
 // calcola solo su dati validati (la stazione il biossido di azoto lo misura: compare solo nei
 // dati validati). Per questo il giudizio ufficiale può essere peggiore del nostro. Può anche
 // essere diverso in un senso o nell'altro, perché ARPAV parte da dati controllati e noi no, e
-// perché il nostro calcolo dell'ozono non è ancora stato confrontato con il loro: l'interfaccia
-// lo dice e non promette che l'ufficiale non sia mai migliore.
+// perché il nostro calcolo dell'ozono non è ancora stato confrontato con il loro. L'interfaccia
+// avverte che il giudizio ufficiale può essere diverso.
 //
 // Fonti della scala, lette il 15/11/2026:
 //   https://www.arpa.veneto.it/temi-ambientali/aria/iqa/indice
@@ -24,20 +24,19 @@
 // Cose che ARPAV non scrive e che qui sono una nostra scelta:
 // - la concentrazione si arrotonda all'intero prima del rapporto. Verificato su un solo caso e
 //   solo per il PM10 (Bassano, 12/11/2026: 13,4 è diventato 13 e l'indice 26). Che valga anche
-//   per l'ozono, e che i mezzi vadano in su (25,5 diventa 26), NON è verificato: sul confine
+//   per l'ozono, e che i mezzi vadano in su (25,5 diventa 26), non è verificato: sul confine
 //   tra due classi il nostro giudizio può differire di una classe da quello ufficiale;
 // - una media su 8 ore vale se ha almeno 6 ore su 8, e il massimo del giorno vale se le medie
 //   valide sono almeno 18 su 24 (regola della direttiva UE 2024/2881, non di una pagina ARPAV);
-// - l'ora scritta da ARPAV è presa come FINE dell'ora di misura: "01" è l'ora da mezzanotte
+// - l'ora scritta da ARPAV è presa come fine dell'ora di misura: "01" è l'ora da mezzanotte
 //   all'una, "00" del giorno dopo è l'ultima ora del giorno. ARPAV non lo dichiara. Indizi letti
 //   il 15/11/2026: il file esportato alle 11:40 ha come ultima voce l'ora 11, che a quell'ora
 //   non può essere l'ora che comincia alle 11; la tabella validata numera le ore da 1 a 24.
 //   Le medie su 8 ore di un giorno sono quindi quelle che finiscono dall'ora 01 del giorno
 //   all'ora 00 del giorno dopo. Se la convenzione fosse l'altra, le finestre si spostano di un'ora.
 //
-// Parole: il 50 del PM10 e il 120 dell'ozono qui si chiamano sempre «valore di riferimento»,
-// come nella pagina ARPAV sul calcolo. Non si scrive «limite superato»: per dire che cosa
-// prevede la legge serve prima leggere e citare la norma.
+// Parole: il 50 del PM10 e il 120 dell'ozono qui si chiamano «valore di riferimento», come
+// nella pagina ARPAV sul calcolo, e non «limite di legge».
 
 import type { DatiAria, PuntoSerieAria } from '../types';
 
@@ -115,8 +114,7 @@ export interface GiudizioAria {
 
 /**
  * La classe per un rapporto con il valore di riferimento (in percento).
- * null se il rapporto non è un numero vero (non finito, o negativo): un dato rotto non diventa
- * mai una parola, tanto meno la peggiore.
+ * null se il rapporto non è un numero valido (non finito, o negativo).
  */
 export function classeDaRapporto(rapporto: number): FasciaAria | null {
   if (typeof rapporto !== 'number' || !Number.isFinite(rapporto) || rapporto < 0) return null;

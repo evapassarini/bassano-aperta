@@ -5,7 +5,7 @@
 // disponibile per ogni inquinante misurato e, per ozono e PM10, le serie brevi
 // che ARPAV pubblica (circa 48 ore di medie orarie, circa 7 medie giornaliere).
 // Le serie servono al giudizio a parole, che si calcola nel sito
-// (src/live/giudizioAria.ts): qui non si giudica niente, si copiano i numeri.
+// (src/live/giudizioAria.ts): lo script copia solo i numeri.
 //
 // Uso:   node scripts/dati-aria.mjs
 //
@@ -21,12 +21,12 @@
 // un'esportazione all'altra per lo stesso valore): per le medie orarie teniamo
 // solo l'ora, per le medie giornaliere (PM10) solo il giorno.
 //
-// Il giorno del PM10 NON è una data di misura scritta da ARPAV: tutte le voci
+// Il giorno del PM10 non è una data di misura scritta da ARPAV: tutte le voci
 // hanno l'ora dell'esportazione (il 15/11/2026 alle 11:40 erano
 // "2026-11-08 11:40:01" ... "2026-11-14 11:40:01"). Che quel giorno sia il
 // giorno misurato è verificato su un caso solo, a metà giornata (12/11: in
 // diretta 13,399997, validato 13). Non sappiamo cosa succede subito dopo
-// mezzanotte. Per questo lo script si difende in due modi:
+// mezzanotte. Per questo lo script fa due controlli:
 // - scarta ogni media giornaliera con un giorno che non sia già finito
 //   (giorno italiano di quando gira lo script);
 // - legge la tabella dei dati validati di ARPAV per la stazione e, se il suo
@@ -153,7 +153,7 @@ async function main() {
         const testo = String(voce?.mis ?? '').trim();
         const valore = testo === '' ? NaN : Number(testo);
         if (!quando || !Number.isFinite(valore) || valore < 0) continue;
-        // Una media giornaliera vale solo per un giorno già finito: mai oggi, mai domani.
+        // Una media giornaliera vale solo per un giorno già finito.
         if (info.giornaliero && quando.giorno >= oggi) {
           console.warn(`[aria] "${chiave}" del ${quando.giorno}: il giorno non è finito, lo scarto`);
           continue;

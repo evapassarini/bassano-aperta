@@ -1,15 +1,13 @@
-// Finestra "Fonti e licenze": da dove viene ogni cosa, con che licenza e di quando è.
+// Finestra "Fonti e licenze": da dove viene ogni cosa e con che licenza.
 
 import type { DatiStrati } from '../types';
-import { leggiAria, leggiAvvisi, leggiDataStazioni } from '../live';
+import { leggiAria } from '../live';
 import { PAGINE_ARPAV_ARIA } from '../live/giudizioAria';
-import { formattaDataOraLunga, formattaNumero, urlSicuro } from './aiuti';
+import { formattaNumero, urlSicuro } from './aiuti';
 import { el, icona, idUnico, linkEsterno, soli } from './dom';
 
 export interface OpzioniFonti {
   strati: DatiStrati;
-  /** Data di generazione della mappa di base (base.json), se chi avvia la conosce. */
-  baseGenerato?: string;
   /** Quanti lampioni vengono da OpenStreetMap e quanti sono in tutto (numeri scritti come testo). */
   lampioniVeri?: string;
   lampioniTutti?: string;
@@ -45,20 +43,13 @@ function voce(titolo: string, ...corpo: (Node | string | null)[]): HTMLElement {
   return sezione;
 }
 
-/** Crea la finestra di dialogo. Le date di aria, avvisi e tabella delle stazioni si leggono solo alla prima apertura. */
+/** Crea la finestra di dialogo. La stazione dell'aria si legge solo alla prima apertura. */
 export function creaFonti(opzioni: OpzioniFonti): FinestraFonti {
   const { strati } = opzioni;
   const idTitolo = idUnico('fonti');
   const chiudi = el('button', { type: 'button', class: 'bottone-tondo', 'aria-label': 'Chiudi Fonti e licenze' }, icona('chiudi', 20));
 
   // --- OpenStreetMap -------------------------------------------------------
-  const date = el('ul', { class: 'fonti-date' });
-  if (opzioni.baseGenerato) {
-    date.append(el('li', null, `Mappa di base scaricata il ${formattaDataOraLunga(opzioni.baseGenerato)}.`));
-  }
-  if (strati.generato) {
-    date.append(el('li', null, `Strati Cultura, Ambiente e Mobilità preparati il ${formattaDataOraLunga(strati.generato)}.`));
-  }
   const osm = voce(
     'La mappa: OpenStreetMap',
     el(
@@ -68,7 +59,6 @@ export function creaFonti(opzioni: OpzioniFonti): FinestraFonti {
       linkEsterno('https://www.openstreetmap.org/copyright', '© OpenStreetMap contributors'),
       ', licenza ODbL.',
     ),
-    date.childElementCount > 0 ? date : null,
   );
   const veri = Number(opzioni.lampioniVeri);
   const tutti = Number(opzioni.lampioniTutti);
@@ -118,12 +108,13 @@ export function creaFonti(opzioni: OpzioniFonti): FinestraFonti {
 
   // --- Illustrazioni dei luoghi simbolo ---------------------------------------
   const illustrazioni = voce(
-    'Le illustrazioni dei luoghi simbolo',
+    'Le illustrazioni: luoghi simbolo, treno e persone',
     'I disegni dei luoghi simbolo, come il Ponte Vecchio, sono fatti per questo progetto a partire dalle sagome degli edifici su OpenStreetMap. Altezze e dettagli sono in gran parte stime: sono illustrazioni, non rilievi.',
+    "Anche quello che si muove sulla mappa è un'illustrazione: il treno che entra in stazione non segue gli orari di Trenitalia, le persone nelle piazze e sul Ponte Vecchio non sono presenze vere, e l'acqua della Brenta scorre a una velocità scelta da noi. Chi ha chiesto al proprio dispositivo meno animazioni vede la mappa ferma.",
   );
 
   // --- ARPAV ---------------------------------------------------------------
-  const ariaQuando = el('li', null, "Qualità dell'aria: leggo la data della fotografia…");
+  const ariaQuando = el('li', null, "Qualità dell'aria: stazione di Bassano.");
   const arpav = voce(
     'I dati ambientali: ARPAV',
     el(
@@ -156,13 +147,12 @@ export function creaFonti(opzioni: OpzioniFonti): FinestraFonti {
         linkEsterno(PAGINE_ARPAV_ARIA.calcolo, 'come si calcola'),
         ', ',
         linkEsterno(PAGINE_ARPAV_ARIA.ufficiale, "i dati validati con l'indice ufficiale"),
-        '. Pagine lette il 15 novembre 2026.',
+        '.',
       ),
     ),
   );
 
   // --- Treni ---------------------------------------------------------------
-  const stazioniQuando = el('li', null, 'I nomi delle stazioni vengono dagli orari di Trenitalia distribuiti da BusOne: leggo la data della tabella…');
   const treni = voce(
     'I treni: BusOne e Trenitalia',
     el(
@@ -180,12 +170,11 @@ export function creaFonti(opzioni: OpzioniFonti): FinestraFonti {
       el('li', null, 'Le posizioni dei treni lungo la linea, che in quei dati sono stime, qui non si mostrano.'),
       el('li', null, "L'elenco può non essere completo: i dati contengono solo i treni seguiti in diretta, e un treno soppresso può non comparire."),
       el('li', null, "L'ora scritta accanto a ogni treno è quella dell'orario ufficiale; con un ritardo o un anticipo c'è anche l'ora prevista."),
-      stazioniQuando,
+      el('li', null, 'I nomi delle stazioni vengono dagli orari di Trenitalia distribuiti da BusOne.'),
     ),
   );
 
   // --- Avvisi sulla viabilità ----------------------------------------------
-  const avvisiQuando = el('li', null, 'Leggo la data della fotografia…');
   const viabilita = voce(
     'Gli avvisi sulla viabilità: CCISS e Vi.abilità',
     el(
@@ -202,8 +191,7 @@ export function creaFonti(opzioni: OpzioniFonti): FinestraFonti {
       { class: 'fonti-date' },
       el('li', null, 'Nessuna delle due fonti dichiara una licenza: riportiamo solo citazioni brevi, ognuna con il link alla pagina della fonte.'),
       el('li', null, 'Non è il traffico in tempo reale: è una fotografia scaricata di tanto in tanto. Code e velocità di adesso non le mostriamo, perché nessun ente le pubblica per Bassano con una licenza aperta: nella scheda degli avvisi, il riquadro «Traffico adesso» porta ai siti dove vederle.'),
-      el('li', null, comeArrivaLaFotografia('Quando apri gli avvisi o questa pagina')),
-      avvisiQuando,
+      el('li', null, comeArrivaLaFotografia('Appena apri il sito')),
     ),
   );
 
@@ -239,7 +227,7 @@ export function creaFonti(opzioni: OpzioniFonti): FinestraFonti {
   // --- Testi ---------------------------------------------------------------
   const testi = voce(
     'I testi: fatti con cura, ma possono sbagliare',
-    'I racconti storici sono stati compilati nel novembre 2026 a partire da fonti pubbliche, indicate tappa per tappa. Non sono il lavoro di uno storico e possono contenere errori. Quando un fatto viene da una sola fonte, o le fonti lo raccontano in modo diverso, lo scriviamo con «secondo ...».',
+    'I racconti storici sono scritti a partire da fonti pubbliche, indicate tappa per tappa. Non sono il lavoro di uno storico e possono contenere errori. Quando un fatto viene da una sola fonte, o le fonti lo raccontano in modo diverso, lo scriviamo con «secondo ...».',
     el(
       'p',
       null,
@@ -264,50 +252,17 @@ export function creaFonti(opzioni: OpzioniFonti): FinestraFonti {
     if (e.target === nodo) nodo.close();
   });
 
-  let avvisiChiesti = false;
-  const chiediAvvisi = (): void => {
-    if (avvisiChiesti) return;
-    avvisiChiesti = true;
-    leggiAvvisi().then(
-      (dati) => {
-        avvisiQuando.textContent = `Fotografia del ${formattaDataOraLunga(dati.generato)}.`;
-      },
-      () => {
-        avvisiChiesti = false;
-        avvisiQuando.textContent = 'La fotografia degli avvisi non è disponibile in questo momento.';
-      },
-    );
-  };
-
-  const NOMI_STAZIONI = 'I nomi delle stazioni vengono dagli orari di Trenitalia distribuiti da BusOne';
-  let stazioniChieste = false;
-  const chiediStazioni = (): void => {
-    if (stazioniChieste) return;
-    stazioniChieste = true;
-    leggiDataStazioni().then(
-      (generato) => {
-        stazioniQuando.textContent = `${NOMI_STAZIONI}: tabella del ${formattaDataOraLunga(generato)}.`;
-      },
-      () => {
-        stazioniChieste = false;
-        stazioniQuando.textContent = `${NOMI_STAZIONI}. La data della tabella non è disponibile in questo momento.`;
-      },
-    );
-  };
-
   let ariaChiesta = false;
   const apri = (): void => {
     if (!nodo.open) nodo.showModal();
     nodo.querySelector<HTMLElement>('h2')?.focus();
-    chiediAvvisi();
-    chiediStazioni();
     if (ariaChiesta) return;
     ariaChiesta = true;
     leggiAria().then(
       (dati) => {
         ariaQuando.replaceChildren(...soli(
-          `Qualità dell'aria: fotografia del ${formattaDataOraLunga(dati.generato)}`,
-          dati.stazione ? `, stazione ${dati.stazione}. ` : '. ',
+          "Qualità dell'aria",
+          dati.stazione ? `: stazione ${dati.stazione}. ` : '. ',
           dati.fonte?.url ? linkEsterno(dati.fonte.url, dati.fonte.nome || 'ARPAV') : null,
           dati.fonte?.licenza ? el('span', { class: 'fonti-licenza' }, ` ${dati.fonte.licenza}`) : null,
         ));

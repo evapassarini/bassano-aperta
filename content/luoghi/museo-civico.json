@@ -5,7 +5,7 @@
   "genere": "luogo",
   "lat": 45.76642,
   "lon": 11.7352,
-  "intro": "In Piazza Garibaldi, dentro l'ex convento di San Francesco, Bassano custodisce da quasi due secoli quadri, libri, reperti e le carte di Antonio Canova. Tra queste sale c'è anche la storia di un cavallo di gesso gigantesco: fatto a pezzi negli anni Sessanta, sta per tornare in piedi.",
+  "intro": "In Piazza Garibaldi, dentro l'ex convento di San Francesco, Bassano custodisce da quasi due secoli quadri, libri, reperti e le carte di Antonio Canova. Tra queste sale c'è anche la storia di un cavallo di gesso gigantesco: fatto a pezzi negli anni Sessanta, è al centro di un restauro annunciato nel 2025 per riportarlo in mostra.",
   "tappe": [
     {
       "anno": "1819-1822",
@@ -94,7 +94,7 @@
     {
       "anno": "2026",
       "titolo": "Il ritorno del cavallo",
-      "testo": "Il sito dei Musei annuncia che il Cavallo colossale torna visibile al Museo Civico dal 12 dicembre 2026. Per il trasporto e il montaggio una parte del museo resta chiusa per alcune settimane: gli avvisi aggiornati sono sulla pagina ufficiale.",
+      "testo": "Il sito dei Musei annuncia il ritorno del Cavallo colossale al Museo Civico, visibile dal 12 dicembre 2026, e la chiusura di una parte del museo per alcune settimane durante il trasporto e il montaggio. Orari e avvisi aggiornati sono sulla pagina ufficiale.",
       "fonte": {
         "titolo": "Musei Civici di Bassano del Grappa, pagina «Museo Civico»",
         "url": "https://www.museibassano.it/it/pagina/museo-civico"
@@ -128,15 +128,6 @@
       "autore": "Autore sconosciuto",
       "licenza": "Pubblico dominio",
       "alt": "Incisione in bianco e nero di una lunga sala del museo: statue e busti di Canova su piedistalli ai due lati, scaffali di libri alle pareti e un cavallo di gesso sul fondo."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Antonio Canova, Testa del genio (calco in gesso), Museo Civico di Bassano del Grappa",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Testa_del_genio_di_Antonio_Canova%2C_Museo_Civico_di_Bassano_del_Grappa.JPG?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Testa_del_genio_di_Antonio_Canova%2C_Museo_Civico_di_Bassano_del_Grappa.JPG",
-      "autore": "Dispe",
-      "licenza": "CC BY-SA 3.0",
-      "alt": "Una testa in gesso bianco con i capelli ricci raccolti sopra la fronte e lo sguardo rivolto verso l'alto, appoggiata su una base rotonda contro una parete chiara."
     },
     {
       "tipo": "video",
@@ -177,78 +168,6 @@
       "pagina": "https://www.youtube.com/watch?v=vZqdnmC8_lI",
       "autore": "Itinerarinellarte",
       "licenza": "Licenza non indicata: video solo incorporato da YouTube"
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Una sala del museo con le sculture di Canova",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_-_Museo_Civico_di_Bassano_-Sculture_di_Antonio_Canova.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Museo_Civico_di_Bassano_-Sculture_di_Antonio_Canova.jpg",
-      "autore": "Silvana Gallio",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Una sala in penombra con le pareti scure: al centro una statua femminile bianca vista di spalle, attorno un busto, una testa di cavallo e un'altra figura su piedistalli neri, sul fondo una nicchia chiara con colonne."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Antonio Canova, Autoritratto (gesso, 1812), esposto al Museo Civico di Bassano del Grappa",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Antonio_Canova%2C_Autoritratto%2C_1812%2C_gesso_01.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Antonio_Canova%2C_Autoritratto%2C_1812%2C_gesso_01.jpg",
-      "autore": "Superchilum",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Un busto in gesso bianco su fondo nero: il volto di un uomo con i capelli mossi, lo sguardo rivolto in alto verso destra."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Antonio Canova, Endimione dormiente (gesso, 1819-1822), esposto al Museo Civico di Bassano del Grappa",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Antonio_Canova%2C_Endimione_dormiente%2C_1819-1822%2C_gesso_01.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Antonio_Canova%2C_Endimione_dormiente%2C_1819-1822%2C_gesso_01.jpg",
-      "autore": "Superchilum",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Una scultura bianca di un giovane addormentato disteso su una roccia, con un cane accucciato ai piedi, su un basamento scuro in una sala dalle pareti verdi."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Una sala di dipinti del Museo Civico",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_-_Museo_Civico_di_Bassano_-_2024-09-18_22-26-39_001.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Museo_Civico_di_Bassano_-_2024-09-18_22-26-39_001.jpg",
-      "autore": "Cristianferronato",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Una lunga sala con le pareti blu e il pavimento alla veneziana: grandi dipinti antichi in cornice dorata ai due lati, una panca scura al centro e un visitatore di spalle in fondo."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Un passaggio tra le sale del museo, con due telamoni ai lati dell'arco",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_-_Museo_Civico_di_Bassano_-_2024-09-18_22-19-13_001.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Museo_Civico_di_Bassano_-_2024-09-18_22-19-13_001.jpg",
-      "autore": "Cristianferronato",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Un arco chiaro tra due sale, affiancato da due grandi figure maschili scolpite che reggono la cornice; oltre l'arco si vedono un gruppo scultoreo bianco, alcuni busti, una scala e una persona seduta in ombra."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Una sala del museo con un modello in legno del ponte coperto",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_-_Museo_Civico_di_Bassano_-_2024-09-18_22-22-19_001.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Museo_Civico_di_Bassano_-_2024-09-18_22-22-19_001.jpg",
-      "autore": "Cristianferronato",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Una sala dalle pareti blu: in primo piano, su un piano a specchio, un modello in legno di un ponte coperto; alle pareti dipinti, stampe e pannelli con testi, uno intitolato «Il ponte palladiano»."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "La chiesa di San Francesco, accanto al museo",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa%2C_chiesa_di_San_Francesco_02.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa%2C_chiesa_di_San_Francesco_02.jpg",
-      "autore": "Syrio",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Una chiesa in mattoni e ciottoli vista di scorcio, con alte finestre ad arco e un campanile dalla punta conica; davanti alcune biciclette, pochi passanti lontani e un ciclista."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Il pronao della chiesa di San Francesco in una xilografia (datata 1903 su Commons)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_pronao_della_chiesa_di_San_Franceso.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_pronao_della_chiesa_di_San_Franceso.jpg",
-      "autore": "Giuseppe Barberis",
-      "licenza": "Pubblico dominio",
-      "alt": "Incisione in bianco e nero della facciata in mattoni della chiesa, con un piccolo portico a due archi su colonne davanti al portale e due figure sui gradini."
     }
   ],
   "live": [
@@ -256,7 +175,7 @@
       "tipo": "link",
       "etichetta": "Orari e avvisi di oggi",
       "url": "https://www.museibassano.it/it/pagina/museo-civico",
-      "nota": "La pagina ufficiale indica se oggi il museo è aperto e segnala chiusure parziali, come quella legata al montaggio del Cavallo colossale. Lo stato di apertura è mostrato uguale su tutto il sito dei Musei: leggi anche gli avvisi."
+      "nota": "La pagina ufficiale indica se oggi il museo è aperto e segnala eventuali chiusure parziali. Lo stato di apertura è mostrato uguale su tutto il sito dei Musei: leggi anche gli avvisi."
     },
     {
       "tipo": "link",

@@ -1,6 +1,19 @@
 // Disegno della mappa su canvas 2D. Ordine: carta, aree, strade, linee tematiche,
 // poi tutto ciò che sta in piedi dal più lontano al più vicino, infine i segnaposto.
 
+import {
+  carrozze,
+  colonnePonte,
+  VELOCITA_TRENO,
+  istanteFermo,
+  momentoTreno,
+  PASSANTI_PONTE,
+  passanteSulPonte,
+  passoDi,
+  PONTE,
+  spostamentoCorrente,
+  suPonte,
+} from './animazioni';
 import { creaNuvola, nuvoleInVista } from './nuvole';
 import type { Tasselli } from './tasselli';
 import type { IdStrato, Luce, TipoArea, TipoStrada } from '../types';
@@ -32,7 +45,7 @@ import {
   raggruppaInTessere,
   siToccano,
 } from './scena';
-import type { EdificioPronto, PuntoPronto, Scena, StratiVisibili } from './scena';
+import type { EdificioPronto, LandmarkPronto, PuntoPronto, Scena, StratiVisibili } from './scena';
 import {
   CAPPELLO,
   COLMO_FINTO,
@@ -66,11 +79,34 @@ export interface StatoDisegno {
   landmarkSopra: number;
   /** Area dei dati in metri locali: fuori da qui la carta sfuma. */
   area: Rettangolo;
+  /**
+   * Tempo delle animazioni decorative, in millisecondi (acqua che scorre, treno). Senza, la
+   * mappa è ferma: acqua immobile, treno fermo sul binario poco prima della stazione.
+   */
+  tempo?: number;
 }
 
 interface Pezzo extends Rettangolo {
   percorso: Path2D;
 }
+
+/** Una carrozza pronta da disegnare: base in metri [x0, y0, ... x3, y3] e chiave di profondità. */
+interface Vagone {
+  base: number[];
+  chiave: number;
+}
+
+/** Misure delle carrozze, in metri: un poco più grandi del vero, perché si riconoscano. */
+const ALTEZZA_VAGONE = 4.4;
+const MEZZA_LARGHEZZA_VAGONE = 1.75;
+/** Ogni quanto si ricontrolla un treno che corre fuori vista. */
+const CONTROLLO_TRENO_MS = 1000;
+/** Fotogrammi delle animazioni: acqua e figurine 10 al secondo, il treno in corsa 25. */
+const INTERVALLO_ACQUA_MS = 100;
+/** Le figurine compaiono sfumando da vicino; sono un poco più grandi del vero, perché si vedano. */
+const FIGURINE = { da: 2.4, a: 3 };
+const ALTEZZA_FIGURINA = 3.4;
+const INTERVALLO_TRENO_MS = 40;
 
 const AREE_SOTTO: TipoArea[] = ['coltivo', 'prato', 'parco', 'bosco'];
 const ORDINE_STRADE: Exclude<TipoStrada, 'ferrovia'>[] = [
@@ -126,8 +162,10 @@ export const DETTAGLI = {
   cornici: { da: 3.5, a: 4.6 },
   /** Seconda serie di righe dei coppi, in mezzo alle prime; telai a croce delle finestre. */
   coppiFitti: { da: 5.5, a: 7.5 },
-  /** Lastre del selciato su piazze e strade del centro, increspature dell'acqua. */
+  /** Lastre del selciato su piazze e strade del centro. */
   selciato: { da: 2.6, a: 4.2 },
+  /** Increspature dell'acqua: entrano prima del selciato, perché scorrono con la corrente. */
+  acqua: { da: 1.4, a: 2.6 },
   /** La mano d'acquerello stesa su tutto il foglio: macchie di colore e grana della carta. */
   macchie: { da: 1.3, a: 3.4 },
 };
@@ -452,6 +490,8 @@ export class Disegnatore {
   private readonly illustrazioni: Illustrazioni;
 
   private readonly acqua: Pezzo | null;
+  /** I riquadri delle singole aree d'acqua: dicono se c'è davvero acqua in vista. */
+  private readonly riquadriAcqua: Rettangolo[] = [];
   private readonly aree = new Map<TipoArea, Pezzo[]>();
   private readonly strade = new Map<string, Pezzo[]>();
   private readonly linee: { strato: IdStrato; tipo: 'ciclabile' | 'ferrovia'; percorso: Path2D }[] = [];
@@ -496,6 +536,20 @@ export class Disegnatore {
    * non c'era tempo di prepararli: chi disegna chiede un altro fotogramma.
    */
   incompleto = false;
+  /** Quanto si vedono le figurine in questo fotogramma (0 da lontano, 1 da vicino). */
+  private pFigurine = 0;
+  /** true se nell'ultimo fotogramma si è disegnato qualcosa che si muove (acqua, treno in corsa). */
+  animato = false;
+  /**
+   * Fra quanti millisecondi, al più, conviene ridisegnare anche se nulla si muove ora: la fine
+   * della sosta del treno, la prossima corsa, o un controllo se il treno corre fuori vista.
+   */
+  prossimoMovimento = Infinity;
+  /**
+   * Ogni quanti millisecondi conviene ridisegnare ciò che si muove: l'acqua scorre piano e
+   * basta poco; il treno in corsa ha bisogno di più fotogrammi.
+   */
+  intervalloAnimazione = Infinity;
   private spriteNuvola: HTMLCanvasElement | null = null;
   private chiaveNuvola = '';
   /** Tasselli dipinti facoltativi, stesi sopra gli edifici di giorno. */
@@ -579,6 +633,7 @@ export class Disegnatore {
         tracciaAnello(acqua, a.anello);
         const k = i * 4;
         const q = scena.riquadriAree;
+        this.riquadriAcqua.push({ minX: q[k], minY: q[k + 1], maxX: q[k + 2], maxY: q[k + 3] });
         rAcqua = rAcqua
           ? {
               minX: Math.min(rAcqua.minX, q[k]),
@@ -927,6 +982,9 @@ export class Disegnatore {
     const visibile = riquadroVisibile(camera, vista, 4 / z);
     const dettaglio = livelloDettaglio(z, vista);
     this.incompleto = false;
+    this.animato = false;
+    this.prossimoMovimento = Infinity;
+    this.intervalloAnimazione = Infinity;
 
     const pronte = this.illustrazioni.elenco.reduce((n, v) => n + (v.pronta ? 1 : 0), 0);
     if (pronte !== this.pronteNeiPezzi) {
@@ -939,7 +997,7 @@ export class Disegnatore {
     // Quanto si vedono le lastre del selciato e le increspature dell'acqua a questo zoom.
     const pSelciato = trame ? presenza(z, DETTAGLI.selciato) : 0;
     this.carta(ctx, s, z);
-    this.terreno(ctx, visibile, z, trame, pSelciato);
+    this.terreno(ctx, visibile, z, trame, pSelciato, s.tempo);
     this.rete(ctx, visibile, z, trame, pSelciato);
     if (dettaglio === 'pieno' && this.P.ombraCase !== '' && z > DETTAGLI.ombre.da) {
       this.ombreATerra(ctx, visibile, presenza(z, DETTAGLI.ombre));
@@ -1054,6 +1112,7 @@ export class Disegnatore {
     z: number,
     trame: Trame | null,
     pSelciato: number,
+    tempo?: number,
   ): void {
     const P = this.P;
     const lastre = pSelciato > 0 && trame ? trame.selciato : null;
@@ -1113,10 +1172,27 @@ export class Disegnatore {
         ctx.lineWidth = 5;
         ctx.stroke(acqua);
       }
-      if (pSelciato > 0 && trame?.increspature) {
-        ctx.globalAlpha = pSelciato * P.trame.acqua;
+      const pAcqua = trame?.increspature ? presenza(z, DETTAGLI.acqua) : 0;
+      if (pAcqua > 0 && trame?.increspature) {
+        ctx.globalAlpha = pAcqua * P.trame.acqua;
         ctx.fillStyle = trame.increspature;
-        ctx.fill(acqua);
+        if (tempo === undefined) {
+          ctx.fill(acqua);
+        } else {
+          // La corrente: si sposta il disegno delle increspature, non l'acqua. La tessera si
+          // ripete ogni (36, 18) unità, quindi lo spostamento torna su sé stesso senza stacchi.
+          // Il ritaglio sull'acqua è già in vigore: basta coprire la parte d'acqua in vista.
+          const { dx, dy } = spostamentoCorrente(tempo);
+          const minX = Math.max(this.acqua.minX, visibile.minX);
+          const minY = Math.max(this.acqua.minY, visibile.minY);
+          const maxX = Math.min(this.acqua.maxX, visibile.maxX);
+          const maxY = Math.min(this.acqua.maxY, visibile.maxY);
+          ctx.translate(dx, dy);
+          ctx.fillRect(minX - dx - 36, minY - dy - 18, maxX - minX + 72, maxY - minY + 36);
+          ctx.translate(-dx, -dy);
+          // Il riquadro di tutta l'acqua copre quasi la città: si anima solo se un'area d'acqua è in vista.
+          if (this.riquadriAcqua.some((r) => siToccano(r, visibile))) this.inMovimentoLento();
+        }
         ctx.globalAlpha = 1;
       }
       ctx.restore();
@@ -1538,8 +1614,14 @@ export class Disegnatore {
     // e a questo spessore non si distinguono.
     ctx.lineCap = 'butt';
     ctx.lineJoin = 'bevel';
+    // Carrozze e figurine entrano nell'ordine di profondità insieme a case e alberi: una si
+    // dipinge prima del primo elemento più vicino di lei.
+    this.pFigurine = presenza(z, FIGURINE);
+    const mobili = this.mobiliInVista(s, visibile);
+    let v = 0;
     for (let j = 0; j < trovati.length; j++) {
       const i = trovati[j];
+      while (v < mobili.length && mobili[v].chiave > el.chiave[i]) mobili[v++].disegna(ctx);
       const tipo = el.tipo[i];
       if (tipo === EL_EDIFICIO) {
         this.edificio(ctx, el.rif[i]);
@@ -1561,10 +1643,247 @@ export class Disegnatore {
         inPixel();
         this.illustrazione(ctx, sp, s.densita);
         inIso();
+        if (this.scena.landmark[indice].dati.id === 'ponte-vecchio') this.passantiPonte(ctx, s, this.scena.landmark[indice]);
         ctx.lineWidth = this.spessoreTratto;
         ctx.strokeStyle = this.tratto;
       }
     }
+    while (v < mobili.length) mobili[v++].disegna(ctx);
+  }
+
+  /** Treno e figurine delle piazze in vista, dal più lontano al più vicino. */
+  private mobiliInVista(s: StatoDisegno, visibile: Rettangolo): { chiave: number; disegna: (ctx: CanvasRenderingContext2D) => void }[] {
+    const mobili: { chiave: number; disegna: (ctx: CanvasRenderingContext2D) => void }[] = this.vagoniInVista(s, visibile).map(
+      (w) => ({ chiave: w.chiave, disegna: (ctx: CanvasRenderingContext2D) => this.vagone(ctx, w) }),
+    );
+    if (this.pFigurine > 0) {
+      const tempo = s.tempo ?? 0;
+      let qualcuna = false;
+      for (const p of this.scena.passeggiate) {
+        const q = passoDi(p, tempo);
+        const iso = metriInIso(q.x, q.y);
+        if (iso.sx < visibile.minX - 2 || iso.sx > visibile.maxX + 2 || iso.sy < visibile.minY - 4 || iso.sy > visibile.maxY + 2) continue;
+        qualcuna = true;
+        const colore = p.colore;
+        const passo = q.cammina ? tempo / 1000 + p.fase : 0;
+        mobili.push({ chiave: q.x + q.y, disegna: (ctx) => this.figurina(ctx, q.x, q.y, 0, colore, passo, q.cammina) });
+      }
+      if (qualcuna && s.tempo !== undefined) this.inMovimentoLento();
+    }
+    return mobili.sort((a, b) => b.chiave - a.chiave);
+  }
+
+  /** Qualcosa si muove piano (acqua, figurine): bastano dieci fotogrammi al secondo. */
+  private inMovimentoLento(): void {
+    this.animato = true;
+    this.intervalloAnimazione = Math.min(this.intervalloAnimazione, INTERVALLO_ACQUA_MS);
+  }
+
+  /**
+   * Una figurina in piedi in (x, y, z), metri locali: ombra, gambe che si alternano, vestito,
+   * testa. `passo` fa muovere le gambe; ferma, le gambe restano unite.
+   */
+  private figurina(ctx: CanvasRenderingContext2D, x: number, y: number, z: number, colore: number, passo: number, cammina: boolean): void {
+    const G = this.P.gente;
+    const piede = metriInIso(x, y, z);
+    const h = ALTEZZA_FIGURINA * ISO_Z;
+    const alfa = this.pFigurine;
+    ctx.globalAlpha = alfa;
+    if (z === 0) {
+      ctx.fillStyle = this.P.ombra;
+      ctx.beginPath();
+      ctx.ellipse(piede.sx + 0.4, piede.sy, 0.9, 0.34, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    const falcata = cammina ? Math.sin(passo * Math.PI * 3.6) * 0.28 : 0;
+    const anca = piede.sy - h * 0.47;
+    ctx.strokeStyle = G.gambe;
+    ctx.lineWidth = 0.26;
+    ctx.beginPath();
+    ctx.moveTo(piede.sx - 0.15, anca);
+    ctx.lineTo(piede.sx - 0.15 + falcata, piede.sy);
+    ctx.moveTo(piede.sx + 0.15, anca);
+    ctx.lineTo(piede.sx + 0.15 - falcata, piede.sy);
+    ctx.stroke();
+    ctx.fillStyle = G.vesti[colore % G.vesti.length];
+    ctx.beginPath();
+    ctx.rect(piede.sx - 0.34, piede.sy - h * 0.8, 0.68, h * 0.36);
+    ctx.fill();
+    ctx.fillStyle = G.pelle;
+    ctx.beginPath();
+    ctx.arc(piede.sx, piede.sy - h * 0.88, h * 0.09, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = G.capelli;
+    ctx.beginPath();
+    ctx.arc(piede.sx, piede.sy - h * 0.9, h * 0.08, Math.PI, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.lineWidth = this.spessoreTratto;
+    ctx.strokeStyle = this.tratto;
+  }
+
+  /**
+   * Chi attraversa il Ponte Vecchio: si dipinge subito dopo l'illustrazione, ritagliato sulle
+   * aperture tra le colonne della facciata sud, così sembra camminare dentro il ponte coperto.
+   */
+  private passantiPonte(ctx: CanvasRenderingContext2D, s: StatoDisegno, ponte: LandmarkPronto): void {
+    if (this.pFigurine <= 0) return;
+    const tempo = s.tempo ?? 0;
+    const col = colonnePonte();
+    const H = PONTE.mezzaLarghezza;
+    const angolo = (sPonte: number, tPonte: number, zz: number): { sx: number; sy: number } => {
+      const m = suPonte(ponte, sPonte, tPonte);
+      return metriInIso(m.x, m.y, zz);
+    };
+    ctx.save();
+    ctx.beginPath();
+    for (let c = 0; c + 1 < col.length; c++) {
+      const a = col[c] + 0.23;
+      const b = col[c + 1] - 0.23;
+      const p0 = angolo(a, H, PONTE.vuoto.da);
+      const p1 = angolo(b, H, PONTE.vuoto.da);
+      const p2 = angolo(b, H, PONTE.vuoto.a);
+      const p3 = angolo(a, H, PONTE.vuoto.a);
+      ctx.moveTo(p0.sx, p0.sy);
+      ctx.lineTo(p1.sx, p1.sy);
+      ctx.lineTo(p2.sx, p2.sy);
+      ctx.lineTo(p3.sx, p3.sy);
+      ctx.closePath();
+    }
+    ctx.clip();
+    // Da nord a sud: chi sta più a nord è più lontano e va dipinto prima.
+    for (const p of [...PASSANTI_PONTE].sort((u, w) => u.t - w.t)) {
+      const q = passanteSulPonte(p, tempo);
+      const m = suPonte(ponte, q.s, p.t);
+      this.figurina(ctx, m.x, m.y, PONTE.piano, p.colore, tempo / 1000 + p.fase, true);
+    }
+    ctx.restore();
+    if (s.tempo !== undefined) this.inMovimentoLento();
+  }
+
+  // --- treno decorativo ------------------------------------------------------------
+
+  /**
+   * Le carrozze del treno decorativo che toccano la vista, dalla più lontana alla più vicina.
+   * Dice anche se c'è movimento (`animato`) o quando ricontrollare (`prossimoMovimento`).
+   */
+  private vagoniInVista(s: StatoDisegno, visibile: Rettangolo): Vagone[] {
+    const percorso = this.scena.binari;
+    if (!percorso) return [];
+    const animabile = s.tempo !== undefined;
+    const m = momentoTreno(percorso, s.tempo ?? istanteFermo(percorso));
+    const vagoni: Vagone[] = [];
+    // Un treno che corre fuori vista si ricontrolla ogni secondo; se in quel secondo può entrare
+    // nella vista, si guarda a ritmo pieno, così non compare già dentro il bordo.
+    const r = (VELOCITA_TRENO * CONTROLLO_TRENO_MS) / 1000 + MEZZA_LARGHEZZA_VAGONE * 2;
+    const vicino = { minX: visibile.minX - r, minY: visibile.minY - r, maxX: visibile.maxX + r, maxY: visibile.maxY + r };
+    let inArrivo = false;
+    for (const c of carrozze(percorso, m)) {
+      const dx = c.testa.x - c.coda.x;
+      const dy = c.testa.y - c.coda.y;
+      const l = Math.hypot(dx, dy) || 1;
+      const nx = (-dy / l) * MEZZA_LARGHEZZA_VAGONE;
+      const ny = (dx / l) * MEZZA_LARGHEZZA_VAGONE;
+      const base = [
+        c.coda.x + nx, c.coda.y + ny,
+        c.testa.x + nx, c.testa.y + ny,
+        c.testa.x - nx, c.testa.y - ny,
+        c.coda.x - nx, c.coda.y - ny,
+      ];
+      let minX = Infinity;
+      let minY = Infinity;
+      let maxX = -Infinity;
+      let maxY = -Infinity;
+      let chiave = Infinity;
+      for (let k = 0; k < 8; k += 2) {
+        const q = metriInIso(base[k], base[k + 1]);
+        minX = Math.min(minX, q.sx);
+        maxX = Math.max(maxX, q.sx);
+        minY = Math.min(minY, q.sy - ALTEZZA_VAGONE * ISO_Z);
+        maxY = Math.max(maxY, q.sy);
+        chiave = Math.min(chiave, base[k] + base[k + 1]);
+      }
+      if (!siToccano({ minX, minY, maxX, maxY }, visibile)) {
+        if (siToccano({ minX, minY, maxX, maxY }, vicino)) inArrivo = true;
+        continue;
+      }
+      vagoni.push({ base, chiave });
+    }
+    if (animabile) {
+      if (vagoni.length > 0 && !m.fermo) {
+        this.animato = true;
+        this.intervalloAnimazione = Math.min(this.intervalloAnimazione, INTERVALLO_TRENO_MS);
+      }
+      else if (m.fermo) this.prossimoMovimento = Math.min(this.prossimoMovimento, m.prossimoCambio);
+      // In corsa ma fuori vista: si ricontrolla ogni tanto, con un fotogramma solo.
+      else this.prossimoMovimento = Math.min(this.prossimoMovimento, inArrivo ? INTERVALLO_TRENO_MS : CONTROLLO_TRENO_MS);
+    }
+    return vagoni.sort((a, b) => b.chiave - a.chiave);
+  }
+
+  /** Una carrozza: le pareti che guardano verso chi osserva, una fascia di finestrini, il tetto. */
+  private vagone(ctx: CanvasRenderingContext2D, v: Vagone): void {
+    const T = this.P.treno;
+    const b = v.base;
+    const cx = (b[0] + b[2] + b[4] + b[6]) / 4;
+    const cy = (b[1] + b[3] + b[5] + b[7]) / 4;
+    const punto = (x: number, y: number, z: number): void => {
+      const q = metriInIso(x, y, z);
+      ctx.lineTo(q.sx, q.sy);
+    };
+    for (let k = 0; k < 4; k++) {
+      const ax = b[k * 2];
+      const ay = b[k * 2 + 1];
+      const bx = b[((k + 1) % 4) * 2];
+      const by = b[((k + 1) % 4) * 2 + 1];
+      // Normale verso l'esterno della parete.
+      let nx = by - ay;
+      let ny = -(bx - ax);
+      if (nx * ((ax + bx) / 2 - cx) + ny * ((ay + by) / 2 - cy) < 0) {
+        nx = -nx;
+        ny = -ny;
+      }
+      // Si vedono solo le pareti rivolte verso chi guarda (x + y che cala).
+      if (nx + ny >= 0) continue;
+      ctx.beginPath();
+      const inizio = metriInIso(ax, ay);
+      ctx.moveTo(inizio.sx, inizio.sy);
+      punto(bx, by, 0);
+      punto(bx, by, ALTEZZA_VAGONE);
+      punto(ax, ay, ALTEZZA_VAGONE);
+      ctx.closePath();
+      // Come per le case: la parete che guarda più a ovest prende la luce, quella a sud l'ombra.
+      ctx.fillStyle = nx < ny ? T.luce : T.ombra;
+      ctx.fill();
+      ctx.stroke();
+      const lato = Math.hypot(bx - ax, by - ay);
+      if (lato > 8) {
+        // La fascia dei finestrini, un metro e mezzo più corta della parete a ogni capo.
+        const t0 = 1.5 / lato;
+        const t1 = 1 - t0;
+        const x0 = ax + (bx - ax) * t0;
+        const y0 = ay + (by - ay) * t0;
+        const x1 = ax + (bx - ax) * t1;
+        const y1 = ay + (by - ay) * t1;
+        ctx.beginPath();
+        const f = metriInIso(x0, y0, 1.9);
+        ctx.moveTo(f.sx, f.sy);
+        punto(x1, y1, 1.9);
+        punto(x1, y1, 2.7);
+        punto(x0, y0, 2.7);
+        ctx.closePath();
+        ctx.fillStyle = T.finestrini;
+        ctx.fill();
+      }
+    }
+    ctx.beginPath();
+    const t = metriInIso(b[0], b[1], ALTEZZA_VAGONE);
+    ctx.moveTo(t.sx, t.sy);
+    for (let k = 2; k < 8; k += 2) punto(b[k], b[k + 1], ALTEZZA_VAGONE);
+    ctx.closePath();
+    ctx.fillStyle = T.tetto;
+    ctx.fill();
+    ctx.stroke();
   }
 
   /** true se in questo fotogramma c'è ancora tempo per preparare una forma nuova. */
@@ -2761,9 +3080,10 @@ export class Disegnatore {
     }
     for (const m of marcatori) {
       const p = this.scena.punti[m.indice].dati;
-      const colori = P.strati[p.strato];
+      const avviso = p.tipo === 'avviso';
+      const colori = avviso ? P.avviso : P.strati[p.strato];
       const sopra = m.indice === s.puntoSopra;
-      this.spillo(ctx, m, p.strato, colori.fondo, colori.segno, p.storia !== undefined, sopra);
+      this.spillo(ctx, m, avviso ? 'avviso' : p.strato, colori.fondo, colori.segno, p.storia !== undefined, sopra);
     }
 
     // Nomi: prima quello sotto il cursore, poi i luoghi con una storia, poi gli altri.
@@ -2840,11 +3160,11 @@ export class Disegnatore {
     }
   }
 
-  /** Un segnaposto: forma diversa per strato, sempre rivolto a chi guarda. */
+  /** Un segnaposto: forma diversa per strato (triangolo per gli avvisi), sempre rivolto a chi guarda. */
   private spillo(
     ctx: CanvasRenderingContext2D,
     m: Marcatore,
-    strato: IdStrato,
+    strato: IdStrato | 'avviso',
     fondo: string,
     segno: string,
     conStoria: boolean,
@@ -2855,7 +3175,12 @@ export class Disegnatore {
     if (m.pallino) {
       ctx.beginPath();
       if (strato === 'cultura') ctx.arc(m.px, m.py, r, 0, Math.PI * 2);
-      else if (strato === 'ambiente') {
+      else if (strato === 'avviso') {
+        ctx.moveTo(m.px, m.py - r * 1.3);
+        ctx.lineTo(m.px + r * 1.3, m.py + r);
+        ctx.lineTo(m.px - r * 1.3, m.py + r);
+        ctx.closePath();
+      } else if (strato === 'ambiente') {
         ctx.moveTo(m.px, m.py - r * 1.25);
         ctx.lineTo(m.px + r * 1.25, m.py);
         ctx.lineTo(m.px, m.py + r * 1.25);
@@ -2884,6 +3209,16 @@ export class Disegnatore {
       ctx.lineTo(x - r * 0.8, y + r * 0.6);
       ctx.arc(x, y, r, Math.PI - 0.6435, 0.6435, false);
       ctx.closePath();
+    } else if (strato === 'avviso') {
+      // Cartello di pericolo: un triangolo con la punta in alto, su un paletto fino a terra.
+      const l = r * 1.25;
+      ctx.moveTo(x, y - l);
+      ctx.lineTo(x + l, y + l * 0.75);
+      ctx.lineTo(x + r * 0.18, y + l * 0.75);
+      ctx.lineTo(m.px, m.py);
+      ctx.lineTo(x - r * 0.18, y + l * 0.75);
+      ctx.lineTo(x - l, y + l * 0.75);
+      ctx.closePath();
     } else if (strato === 'ambiente') {
       // Aquilone: un rombo con la punta in basso allungata fino a terra.
       ctx.moveTo(x, y - r * 1.15);
@@ -2911,6 +3246,17 @@ export class Disegnatore {
     ctx.strokeStyle = sopra ? segno : conAlfa(this.P.seppia, 0.9);
     ctx.stroke();
 
+    if (strato === 'avviso') {
+      // Un punto esclamativo al posto dell'anello.
+      ctx.fillStyle = segno;
+      ctx.beginPath();
+      ctx.rect(x - r * 0.11, y - r * 0.55, r * 0.22, r * 0.7);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(x, y + r * 0.42, r * 0.13, 0, Math.PI * 2);
+      ctx.fill();
+      return;
+    }
     // Segno interno: pieno per i luoghi con una storia, un anello per gli altri.
     ctx.beginPath();
     ctx.arc(x, y, r * (conStoria ? 0.42 : 0.34), 0, Math.PI * 2);

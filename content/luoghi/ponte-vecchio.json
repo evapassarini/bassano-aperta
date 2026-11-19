@@ -43,7 +43,7 @@
         "titolo": "Wikipedia, voce «Ponte Vecchio (Bassano del Grappa)»",
         "url": "https://it.wikipedia.org/wiki/Ponte_Vecchio_(Bassano_del_Grappa)"
       },
-      "media": 3
+      "media": 1
     },
     {
       "anno": "1915-1918",
@@ -98,7 +98,7 @@
         "titolo": "il Dolomiti, «Dopo sei anni il Ponte degli Alpini di Bassano del Grappa è rinato» (2021)",
         "url": "https://www.ildolomiti.it/societa/2021/dopo-sei-anni-il-ponte-degli-alpini-di-bassano-del-grappa-e-rinato-grazie-anche-a-una-ditta-trentina"
       },
-      "media": 6
+      "media": 2
     }
   ],
   "media": [
@@ -113,24 +113,6 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "Palladio, I quattro libri dell'architettura (1570), Libro III: la pagina sul ponte di Bassano",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pallarch3-1.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Pallarch3-1.jpg",
-      "autore": "Andrea Palladio",
-      "licenza": "Pubblico dominio",
-      "alt": "Pagina a stampa fitta di testo, intitolata «Del ponte di Bassano», con un capolettera decorato e in fondo la legenda delle lettere usate nel disegno."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Il ponte di Bassano nel disegno di Ottavio Bertotti Scamozzi (1773)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ponte_Vecchio_Bassano_Bertotti_Scamozzi_1773.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Ponte_Vecchio_Bassano_Bertotti_Scamozzi_1773.jpg",
-      "autore": "Ottavio Bertotti Scamozzi",
-      "licenza": "Pubblico dominio",
-      "alt": "Disegno tecnico in bianco e nero: il fianco del ponte coperto con cinque campate, sotto la pianta con le quattro file di pali e la sezione trasversale."
-    },
-    {
-      "tipo": "immagine",
       "titolo": "Ponte di Bassano, incisione di Francesco Corsi (1845)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ponte_di_Bassano_(incisione).jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Ponte_di_Bassano_(incisione).jpg",
@@ -140,57 +122,12 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "Il ponte coperto e il castello, xilografia (1901)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa%2C_il_ponte_coperto_ed_il_castello_(xilografia).jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa%2C_il_ponte_coperto_ed_il_castello_(xilografia).jpg",
-      "autore": "Autore sconosciuto",
-      "licenza": "Pubblico dominio",
-      "alt": "Xilografia in bianco e nero: il ponte coperto visto dal fiume, con le case che salgono sulla riva e in alto le torri della città."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Il ponte coperto sulla Brenta e il castello, xilografia di Giuseppe Barberis (1903)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_ponte_coperto_sul_Brenta_e_Castello.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_ponte_coperto_sul_Brenta_e_Castello.jpg",
-      "autore": "Giuseppe Barberis",
-      "licenza": "Pubblico dominio",
-      "alt": "Xilografia in bianco e nero: il ponte coperto sulla Brenta visto da valle, due piccole figure in mezzo all'acqua bassa, le case sulla riva e le torri in alto."
-    },
-    {
-      "tipo": "immagine",
       "titolo": "Il cantiere del Ponte Vecchio visto dall'alto (28 dicembre 2018)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Lavori_Ponte_Vecchio.jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Lavori_Ponte_Vecchio.jpg",
       "autore": "Slapmysalami",
       "licenza": "CC BY-SA 4.0",
       "alt": "Veduta aerea di Bassano: la Brenta attraversa i tetti rossi della città e al centro si vede il ponte in cantiere, con il letto del fiume in parte all'asciutto."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Il Ponte Vecchio dopo il restauro (31 ottobre 2022)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ponte_Vecchio_(Bassano_del_Grappa)_01.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Ponte_Vecchio_(Bassano_del_Grappa)_01.jpg",
-      "autore": "Superchilum",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Il ponte coperto, rosso scuro, si specchia nella Brenta calma; ai lati le case affacciate sull'acqua, sullo sfondo i monti."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Il Ponte degli Alpini da vicino (settembre 2007)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_z01.JPG?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_z01.JPG",
-      "autore": "Zyance",
-      "licenza": "CC BY 3.0",
-      "alt": "Il ponte visto da vicino dal livello del fiume: i piloni di legno a forma di prua, il parapetto, la copertura sorretta da colonnine e dietro le case e le torri della città."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Targa sul Ponte degli Alpini dedicata ai canti (fotografia del 2025)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_-_Targa_sul_ponte_degli_Alpini_01.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Targa_sul_ponte_degli_Alpini_01.jpg",
-      "autore": "Syrio",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Lapide di marmo murata su una parete gialla: un'iscrizione in lettere maiuscole ricorda i canti che risuonarono sul vecchio ponte, con le date 1915, 1924 e 1918 incise in basso."
     },
     {
       "tipo": "video",
@@ -215,60 +152,6 @@
       "pagina": "https://www.youtube.com/watch?v=SPREnPFTbnQ",
       "autore": "Rete Veneta",
       "licenza": "Licenza non indicata: video solo incorporato da YouTube"
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Sotto la copertura del Ponte Vecchio (11 agosto 2012)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_Ponte_Veccio_05.JPG?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_Ponte_Veccio_05.JPG",
-      "autore": "BKP",
-      "licenza": "CC BY-SA 3.0",
-      "alt": "L'interno del ponte visto in prospettiva: il tetto a travi di legno, le due file di colonne rosse con il parapetto e, a terra, le fasce di ciottoli tra le lastre di pietra. A metà del ponte camminano alcuni passanti."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Il fianco del ponte e i piloni visti da vicino (11 agosto 2012)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_Ponte_Veccio_06.JPG?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_Ponte_Veccio_06.JPG",
-      "autore": "BKP",
-      "licenza": "CC BY-SA 3.0",
-      "alt": "Il fianco del ponte in scorcio: la balaustra di colonnine rosse, le colonne che reggono il tetto e, sotto, i piloni rivestiti di tavole che scendono a punta nell'acqua verde. Sul ponte si vedono alcune persone, piccole; dietro, le case sulla riva."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "L'ingresso del ponte (9 agosto 2011)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/L%27accesso_al_ponte_di_Bassano_%286073240856%29.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:L%27accesso_al_ponte_di_Bassano_%286073240856%29.jpg",
-      "autore": "Rino Porrovecchio",
-      "licenza": "CC BY-SA 2.0",
-      "alt": "Un grande arco di pietra chiara si apre in un edificio color ocra: oltre l'arco si intravede in penombra la corsia coperta del ponte. Davanti, una piazzetta lastricata a cubetti con due fioriere e alcuni passanti vicino all'arco."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Il ponte illuminato di notte (25 aprile 2012)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/PontediBassanonotte.JPG?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:PontediBassanonotte.JPG",
-      "autore": "Dario Rettore",
-      "licenza": "Pubblico dominio",
-      "alt": "Il ponte di notte, con le luci accese sotto la copertura e i piloni scuri nell'acqua; a destra le case gialle illuminate sulla riva, sopra un cielo nero."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Il ponte e la Brenta visti dall'alto (data indicata su Commons: 2018)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ponte_degli_alpini._Bassano_del_Grappa.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Ponte_degli_alpini._Bassano_del_Grappa.jpg",
-      "autore": "Wikimaruz",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Veduta aerea: il ponte coperto attraversa il fiume verde tra i tetti rossi delle due rive; la Brenta risale verso nord e sullo sfondo si alzano i monti."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "La Brenta vista dall'interno del ponte (3 febbraio 2014)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa%2C_dal_Ponte_degli_Alpini_%2812292723636%29.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa%2C_dal_Ponte_degli_Alpini_%2812292723636%29.jpg",
-      "autore": "decar66 (Salva Barbera)",
-      "licenza": "CC BY 2.0",
-      "alt": "Dall'interno del ponte, tra due colonne rosse e sopra la balaustra a colonnine, si vede il fiume che risale tra le case colorate verso i monti, sotto un cielo carico di nuvole. Il pavimento è bagnato."
     }
   ],
   "live": [
@@ -295,11 +178,15 @@
     {
       "titolo": "Wikimedia Commons, «ICBSA Coro ICAM - Sul ponte di Bassano.oga»",
       "url": "https://commons.wikimedia.org/wiki/File:ICBSA_Coro_ICAM_-_Sul_ponte_di_Bassano.oga"
+    },
+    {
+      "titolo": "Wikimedia Commons, fotografia della lapide sul Ponte degli Alpini dedicata ai canti",
+      "url": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Targa_sul_ponte_degli_Alpini_01.jpg"
     }
   ],
   "incertezze": [
     "Distruzione del 1945: Wikipedia, che cita l'Enciclopedia dell'Antifascismo e la targa sul ponte, parla di un sabotaggio partigiano il 17 febbraio 1945, e l'articolo del Dolomiti del 15 maggio 2021 va nello stesso senso (il ponte fu prima bombardato dagli aerei alleati e poi fatto saltare dai partigiani). Un altro articolo del Dolomiti, del 3 ottobre 2021, scrive invece che fu «raso al suolo dalle truppe naziste in fuga il 29 aprile 1945», e la scheda del Palladio Museum parla di «demolizione per mano delle truppe tedesche», senza data. Potrebbero essere due episodi distinti, ma non è confermato: sul sito compare solo la versione di Wikipedia, senza la discordanza.",
-    "Rappresaglia di febbraio: Wikipedia riporta che dopo l'esplosione tre partigiani furono fucilati sul ponte per rappresaglia; la voce italiana dice dai fascisti, quella inglese dai nazisti. Sul sito scriviamo «nazifascisti» (decisione della curatrice).",
+    "Rappresaglia di febbraio: Wikipedia riporta che dopo l'esplosione tre partigiani furono fucilati sul ponte per rappresaglia; la voce italiana dice dai fascisti, quella inglese dai nazisti. Sul sito scriviamo «nazifascisti», che tiene insieme le due versioni.",
     "Ricostruzione del 1948: secondo Wikipedia i lavori furono dell'impresa Giulio Tessarolo & Figli di Rosà, con molti operai reduci alpini, e il ponte «rifatto dagli Alpini» è una leggenda. Il Dolomiti scrive invece che fu ricostruito «dalle Penne Nere» (15 maggio 2021) e parla di «un restauro da 38 milioni di lire pagati dagli Alpini» (3 ottobre 2021). Sul sito è una curiosità, con le due versioni attribuite.",
     "Nome «degli Alpini»: la dedica del 1928 alla memoria dei soldati, e in particolare degli Alpini, è riportata da Wikipedia senza nota e ripresa dal Dolomiti (3 ottobre 2021); manca una fonte primaria. Che il nome venga anche dalla ricostruzione del 1948 è una lettura corrente, non un dato documentato.",
     "«Sul ponte di Bassano»: esistono due canzoni con questo titolo, un lamento alpino e una canzone d'amore. Autore e data del canto alpino non sono verificati (le fonti dicono «durante» o «alla fine» della Prima guerra mondiale, una indica il 1916). Su Wikimedia Commons ci sono due registrazioni storiche con questo titolo: non le mettiamo tra i media da ascoltare finché qualcuno non le avrà ascoltate e non sarà chiaro quale delle due canzoni contengano, e di che anno siano.",

@@ -33,7 +33,7 @@ export interface Tendenza {
   verso: Verso;
   /** Differenza in metri tra l'ultima lettura e quella di confronto. */
   differenza: number;
-  /** Ore che separano davvero le due letture. */
+  /** Ore effettive tra le due letture. */
   ore: number;
 }
 
@@ -81,7 +81,7 @@ function righeDi(dati: unknown[], tipo: string): Riga[] {
 
 /**
  * Trasforma la risposta dell'API in una lettura. Lancia un errore se la risposta non ha
- * la forma attesa o non contiene nessun livello: meglio nessun numero che un numero finto.
+ * la forma attesa o non contiene nessun livello.
  */
 export function interpretaBrenta(risposta: unknown): LetturaBrenta {
   if (typeof risposta !== 'object' || risposta === null) {
@@ -122,7 +122,7 @@ export function interpretaBrenta(risposta: unknown): LetturaBrenta {
 /**
  * Confronta l'ultima lettura con quella di circa `ore` ore prima.
  * Sotto la soglia (2 cm) il fiume è considerato stabile. Restituisce null se la serie
- * non arriva abbastanza indietro per un confronto onesto.
+ * non arriva abbastanza indietro per il confronto.
  */
 export function tendenza(
   serie: { quando: string; livello: number }[],

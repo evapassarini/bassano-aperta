@@ -32,8 +32,8 @@
 // Se una fonte non risponde:
 //   - Vi.abilità: restano le ordinanze della fotografia precedente che valgono ancora
 //     (ultimi 120 giorni), così non spariscono dal sito ordinanze in vigore;
-//   - CCISS: gli eventi vecchi non si conservano (non direbbero più nulla di certo) e
-//     CCISS esce dall'elenco "fonti", così la scheda può dire che mancano.
+//   - CCISS: gli eventi vecchi non si conservano e CCISS esce dall'elenco "fonti", così
+//     la scheda può dire che mancano.
 // In tutti e due i casi il file viene scritto ma lo script esce con codice 2, perché
 // chi lo lancia (anche in automatico) se ne accorga. Se non rispondono tutte e due lo
 // script esce con codice 1 e non tocca il file esistente.
@@ -164,7 +164,7 @@ async function main() {
   }
   if (cciss === null) problemi.push('CCISS non ha risposto: il file esce senza eventi di traffico.');
 
-  // In "fonti" finiscono solo le fonti di cui la fotografia contiene davvero i dati.
+  // In "fonti" finiscono solo le fonti che hanno risposto.
   const fonti = [];
   if (cciss !== null) fonti.push(FONTE_CCISS);
   if (viabilita !== null) fonti.push(FONTE_VIABILITA);

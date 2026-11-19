@@ -1,7 +1,7 @@
 // Aiuti puri dell'interfaccia: ricerca, date e numeri in italiano, parole per la
 // tendenza del fiume, indirizzi dei video, tabellone dei treni, scelta degli avvisi. Nessun DOM qui dentro: si provano con vitest.
 
-import type { Avviso, DatiAria, DatiAvvisi, Fonte, IdStrato, LetturaTreni, Punto, Storia, TipoPunto, Treno } from '../types';
+import type { Avviso, DatiAria, DatiAvvisi, Fonte, IdStrato, LetturaTreni, LonLat, Punto, Storia, TipoPunto, Treno } from '../types';
 
 // ---------------------------------------------------------------------------
 // Ricerca nei luoghi
@@ -260,7 +260,7 @@ export function riassuntoAria(dati: Pick<DatiAria, 'generato' | 'misure'>, adess
   }
   const scattata = Date.parse(dati.generato);
   // La data della fotografia si dichiara se è vecchia, oppure se la misura non ha una data
-  // propria: il numero non resta mai senza una data accanto.
+  // propria.
   const vecchia = Number.isFinite(scattata) && (!quando || adesso.getTime() - scattata > FOTO_ARIA_VECCHIA_MS);
   return {
     nome,
@@ -387,7 +387,7 @@ export function tracciaSerie(
 
   const minimo = Math.min(...valori);
   const massimo = Math.max(...valori);
-  // Un fiume fermo non deve sembrare in tempesta: scala minima di 10 cm.
+  // Scala verticale di almeno 10 cm, così le piccole variazioni del livello non sembrano grandi.
   const ampiezza = Math.max(massimo - minimo, 0.1);
   const centro = (massimo + minimo) / 2;
   const basso = centro - ampiezza / 2;
@@ -444,7 +444,7 @@ export function idYouTube(url: string): string | null {
 }
 
 /**
- * Indirizzo da mettere nell'iframe: sempre youtube-nocookie, mai altro.
+ * Indirizzo da mettere nell'iframe, sul dominio www.youtube-nocookie.com.
  * Restituisce null se l'indirizzo non è di YouTube: in quel caso non si incorpora nulla.
  */
 export function urlIncorporamento(url: string, avvia = false): string | null {
@@ -590,6 +590,7 @@ const NOME_TIPO: Record<TipoPunto, string> = {
   'fermata-bus': "Fermata dell'autobus",
   stazione: 'Stazione',
   bici: 'Bici',
+  avviso: 'Avviso sulla strada',
 };
 
 /** Nome leggibile di un tipo di punto. */
@@ -666,7 +667,7 @@ export interface RigaTreno {
   tono: 'orario' | 'ritardo' | 'anticipo' | 'soppresso';
 }
 
-/** Lo stato di un treno a parole: mai affidato solo al colore. */
+/** Lo stato di un treno scritto a parole, così non dipende solo dal colore. */
 export function statoTreno(treno: Pick<Treno, 'ritardoMinuti' | 'soppresso'>): Pick<RigaTreno, 'stato' | 'statoPerEsteso' | 'tono'> {
   if (treno.soppresso) return { stato: 'soppresso', statoPerEsteso: 'soppresso', tono: 'soppresso' };
   const minuti = Math.round(treno.ritardoMinuti);
@@ -771,7 +772,7 @@ const DURATA_EVENTO_MS = 24 * 60 * 60 * 1000;
 /**
  * Gli avvisi da mostrare. Gli eventi di traffico valgono se pubblicati nelle ultime 24 ore
  * rispetto ad `adesso`, oppure se la fonte li dava come validi (`attivo`, in corso o programmati) in una fotografia
- * (`generato`) di meno di 24 ore: più vecchi non dicono più nulla di certo e non si mostrano.
+ * (`generato`) di meno di 24 ore. Gli altri eventi non si mostrano.
  * Le ordinanze restano tutte. In ogni gruppo, prima i più recenti.
  */
 export function scegliAvvisi(avvisi: Avviso[], adesso: Date, generato?: string): { eventi: Avviso[]; ordinanze: Avviso[] } {
@@ -795,6 +796,56 @@ export function scegliAvvisi(avvisi: Avviso[], adesso: Date, generato?: string):
   return { eventi, ordinanze };
 }
 
+/** Due cartelli della stessa strada più vicini di così diventano uno solo, con tutti i testi. */
+const CARTELLI_VICINI_M = 25;
+
+/** Un punto della fotografia degli avvisi, se è fatto bene (la copia remota può essere di un'altra versione). */
+function lonLat(p: unknown): LonLat | null {
+  if (!p || typeof p !== 'object') return null;
+  const { lon, lat } = p as { lon?: unknown; lat?: unknown };
+  return typeof lon === 'number' && typeof lat === 'number' && Number.isFinite(lon) && Number.isFinite(lat) ? { lon, lat } : null;
+}
+
+/**
+ * I cartelli degli avvisi da mettere sulla mappa: gli stessi eventi che mostra la scheda
+ * (`scegliAvvisi`), solo quelli con un incrocio del tratto dove la città si vede. `posizione`
+ * dà i metri locali di un punto, oppure null se lì non va disegnato nulla. Si prova prima
+ * l'incrocio d'inizio, poi quello di fine. Le ordinanze non hanno coordinate: restano nella scheda.
+ */
+export function puntiAvvisi(
+  dati: DatiAvvisi,
+  adesso: Date,
+  posizione: (ll: LonLat) => { x: number; y: number } | null,
+): Punto[] {
+  const { eventi } = scegliAvvisi(Array.isArray(dati?.avvisi) ? dati.avvisi : [], adesso, dati?.generato);
+  const punti: Punto[] = [];
+  for (const a of eventi) {
+    let dove: { x: number; y: number } | null = null;
+    for (const ll of [lonLat(a.inizio), lonLat(a.fine)]) {
+      if (ll) dove = posizione(ll);
+      if (dove) break;
+    }
+    if (!dove) continue;
+    const strada = typeof a.strada === 'string' && a.strada ? a.strada : 'Avviso sulla strada';
+    const vicino = punti.find((p) => p.nome === strada && Math.hypot(p.x - dove!.x, p.y - dove!.y) < CARTELLI_VICINI_M);
+    if (vicino) {
+      if (!vicino.nota?.split('\n').includes(a.testo)) vicino.nota = `${vicino.nota}\n${a.testo}`;
+      continue;
+    }
+    punti.push({
+      id: `avviso-${punti.length + 1}`,
+      strato: 'mobilita',
+      tipo: 'avviso',
+      nome: strada,
+      x: dove.x,
+      y: dove.y,
+      nota: a.testo,
+      url: a.url,
+    });
+  }
+  return punti;
+}
+
 /** Oltre questa età la fotografia degli avvisi non si considera più recente. */
 const AVVISI_VECCHI_MS = 24 * 60 * 60 * 1000;
 /** Lo script tiene le ordinanze pubblicate negli ultimi 120 giorni (scripts/lib/avvisi.mjs). */
@@ -814,7 +865,7 @@ export interface QuadroAvvisi {
   /**
    * Eventi che il CCISS dava come validi (`attivo`) e che non mostriamo perché la fotografia
    * ha più di 24 ore: non sappiamo se valgono ancora. Gli eventi dell'RSS più vecchi di 24 ore
-   * non si contano: per regola non dicono più nulla.
+   * non si contano.
    */
   eventiNascosti: number;
   /** Frase che spiega gli eventi nascosti, vuota se non ce ne sono. */
@@ -830,7 +881,7 @@ export interface QuadroAvvisi {
 /**
  * Tutto quello che la scheda degli avvisi deve dire, deciso senza DOM. La fotografia si
  * rigenera a mano: può essere vecchia, o fatta mentre una fonte non rispondeva. In quei casi
- * la scheda lo dice, e non afferma mai nulla su "questo momento". Le ordinanze pubblicate
+ * la scheda lo dice e parla della fotografia, non di adesso. Le ordinanze pubblicate
  * da più di 120 giorni rispetto ad `adesso` non si mostrano.
  */
 export function quadroAvvisi(dati: Pick<DatiAvvisi, 'generato' | 'fonti' | 'avvisi'>, adesso: Date): QuadroAvvisi {
@@ -879,11 +930,11 @@ export function quadroAvvisi(dati: Pick<DatiAvvisi, 'generato' | 'fonti' | 'avvi
 /**
  * Dove guardare il traffico di adesso. Bassano Aperta non lo mostra: per Bassano nessun ente
  * pubblica code e velocità in tempo reale con una licenza che ne permetta il riuso, e i
- * servizi commerciali chiedono una chiave a pagamento (verificato il 18/11/2026, vedi
- * docs/SPEC.md). Gli indirizzi sono fissi e centrati su Bassano: nessun dato di chi legge.
+ * servizi commerciali chiedono una chiave a pagamento (vedi docs/SPEC.md). Gli indirizzi
+ * sono fissi e centrati su Bassano: non contengono dati di chi legge.
  */
-// Controllati il 18/11/2026. Waze non apre la mappa centrata su un punto senza metterlo come
-// destinazione: la pagina mostra le indicazioni, ma non parte nessuna navigazione. ANAS VAI dà
+// Waze non apre la mappa centrata su un punto senza metterlo come destinazione: la pagina
+// mostra le indicazioni, ma non parte nessuna navigazione. ANAS VAI dà
 // le velocità tratta per tratta sulla SS47 e sulla SS248 (getlinearmap?strada=SS248 risponde con
 // le tratte della Schiavonesca-Marosticana). La pagina della Pedemontana ha notizie e il numero
 // per le segnalazioni, non un elenco di code.
@@ -931,8 +982,7 @@ const VERSIONI_CC = new Set(['1.0', '2.0', '2.5', '3.0', '4.0']);
  * Indirizzo della pagina ufficiale di una licenza Creative Commons, a partire dal nome scritto
  * nei contenuti («CC BY-SA 4.0», «CC BY 2.5», «CC0», «CC0 1.0»). Riconosce solo le licenze
  * generiche BY, BY-SA e CC0: per tutto il resto (pubblico dominio, licenze adattate a un
- * paese, altre varianti, testo libero) restituisce null e il nome resta senza link. Meglio
- * nessun link che un link alla licenza sbagliata.
+ * paese, altre varianti, testo libero) restituisce null e il nome resta senza link.
  */
 export function urlLicenza(licenza: string | null | undefined): string | null {
   if (typeof licenza !== 'string') return null;

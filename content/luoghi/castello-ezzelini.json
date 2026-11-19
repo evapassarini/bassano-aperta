@@ -15,7 +15,7 @@
         "titolo": "Wikipedia, voce «Duomo di Bassano del Grappa»",
         "url": "https://it.wikipedia.org/wiki/Duomo_di_Bassano_del_Grappa"
       },
-      "media": 4
+      "media": 2
     },
     {
       "anno": "XII-XIII secolo",
@@ -25,7 +25,7 @@
         "titolo": "Wikipedia, voce «Castello degli Ezzelini (Bassano del Grappa)»",
         "url": "https://it.wikipedia.org/wiki/Castello_degli_Ezzelini_(Bassano_del_Grappa)"
       },
-      "media": 3
+      "media": 1
     },
     {
       "anno": "1311-1404",
@@ -71,7 +71,7 @@
         "titolo": "Wikipedia, voce «Duomo di Bassano del Grappa»",
         "url": "https://it.wikipedia.org/wiki/Duomo_di_Bassano_del_Grappa"
       },
-      "media": 14
+      "media": 5
     },
     {
       "anno": "1688-1689",
@@ -99,19 +99,10 @@
         "titolo": "Wikipedia, voce «Castello degli Ezzelini (Bassano del Grappa)»",
         "url": "https://it.wikipedia.org/wiki/Castello_degli_Ezzelini_(Bassano_del_Grappa)"
       },
-      "media": 1
+      "media": 0
     }
   ],
   "media": [
-    {
-      "tipo": "immagine",
-      "titolo": "Il castello in una xilografia (datata 1901 su Commons)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa%2C_Castello_degli_Ezzelini_%28xilografia%29.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa%2C_Castello_degli_Ezzelini_%28xilografia%29.jpg",
-      "autore": "Autore sconosciuto",
-      "licenza": "Pubblico dominio",
-      "alt": "Xilografia in bianco e nero: le mura merlate e le torri del castello in cima al colle, sopra le case della città."
-    },
     {
       "tipo": "immagine",
       "titolo": "Il Castello degli Ezzelini",
@@ -120,15 +111,6 @@
       "autore": "Bruschi alberto",
       "licenza": "CC BY-SA 4.0",
       "alt": "Il complesso del castello in mattoni e pietra, con una torre quadrata e un cipresso, sotto un cielo azzurro."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Il camminamento fra le due mura",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Camminamento_fra_le_due_mura_del_castello_degli_Ezzelini.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Camminamento_fra_le_due_mura_del_castello_degli_Ezzelini.jpg",
-      "autore": "Ezio1937",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Un sentiero stretto tra l'erba corre fra due alte mura di pietra del castello."
     },
     {
       "tipo": "immagine",
@@ -149,24 +131,6 @@
       "alt": "Il campanile in mattoni del Duomo tra gli alberi, al tramonto, con i colli sullo sfondo."
     },
     {
-      "tipo": "immagine",
-      "titolo": "L'interno del Duomo",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Vista_particolare_Interno_Duomo_S.M._in_Colle.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Vista_particolare_Interno_Duomo_S.M._in_Colle.jpg",
-      "autore": "Gito Trevisan",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "L'interno della chiesa visto verso l'alto: il soffitto con dipinti in cornici ovali e, in basso, candelieri e fiori."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Il campanile del Duomo",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Duomo_campanile_bassano.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Duomo_campanile_bassano.jpg",
-      "autore": "Ezio1937",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Il campanile in mattoni del Duomo accanto a un alto cipresso, visto dal cortile."
-    },
-    {
       "tipo": "video",
       "titolo": "Castello degli Ezzelini: riaperto il camminamento tra le mura e il Corpo di Guardia (servizio del 3 marzo 2023)",
       "url": "https://www.youtube-nocookie.com/embed/61rteLifD18",
@@ -181,51 +145,6 @@
       "pagina": "https://www.youtube.com/watch?v=bmJv2sGn704",
       "autore": "Rete Veneta",
       "licenza": "Licenza non indicata: video solo incorporato da YouTube"
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Il piazzale interno del castello",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Piazzale_inteerno_al_Castello_di_Bassano_del_Grappa.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Piazzale_inteerno_al_Castello_di_Bassano_del_Grappa.jpg",
-      "autore": "Ezio1937",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Un piazzale di ciottoli con una corsia di lastre di pietra: a sinistra un edificio giallo a due piani, in fondo il fianco del Duomo con il portale, a destra due alti cipressi."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "L'entrata al castello accanto alla Torre di Ser Ivano",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Entrata_al_Castelo_a_lato_della_Torre_di_ser_Ivano.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Entrata_al_Castelo_a_lato_della_Torre_di_ser_Ivano.jpg",
-      "autore": "Ezio1937",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Una porta ad arco in un muro intonacato e scrostato, con un piccolo campanile a vela in cima; a destra un'alta torre in mattoni e ciottoli con una bandiera gialla e rossa."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "La Torre di Ser Ivano vista dal basso",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Torre_di_Ser_Ivano.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Torre_di_Ser_Ivano.jpg",
-      "autore": "Ezio1937",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Una torre quadrata in mattoni rossi vista dal basso, tra muri di ciottoli di fiume, con ciuffi d'erba in cima e il cielo azzurro."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Il fianco del Duomo con il campanile",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa%2C_chiesa_di_Santa_Maria_in_Colle_05.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa%2C_chiesa_di_Santa_Maria_in_Colle_05.jpg",
-      "autore": "Syrio",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Il lungo fianco intonacato della chiesa, con finestre a mezzaluna in alto e un portale in pietra; sul fondo il campanile in mattoni."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "L'organo del Duomo",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Organo_S.Maria_in_Colle.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Organo_S.Maria_in_Colle.jpg",
-      "autore": "GiaEsse",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "L'interno della chiesa verso la cantoria: l'organo con le canne in una cornice dorata, sopra un balcone decorato retto da colonne, tra pareti bianche e due altari laterali."
     },
     {
       "tipo": "immagine",

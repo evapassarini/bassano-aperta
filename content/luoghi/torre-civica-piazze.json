@@ -15,7 +15,7 @@
         "titolo": "Wikipedia, voce «Bassano del Grappa»",
         "url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
       },
-      "media": 12
+      "media": 7
     },
     {
       "anno": "1349",
@@ -35,7 +35,7 @@
         "titolo": "Regione del Veneto, Veneto Around Me, scheda della Loggia dei Podestà",
         "url": "https://venetoaroundme.regione.veneto.it/en/node/94076"
       },
-      "media": 9
+      "media": 5
     },
     {
       "anno": "1494",
@@ -93,7 +93,7 @@
         "titolo": "Wikipedia, voce «Bassano del Grappa»",
         "url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
       },
-      "media": 6
+      "media": 4
     },
     {
       "anno": "1898",
@@ -103,7 +103,7 @@
         "titolo": "Wikipedia, voce «Bassano del Grappa»",
         "url": "https://it.wikipedia.org/wiki/Bassano_del_Grappa"
       },
-      "media": 10
+      "media": 6
     }
   ],
   "media": [
@@ -145,48 +145,12 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "Piazza Libertà",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Piazza_Libert%C3%A0_%28Bassano_del_Grappa%29_01.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Piazza_Libert%C3%A0_%28Bassano_del_Grappa%29_01.jpg",
-      "autore": "Superchilum",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Piazza Libertà vuota: i palazzi con i portici a sinistra, la facciata di una chiesa a destra e la Torre Civica in fondo."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "La colonna con il leone alato in Piazza Libertà",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Piazza_Liberta%2C_colonna_con_leone_alato.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Piazza_Liberta%2C_colonna_con_leone_alato.jpg",
-      "autore": "Oursana",
-      "licenza": "CC0",
-      "alt": "Il leone alato in pietra in cima alla colonna, davanti a un palazzo affrescato con finestre ad arco."
-    },
-    {
-      "tipo": "immagine",
       "titolo": "Piazza Vittorio Emanuele, oggi Piazza Libertà, in una xilografia (datata 1901 su Commons)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa%2C_Piazza_Vittorio_Emanuele_%28xilografia%29.jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa%2C_Piazza_Vittorio_Emanuele_%28xilografia%29.jpg",
       "autore": "Autore sconosciuto",
       "licenza": "Pubblico dominio",
       "alt": "Xilografia in bianco e nero della piazza con la torre al centro, i palazzi porticati e alcune figure a passeggio."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Piazza Vittorio Emanuele II in una cartolina del 1903",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/VI-Bassano-del-Grappa-1903-Piazza-Vittorio-Emanuele-II.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:VI-Bassano-del-Grappa-1903-Piazza-Vittorio-Emanuele-II.jpg",
-      "autore": "Autore sconosciuto",
-      "licenza": "Pubblico dominio",
-      "alt": "Cartolina colorata della piazza: la torre, i palazzi, la facciata della chiesa a destra e alcune persone, con una scritta a mano in basso."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "La torre in una xilografia (datata 1903 su Commons, dove è intitolata «Torre Eceliniana»)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_Torre_Eceliniana.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_Torre_Eceliniana.jpg",
-      "autore": "Autore sconosciuto",
-      "licenza": "Pubblico dominio",
-      "alt": "Incisione in bianco e nero della torre in mattoni con l'orologio a metà altezza, le finestre ad arco e i merli in cima, sopra i tetti delle case."
     },
     {
       "tipo": "immagine",
@@ -208,39 +172,12 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "La chiesa di San Giovanni e la piazza in una xilografia (datata 1901 su Commons)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa%2C_chiesa_di_San_Giovanni_%28xilografia%29.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa%2C_chiesa_di_San_Giovanni_%28xilografia%29.jpg",
-      "autore": "Autore sconosciuto",
-      "licenza": "Pubblico dominio",
-      "alt": "Incisione in bianco e nero: a sinistra la facciata con colonne della chiesa, al centro la piazza con un'alta asta e alcune figure a passeggio, a destra una statua su una colonna."
-    },
-    {
-      "tipo": "immagine",
       "titolo": "La chiesa di San Giovanni Battista in Piazza Libertà",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa%2C_chiesa_di_San_Giovanni_Battista_01.jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa%2C_chiesa_di_San_Giovanni_Battista_01.jpg",
       "autore": "Syrio",
       "licenza": "CC BY-SA 4.0",
       "alt": "La grande facciata bianca della chiesa vista di scorcio dal basso, con colonne, timpano e statue in cima, sotto un cielo nuvoloso."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "La colonna di San Bassiano in Piazza Libertà",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bassano_del_Grappa_-_Colonna_di_San_Bassiano_01.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Bassano_del_Grappa_-_Colonna_di_San_Bassiano_01.jpg",
-      "autore": "Syrio",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Un alto basamento in pietra chiara con iscrizioni e medaglioni scolpiti, e in cima la statua di un vescovo con la mitra e il pastorale, davanti ai palazzi della piazza."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Piazza Libertà di notte, con il Municipio",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Municipio_in_Piazza_Liberta.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Municipio_in_Piazza_Liberta.jpg",
-      "autore": "Maurizio Moro5153",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "La piazza di notte: i palazzi illuminati con i portici, il Municipio con la loggia ad archi a sinistra, la cima merlata della torre che spunta dietro i tetti e un lampione in primo piano."
     }
   ],
   "live": [

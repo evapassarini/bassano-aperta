@@ -1,10 +1,9 @@
 # Bassano Aperta: specifica della versione 1
 
-Nome provvisorio. Progetto civico open source, personale di chi lo cura (non di uno studio né
-di un'azienda): una mappa isometrica di Bassano del Grappa con dati utili e il racconto dei
+Progetto civico open source, personale di chi lo cura: una
+mappa isometrica di Bassano del Grappa con dati utili e il racconto dei
 luoghi. Nasce attorno alla candidatura di Bassano a
-**Capitale italiana della Cultura 2029** (dicitura corretta: "candidata a", mai "Città della
-cultura 2029", mai "europea").
+**Capitale italiana della Cultura 2029**.
 
 ## Cosa fa
 
@@ -13,12 +12,12 @@ cultura 2029", mai "europea").
 2. Sopra la base ci sono i luoghi simbolo, disegnati a parte come SVG.
 3. Tre strati accendibili: **Cultura**, **Ambiente**, **Mobilità**.
 4. Clic su un luogo: si apre la **finestra-racconto** con una linea del tempo a tappe, le
-   curiosità, immagini e video (l'audio è previsto, oggi nessun racconto ne ha), e un riquadro **Adesso** con il dato live dove esiste davvero.
+   curiosità, immagini e video (l'audio è previsto, oggi nessun racconto ne ha), e un riquadro **Adesso** con il dato live dove esiste.
 5. Nello strato Mobilità, la scheda della stazione mostra i **prossimi treni** con i ritardi
    dichiarati, letti in diretta.
 6. Dall'elenco «Luoghi» si apre la scheda **Avvisi sulla viabilità**: gli avvisi pubblicati
    dagli enti per le strade attorno a Bassano, come fotografia con data e ora.
-7. Una pagina **Fonti e licenze** elenca ogni fonte, con data, e porta al codice e alle
+7. Una pagina **Fonti e licenze** elenca ogni fonte, con la sua licenza e i suoi limiti, e porta al codice e alle
    segnalazioni. Sulla mappa è sempre scritto il credito «© OpenStreetMap contributors». Su telefono il
    foglio di un racconto aperto lo copre insieme alla mappa.
 8. La mappa si guarda in tre luci: **giorno**, **pomeriggio**, **notte**. Un comando in basso a
@@ -30,53 +29,34 @@ cultura 2029", mai "europea").
 
 Fuori dalla v1: bilancio del Comune (SIOPE), quartieri e servizi, traffico in tempo reale
 strada per strada (code, tempi di percorrenza, strade colorate sulla mappa), posizione dei treni
-lungo la linea, rilievo, tasselli dipinti con AI. Gli avvisi sulla viabilità non
-sono il traffico: sono testi pubblicati dagli enti, e il sito lo dice.
+lungo la linea, rilievo, tasselli dipinti con AI. Gli avvisi sulla viabilità sono testi
+pubblicati dagli enti, non dati sul traffico.
 
-Traffico in tempo reale, ricerca del 18/11/2026: per Bassano nessuna fonte con licenza aperta
+Traffico in tempo reale: per Bassano nessuna fonte con licenza aperta
 dà code o velocità. ANAS VAI ha le velocità sulle statali ma senza licenza e senza CORS; il
 CCISS dà solo eventi; tra i servizi commerciali solo HERE permette di disegnare il traffico
 su una mappa non sua, ma vuole un account con carta di credito e una chiave che starebbe nel
-codice pubblico. Decisione di Eva: nessun servizio a pagamento. La scheda degli avvisi apre
+codice pubblico. Il progetto non usa servizi a pagamento. La scheda degli avvisi apre
 con il riquadro «Traffico adesso» (`LINK_TRAFFICO` in `src/ui/aiuti.ts`), che dice cosa non
-mostriamo e porta a Waze, Google Maps, ANAS VAI, Pedemontana e CCISS (ognuno descritto per
-quello che offre davvero, controllato il 18/11/2026), avvisando che sono
-siti esterni. I link sono indirizzi fissi: non portano nessun dato di chi legge. Si può
+mostriamo e porta a Waze, Google Maps, ANAS VAI, Pedemontana e CCISS, avvisando che sono
+siti esterni. I link sono indirizzi fissi, senza dati di chi legge. Si può
 riaprire la questione se ANAS o il Comune concedono per iscritto i loro dati.
 
 ## Regole editoriali (valgono per ogni testo del sito)
 
-- Ogni fatto ha una fonte letta davvero. La base è `ricerca/ricerca-verificata-2026-11-14.json`:
-  non si aggiunge nulla a memoria.
-- Dove le fonti non concordano non si sceglie a memoria: il punto va in `incertezze`, che è una
-  nota interna di redazione e NON si mostra sul sito (decisione della curatrice del 16 novembre
-  2026: la sezione "Le fonti non concordano" è stata tolta). Nessun testo mostrato rimanda a
-  quella sezione o a un "più sotto". Esempi di note: distruzione del ponte nel 1945,
-  "ricostruito dagli Alpini", numeri del 26 settembre 1944, origine del nome "degli Ezzelini".
+- Ogni fatto ha una fonte letta. La base è `ricerca/ricerca-verificata-2026-11-14.json`.
+- Dove le fonti non concordano il punto va in `incertezze`, che è una nota interna di
+  redazione e non si mostra sul sito.
 - `curiosita` è un elenco di frasi brevi, mostrato nella sezione "Curiosità" della finestra,
   dopo la linea del tempo e prima di "Da vedere e da ascoltare" (se l'elenco è vuoto la sezione
   non c'è). Ogni curiosità ha una fonte: tra quelle delle tappe, tra i media del racconto
   (per esempio la foto di una lapide), oppure nel campo `fontiCuriosita` (elenco di
   `{titolo, url}`), che entra nell'elenco "Fonti" del racconto. Un fatto curioso su cui le
   fonti non sono del tutto coerenti può restare, ma si racconta come curiosità ("si racconta",
-  "secondo ..."), non come elenco di discordanze. Vale soprattutto per il Ponte Vecchio.
-- Sulla rappresaglia dopo l'esplosione sul ponte del febbraio 1945 (tre partigiani fucilati sul
-  ponte) si scrive "nazifascisti": la Wikipedia italiana dice fascisti, quella inglese nazisti.
+  "secondo ...").
 - Il fiume si scrive al femminile: "la Brenta", "della Brenta", "sulla Brenta", come si dice a
-  Bassano. Restano come sono i nomi propri e i titoli che hanno già l'articolo dentro o sono
-  citazioni: "Riviera del Brenta", "Consorzio di Bonifica Brenta", i nomi dei comuni ("Tezze sul
-  Brenta"), i nomi presi da OpenStreetMap ("Ciclopista del Brenta"), i titoli delle fonti, i
-  nomi dei file di Commons e gli indirizzi. `tests/contenuti.test.ts` controlla i testi
-  mostrati dei racconti (elenco delle eccezioni in `NOMI_PROPRI_BRENTA`).
-- Le affermazioni aziendali (Nardini, Poli) si attribuiscono: "secondo l'azienda".
-- Viale dei Martiri e Tempio Ossario: tono sobrio, nessun dettaglio crudo, nessuna foto delle
-  vittime.
-- King Kong Rhino (Li-Jen Shih, Palazzo Sturm): la scultura c'è ancora (confermato di persona
-  da chi cura il sito, novembre 2026). Niente fotografie della scultura (artista vivente, in Italia non c'è libertà
-  di panorama): solo la nostra illustrazione, stampe e disegni del Cinquecento (Dürer,
-  Burgkmair, Enea Vico) e sale di Palazzo Sturm fotografate senza la scultura. Il test dei
-  contenuti ha l'elenco degli autori ammessi per questo racconto.
-- Niente orari, prezzi o calendari scritti a mano: si rimanda alla pagina ufficiale.
+  Bassano. Restano come sono i nomi propri e le citazioni. `tests/contenuti.test.ts` controlla
+  i testi mostrati dei racconti.
 - Lingua: italiano, frasi semplici, niente gergo.
 
 ## Media
@@ -93,45 +73,34 @@ riaprire la questione se ANAS o il Comune concedono per iscritto i loro dati.
 - Le immagini stanno nell'elenco `media` di ogni racconto e le tappe le indicano per indice:
   le nuove si aggiungono sempre in coda, senza spostare le altre. Un file compare una volta
   sola per racconto e un'immagine è legata al massimo a una tappa (lo controlla il test dei
-  contenuti). Quelle non legate a una tappa finiscono nella galleria in fondo: una griglia di
-  miniature tutte uguali (ritaglio 4:3), due colonne quando il foglio è stretto e tre quando
-  è largo almeno 420 px, caricate solo quando servono (`loading="lazy"`), con titolo, autore
-  e licenza sempre visibili sotto ogni miniatura; il clic apre l'immagine in grande. Accanto
-  al titolo della sezione c'è il conto, per esempio «13 immagini e 3 video» (`contoMedia()` in
-  `src/ui/aiuti.ts`).
-- Il 15 novembre 2026 sono state aggiunte 88 immagini in 16 racconti (da 66 a 154 in tutto).
-  Ognuna è stata verificata con l'API di Commons (autore, licenza, nessuna segnalazione di
-  cancellazione) e guardata; ogni indirizzo è stato provato. `Special:FilePath` oggi rimanda a
+  contenuti).
+- Le immagini sono 55, in 16 racconti, e ognuna è legata a una tappa (tranne quelle di
+  «Bassano 2029» e di Nardini al Ponte). Autore e licenza di ognuna vengono dall'API di Commons.
+  `Special:FilePath` oggi rimanda a
   `thumb.wikimedia.org` o a `upload.wikimedia.org`: tutti e due stanno dentro
   `https://*.wikimedia.org` della Content-Security-Policy.
-- Audio: oggi nessun racconto ne ha. Le due registrazioni di «Sul ponte di Bassano» su Commons
-  sono state tolte dal Ponte Vecchio perché nessuno le ha ascoltate e non si sa quale delle due
-  canzoni con quel titolo contengano; i loro dati sono nel README, «Da confermare prima di
-  pubblicare».
 - Video: solo incorporati da `https://www.youtube-nocookie.com/embed/<id>`, e solo dopo un
   clic dell'utente ("Carica il video da YouTube"), per non tracciare chi apre la finestra.
 - Webcam: solo link esterni (i termini d'uso per l'incorporamento non sono stati verificati).
-  Sul Ponte Vecchio non esiste una webcam funzionante: non fingerla.
 
 ## Dati live
 
 - **Brenta** (dal browser, CORS aperto, senza chiave):
   `https://api.arpa.veneto.it/REST/v1/meteo_meteogrammi_tabella?codseqst=300001722`
   restituisce circa tre giorni di livello (m) e portata (m³/s) ogni 10 minuti per la stazione
-  "Brenta a Barzizza". Dire sempre che la stazione è circa 1 km a monte del ponte e che i dati
-  non sono validati. Se la chiamata fallisce: messaggio chiaro, nessun numero finto.
+  "Brenta a Barzizza". Il riquadro dice che la stazione è circa 1 km a monte del ponte e che i
+  dati non sono validati. Se la chiamata fallisce, il riquadro lo scrive e non mostra numeri.
 - **Aria** (nessun CORS: la scarica uno script e salva `public/data/aria.json`; il browser la
   legge dal repository su GitHub, con ripiego sulla copia del sito, vedi «Pubblicazione»):
   `https://www2.arpa.veneto.it/aria-json/exported/aria/data.json`, stazione `codseqst 500000106`.
-  Mostrare sempre data e ora della fotografia nella scheda della stazione. Nel riquadro breve
+  La scheda della stazione mostra data e ora della fotografia. Nel riquadro breve
   sulla mappa vale la regola scritta più sotto (data della misura; data della fotografia se è
   vecchia o se la misura non ha una data).
   Lo script salva anche le serie brevi che ARPAV pubblica per la stazione (`serie`, facoltativo):
   ozono, circa 48 medie orarie; PM10, circa 7 medie giornaliere. Nel file in diretta la stazione
   ha solo ozono e PM10. Il biossido di azoto la stazione lo misura, ma compare solo nei dati
-  validati (`https://api.arpa.veneto.it/REST/v1/aria_tabella_cop?codseqst=500000106`, letto il
-  15/11/2026: biossido di azoto 35 µg/m³ il 12/11). Non scrivere mai che a Bassano il biossido
-  di azoto non si misura. Il PM2.5 nel file in diretta non c'è.
+  validati (`https://api.arpa.veneto.it/REST/v1/aria_tabella_cop?codseqst=500000106`). Il PM2.5
+  nel file in diretta non c'è.
   Il giorno delle medie di PM10 non è una data di misura scritta da ARPAV: le voci hanno tutte
   l'ora dell'esportazione (il 15/11/2026 alle 11:40: da «2026-11-08 11:40:01» a «2026-11-14
   11:40:01»). Che sia il giorno misurato è verificato su un solo giorno e a metà giornata (12/11:
@@ -144,58 +113,51 @@ riaprire la questione se ANAS o il Comune concedono per iscritto i loro dati.
 
 ### Giudizio a parole sull'aria
 
-Il solo numero dice poco a chi non è del mestiere: accanto ai numeri il sito scrive una parola.
+Accanto ai numeri il sito scrive una parola di giudizio.
 La calcola `giudizioAria()` in `src/live/giudizioAria.ts`, dove sta l'unica tabella delle
 soglie, con le fonti nel commento.
 
 - **Scala**: le cinque classi dell'indice di qualità dell'aria (IQA) di ARPAV: buona,
-  accettabile, mediocre, scadente, pessima. Fonti, lette il 15/11/2026:
+  accettabile, mediocre, scadente, pessima. Fonti:
   [la scala](https://www.arpa.veneto.it/temi-ambientali/aria/iqa/indice),
   [il calcolo](https://www.arpa.veneto.it/temi-ambientali/aria/iqa/indice-qualita-dellaria-approfondimenti),
   [i dati validati](https://www.arpa.veneto.it/dati-ambientali/dati-storici/aria/qualita-aria-dati-validati)
   (i confini delle classi sono nel codice di questa pagina).
-- **Non è l'indice ARPAV** e non si chiama né «indice ARPAV» né «IQA»: ARPAV lo calcola solo su
-  dati validati e solo con tutti e tre gli inquinanti (PM10, ozono, biossido di azoto). Noi
-  abbiamo PM10 e ozono, non validati. Manca il biossido di azoto: il giudizio ufficiale può
-  essere peggiore del nostro, e il sito lo dice. Non si scrive che l'ufficiale non può essere
-  migliore: ARPAV parte da dati controllati e il nostro calcolo dell'ozono non è ancora stato
-  confrontato con il suo, quindi i due giudizi possono differire in tutti e due i sensi.
-- **Giorno**: quello dell'ultima media giornaliera di PM10 nella fotografia (di norma ieri).
-  Mai oggi: il giorno deve essere finito. Lo controllano lo script (scarta le medie di un giorno
-  non finito) e l'interfaccia: se il giorno del giudizio è oggi o dopo, per l'orologio del
-  dispositivo, niente parola, solo i numeri e «Giudizio a parole non disponibile».
+- **Non è l'indice ARPAV**: ARPAV lo calcola solo su dati validati e con tutti e tre gli
+  inquinanti (PM10, ozono, biossido di azoto). Il sito usa solo PM10 e ozono, non validati,
+  quindi il suo giudizio può essere diverso da quello ufficiale, in meglio o in peggio.
+- **Giorno**: quello dell'ultima media giornaliera di PM10 nella fotografia, di norma ieri. Il
+  giorno deve essere finito: lo script scarta le medie di un giorno non finito e, se per
+  l'orologio del dispositivo il giorno del giudizio è oggi o dopo, l'interfaccia mostra solo i
+  numeri e «Giudizio a parole non disponibile».
 - **Grandezze e valori di riferimento** (µg/m³): PM10, media del giorno, riferimento 50; ozono,
   la più alta delle medie mobili su 8 ore del giorno (non l'ultima ora, non l'ora più alta),
   riferimento 120. Ogni valore si arrotonda all'intero e si divide per il suo riferimento; vale
   il peggiore dei due. Fino a metà del riferimento compresa: buona. Fino al riferimento:
   accettabile. Fino a una volta e mezzo: mediocre. Fino al doppio: scadente. Oltre: pessima. In
   concentrazioni: PM10 25, 50, 75, 100; ozono 60, 120, 180, 240.
-- **Una parola sola**: il 50 e il 120 nel sito si chiamano sempre «valore di riferimento», come
-  nella pagina ARPAV sul calcolo. Non «soglia di legge», non «limite», non «ha superato»: per
-  dire che cosa prevede la legge (per esempio se un giorno sopra 50 è già una violazione) serve
-  prima leggere e citare la norma. Non è stato fatto.
+- **Nome dei riferimenti**: il 50 e il 120 nel sito si chiamano «valore di riferimento», come
+  nella pagina ARPAV sul calcolo. Il sito non dice che cosa prevede la legge per questi valori.
 - **Ore dell'ozono**: l'ora scritta nel file è presa come fine dell'ora di misura («01» è l'ora
   da mezzanotte all'una; «00» del giorno dopo è l'ultima ora del giorno). Le 24 medie su 8 ore
   di un giorno sono quelle che finiscono dall'ora scritta 01 del giorno all'ora scritta 00 del
   giorno dopo: la prima va dalle 17 del giorno prima all'una, l'ultima dalle 16 alle 24. ARPAV
-  non lo dichiara. Indizi letti il 15/11/2026: il file esportato alle 11:40 ha come ultima voce
+  non lo dichiara. Indizi: un file esportato alle 11:40 ha come ultima voce
   l'ora 11; la tabella validata numera le ore da 1 a 24.
 - **Due numeri per lo stesso valore**: il giudizio usa il valore arrotondato all'intero, le
   misure hanno un decimale. Nella scheda la riga dei valori usati lo dice («15 µg/m³ (14,7
   arrotondato)») e le avvertenze scrivono «Per il giudizio i valori si arrotondano all'intero».
 - **Dati che non bastano**: una media su 8 ore vale con almeno 6 ore su 8, e servono almeno 18
   medie valide nel giorno. Se manca il PM10 o l'ozono di quel giorno, nessuna parola: restano
-  solo i numeri e la scheda scrive «Giudizio a parole non disponibile». Mai una parola
-  inventata, mai un giudizio su un inquinante solo.
+  solo i numeri e la scheda scrive «Giudizio a parole non disponibile».
 - **Giudizio vecchio**: se il giorno ha più di 3 giorni il giudizio si presenta con la sua data
   («Aria il 10 novembre: buona»), non come attuale, e la scheda dice quanti giorni sono passati.
 - **Avvertenze, sempre scritte nella scheda**: giudizio calcolato da questo sito con le fasce di
   ARPAV, su dati ARPAV non validati; guarda solo PM10 e ozono, manca il biossido di azoto e il
   giudizio ufficiale può essere peggiore o comunque diverso; i valori si arrotondano all'intero;
   vale per il giorno indicato, non per adesso e non per l'anno; non sostituisce il bollettino
-  ufficiale, con il link ai dati validati di ARPAV. Nessun consiglio sanitario.
-- **Colore**: accanto alla parola c'è un tondo colorato con il bordo scuro. La parola è sempre
-  scritta: il colore non è mai l'unico modo di capire.
+  ufficiale, con il link ai dati validati di ARPAV. La scheda non dà consigli sanitari.
+- **Colore**: accanto alla parola c'è un tondo colorato con il bordo scuro.
 - **Scelte nostre, non scritte da ARPAV**: l'arrotondamento all'intero prima del rapporto,
   verificato su un solo caso e solo per il PM10 (Bassano, 12/11/2026: 13,4 è diventato 13 e
   l'indice 26); che valga anche per l'ozono e che i mezzi vadano in su (25,5 diventa 26) non è
@@ -204,11 +166,9 @@ soglie, con le fonti nel commento.
   file presa come fine dell'ora di misura (vedi «Ore dell'ozono»: se fosse l'inizio, le finestre
   si spostano di un'ora); i confini dell'ozono in concentrazione e il 25 del PM10, che sono
   aritmetica dai riferimenti ARPAV.
-- **Ancora da fare** (era da fare prima di pubblicare; il sito esce lo stesso, con le
-  avvertenze scritte sopra, e il punto resta aperto): in un giorno feriale, quando un giorno validato cade dentro
+- **Ancora da fare**: in un giorno feriale, quando un giorno validato cade dentro
   le 48 ore di ozono, confrontare la nostra media mobile con `CONC_MM_O3` e il nostro giudizio
-  con `IQA` della tabella validata (`aria_tabella_cop`). Il 15/11/2026 il confronto per l'ozono
-  non era possibile (validato fermo al 12, orari dal 13). Guardare a mano anche un'esportazione
+  con `IQA` della tabella validata (`aria_tabella_cop`). Guardare a mano anche un'esportazione
   del file in diretta tra le 00:00 e le 02:00, per vedere che giorno portano le voci del PM10
   subito dopo mezzanotte, e scrivere qui l'esito.
 - **Alternativa aperta**: l'API ARPAV (`api.arpa.veneto.it/REST/v1/aria_tabella_cop`) dà
@@ -221,15 +181,13 @@ soglie, con le fonti nel commento.
   codice `02520` (e figlie `02520:...`), da un'ora fa a sei ore avanti.
   - Ogni richiesta manda gli header `X-BusOne-Client: bassano-aperta (progetto civico open
     source; https://github.com/evapassarini/bassano-aperta)` e `X-BusOne-Use: personal`. Il
-    contatto è l'indirizzo del repository: nessuna email. Lo stesso valore sta in
-    `src/live/index.ts` e in `scripts/dati-stazioni.mjs`. Solo verso BusOne, mai verso altri
-    indirizzi.
+    contatto è l'indirizzo del repository. Lo stesso valore sta in `src/live/index.ts` e in
+    `scripts/dati-stazioni.mjs`; gli header vanno solo verso BusOne.
   - Condizioni di BusOne: gratuito per usi non commerciali di privati ed enti non profit;
     attribuzione obbligatoria "BusOne (busone.app) e fonte originale" (Trenitalia); BusOne può
     revocare il servizio.
-  - Limiti: si mostrano solo i ritardi. Dire sempre che sono quelli dichiarati dall'operatore,
-    rielaborati da BusOne, non ufficiali. Le posizioni dei treni in quel feed sono stime: non
-    si leggono e non si mostrano mai.
+  - Limiti: si mostrano solo i ritardi, presentati come dichiarati dall'operatore e rielaborati
+    da BusOne, non ufficiali. Le posizioni dei treni nel feed sono stime e non si usano.
   - Il feed non è l'orario completo: contiene solo le corse seguite in diretta. Le corse
     soppresse arrivano di solito senza elenco delle fermate, quindi non si può sapere se
     passavano da Bassano e non compaiono. Il riquadro lo dice sempre: «L'elenco può non essere
@@ -240,20 +198,19 @@ soglie, con le fonti nel commento.
     dell'orario ufficiale (ora prevista meno ritardo), come sui tabelloni di stazione, con il
     ritardo accanto e, quando non è zero, anche «previsto alle HH:MM». Il riquadro spiega quale
     ora è scritta.
-  - Mostrare sempre l'ora di emissione del feed. Il risultato resta in memoria 2 minuti; il
+  - Il riquadro mostra l'ora di emissione del feed. Il risultato resta in memoria 2 minuti; il
     riquadro non si aggiorna da solo, rilegge quando si riapre la scheda.
-  - Se la chiamata fallisce o il feed è malformato: messaggio chiaro con «Riprova», nessun
-    numero finto.
+  - Se la chiamata fallisce o il feed è malformato, il riquadro lo dice e offre «Riprova».
   - I nomi delle stazioni di origine e destinazione vengono da `public/data/stazioni-treni.json`
-    (`{ generato, fonte: { nome, url, licenza }, stazioni: { "02520": "Bassano del Grappa" } }`),
+    (`{ fonte: { nome, url, licenza }, stazioni: { "02520": "Bassano del Grappa" } }`),
     che uno script ricava da `stops.txt` dentro `https://proxy.busone.app/trenitalia/gtfs.zip`
-    (25 MB: si scarica solo quando si rigenera la tabella, mai a ogni visita). Solo il Nord-Est.
-    Se un nome manca non si mostra il codice: si tace. Se la tabella non arriva i treni si
-    mostrano senza nomi. La data della tabella (`generato`) si legge in «Fonti e licenze».
+    (25 MB, si scarica solo quando si rigenera la tabella). Solo il Nord-Est.
+    Se un nome manca non si mostra, nemmeno come codice. Se la tabella non arriva i treni si
+    mostrano senza nomi.
 - **Avvisi sulla viabilità** (nessun CORS: li scarica uno script e salva
   `public/data/avvisi.json`, tipo `DatiAvvisi`; il browser li legge dal repository su GitHub,
-  con ripiego sulla copia del sito, vedi «Pubblicazione»). È una fotografia, non il traffico in tempo
-  reale: mostrare sempre data e ora di `generato`. Due fonti:
+  con ripiego sulla copia del sito, vedi «Pubblicazione»). È una fotografia: la scheda mostra
+  data e ora di `generato`. Due fonti:
   - CCISS Viaggiare Informati, eventi per zona (`urlCcissZona` in `scripts/lib/avvisi.mjs`):
     gli eventi che la mappa di `https://www.cciss.it/web/cciss/situazione-della-viabilita`
     mostra in un riquadro attorno a Bassano, con almeno un punto entro 12 km dal centro o che
@@ -266,7 +223,17 @@ soglie, con le fonti nel commento.
     documentato: se non risponde o cambia forma lo script ripiega su `https://www.cciss.it/rss`
     (100 eventi in tutta Italia; teniamo SS47 Valsugana, SS248 e Pedemontana Veneta vicino a
     Bassano, senza `attivo`, e la scheda mostra solo quelli delle ultime 24 ore). Gli eventi
-    non hanno una pagina propria: il link porta alla mappa del CCISS.
+    non hanno una pagina propria: il link porta alla mappa del CCISS. Gli eventi letti per zona
+    portano anche `inizio` e `fine`, i due incroci che delimitano il tratto (5 decimali).
+  - Cartelli sulla mappa (`puntiAvvisi` in `src/ui/aiuti.ts`, `mostraAvvisi` della mappa): con
+    lo strato Mobilità acceso, ogni evento che la scheda mostra e che ha un incrocio dove la
+    città si vede diventa un cartello triangolare (tipo `avviso`), sull'incrocio d'inizio o,
+    se quello è fuori, su quello di fine. Due avvisi della stessa strada sullo stesso incrocio
+    fanno un cartello solo, con tutti e due i testi. Il clic apre una scheda con il testo, una
+    riga che spiega che i lavori possono essere ovunque nel tratto, il bottone «Tutti gli
+    avvisi» e il link alla mappa del CCISS. Gli eventi fuori dalla mappa e le ordinanze, che non
+    hanno coordinate, restano solo nella scheda. I cartelli arrivano dopo l'avvio, senza far
+    aspettare la mappa, e non entrano nell'elenco «Luoghi».
   - Vi.abilità (Provincia di Vicenza), `https://vi-abilita.it/feed/`: ordinanze sulle strade
     provinciali nei comuni del bassanese (`tipo: 'ordinanza'`), ultimi 120 giorni, al massimo
     dieci. `quando` è la data di pubblicazione, non il periodo dei lavori: vanno presentate come
@@ -281,7 +248,7 @@ soglie, con le fonti nel commento.
     fonte".
   - In `fonti` ci sono solo le fonti di cui la fotografia contiene i dati: l'interfaccia non
     dà per scontato che siano due, e se ne manca una lo dice («In questa fotografia mancano
-    ...») con il link al sito. Se il file manca: messaggio chiaro e link ai due siti.
+    ...») con il link al sito. Se il file manca, la scheda lo dice e dà il link ai due siti.
   - Se Vi.abilità non risponde lo script tiene le ordinanze della fotografia precedente ancora
     dentro i 120 giorni; se non risponde CCISS gli eventi vecchi non si conservano. In tutti e
     due i casi scrive il file ed esce con codice 2. Un feed senza voci, o senza nessuna data
@@ -289,17 +256,16 @@ soglie, con le fonti nel commento.
     tocca il file.
   - Sul sito pubblicato lo script gira più volte al giorno dentro `.github/workflows/dati.yml`
     (vedi «Pubblicazione»). Lì anche il codice 2 vale come errore: la fotografia incompleta si
-    scarta e resta il file di prima. Al primo giro su GitHub (novembre 2026) hanno risposto
-    tutte e due le fonti. Se un giorno una delle due comincia a rifiutare le richieste dai
-    server di GitHub, la fotografia non si aggiorna più e il lavoro resta rosso.
-  - La scheda non dice mai nulla su «questo momento»: se non ci sono avvisi scrive «Nella
+    scarta e resta il file di prima. Se una delle due fonti rifiuta le richieste dai server di
+    GitHub, la fotografia non si aggiorna e il lavoro resta rosso.
+  - Se non ci sono avvisi, la scheda scrive «Nella
     fotografia del ... non ci sono avvisi per la zona di Bassano». Se la fotografia ha più di 24
     ore lo dice e rimanda ai siti delle fonti. Le ordinanze pubblicate da più di 120 giorni
     rispetto al momento della lettura non si mostrano.
   - Dai testi si tolgono l'intestazione di protocollo, le sigle e i nomi di chi ha scritto
     l'atto, i nomi dei file allegati e i riferimenti d'ufficio dentro il testo (concessione
-    prot., OM, AREA EST, CUP, CIG); la formula fissa diventa «Senso unico alternato». Nessun
-    dato di persone nei file.
+    prot., OM, AREA EST, CUP, CIG); la formula fissa diventa «Senso unico alternato». I file non
+    contengono dati di persone.
   - Accessibilità di treni e avvisi: gli elenchi non sono zone `aria-live`; a chi usa un lettore
     di schermo si annuncia una sola frase breve (`role="status"`), per esempio «6 treni nelle
     prossime ore». Dopo «Riprova» il fuoco resta nel riquadro. Ogni link «Leggi alla fonte» dice
@@ -334,10 +300,9 @@ soglie, con le fonti nel commento.
   `[x0, y0, ...]`. I primi `veri` vengono da OpenStreetMap (`highway=street_lamp`); a Bassano
   sono pochi. Gli altri li dispone `scripts/dati-lampioni.mjs` lungo le strade di `base.json`
   e sul bordo delle aree di tipo `piazza` (rientrati di 2,5 m, dopo le strade principali e
-  secondarie e prima di vie e vicoli; stessa distanza minima di 24 m), con regole fisse (nessun
-  caso: a ogni corsa gli stessi punti), **a scopo illustrativo**. Il
-  sito lo dichiara in «Fonti e licenze» con i due numeri: non è un rilievo dell'illuminazione
-  pubblica e non va presentato come tale.
+  secondarie e prima di vie e vicoli; stessa distanza minima di 24 m), con regole fisse (a ogni
+  corsa gli stessi punti), **a scopo illustrativo**. Il sito lo dice in «Fonti e licenze», con i
+  due numeri: non è un rilievo dell'illuminazione pubblica.
 - Se Overpass non risponde lo script tiene i lampioni rilevati del `lampioni.json` che c'è già
   (i primi `veri` punti) e lo scrive in console; scrive `veri: 0` solo se un file precedente con
   lampioni rilevati non esiste.
@@ -383,7 +348,7 @@ stanno in `src/types.ts`.
 | Avvio | `index.html`, `src/main.ts` | Collega tutto |
 | Pubblicazione | `vercel.json`, `.github/workflows/*.yml` | Sito su Vercel, intestazioni di sicurezza, aggiornamento di aria e avvisi più volte al giorno, controllo a ogni push |
 
-### Proiezione (vincolante per mappa e illustrazioni)
+### Proiezione (comune a mappa e illustrazioni)
 
 - Metri locali: `x = (lon - lon0) * 111320 * cos(lat0)`, `y = (lat - lat0) * 110574`, con
   origine in `ORIGINE`.
@@ -410,6 +375,7 @@ export interface Mappa {
   zooma(fattore: number): void;   // > 1 avvicina, < 1 allontana, attorno al centro
   evidenzia(storia: string | null): void;
   impostaLuce(luce: Luce): void;  // all'avvio vale 'giorno'; con la luce già attiva non fa nulla
+  mostraAvvisi(punti: Punto[]): void; // cartelli degli avvisi; una nuova chiamata sostituisce i vecchi
   distruggi(): void;
 }
 export function creaMappa(opzioni: OpzioniMappa): Mappa;
@@ -444,7 +410,7 @@ export function creaUI(opzioni: OpzioniUI): UI;
 «Adesso» di notte a «Notte» non richiama `alCambioLuce`: la luce effettiva è la stessa.
 
 Dove stanno i comandi. Da 720 px di larghezza in su: in alto a sinistra testata, strati,
-«Luoghi» e «Fonti e licenze»; **in basso a sinistra** il riquadro Aria e, sotto, le quattro
+«Luoghi» e «Fonti e licenze»; in basso a sinistra il riquadro Aria e, sotto, le quattro
 scelte della luce, larghi come la colonna di sinistra; lo zoom in basso a destra (accanto alla
 finestra quando un racconto o una scheda è aperta) e, nel margine sotto lo zoom, il credito
 «© OpenStreetMap contributors». Su telefono: in basso a sinistra, dal basso
@@ -454,7 +420,7 @@ luce sono un gruppo di scelte esclusive (`role="radiogroup"`, «Luce della mappa
 frecce cambiano scelta. Ogni scelta è alta almeno 44 px, come gli altri comandi sulla mappa; su
 telefono il gruppo prende tutta la larghezza che resta accanto allo zoom. Se la finestra è larga
 ma bassa (sotto 36em di altezza: la soglia cresce con il testo) Aria e luce si spostano accanto
-alla colonna di sinistra; sopra quella soglia la colonna in alto non scende mai sopra Aria e
+alla colonna di sinistra; sopra quella soglia la colonna in alto non si sovrappone ad Aria e
 luce e, se manca il posto, scorre.
 
 Il credito della mappa (classe `.credito-mappa`, dentro `.controlli`; testo e indirizzo nelle
@@ -462,8 +428,7 @@ costanti `TESTO_CREDITO_OSM` e `URL_CREDITO_OSM` di `src/ui/index.ts`) è una ri
 il link a `https://www.openstreetmap.org/copyright`, che si apre in una nuova scheda. È
 visibile in ogni luce, su fondo di carta chiara, finché si vede la mappa. Su telefono, con il
 foglio di un racconto aperto, il credito è coperto quasi del tutto dal foglio, insieme alla
-mappa, e torna in vista alla chiusura (provato sul sito costruito a 375x812). Il credito con il
-link resta sempre in «Fonti e licenze».
+mappa, e torna in vista alla chiusura. Il credito con il link è anche in «Fonti e licenze».
 
 Il riquadro **Aria** legge `leggiAria()`. Per prima cosa scrive il giudizio a parole, con il
 tondo colorato: «Aria buona · ieri» (dopo due o tre giorni la data al posto di «ieri»; oltre i
@@ -474,10 +439,10 @@ giudizio del sito»; quando c'è anche la data della fotografia la riga si accor
 nel testo per i lettori di schermo). Con il giudizio il riquadro ha tre righe ed è alto circa
 66 px; con la luce il gruppo in basso è alto circa 126 px. Lo spazio riservato al gruppo è una
 sola variabile CSS, `--gruppo-basso` (8.5rem): la usano la colonna in alto, lo zoom quando va
-sopra il gruppo e l'aiuto dei tasti. Non scrivere altre altezze fisse. Se i dati non bastano per il giudizio il riquadro resta com'era: «Aria ·
-ARPAV» e sotto il valore. La data della fotografia («foto del ...») compare se la fotografia ha
-più di 3 giorni oppure se la misura non ha una data propria: il numero non resta mai senza una
-data. Una data di un altro anno porta anche l'anno. L'attribuzione per intero («Fonte: ARPAV,
+sopra il gruppo e l'aiuto dei tasti. Se i dati non bastano per il giudizio il riquadro resta
+com'era: «Aria · ARPAV» e sotto il valore. La data della fotografia («foto del ...») compare se la fotografia ha
+più di 3 giorni oppure se la misura non ha una data propria. Una data di un altro anno porta
+anche l'anno. L'attribuzione per intero («Fonte: ARPAV,
 dati non validati», e con il giudizio anche «Giudizio calcolato da questo sito ... Non è il
 bollettino ufficiale») sta nel testo per i lettori di schermo e nel suggerimento al passaggio
 del mouse; la scheda che si apre la mostra scritta. Nella scheda della stazione il riquadro
@@ -485,7 +450,7 @@ del mouse; la scheda che si apre la mostra scritta. Nella scheda della stazione 
 valori usati con il loro valore di riferimento, la scala intera dalla classe migliore alla peggiore con quella
 del giorno segnata (riquadro e data, non solo colore), le avvertenze con i link ad ARPAV e poi
 le ultime misure arrivate, senza etichetta. Se il file non arriva scrive «Aria: dato non
-disponibile». Nessun numero finto. Al clic apre la scheda della stazione dell'aria (il punto di
+disponibile». Al clic apre la scheda della stazione dell'aria (il punto di
 tipo `aria` degli strati), senza spostare la mappa e senza accendere lo strato.
 
 Treni e avvisi non cambiano questa interfaccia. Il riquadro «Prossimi treni» sta nella scheda
@@ -506,7 +471,6 @@ export function leggiAria(): Promise<DatiAria>;           // aria.json: la più 
 export function giudizioAria(dati: Pick<DatiAria, 'serie'> | null | undefined): GiudizioAria | null;
 export function leggiTreni(): Promise<LetturaTreni>;     // feed BusOne + tabella stazioni; in memoria 2 minuti; rifiuta se la rete fallisce o il feed è malformato
 export function leggiAvvisi(): Promise<DatiAvvisi>;       // avvisi.json: la più recente tra GitHub e la copia del sito
-export function leggiDataStazioni(): Promise<string>;    // `generato` di public/data/stazioni-treni.json, per «Fonti e licenze»
 ```
 
 `src/live/treni.ts` contiene la parte pura, con test:
@@ -516,7 +480,7 @@ segue la linea: `_v_1-`, `_v_5-`, `_v_62-` ...); se non si riconosce il treno re
 con `numero` vuoto e la riga dice «numero non indicato».
 `quando` è `departure.time` (o `arrival.time` se la corsa termina a Bassano), che contiene già
 il ritardo. Una corsa è soppressa se è `CANCELED` o se la fermata di Bassano è `SKIPPED`, ma
-solo quando porta ancora con sé la fermata di Bassano e il suo orario: nel feed vero le corse
+solo quando porta ancora con sé la fermata di Bassano e il suo orario: nel feed le corse
 `CANCELED` arrivano quasi sempre senza fermate e non si possono attribuire a Bassano.
 
 ### Avvio (`index.html`, `src/main.ts`)
@@ -543,7 +507,7 @@ solo quando porta ancora con sé la fermata di Bassano e il suo orario: nel feed
   `detail: { id: 'avvisi-viabilita' }`, così l'evidenza si spegne come per gli altri punti. Lo zoom ha due bottoni e il doppio clic o doppio tocco, oltre a rotella, due
   dita e tasti + e -.
 - Attributi facoltativi su `radice`, letti da `creaUI` per «Fonti e licenze»:
-  `data-base-generato` (lo imposta `main.ts` da `base.generato`), `data-lampioni-veri` e
+  `data-lampioni-veri` e
   `data-lampioni-tutti` (li imposta `main.ts` da `lampioni.json`: quanti lampioni vengono da
   OpenStreetMap e quanti sono in tutto), `data-alberi-veri` e `data-alberi-tutti` (li imposta
   `main.ts` da `base.json`, solo se contiene il campo facoltativo `alberiVeri`: quanti alberi
@@ -553,16 +517,19 @@ solo quando porta ancora con sé la fermata di Bassano e il suo orario: nel feed
 - Alberi: `scripts/dati-osm.mjs` salva `alberiVeri` in `base.json`, ma lo script non è stato
   rilanciato e nel file di oggi il campo non c'è. Finché manca, «Fonti e licenze» dice a parole
   che una parte degli alberi viene da OpenStreetMap e una parte è aggiunta a scopo illustrativo
-  dentro boschi e parchi; quando c'è, scrive i due numeri.
-- «Fonti e licenze» ha anche una voce sulle illustrazioni dei luoghi simbolo: fatte per questo
-  progetto a partire dalle sagome su OpenStreetMap, con altezze e dettagli in gran parte stime.
+  dentro boschi e parchi; quando c'è, scrive i due numeri. Nei parchi e nei giardini entro
+  1,2 km dal centro gli alberi illustrativi sono più fitti (griglia di 13 m, `scripts/lib/alberi.mjs`;
+  `npm run dati:alberi` li aggiunge al file che c'è già). Al massimo 8000 alberi in tutto.
+- «Fonti e licenze» ha anche una voce sulle illustrazioni: i luoghi simbolo, fatti per questo
+  progetto a partire dalle sagome su OpenStreetMap, con altezze e dettagli in gran parte stime,
+  e quello che si muove sulla mappa (treno, persone, acqua), che è decorativo.
 - Nella testa di `index.html` ci sono i dati per le anteprime sui social (`og:*`,
-  `twitter:card`), l'indirizzo canonico e l'icona per iPhone. L'indirizzo del sito è un
-  segnaposto e sta solo lì, nelle tre righe sotto il commento «Indirizzo del sito»
+  `twitter:card`), l'indirizzo canonico e l'icona per iPhone. L'indirizzo del sito
+  (`https://bassano.evapassarini.com`) nel codice sta solo lì, nelle tre righe sotto il commento «Indirizzo del sito»
   (`canonical`, `og:url`, `og:image`).
-- `alVaiA` riporta le coordinate dentro `RIQUADRO`. Unica eccezione documentata al riquadro:
-  la storia `monte-grappa` tiene le coordinate vere della cima (fuori mappa) e sulla mappa ha
-  un segnaposto sul margine nord-est.
+- `alVaiA` riporta le coordinate dentro `RIQUADRO`. Fa eccezione la storia `monte-grappa`,
+  che tiene le coordinate della cima (fuori mappa): il suo punto in `strati.json` cade sotto
+  le nuvole e non si disegna, quindi il racconto si apre dall'elenco «Luoghi».
 - Una storia con un disegno ha `landmark` uguale all'`id` in `public/landmarks/indice.json`.
 - In `indice.json`, `larghezzaMetri` è la larghezza dell'SVG sul piano isometrico (la larghezza
   sullo schermo a zoom 1), non quella reale dell'edificio: `((x2 - y2) - (x1 - y1)) * 0.7071`
@@ -577,39 +544,38 @@ solo quando porta ancora con sé la fermata di Bassano e il suo orario: nel feed
 
 ## Aspetto
 
-Una cartolina illustrata, non una dashboard: una veduta dipinta ad acquerello e china. Carta
+Una cartolina illustrata: una veduta dipinta ad acquerello e china. Carta
 crema calda, tetti in cotto profondo, intonaci ocra, gialli e crema (poco rosa, niente bianco
 freddo), Brenta verde-azzurra, verde dei colli morbido. Contorni a china color seppia scuro. Titoli in Fraunces, testi in Inter (pacchetti `@fontsource`, niente font da server
-esterni). Niente gradienti viola, niente vetro sfocato, niente emoji. Deve funzionare su
-telefono (la finestra-racconto diventa un foglio dal basso) e da tastiera; rispettare
-`prefers-reduced-motion`. Di notte la cartolina resta una cartolina: blu notte e luci calde,
-non uno schermo nero. I pannelli restano di carta crema.
+esterni). Funziona su telefono (la finestra-racconto diventa un foglio dal basso) e da
+tastiera e rispetta `prefers-reduced-motion`. Di notte la mappa è blu notte con luci calde e i
+pannelli restano di carta crema.
 
 ### Edifici dipinti dal codice
 
 Tutti gli edifici sono dipinti dal codice, senza immagini: tetti a falde, finestre, persiane,
-porte, portici. Nessuna dipendenza in più. I dieci luoghi simbolo restano SVG a parte.
+porte, portici. I dieci luoghi simbolo restano SVG a parte.
 
 - **Tutto deciso dal seme.** Ogni edificio ha un numero stabile ricavato dalla sua impronta
   (`semeDi`). Forma del tetto, pendenza, tinte, passo delle finestre, persiane, porta, portico,
-  comignoli, finestre accese di notte: tutto viene da lì e dalla posizione. Stesso edificio,
-  stesso aspetto a ogni fotogramma e a ogni avvio. Nessun numero a caso.
+  comignoli, finestre accese di notte: tutto viene da lì e dalla posizione, quindi lo stesso
+  edificio ha lo stesso aspetto a ogni fotogramma e a ogni avvio.
 - **Tetti** (`src/map/tetti.ts`, funzioni pure con test in `tests/edifici.test.ts`). La forma
   segue il tipo: capannoni piani e grigi con le fasce dei lucernari; condomini grandi e alti
   fuori dal centro con il tetto piano e il parapetto; torri a punta; tutto il resto in cotto, a
   falde. Una casa con più di 1500 m² di impronta a più di 700 m dal centro (supermercati,
-  magazzini, fabbriche senza etichetta nei dati) si dipinge da capannone, tetto e muri: non un
-  padiglione di cotto lungo cento metri. Sui rettangoli due falde con il colmo lungo il lato lungo e i timpani sui lati corti,
+  magazzini, fabbriche senza etichetta nei dati) si dipinge da capannone, tetto e muri. Sui
+  rettangoli due falde con il colmo lungo il lato lungo e i timpani sui lati corti,
   oppure padiglione. Sulle impronte senza rientranze il padiglione è esatto (ogni lato ha la
   sua falda). Sulle impronte con rientranze il tetto sale a gradoni: l'impronta si rientra
   finché regge, le strozzature si tagliano, ciò che resta senza rientranze si chiude a
-  padiglione; dove non si può più salire resta un piano in cima. Un piano in cotto non resta
-  mai una lastra liscia: si divide in due lungo il suo asse più lungo e le due metà si
+  padiglione; dove non si può più salire resta un piano in cima. Un piano in cotto
+  si divide in due lungo il suo asse più lungo e le due metà si
   dipingono come due falde molto basse, con il colmo in mezzo, i due toni e i coppi che
   scendono dal colmo («colmo finto»: le facce restano piane, quindi dentro i muri). Se le falde
   coprono meno del 90% dell'impronta si buttano e tutto il tetto diventa un piano con il colmo
-  finto. Regola che vale sempre: nessuna falda esce dai muri (tolleranza 25 cm) e sotto le
-  falde c'è sempre l'impronta alzata alla gronda, quindi il tetto non ha buchi.
+  finto. Le falde restano dentro i muri (tolleranza 25 cm) e sotto le falde c'è l'impronta
+  alzata alla gronda, quindi il tetto non ha buchi.
 - **Altezze.** Il tetto a falde prende una parte dell'altezza del dato: la gronda scende di
   metà del rialzo, il colmo sale dell'altra metà. Gli edifici davanti a un luogo simbolo
   restano a 3,5 m colmo compreso, anche quelli che nei dati sono già più bassi (il loro colmo
@@ -618,8 +584,7 @@ porte, portici. Nessuna dipendenza in più. I dieci luoghi simbolo restano SVG a
 - **Luce sui tetti.** Come sui muri: chiare le falde a ovest, scure quelle a sud e a est, a
   mezza tinta quelle a nord. I toni di cotto cambiano da casa a casa (dieci toni, dal bruno
   all'arancio) e un poco anche da falda a falda: una falda in luce su quattro resta a mezza
-  tinta e una a mezza tinta su quattro prende la luce, lo decide il seme (sono gli stessi
-  riempimenti: costo zero). Le falde in ombra non cambiano, perché da lontano sono stese a
+  tinta e una a mezza tinta su quattro prende la luce, lo decide il seme. Le falde in ombra non cambiano, perché da lontano sono stese a
   tessere. Le parti in ombra (muri e falde) non ingrigiscono: di giorno e nel pomeriggio il
   rosso scende meno e il blu di più (`inOmbra`, chiave `ombraCalda`), così l'ombra di un
   giallo è ocra bruciata e non oliva; poi virano appena verso `ombraTinta` (terra calda di
@@ -654,13 +619,13 @@ porte, portici. Nessuna dipendenza in più. I dieci luoghi simbolo restano SVG a
   (`FUOCHI_CENTRO`, `lontananzaDalCentro` in `src/map/disegno.ts`). Vale per intonaci, finestre
   (in centro più piccole, scure e fitte), persiane, portici, vetrine, abbaini, e per il terreno:
   dentro la sagoma dei due fuochi la carta prende una mano di sabbia calda.
-- **Stile dipinto, uno solo per tutta la città** (`src/map/trame.ts`). Nessuna immagine: poche
+- **Stile dipinto, uno solo per tutta la città** (`src/map/trame.ts`). Poche
   tele piccole create dal codice una volta per luce, da un seme fisso, e riusate come motivo.
   - *Mano d'acquerello*: un velo leggero di macchie e grana (rumore che si ripete ai bordi,
     21 m di lato): tela trasparente a due colori per luce (`macchieTinta`: bruno e crema di
     giorno, blu di notte), stesa con la fusione normale su tutto il foglio in una passata
-    sola, dopo case e luoghi simbolo e prima di nuvole, nomi e segnaposto. È grana, non
-    colore: la variazione vera sta nelle tinte di tetti e muri. Sta attaccata alla mappa. La
+    sola, dopo case e luoghi simbolo e prima di nuvole, nomi e segnaposto. Dà grana, non cambia
+    i colori, che vengono dalle tinte di tetti e muri. Sta attaccata alla mappa. La
     tela esiste in quattro misure, ognuna la media della precedente (`livelloTrama`): da
     lontano si usa quella ridotta, così la grana non frigge muovendo la mappa. Passa anche su
     luoghi simbolo, linee tematiche e alone dell'evidenza (stanno in mezzo alle case, non si
@@ -668,8 +633,8 @@ porte, portici. Nessuna dipendenza in più. I dieci luoghi simbolo restano SVG a
     tra zoom 1,3 e 3,4.
   - *Selciato*: lastre in isometria (giunti a mano, uno su quattro manca, qualche lastra più
     scura o più chiara; la tessera ripete ogni 7 lastre) su piazze e strade dentro la sagoma
-    del centro; entra tra zoom 2,6 e 4,2. Non si stende sul resto del terreno del centro: era
-    un riempimento a tutto schermo quasi tutto nascosto dalle case.
+    del centro; entra tra zoom 2,6 e 4,2. Non si stende sul resto del terreno del centro, che è
+    quasi tutto coperto dalle case.
   - *Acqua*: un bordo di pietra chiara (l'argine) tracciato prima dell'acqua, che ne copre la
     metà interna: resta fuori dalla riva e un canale stretto non si svuota. Sotto le rive due
     passate più scure, il filo scuro dell'acqua, increspature lungo la corrente da vicino. La
@@ -678,7 +643,7 @@ porte, portici. Nessuna dipendenza in più. I dieci luoghi simbolo restano SVG a
     piano tra zoom 1,8 e 5, senza scatti. Le file dei coppi scartano un poco, sempre allo
     stesso modo (dal seme).
   - *Alberi*: da vicino tre toni (ombra in basso a destra, tinta, tocco di luce) e contorno.
-  - *Luoghi simbolo*: i file SVG non si toccano; in ogni luce il disegno viene moltiplicato per
+  - *Luoghi simbolo*: i file SVG restano invariati; in ogni luce il disegno viene moltiplicato per
     un velo (`illustrazioni.velo`: caldo e leggero di giorno, dorato nel pomeriggio, blu di
     notte) e le pezze d'acqua prendono il colore del fiume della mappa. Il colore dell'acqua
     scritto nei file è una costante a parte (`ACQUA_NEI_DISEGNI`), non la tavolozza.
@@ -690,20 +655,20 @@ porte, portici. Nessuna dipendenza in più. I dieci luoghi simbolo restano SVG a
   (da 1,3 a 3,4), il terzo tono delle falde (1,45), le ombre a terra (1,5), colmi e displuvi a
   penna (da 1,7 a 3), una fascia tenue
   per ogni fila di finestre (da 1,9 a 2,8: sta al posto delle finestre finché sarebbero puntini, e se
-  ne va tra 2,9 e 3,6; pesa meno sugli intonaci scuri, dove rigava la facciata), finestre,
+  ne va tra 2,9 e 3,6; pesa meno sugli intonaci scuri), finestre,
   porte e archi (2,6; in centro le case hanno solo il davanzale chiaro, non la cornice), righe dei coppi una sì e una no (2,8), persiane, zoccolo e marcapiano
   (3,3), le altre righe dei coppi e le cornici (3,5), comignoli e abbaini (3,9), coppi più
   fitti e telai delle finestre (5,5); a terra il selciato (2,6). Ogni strato entra sfumando tra
-  due valori di zoom: mai uno scatto.
+  due valori di zoom.
 - **Luci.** Le tre tavolozze hanno le stesse chiavi anche per gli edifici (intonaci carichi e
   chiari, tetti piani, toni delle falde, coppi, vetro, cornice, telaio, persiane, porte, ombra
   di facciata, portico, tinta delle ombre, ombra a terra delle case, china, peso e tinte della
   mano d'acquerello, calore delle ombre, selciato, terreno del centro, argine, fascia di
   corrente, velo dei luoghi simbolo). Di giorno l'ombra propria vira a una terra calda, nel
   pomeriggio appena al viola. Fuori dal centro le strade sono più chiare della carta e hanno
-  il bordo scuro: la trama delle vie deve leggersi anche in periferia. Di notte le finestre accese sono un sottoinsieme fisso delle finestre
+  il bordo scuro, così la trama delle vie si legge anche in periferia. Di notte le finestre accese sono un sottoinsieme fisso delle finestre
   dipinte, le altre restano scure; compaiono sfumando tra zoom 1,9 e 2,3 (più da lontano
-  restano le luci dei lampioni: servirebbe la facciata di migliaia di case per dei puntini). I
+  restano solo le luci dei lampioni). I
   portici hanno una luce calda. I luoghi simbolo di notte prendono un velo blu-viola chiaro,
   vicino a quello dei muri.
 
@@ -718,6 +683,38 @@ una griglia e da un seme, sempre uguali; colori per ogni luce in `palette.nuvole
 non ci si può trascinare. Lo zoom minimo non lascia rimpicciolire la città fino a farne
 un'isola in mezzo alle nuvole.
 
+I segnalini che cadono a meno di `MARGINE_SEGNALINI` (100 m) dal contorno delle nuvole, o
+oltre, non si disegnano (`segnalinoInVista`): lì il velo copre già le case e il segnalino
+sembrerebbe sospeso sulle nuvole. `src/main.ts` li toglie da `strati.punti` all'avvio, quindi
+non compaiono nemmeno nell'elenco «Luoghi»; i racconti restano tutti nell'elenco. La stessa
+regola vale per i cartelli degli avvisi.
+
+### Animazioni decorative
+
+La mappa ha qualche movimento, solo decorativo (logica pura in `src/map/animazioni.ts`):
+
+- **La Brenta scorre**: le increspature dell'acqua si spostano verso valle, una tessera ogni
+  24 secondi (`spostamentoCorrente`). Si vedono da zoom 1,4 (`DETTAGLI.acqua`).
+- **Il treno**: quattro carrozze che escono dalle nuvole a sud-est, rallentano, sostano 20
+  secondi alla stazione e ripartono verso nord; dopo una pausa ne arriva uno in senso contrario.
+  Il percorso si ricava dai binari di `base.json` (`percorsoTreno`: i tratti si spezzano dove un
+  altro binario li tocca, poi il cammino più corto tra gli estremi a sud e a nord, attraverso la
+  stazione). Il tempo è quello dell'orologio: chi apre il sito nello stesso momento vede il
+  treno nello stesso punto. Non segue gli orari veri e non ha legami con i treni di BusOne.
+- **Le persone**: nelle piazze entro 700 m dal centro, fino a 16 per piazza secondo la
+  grandezza (nelle più piccole anche una o nessuna), vanno avanti e indietro su tragitti scelti una volta sola (dentro la piazza, lontano
+  dai muri, senza attraversare case). Sul Ponte Vecchio cinque passanti attraversano il ponte,
+  ritagliati sulle aperture tra le colonne della facciata sud. Compaiono da zoom 2,4.
+- Carrozze e persone sono un poco più grandi del vero, perché si riconoscano, ed entrano
+  nell'ordine di profondità insieme a case e alberi (`mobiliInVista` in `disegno.ts`).
+- **Quando si muove**: `StatoDisegno.tempo` porta il tempo; senza, tutto sta fermo (treno in
+  arrivo sul binario aperto a sud della stazione, dove nessuna pensilina lo copre).
+  `src/map/index.ts` passa il tempo solo se la pagina si vede e chi guarda non ha chiesto meno
+  movimento (`prefers-reduced-motion`). Il Disegnatore dice se c'è qualcosa in moto in vista
+  (`animato`) e ogni quanto ridisegnare (`intervalloAnimazione`: 100 ms per acqua e persone,
+  40 ms per il treno in corsa); con il treno in sosta o fuori vista la mappa si risveglia solo
+  quando serve (`prossimoMovimento`). Lontano da acqua, piazze e treno non si ridisegna nulla.
+
 ### Tasselli dipinti (prova)
 
 Facoltativi e spenti. Non basta che esista `public/tasselli/indice.json`: i tasselli si
@@ -725,14 +722,13 @@ accendono solo con la variabile d'ambiente `VITE_TASSELLI=1` al momento di costr
 di avviare lo sviluppo (per esempio `VITE_TASSELLI=1 npm run dev`). In `src/map/tasselli.ts`,
 `tasselliAccesi()` legge la variabile e `creaTasselli()` da spento restituisce `null` e non fa
 nessuna richiesta alla rete; `src/map/index.ts` usa `creaTasselli()`. Su Vercel la variabile
-non va impostata finché i tasselli non esistono. Da accesi, `src/map/tasselli.ts` stende sopra gli
+non è impostata. Da accesi, `src/map/tasselli.ts` stende sopra gli
 edifici, sotto etichette e segnaposto, le immagini elencate (centro in metri locali, lati sul
 piano isometrico, zoom da cui compaiono), con i bordi sfumati. Sono versioni dipinte dello
-stesso scorcio disegnato dal codice e si mostrano solo con la luce di giorno. Oggi non ce n'è
-nessuno: la prova sul centro è stata tolta perché accanto alle case disegnate dal codice la
-differenza di stile si vedeva troppo (o tutta la città dipinta, o niente). La cartella è
-fuori da git finché non è chiarita la licenza delle immagini generate: senza tasselli la mappa
-è quella disegnata dal codice.
+stesso scorcio disegnato dal codice e si mostrano solo con la luce di giorno. Al momento non ce n'è
+nessuno: la prova sul centro è stata tolta perché la differenza di stile con le case disegnate
+dal codice si vedeva troppo. La cartella è fuori da git finché non è chiarita la licenza delle
+immagini generate.
 
 ## Prestazioni
 
@@ -767,7 +763,7 @@ Stile dipinto: nessun lavoro in più per edificio. La mano d'acquerello è un so
 tutto schermo per fotogramma, qualunque sia il numero di case, con la fusione normale e senza
 ammorbidire (la tela scelta ha già i pixel grandi quasi come quelli dello schermo). Si è
 provato a riempire ogni tetto e ogni muro con un motivo (dal 40 all'80% in più su processore)
-e a fondere il velo con `overlay` (fino al 35% in più): no a tutti e due. Selciato, argini e
+e a fondere il velo con `overlay` (fino al 35% in più): troppo costosi, non si usano. Selciato, argini e
 increspature sono pochi riempimenti e tratti sulle forme del terreno che c'erano già; i toni
 diversi delle falde riusano i riempimenti che c'erano.
 Misura (Chrome senza interfaccia, 1400 x 900 a densità 2, la camera si sposta a ogni
@@ -775,7 +771,7 @@ fotogramma; «prima» è la versione senza stile dipinto). Disegno su processore
 (`--disable-gpu`), intervallo medio tra fotogrammi: zoom 2,4 da 144 a 151 ms (+5%); zoom 6 da
 144 a 162 ms (+13%); zoom 3,5 da 195 a 219 ms (+12%). Con la scheda grafica i fotogrammi
 restano a 60 al secondo prima e dopo e il tempo di disegno nel codice non cambia (zoom 2,4:
-5,6 e 5,4 ms; zoom 6: 3,1 e 2,9 ms). Sono numeri di una macchina sola: contano i rapporti.
+5,6 e 5,4 ms; zoom 6: 3,1 e 2,9 ms). Le misure vengono da una sola macchina e servono a confrontare prima e dopo.
 
 ## Pubblicazione
 
@@ -788,20 +784,22 @@ restano a 60 al secondo prima e dopo e il tempo di disegno nel codice non cambia
   `npm run build` e pubblica `dist` (`vercel.json`). `/assets/*` resta in
   memoria un anno; `/data/*` e `/landmarks/*` 5 minuti. La versione di Node si sceglie nelle
   impostazioni del progetto Vercel (24 o superiore; il progetto è provato con la 26).
-- **Dominio**: quello definitivo non è ancora noto. Il segnaposto sta in un punto solo, in
+- **Dominio**: `https://bassano.evapassarini.com`; il primo indirizzo,
+  `https://bassano-aperta.vercel.app`, funziona ancora. Nel codice l'indirizzo sta in un punto solo, in
   `index.html` (vedi «Avvio»).
 - **Intestazioni di sicurezza** (`vercel.json`): `X-Content-Type-Options`, `Referrer-Policy`,
   `Permissions-Policy` e una Content-Security-Policy. Indirizzi esterni permessi:
   `api.arpa.veneto.it`, `proxy.busone.app` e `raw.githubusercontent.com` per i dati; `commons.wikimedia.org` e
   `*.wikimedia.org` per immagini e audio; `www.youtube-nocookie.com` per i video. Una fonte
   esterna nuova va aggiunta anche lì, altrimenti il browser la blocca. Il sito non si può
-  incorporare in una cornice su altri siti (`frame-ancestors 'self'`). La regola è stata
-  provata in locale, non su Vercel.
+  incorporare in una cornice su altri siti (`frame-ancestors 'self'`). Gli stili vengono solo
+  dai file del sito (`style-src 'self'`, senza `'unsafe-inline'`): niente attributi `style`
+  scritti nell'HTML; gli stili impostati dal codice con `elemento.style` sono permessi.
 - **Aggiornamento automatico** (`.github/workflows/dati.yml`): programmato ogni 6 ore, al
-  minuto 17 (ora UTC), e a mano dalla scheda Actions. GitHub ritarda e salta i lavori
-  programmati (a novembre 2026 circa due giri al giorno): i testi del sito dicono «più volte
-  al giorno», senza promettere una cadenza. Esegue `npm run dati:aria` e `npm run dati:avvisi`, poi
-  `npm test`. Regola: niente dati rotti. Se uno script non esce con codice 0 il suo file torna
+  minuto 17 (ora UTC), e a mano dalla scheda Actions. GitHub può ritardare o saltare i
+  lavori programmati (a novembre 2026 circa due giri al giorno), per questo i testi del sito
+  dicono «più volte al giorno». Esegue `npm run dati:aria` e `npm run dati:avvisi`, poi
+  `npm test`. Se uno script non esce con codice 0 il suo file torna
   com'era e non si pubblica; l'altro, se è riuscito, si pubblica lo stesso. Se le prove
   falliscono non si pubblica nulla. Se una fonte non ha risposto il lavoro finisce in rosso. Il
   commit, fatto da `github-actions[bot]`, contiene solo `public/data/aria.json` e
@@ -827,13 +825,11 @@ restano a 60 al secondo prima e dopo e il tempo di disegno nel codice non cambia
   `npm ci`, `npx tsc --noEmit`, `npm test`, `npm run build`.
 - **Anteprima per i social**: `public/anteprima.jpg`, 1200x630, scatto del sito costruito (non
   del server di sviluppo). Icona per iPhone: `public/apple-touch-icon.png`, 180x180. Come
-  rifarle è nel README.
-- I due workflow girano su GitHub dal novembre 2026; al primo giro di `dati.yml` CCISS e
-  Vi.abilità hanno risposto tutte e due.
+  rifarle è in `docs/SVILUPPO.md`.
 
 ## Licenze
 
-Il dettaglio è nel file `NOTICE`. Codice MIT, e solo il codice. Dati in `public/data/` e in
+Il dettaglio è nel file `NOTICE`. Il codice è sotto licenza MIT. Dati in `public/data/` e in
 `scripts/landmark/plan/` con le licenze delle fonti: OpenStreetMap ODbL 1.0 («© OpenStreetMap
 contributors»); ARPAV con attribuzione (CC BY 4.0 dichiarata per i file XML, non dichiarata in
 modo esplicito per l'idrometro); treni BusOne (busone.app) e Trenitalia, uso non commerciale di
@@ -841,27 +837,92 @@ privati ed enti non profit; avvisi CCISS e Vi.abilità con licenza non dichiarat
 brevi con link. Testi dei racconti (`content/`), illustrazioni (`public/landmarks/`),
 documentazione e le due immagini del progetto (`public/anteprima.jpg`,
 `public/apple-touch-icon.png`): non sono MIT e per ora non hanno una licenza aperta, restano di
-chi cura il sito; la scelta è tra i punti da confermare. Foto e video citati: restano dei loro
+chi cura il sito; la scelta è tra i punti aperti. Foto e video citati: restano dei loro
 autori, con la licenza di ciascun file.
 
-## Da confermare prima della pubblicazione
+## Punti aperti
 
-Chi cura il sito ha scelto di pubblicarlo con tutte le fonti accese, con attribuzione e link. I
-punti qui sotto restano aperti. L'elenco completo e aggiornato è nel README; le domande della
-ricerca stanno in `open_questions`.
+Il sito è pubblicato con tutte le fonti accese (treni BusOne, avvisi CCISS e Vi.abilità,
+Brenta e aria ARPAV), con attribuzione e link, ma senza conferme scritte delle fonti. Le
+domande della ricerca stanno in `open_questions` di `ricerca/ricerca-verificata-2026-11-14.json`,
+una fotografia degli appunti di ricerca che non viene aggiornata: alcune sono già
+risolte.
 
-Già deciso: chi firma il progetto (personale, quindi dentro le condizioni di BusOne) e il
-contatto nell'header `X-BusOne-Client` (l'indirizzo del repository).
+Permessi e licenze:
 
-Ancora aperto: distruzione del ponte nel 1945; ruolo degli Alpini nel 1948; numeri del 26
-settembre 1944; conferma scritta di ARPAV per l'uso continuo dell'API e per la licenza;
-conferma scritta di CCISS e Vi.abilità per il riuso degli avvisi; rilettura alla fonte dei
-termini di BusOne; confronto del giudizio sull'aria con quello di ARPAV in un giorno feriale;
-17 video mai guardati per intero; sei file di Commons, tra quelli precedenti al 15 novembre
-2026, non ricontrollati (le 88 immagini aggiunte quel giorno sono verificate una per una); le cinque foto del
-Sacrario del Monte Grappa già presenti (opera del 1935 di Greppi e Castiglioni, morti da meno
-di 70 anni: senza libertà di panorama va deciso se tenerle); inquadrature delle due
-webcam; permessi per le webcam; testi che scadono il 12 e il 16 dicembre 2026; dominio
-definitivo al posto del segnaposto; licenza di testi, illustrazioni e documentazione; chi firma
-i commit e quale storia git si pubblica; controllo, dopo la prossima pubblicazione, che la
-Content-Security-Policy lasci passare la lettura da raw.githubusercontent.com.
+- ARPAV: manca una conferma scritta per l'uso continuo dell'API della Brenta e per la licenza
+  dei dati (idrometro e file JSON dell'aria). Il fuso orario delle date ARPAV non è dichiarato:
+  l'ora mostrata potrebbe sbagliare di un'ora.
+- CCISS e Vi.abilità: nessuna delle due dichiara una licenza di riuso e manca una conferma
+  scritta. Il sito riporta solo citazioni brevi con link.
+- BusOne: i termini d'uso e la licenza dei dati di Trenitalia vanno riletti alla fonte. Se un
+  giorno il progetto passasse a un'azienda o a uno studio servirebbe prima il consenso scritto
+  di BusOne.
+- Webcam: oggi sono solo link; i termini d'uso di Windy non sono stati letti.
+- Testi dei racconti, illustrazioni e documentazione non hanno ancora una licenza aperta (vedi
+  `NOTICE`, punto 3). Se se ne sceglie una va scritta in `NOTICE`, nel README, qui in
+  «Licenze» e nella pagina «Fonti e licenze» (`src/ui/fonti.ts`).
+
+Aria: il giudizio a parole non è ancora stato confrontato con quello ufficiale di ARPAV. Va
+fatto in un giorno feriale, quando un giorno validato cade dentro le 48 ore di ozono (vedi
+«Giudizio a parole sull'aria», «Ancora da fare»).
+
+Fatti storici, oggi nelle note interne `incertezze` e non affermati come certi:
+
+- la distruzione del Ponte Vecchio nel 1945 e chi la compì;
+- il ruolo degli Alpini nella ricostruzione del 1948;
+- luogo, date e numeri del 26 settembre 1944; la tappa su Karl Franz Tausch poggia su una sola
+  fonte (Wikipedia) e non risulta una condanna per quei fatti: da rivedere con ANPI o ISTREVI;
+- l'origine del nome «degli Ezzelini».
+
+Media:
+
+- i 17 video incorporati nei racconti non sono stati guardati per intero; l'anno del
+  cinegiornale Luce sul Tempio Ossario non è certo;
+- le due registrazioni di «Sul ponte di Bassano» su Wikimedia Commons non sono state
+  ascoltate. Esistono due canzoni con questo titolo, un lamento alpino e una canzone d'amore, e
+  non si sa quale contengano: per questo non sono nel racconto del Ponte Vecchio. Dopo
+  l'ascolto si possono aggiungere all'elenco `media` di `content/luoghi/ponte-vecchio.json` con
+  `"tipo": "audio"`, scrivendo nel titolo quale canzone è. Sono i file
+  `ICBSA_Coro_ICAM_-_Sul_ponte_di_Bassano.oga` (Coro ICAM, etichetta Vedette) e
+  `ICBSA_Coro_ex_combattenti_-_Sul_ponte_di_Bassano.oga` (Coro ex combattenti, etichetta
+  Columbia), tutti e due del fondo ICBSA, licenza indicata CC BY-SA 4.0, da ricontrollare su
+  Commons;
+- due immagini sono larghe appena 1024 px: `Bassano_z10.JPG` nel Viale dei Martiri e
+  `Bassano_Ponte_vecchio_07feb08_05.jpg` in Nardini al Ponte;
+- Garage Nardini e Bolle non hanno immagini libere: i loro racconti sono solo testo. Nardini al
+  Ponte ha due foto di contesto, ma nessuna pagina di Commons dice quale edificio sia la
+  grapperia.
+
+Nomi e posizioni sulla mappa:
+
+- «Ciclopista del Brenta» viene solo da OpenStreetMap (relazione 32302); un'altra relazione,
+  «Ciclovia della Valsugana», ha lo stesso nome come nome alternativo. Il nome del tratto di
+  Bassano va chiesto a chi è del posto;
+- «Nardini Basso» e «Nardini Alto» sono nomi d'uso riportati da fonti non ufficiali (lo dicono
+  le note `incertezze` dei due racconti);
+- le due webcam (Piazza Libertà e Via Matteotti): non si è controllato che cosa inquadrino. Il
+  punto sulla mappa vuole segnare il luogo inquadrato, non la telecamera;
+- posizioni scelte da noi: Brenta, King Kong Rhino (posizione, verso e dimensioni del disegno;
+  è volutamente più grande del vero), Garage Nardini (dedotto dal bar «Distilleria Bortolo
+  Nardini» su OpenStreetMap, da verificare sul posto).
+
+Testi da aggiornare: il racconto del Museo Civico (introduzione e tappa del 2026) dopo il
+12 dicembre 2026, quando il Cavallo colossale torna in mostra; «Bassano 2029» dopo il
+16 dicembre 2026, quando si conoscono le finaliste.
+
+Pubblicazione e funzionamento:
+
+- se CCISS o Vi.abilità cominciassero a rifiutare le richieste dai server di GitHub, la
+  fotografia degli avvisi smetterebbe di aggiornarsi e `dati.yml` resterebbe rosso. Si può
+  allora scegliere di accettare anche la fotografia incompleta (codice 2);
+- la Content-Security-Policy senza `'unsafe-inline'` in `style-src` è provata sul sito
+  costruito in locale: dopo la pubblicazione va ricontrollata nel browser che stili,
+  immagini, video e dati non siano bloccati;
+- l'anteprima per i social va rifatta se l'aspetto della mappa cambia.
+
+Prove non ancora fatte: un telefono vero, un lettore di schermo, Safari e Firefox,
+`prefers-reduced-motion` attivo. Su telefono, con il foglio di un racconto aperto, il credito
+OpenStreetMap è quasi tutto coperto dal foglio, come la mappa, e torna in vista alla chiusura:
+provato sul sito costruito a 375x812, non su un telefono vero. Il credito con il link resta in
+«Fonti e licenze».

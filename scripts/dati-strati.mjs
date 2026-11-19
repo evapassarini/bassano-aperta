@@ -9,7 +9,7 @@
 // Overpass e le riusa alla corsa successiva, senza riscaricare.
 //
 // Solo moduli interni di Node. Se qualcosa va storto lo script esce con codice
-// diverso da zero e non tocca il file esistente: mai uno strati.json a metà.
+// diverso da zero e non tocca il file esistente.
 
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
@@ -83,7 +83,7 @@ const FONTI = [
 // ---------------------------------------------------------------------------
 // Luoghi con una storia (content/luoghi/<id>.json).
 // "osm": elemento di OpenStreetMap da cui si prende la posizione a ogni corsa.
-// "lat"/"lon": posizione di riserva. Dove "stima" è true la posizione NON
+// "lat"/"lon": posizione di riserva. Dove "stima" è true la posizione non
 // viene da un elemento OSM del luogo: è una stima da controllare sul posto.
 // "doppioni": nomi OSM che sono lo stesso luogo (entro "raggio" metri) e
 // quindi non vanno ripetuti. "anche": elementi OSM che fanno parte della
@@ -178,7 +178,7 @@ const LUOGHI = [
   },
 ];
 
-/** Cima del Monte Grappa (dalla ricerca): serve solo per calcolare la distanza. */
+/** Cima del Monte Grappa: serve solo per calcolare la distanza. */
 const MONTE_GRAPPA = { lat: 45.87056, lon: 11.79972 };
 /** Di quanti metri il segnaposto del Monte Grappa sta dentro l'angolo nord-est. */
 const RIENTRO_GRAPPA = 60;
@@ -929,7 +929,7 @@ function linee(elementi) {
 }
 
 // ---------------------------------------------------------------------------
-// Controlli finali: meglio fermarsi che scrivere un file sbagliato.
+// Controlli finali: se uno non passa, lo script si ferma senza scrivere il file.
 // ---------------------------------------------------------------------------
 
 const TIPI_PUNTO = new Set(['museo', 'biblioteca', 'teatro', 'monumento', 'chiesa', 'luogo-storico', 'aria', 'idrometro', 'webcam', 'fermata-bus', 'stazione', 'bici']);
@@ -981,7 +981,6 @@ async function main() {
   const mobilita = puntiMobilita(datiPunti.elements);
 
   const dati = {
-    generato: new Date().toISOString(),
     fonti: FONTI,
     punti: [...cultura.punti, ...ambiente, ...mobilita],
     linee: linee(datiLinee.elements),

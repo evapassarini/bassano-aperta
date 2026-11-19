@@ -13,6 +13,7 @@
     "dati:aria": "node scripts/dati-aria.mjs",
     "dati:avvisi": "node scripts/dati-avvisi.mjs",
     "dati:lampioni": "node scripts/dati-lampioni.mjs",
+    "dati:alberi": "node scripts/dati-alberi.mjs",
     "dati:stazioni": "node scripts/dati-stazioni.mjs",
     "illustrazioni": "node scripts/landmark/genera.mjs"
   },

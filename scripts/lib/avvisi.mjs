@@ -262,14 +262,14 @@ export function filtraCciss(voci) {
 //       dataPubblicazione: "12/10/2026 10:41" (ora italiana), fonte, priorita,
 //       percorsoTO: { coordinateMappaInizioTO: { coordinateMappaCX: lon, coordinateMappaCY: lat },
 //                     coordinateMappaFineTO: { ... } } }, ... ], "html": "..." }
-// Controllato il 18/11/2026. Non è un servizio documentato: se cambia, lo script torna
+// Non è un servizio documentato: se cambia, lo script torna
 // all'RSS nazionale (filtraCciss), che però tiene solo 100 eventi in tutta Italia.
 // Rispetto all'RSS dà anche gli eventi lunghi (un tratto chiuso per lavori per settimane)
 // e quelli sulle strade provinciali. Lo stato ACTIVE vuol dire avviso valido: l'evento può
 // essere in corso o programmato (una chiusura che comincia domani), il testo dice quando.
-// Attenzione allo zoom (`_z`): fa da filtro sulla priorità. Fino a 14 il CCISS manda solo gli
+// Lo zoom (`_z`) fa da filtro sulla priorità. Fino a 14 il CCISS manda solo gli
 // eventi di priorità Alta e Molto Alta; da 16 arrivano anche Normale e Bassa, come i lavori
-// sulla SS47 a Bassano (provato il 18/11/2026: 2 eventi a z=11 e z=14, 12 a z=16 e z=18).
+// sulla SS47 a Bassano (in una prova: 2 eventi a z=11 e z=14, 12 a z=16 e z=18).
 
 /** Centro di Bassano (Ponte Vecchio, circa) e raggio entro cui un evento ci riguarda. */
 export const CENTRO_BASSANO = { lat: 45.7665, lon: 11.7345 };
@@ -341,6 +341,11 @@ function puntoCciss(c) {
   return { lat, lon };
 }
 
+/** Un punto con 5 decimali (circa un metro), nell'ordine dei LonLat del sito. */
+function arrotonda(p) {
+  return p ? { lon: Math.round(p.lon * 1e5) / 1e5, lat: Math.round(p.lat * 1e5) / 1e5 } : undefined;
+}
+
 /** I punti di un evento: inizio, fine e il punto di mezzo, quelli che ci sono. */
 function puntiEvento(e) {
   const inizio = puntoCciss(e?.percorsoTO?.coordinateMappaInizioTO);
@@ -398,6 +403,9 @@ export function filtraCcissZona(eventi) {
     const chiave = chiaveDoppione(`${strada} ${testo}`);
     if (visti.has(chiave)) continue;
     visti.add(chiave);
+    // I due incroci del tratto, per il segnale sulla mappa (vedi src/ui/aiuti.ts, puntiAvvisi).
+    const inizio = arrotonda(puntoCciss(e?.percorsoTO?.coordinateMappaInizioTO));
+    const fine = arrotonda(puntoCciss(e?.percorsoTO?.coordinateMappaFineTO));
     avvisi.push({
       distanza,
       avviso: {
@@ -408,6 +416,8 @@ export function filtraCcissZona(eventi) {
         fonte: FONTE_CCISS.nome,
         url: PAGINA_CCISS,
         attivo: true,
+        ...(inizio ? { inizio } : {}),
+        ...(fine ? { fine } : {}),
       },
     });
   }
@@ -617,8 +627,7 @@ function dopoLaStrada(titolo, strada) {
 /**
  * Le ordinanze di una fotografia precedente che valgono ancora: servono quando Vi.abilità
  * non risponde, per non far sparire dal sito ordinanze in vigore. Si riapplicano il limite
- * dei 120 giorni e quello delle 10 voci. Gli eventi del CCISS non si conservano mai: un
- * evento di traffico vecchio non dice più nulla di certo.
+ * dei 120 giorni e quello delle 10 voci. Gli eventi del CCISS invece non si conservano.
  */
 export function ordinanzePrecedenti(datiVecchi, adesso = new Date()) {
   const ora = adesso instanceof Date ? adesso.getTime() : new Date(adesso).getTime();

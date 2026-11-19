@@ -132,8 +132,8 @@ export function creaCittaFinta(edificiVoluti = 400, mezzoLato = 600): CittaFinta
   ];
 
   return {
-    base: { generato: '2026-11-14T00:00:00Z', fonte: 'Dati finti per i test', edifici, strade, aree, alberi },
-    strati: { generato: '2026-11-14T00:00:00Z', fonti: [], punti, linee },
+    base: { fonte: 'Dati finti per i test', edifici, strade, aree, alberi },
+    strati: { fonti: [], punti, linee },
     landmark,
   };
 }

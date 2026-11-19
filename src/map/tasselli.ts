@@ -52,9 +52,12 @@ function valida(v: unknown): v is VoceTassello {
  * L'interruttore dei tasselli. È spento se non lo si accende apposta: oggi i tasselli non
  * esistono, e senza interruttore ogni visita chiederebbe un indice.json che non c'è (errore 404).
  * Si accende con la variabile d'ambiente VITE_TASSELLI=1, al momento di costruire o di avviare
- * il sito in sviluppo.
+ * il sito in sviluppo. Si legge solo questa variabile: passare tutto import.meta.env
+ * copierebbe nel sito pubblicato anche le altre variabili VITE_ (per esempio quelle di Vercel).
  */
-export function tasselliAccesi(ambiente: Record<string, unknown> | undefined = import.meta.env): boolean {
+export function tasselliAccesi(
+  ambiente: Record<string, unknown> | undefined = { VITE_TASSELLI: import.meta.env.VITE_TASSELLI },
+): boolean {
   return ambiente?.VITE_TASSELLI === '1';
 }
 

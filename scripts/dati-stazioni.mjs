@@ -2,7 +2,7 @@
 // Tabella dei nomi delle stazioni dei treni: serve a dire da dove viene e dove va
 // un treno che passa da Bassano (il feed in diretta dà solo i codici delle fermate).
 // Scrive public/data/stazioni-treni.json:
-//   { "generato": ISO, "fonte": { nome, url, licenza }, "stazioni": { "02520": "Bassano del Grappa", ... } }
+//   { "fonte": { nome, url, licenza }, "stazioni": { "02520": "Bassano del Grappa", ... } }
 //
 // Uso:   node scripts/dati-stazioni.mjs
 //
@@ -98,7 +98,6 @@ async function main() {
   }
 
   const uscita = {
-    generato: new Date().toISOString(),
     fonte: {
       nome: 'BusOne (busone.app), dagli orari pubblicati da Trenitalia',
       url: URL_GTFS,

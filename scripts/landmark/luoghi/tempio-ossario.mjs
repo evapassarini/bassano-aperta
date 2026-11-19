@@ -1,9 +1,9 @@
 // Tempio Ossario: genera public/landmarks/tempio-ossario.svg.
 // Uso: node scripts/landmark/luoghi/tempio-ossario.mjs [file di uscita]
 //
-// Com'e' fatto davvero (OpenStreetMap + fotografie di Wikimedia Commons):
+// Com'e' fatto (OpenStreetMap + fotografie di Wikimedia Commons):
 // - croce latina lunga circa 74 m, asse a 171,5 gradi da nord: la facciata col rosone guarda
-//   a nord (piazzale Cadorna) e dalla vista della mappa, che guarda da sud-ovest, NON si vede;
+//   a nord (piazzale Cadorna) e dalla vista della mappa, che guarda da sud-ovest, non si vede;
 // - si vedono il fianco ovest (in ombra) e la testata sud (in luce): abside poligonale,
 //   coro, e ai lati del coro i due campanili quadrati di mattoni;
 // - i campanili non hanno guglie: cella campanaria con un grande arco acuto per lato,

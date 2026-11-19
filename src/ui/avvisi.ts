@@ -158,7 +158,7 @@ export function creaSchedaAvvisi(): Scheda {
           el(
             'p',
             { class: 'adesso-errore' },
-            'La fotografia degli avvisi non è disponibile. Non mostriamo avvisi che non abbiamo: puoi leggerli sui siti di CCISS e di Vi.abilità.',
+            'La fotografia degli avvisi non è disponibile. Puoi leggerli sui siti di CCISS e di Vi.abilità.',
           ),
           el(
             'p',

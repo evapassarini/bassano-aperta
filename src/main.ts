@@ -2,9 +2,12 @@
 
 import './stile.css';
 import { creaMappa } from './map/index';
-import { lonLatInMetri } from './map/proiezione';
+import { segnalinoInVista } from './map/nuvole';
+import { lonLatInMetri, riquadroInMetri } from './map/proiezione';
 import { RIQUADRO } from './types';
 import type { DatiBase, DatiLampioni, DatiStrati, Landmark, LonLat, Punto, Storia } from './types';
+import { leggiAvvisi } from './live';
+import { puntiAvvisi } from './ui/aiuti';
 import { creaUI } from './ui/index';
 
 const BASE = import.meta.env.BASE_URL;
@@ -39,7 +42,7 @@ function dentroIlRiquadro(ll: LonLat): LonLat {
 
 /**
  * Segnaposto personali, solo in locale: stanno in personale.local.json nella cartella del
- * progetto, che git ignora e che la build non copia. Non finiscono mai nel sito pubblicato.
+ * progetto, che git ignora e che la build non copia.
  */
 async function puntiPersonali(): Promise<Punto[]> {
   if (!import.meta.env.DEV) return [];
@@ -114,6 +117,10 @@ async function avvia(): Promise<void> {
     ]);
 
     strati.punti.push(...(await puntiPersonali()));
+    // Vicino al bordo le nuvole coprono le case: lì i segnalini non si disegnano e non
+    // compaiono nell'elenco «Luoghi» (i racconti restano tutti nell'elenco).
+    const area = riquadroInMetri();
+    strati.punti = strati.punti.filter((p) => segnalinoInVista(area, p.x, p.y));
 
     const conosciute = new Set(storie.map((s) => s.id));
 
@@ -138,8 +145,6 @@ async function avvia(): Promise<void> {
       },
     });
 
-    // La data della mappa di base e gli indirizzi del progetto servono a "Fonti e licenze".
-    radice.dataset.baseGenerato = base.generato;
     // Quanti lampioni sono rilevati e quanti illustrativi: lo dice «Fonti e licenze».
     if (datiLampioni && Number.isInteger(datiLampioni.veri)) {
       radice.dataset.lampioniVeri = String(datiLampioni.veri);
@@ -158,7 +163,13 @@ async function avvia(): Promise<void> {
       storie,
       strati,
       alCambioStrato: (id, visibile) => mappa.mostraStrato(id, visibile),
-      alVaiA: (ll) => mappa.vaiA(dentroIlRiquadro(ll)),
+      // Verso un racconto il cui punto cade sotto le nuvole (Monte Grappa) la mappa non vola:
+      // si apre solo il racconto.
+      alVaiA: (ll) => {
+        const dentro = dentroIlRiquadro(ll);
+        const m = lonLatInMetri(dentro);
+        if (segnalinoInVista(area, m.x, m.y)) mappa.vaiA(dentro);
+      },
       alloZoom: (fattore) => mappa.zooma(fattore),
       // La prima chiamata arriva subito, dentro creaUI: la mappa esiste già.
       alCambioLuce: (luce) => mappa.impostaLuce(luce),
@@ -195,9 +206,29 @@ async function avvia(): Promise<void> {
 
     avviso?.remove();
 
+    // I cartelli degli avvisi sulla viabilità: arrivano dopo, senza far aspettare la mappa.
+    // Si vedono con lo strato Mobilità, solo dove la città si vede (non sulle nuvole). Si
+    // ricalcolano ogni 10 minuti con le stesse regole della scheda, che li fa scadere.
+    let timerAvvisi = 0;
+    leggiAvvisi().then(
+      (dati) => {
+        const dove = (ll: LonLat): { x: number; y: number } | null => {
+          const m = lonLatInMetri(ll);
+          return segnalinoInVista(area, m.x, m.y) ? m : null;
+        };
+        const aggiorna = (): void => mappa.mostraAvvisi(puntiAvvisi(dati, new Date(), dove));
+        aggiorna();
+        timerAvvisi = window.setInterval(aggiorna, 10 * 60 * 1000);
+      },
+      () => {
+        // Senza fotografia niente cartelli: la scheda degli avvisi dice già che manca.
+      },
+    );
+
     // In sviluppo, quando Vite ricarica questo modulo, mappa e interfaccia vecchie si fermano:
     // senza, resterebbero accesi i loro timer e i loro ascoltatori.
     import.meta.hot?.dispose(() => {
+      window.clearInterval(timerAvvisi);
       ui.distruggi();
       mappa.distruggi();
     });

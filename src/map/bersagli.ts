@@ -24,6 +24,8 @@ export interface Marcatore {
   raggio: number;
   /** true se è disegnato come pallino (zoom basso). */
   pallino: boolean;
+  /** true per il cartello di un avviso: il triangolo è più largo del cerchio di un segnaposto. */
+  avviso?: boolean;
 }
 
 export function misureSegnaposto(
@@ -72,6 +74,7 @@ export function marcatoriInVista(
       ty: s.py - m.gambo,
       raggio: m.raggio,
       pallino: m.pallino,
+      ...(p.dati.tipo === 'avviso' ? { avviso: true } : {}),
     });
   }
   return u;
@@ -96,7 +99,7 @@ export function distanzaDaSegmento(
 
 /** true se il punto tocca la testa o il gambo del segnaposto. */
 export function colpisceMarcatore(x: number, y: number, m: Marcatore, tolleranza: number): boolean {
-  if (Math.hypot(x - m.tx, y - m.ty) <= m.raggio + tolleranza) return true;
+  if (Math.hypot(x - m.tx, y - m.ty) <= m.raggio * (m.avviso ? 1.6 : 1) + tolleranza) return true;
   if (m.pallino) return false;
   return distanzaDaSegmento(x, y, m.px, m.py, m.tx, m.ty) <= m.raggio * 0.45 + tolleranza;
 }

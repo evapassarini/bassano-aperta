@@ -89,7 +89,7 @@
         "titolo": "Poli Museo della Grappa, racconto su Google Arts & Culture",
         "url": "https://artsandculture.google.com/story/1gVhNEaZ-ZJuJA"
       },
-      "media": 7
+      "media": 4
     },
     {
       "anno": "Oggi",
@@ -138,57 +138,12 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "Un alambicco di vetro in vetrina (31 ottobre 2022)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Poli_Museo_della_Grappa_03.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Poli_Museo_della_Grappa_03.jpg",
-      "autore": "Superchilum",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "In una teca alta, un alambicco di vetro trasparente: un pallone panciuto in basso, un collo a bulbi sovrapposti e in cima un tubo di vetro che scende a serpentina. Sul vetro della teca si vedono dei riflessi."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Un alambicco di rame dal collo alto (31 ottobre 2022)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Poli_Museo_della_Grappa_07.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Poli_Museo_della_Grappa_07.jpg",
-      "autore": "Superchilum",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "In una nicchia sotto una finestra a mezzaluna, un alambicco di rame lucido: una caldaia cilindrica su un fornello di mattoni e sopra un lungo cono che finisce in un tubo ricurvo."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Un grande alambicco di rame a due corpi (31 ottobre 2022)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Poli_Museo_della_Grappa_09.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Poli_Museo_della_Grappa_09.jpg",
-      "autore": "Superchilum",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Due grossi recipienti di rame con bulloni, rubinetti e oblò di ottone, montati su gambe di ferro e collegati in alto da un tubo: una caldaia sferica a sinistra e una colonna cilindrica a destra. Dietro, pannelli illustrati."
-    },
-    {
-      "tipo": "immagine",
       "titolo": "La parete delle bottigliette (31 ottobre 2022)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Poli_Museo_della_Grappa_17.jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Poli_Museo_della_Grappa_17.jpg",
       "autore": "Superchilum",
       "licenza": "CC BY-SA 4.0",
       "alt": "Una grande vetrina a parete, illuminata da dietro di giallo, con una decina di ripiani fitti di centinaia di piccole bottiglie di forme e colori diversi."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Una vetrina con strumenti di legno e di rame (31 ottobre 2022)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Poli_Museo_della_Grappa_15.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Poli_Museo_della_Grappa_15.jpg",
-      "autore": "Superchilum",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Una teca di vetro su gambe di rame: dentro, un recipiente di legno cerchiato di ferro con un rubinetto in cima, un cilindro di rame con coperchio e un piccolo alambicco di rame; sullo sfondo pannelli illustrati."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "La sala con i cilindri colorati lungo il bancone (31 ottobre 2022)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Poli_Museo_della_Grappa_14.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Poli_Museo_della_Grappa_14.jpg",
-      "autore": "Superchilum",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Una sala con moquette rossa e un bancone di legno ad angolo: sopra sono allineati una ventina di cilindri decorati con immagini di frutti, piante e bottiglie; in alto una vetrina illuminata piena di bottiglie."
     }
   ],
   "live": [],

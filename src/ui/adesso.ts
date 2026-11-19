@@ -1,5 +1,5 @@
 // Riquadri "Adesso": il livello della Brenta in diretta, i treni alla stazione, la fotografia
-// dell'aria, i link alle pagine ufficiali. Se un dato non arriva lo si dice, senza numeri inventati.
+// dell'aria, i link alle pagine ufficiali. Se un dato non arriva, il riquadro lo scrive.
 
 import type { DatiAria, LetturaTreni, Live } from '../types';
 import { leggiAria, leggiBrenta, leggiTreni } from '../live';
@@ -139,7 +139,7 @@ export function riquadroBrenta(nota: string): HTMLElement {
           el(
             'p',
             { class: 'adesso-errore' },
-            'In questo momento non riusciamo a leggere il livello della Brenta. Non mostriamo numeri che non abbiamo: puoi guardarlo sul sito di ARPAV.',
+            'In questo momento non riusciamo a leggere il livello della Brenta. Puoi guardarlo sul sito di ARPAV.',
           ),
           riprova,
         );
@@ -262,7 +262,7 @@ export function riquadroTreni(): HTMLElement {
           el(
             'p',
             { class: 'adesso-errore' },
-            'In questo momento non riusciamo a leggere i treni. Non mostriamo orari o ritardi che non abbiamo: controlla i canali di Trenitalia.',
+            'In questo momento non riusciamo a leggere i treni. Puoi controllare orari e ritardi sui canali di Trenitalia.',
           ),
           riprova,
         );
@@ -314,7 +314,7 @@ export const GIUDIZIO_ARIA_MANCA =
 function bloccoGiudizio(dati: DatiAria, adesso: Date): HTMLElement | null {
   const g = giudizioAria(dati);
   const tempo = g ? tempoGiudizio(g.giorno, adesso) : null;
-  // Mai oggi (né un giorno che deve ancora venire): il giorno del giudizio deve essere finito.
+  // Il giorno del giudizio deve essere già finito: non oggi e non un giorno futuro.
   if (!g || !tempo || tempo.giorniFa < 1) return null;
 
   const segno = (classe: string): HTMLElement => el('span', { class: `aria-segno aria-segno-${classe}`, 'aria-hidden': 'true' });
@@ -461,7 +461,7 @@ export function riquadroAria(nota: string, adesso: () => Date = () => new Date()
           el(
             'p',
             { class: 'adesso-errore' },
-            "La fotografia della qualità dell'aria non è disponibile. Non mostriamo numeri che non abbiamo.",
+            "In questo momento la fotografia della qualità dell'aria non è disponibile.",
           ),
           riprova,
         );

@@ -54,7 +54,6 @@ export interface Area {
 }
 
 export interface DatiBase {
-  generato: string; // ISO 8601
   fonte: string; // attribuzione da mostrare
   edifici: Edificio[];
   strade: Strada[];
@@ -80,9 +79,8 @@ export type Luce = 'giorno' | 'pomeriggio' | 'notte';
 export type SceltaLuce = 'adesso' | Luce;
 
 export interface DatiLampioni {
-  generato: string;
   fonte: string;
-  /** Quanti dei punti vengono davvero da OpenStreetMap (highway=street_lamp). */
+  /** Quanti dei punti vengono da OpenStreetMap (highway=street_lamp). */
   veri: number;
   /**
    * Lampioni in metri locali: [x0, y0, x1, y1, ...]. Prima i `veri` da OpenStreetMap, poi quelli
@@ -109,7 +107,9 @@ export type TipoPunto =
   | 'webcam'
   | 'fermata-bus'
   | 'stazione'
-  | 'bici';
+  | 'bici'
+  /** Un avviso sulla viabilità con la sua posizione: non sta in strati.json, arriva da avvisi.json. */
+  | 'avviso';
 
 export interface Punto {
   id: string;
@@ -135,7 +135,6 @@ export interface Linea {
 }
 
 export interface DatiStrati {
-  generato: string;
   fonti: { nome: string; url: string; licenza: string }[];
   punti: Punto[];
   linee: Linea[];
@@ -219,6 +218,12 @@ export interface Avviso {
    * pubblicati da tempo (un tratto chiuso per settimane), finché la fotografia ha meno di 24 ore.
    */
   attivo?: boolean;
+  /**
+   * Solo per gli eventi del CCISS letti per zona: i due incroci che delimitano il tratto,
+   * come li dà la fonte. Il punto esatto dei lavori può essere ovunque tra i due.
+   */
+  inizio?: LonLat;
+  fine?: LonLat;
 }
 
 export interface DatiAvvisi {
@@ -284,8 +289,8 @@ export interface Storia {
    */
   fontiCuriosita?: Fonte[];
   /**
-   * Nota interna di redazione: punti su cui le fonti non concordano. NON è mostrata sul sito
-   * (decisione della curatrice del 16 novembre 2026); serve a chi scrive e rivede i testi.
+   * Nota interna di redazione: punti su cui le fonti non concordano. Non è mostrata sul sito;
+   * serve a chi scrive e rivede i testi.
    */
   incertezze: string[];
   /** Id del disegno in public/landmarks/<id>.svg, se esiste. */
@@ -304,7 +309,7 @@ export interface Landmark {
   lon: number;
   /**
    * Larghezza dell'intero SVG sul piano isometrico, cioè la sua larghezza sullo schermo a
-   * zoom 1. NON è la larghezza reale dell'edificio: per un disegno che va dal punto più a
+   * zoom 1. Non è la larghezza reale dell'edificio: per un disegno che va dal punto più a
    * ovest (x1, y1) al punto più a est (x2, y2), in metri locali, vale
    * ((x2 - y2) - (x1 - y1)) * 0.7071. Il Ponte Vecchio, lungo 74 m, ha 66.3 (ombra e margini compresi).
    */

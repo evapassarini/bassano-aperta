@@ -138,17 +138,15 @@ export const INTESTAZIONI_BUSONE = {
 const DURATA_MEMORIA_TRENI_MS = 2 * 60 * 1000;
 
 interface TabellaStazioni {
-  /** Quando lo script ha generato la tabella (ISO 8601). */
-  generato: string;
   stazioni: Record<string, string>;
 }
 
 function controllaStazioni(dati: unknown): TabellaStazioni {
-  const d = dati as { generato?: unknown; stazioni?: unknown } | null;
+  const d = dati as { stazioni?: unknown } | null;
   if (!d || typeof d !== 'object' || !d.stazioni || typeof d.stazioni !== 'object' || Array.isArray(d.stazioni)) {
     throw new Error('stazioni-treni.json non ha la forma attesa');
   }
-  return { generato: typeof d.generato === 'string' ? d.generato : '', stazioni: d.stazioni as Record<string, string> };
+  return { stazioni: d.stazioni as Record<string, string> };
 }
 
 let stazioniInMemoria: Promise<TabellaStazioni> | null = null;
@@ -173,19 +171,6 @@ function leggiStazioni(): Promise<Record<string, string>> {
     (tabella) => tabella.stazioni,
     (): Record<string, string> => ({}),
   );
-}
-
-/**
- * Data in cui è stata generata la tabella dei nomi delle stazioni, per «Fonti e licenze».
- * Rifiuta se il file non arriva o non dichiara una data.
- */
-export function leggiDataStazioni(): Promise<string> {
-  return leggiTabellaStazioni().then((tabella) => {
-    if (!tabella.generato || Number.isNaN(Date.parse(tabella.generato))) {
-      throw new Error('stazioni-treni.json non dichiara quando è stato generato');
-    }
-    return tabella.generato;
-  });
 }
 
 let treniInMemoria: { quando: number; promessa: Promise<LetturaTreni> } | null = null;

@@ -6,11 +6,12 @@ codice. Dati, testi, illustrazioni e media hanno ognuno le sue condizioni, scrit
 1. Codice
 
 Licenza MIT, vedi LICENSE. Vale per il codice del sito e degli script: src/, scripts/
-(esclusa scripts/landmark/plan/), tests/, index.html e i file di configurazione.
+(esclusa scripts/landmark/plan/), tests/ (esclusi i due file di dati descritti al punto 2),
+index.html e i file di configurazione.
 
 2. Dati
 
-I file in public/data/ e in scripts/landmark/plan/ NON sono sotto licenza MIT. Seguono la
+I file in public/data/ e in scripts/landmark/plan/ non sono sotto licenza MIT. Seguono la
 licenza della fonte da cui vengono, scritta anche dentro ogni file nei campi "fonte" o
 "fonti".
 
@@ -25,18 +26,22 @@ licenza della fonte da cui vengono, scritta anche dentro ogni file nei campi "fo
   BusOne e alla fonte originale. BusOne può sospendere il servizio. Non c'è una licenza
   aperta: chi riusa questi dati deve leggere e rispettare i termini di BusOne.
 - ARPAV: public/data/aria.json, le coordinate delle stazioni in public/data/strati.json
-  e il livello del Brenta che il sito legge in diretta. Dati non validati.
+  e il livello della Brenta che il sito legge in diretta. Dati non validati.
   Per i file dell'aria: ARPAV dichiara la licenza CC BY 4.0 per i file XML della sua
   pagina open data; i file JSON dell'aria sono elencati nella stessa pagina, ma che la
   licenza valga anche per loro non è scritto in modo esplicito.
   https://www.arpa.veneto.it/dati-ambientali/open-data/dati-arpav-in-formato-xml
-  Per i dati dell'idrometro del Brenta ARPAV non dichiara una licenza in modo esplicito.
+  Per i dati dell'idrometro della Brenta ARPAV non dichiara una licenza in modo esplicito.
   Attribuzione da usare sempre: "Fonte: ARPAV, dati non validati".
 - CCISS Viaggiare Informati e Vi.abilità (Provincia di Vicenza): public/data/avvisi.json.
   Nessuna delle due fonti dichiara una licenza di riuso. Il file contiene solo citazioni
   brevi, ognuna con il nome della fonte e il link alla pagina originale. Non sono dati
   liberi: chi li riusa deve rivolgersi alle due fonti.
   https://www.cciss.it/  https://vi-abilita.it/
+- Dati delle prove: tests/fixtures/brenta-arpav.json (ARPAV) e
+  tests/fixtures/cciss-zona.json (CCISS Viaggiare Informati) sono
+  copie di risposte vere delle due fonti, tenute solo per le prove automatiche. Non sono
+  sotto licenza MIT: valgono le condizioni scritte qui sopra per ARPAV e per CCISS.
 - Webcam Windy: in public/data/strati.json ci sono solo i link. Le immagini restano sul
   sito esterno.
 - I lampioni non rilevati di public/data/lampioni.json e gli alberi aggiunti in
@@ -47,26 +52,23 @@ licenza della fonte da cui vengono, scritta anche dentro ogni file nei campi "fo
 
 I testi dei racconti in content/, le illustrazioni dei luoghi simbolo in
 public/landmarks/, la documentazione (README.md e docs/) e le due immagini del progetto
-(public/anteprima.jpg e public/apple-touch-icon.png) NON sono sotto licenza MIT.
-Per ora non è stata scelta nessuna licenza aperta: restano di chi cura il sito, e per
-riusarli serve chiedere, aprendo una segnalazione sul repository.
-La scelta di una licenza aperta è ancora da fare: vedi README, "Da confermare prima di
-pubblicare".
+(public/anteprima.jpg e public/apple-touch-icon.png) non sono sotto licenza MIT.
+Per ora non hanno una licenza aperta (vedi docs/SPEC.md, "Punti aperti"): restano di chi cura
+il sito, e per riusarli serve chiedere, aprendo una segnalazione sul repository.
 Le illustrazioni sono disegnate a partire dalle sagome degli edifici su OpenStreetMap
 (© OpenStreetMap contributors).
-public/anteprima.jpg è uno scatto della mappa del sito: contiene dati di OpenStreetMap
-(© OpenStreetMap contributors, ODbL 1.0).
+public/anteprima.jpg e le immagini in docs/readme/ sono scatti della mappa del sito:
+contengono dati di OpenStreetMap (© OpenStreetMap contributors, ODbL 1.0).
 
 4. Foto e video citati nei racconti
 
-Le fotografie, le stampe e i video citati nei racconti NON fanno parte di questo
+Le fotografie, le stampe e i video citati nei racconti non fanno parte di questo
 repository e non sono coperti dalle licenze scritte sopra. Restano dei loro autori.
 Autore, licenza e link alla pagina originale sono scritti accanto a ciascuno, nei file di
 content/ (campi "autore", "licenza", "pagina") e sul sito sotto ogni file.
 Le immagini vengono da Wikimedia Commons, ognuna con la sua licenza. I video sono
 solo incorporati da YouTube e restano dei rispettivi canali.
-Oggi nessun racconto ha registrazioni audio. Se un giorno ce ne saranno, varranno le
-stesse regole delle immagini.
+Se in futuro ci saranno registrazioni audio, seguiranno le stesse regole delle immagini.
 
 5. Caratteri
 
@@ -75,4 +77,5 @@ Fraunces e Inter, licenza SIL Open Font License 1.1, dai pacchetti @fontsource.
 6. Appunti di ricerca
 
 Il file in ricerca/ contiene appunti di lavoro con citazioni brevi dalle fonti, ognuna
-con il suo indirizzo. I testi citati restano dei loro autori.
+con il suo indirizzo. I testi citati restano dei loro autori. Gli appunti non vengono
+aggiornati: alcune domande sono già risolte.

@@ -43,7 +43,7 @@
         "titolo": "Bassanonet, articolo sulla mostra di Dürer a Palazzo Sturm (2019)",
         "url": "https://www.bassanonet.it/news/27697-sturm_und_durer.html"
       },
-      "media": 5
+      "media": 2
     },
     {
       "anno": "2018",
@@ -113,57 +113,12 @@
     },
     {
       "tipo": "immagine",
-      "titolo": "Albrecht Dürer, studio preparatorio per il Rinoceronte, disegno a penna, 1515. British Museum, Londra",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Albrecht_D%C3%BCrer_-_Rhinoceros_%28preparatory_study%29_1515_-_BM_SL%2C5218.161_-01.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Albrecht_D%C3%BCrer_-_Rhinoceros_%28preparatory_study%29_1515_-_BM_SL%2C5218.161_-01.jpg",
-      "autore": "Albrecht Dürer",
-      "licenza": "Pubblico dominio",
-      "alt": "Disegno a penna su carta ingiallita: un rinoceronte di profilo rivolto a sinistra, con la pelle a piastre, la scritta «RHINOCERON 1515» in alto e alcune righe di testo scritte a mano in basso."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Hans Burgkmair, Rinoceronte, xilografia, 1515 (riproduzione da un libro)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Burgkmair.png?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Burgkmair.png",
-      "autore": "Hans Burgkmair",
-      "licenza": "Pubblico dominio",
-      "alt": "Xilografia in bianco e nero di un rinoceronte di profilo rivolto a sinistra, con le zampe davanti legate da una catena e la scritta «RHINOCEROS MDXV»."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Enea Vico, Rinoceronte, incisione da Dürer, 1548. National Gallery of Art, Washington",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Enea_Vico_after_Albrecht_D%C3%BCrer%2C_Rhinoceros%2C_1548%2C_NGA_73146.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Enea_Vico_after_Albrecht_D%C3%BCrer%2C_Rhinoceros%2C_1548%2C_NGA_73146.jpg",
-      "autore": "Enea Vico, da Albrecht Dürer",
-      "licenza": "CC0",
-      "alt": "Incisione di un rinoceronte corazzato rivolto a sinistra, con un cartiglio con la scritta «RHINOCERVS» e la data 1548 in alto e alcune righe di testo in italiano in basso."
-    },
-    {
-      "tipo": "immagine",
       "titolo": "Albrecht Dürer, Natività, bulino, 1504. Musei Civici di Bassano, Collezione Remondini (fotografata in mostra a Ferrara)",
       "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Albrecht_D%C3%BCrer%2C_Nativit%C3%A0%2C_Bassano_del_Grappa%2C_Musei_Civici%2C_Collezione_Remondini.jpg?width=960",
       "pagina": "https://commons.wikimedia.org/wiki/File:Albrecht_D%C3%BCrer%2C_Nativit%C3%A0%2C_Bassano_del_Grappa%2C_Musei_Civici%2C_Collezione_Remondini.jpg",
       "autore": "Albrecht Dürer; fotografia di Nicola Quirico",
       "licenza": "CC BY-SA 4.0",
       "alt": "Incisione in bianco e nero: una casa di legno e muratura in rovina con alberelli cresciuti sui muri; in basso a sinistra Maria inginocchiata davanti al bambino, a destra un uomo chino accanto a un pozzo che versa acqua in una brocca."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "Una sala di Palazzo Sturm con stucchi e specchiere (2020)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Palazzo_Sturm_int%C3%A9rieur_02.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Palazzo_Sturm_int%C3%A9rieur_02.jpg",
-      "autore": "Peccadille",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Sala con pareti chiare decorate da cornici verde pallido e stucchi bianchi, due specchiere, una grande vetrina di legno intagliato con statuine bianche e un pavimento di legno a cubi; da una porta si intravede un'altra sala con vetrine."
-    },
-    {
-      "tipo": "immagine",
-      "titolo": "La sala dei tesori del Museo Remondini, a Palazzo Sturm (2020)",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Musee_Remondini_04.jpg?width=960",
-      "pagina": "https://commons.wikimedia.org/wiki/File:Musee_Remondini_04.jpg",
-      "autore": "Peccadille",
-      "licenza": "CC BY-SA 4.0",
-      "alt": "Stanza rivestita di pannelli di legno scuro, con un lungo tavolo chiaro che regge teche di vetro con libri e fogli stampati, e un pavimento di legno a intarsio."
     }
   ],
   "live": [
@@ -171,7 +126,7 @@
       "tipo": "link",
       "etichetta": "Scheda dei Musei Civici",
       "url": "https://www.museibassano.it/it/mostra/king-kong-rhino",
-      "nota": "La scultura è ancora a Palazzo Sturm: lo ha verificato di persona chi cura questo sito, a novembre 2026. La scheda ufficiale riporta ancora le date 2018-2021 e non dice nulla sullo stato attuale."
+      "nota": "Chi cura questo sito ha visto la scultura a Palazzo Sturm, ma la scheda ufficiale riporta ancora le date 2018-2021 e non dice nulla sullo stato attuale: prima di andare controlla con i Musei."
     },
     {
       "tipo": "link",

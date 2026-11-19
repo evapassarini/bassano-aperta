@@ -22,7 +22,6 @@ const lampioni = leggi<DatiLampioni>('public/data/lampioni.json');
 const aria = leggi<DatiAria>('public/data/aria.json');
 const avvisi = leggi<DatiAvvisi>('public/data/avvisi.json');
 const stazioniTreni = leggi<{
-  generato: string;
   fonte: { nome: string; url: string; licenza: string };
   stazioni: Record<string, string>;
 }>('public/data/stazioni-treni.json');
@@ -242,8 +241,8 @@ describe('luoghi simbolo (public/landmarks)', () => {
 });
 
 describe('strati (public/data/strati.json)', () => {
-  it('ha data, fonti e id unici', () => {
-    expect(Number.isNaN(Date.parse(strati.generato))).toBe(false);
+  it('ha fonti e id unici, e nessuna data di preparazione', () => {
+    expect('generato' in strati).toBe(false);
     expect(strati.fonti.length).toBeGreaterThan(0);
     for (const f of strati.fonti) expect(stringa(f.nome) && https(f.url) && stringa(f.licenza)).toBe(true);
     const id = [...strati.punti.map((p) => p.id), ...strati.linee.map((l) => l.id)];
@@ -277,8 +276,8 @@ describe('strati (public/data/strati.json)', () => {
 });
 
 describe('mappa di base (public/data/base.json)', () => {
-  it('ha data, attribuzione OpenStreetMap e contenuto', () => {
-    expect(Number.isNaN(Date.parse(base.generato))).toBe(false);
+  it('ha attribuzione OpenStreetMap e contenuto, e nessuna data di preparazione', () => {
+    expect('generato' in base).toBe(false);
     expect(base.fonte).toContain('OpenStreetMap');
     expect(base.edifici.length).toBeGreaterThan(2000);
     expect(base.strade.length).toBeGreaterThan(500);
@@ -302,9 +301,8 @@ describe('mappa di base (public/data/base.json)', () => {
 });
 
 describe('lampioni (public/data/lampioni.json)', () => {
-  it('ha data, fonte che dichiara i lampioni illustrativi e solo le chiavi previste', () => {
-    expect(Object.keys(lampioni).sort()).toEqual(['fonte', 'generato', 'p', 'veri']);
-    expect(Number.isNaN(Date.parse(lampioni.generato))).toBe(false);
+  it('ha fonte che dichiara i lampioni illustrativi e solo le chiavi previste', () => {
+    expect(Object.keys(lampioni).sort()).toEqual(['fonte', 'p', 'veri']);
     expect(stringa(lampioni.fonte)).toBe(true);
     expect(lampioni.fonte).toContain('illustrativ');
     if (lampioni.veri > 0) expect(lampioni.fonte).toContain('OpenStreetMap');
@@ -396,8 +394,8 @@ describe('avvisi sulla viabilità (public/data/avvisi.json)', () => {
 });
 
 describe('stazioni dei treni (public/data/stazioni-treni.json)', () => {
-  it('ha data e fonte con attribuzione a BusOne', () => {
-    expect(Number.isNaN(Date.parse(stazioniTreni.generato))).toBe(false);
+  it('ha fonte con attribuzione a BusOne, e nessuna data di preparazione', () => {
+    expect('generato' in stazioniTreni).toBe(false);
     const f = stazioniTreni.fonte;
     expect(stringa(f.nome) && https(f.url) && stringa(f.licenza)).toBe(true);
     expect(f.nome).toContain('BusOne');

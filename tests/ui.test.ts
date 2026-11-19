@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { luceAdesso } from '../src/luce';
 import type { Avviso, DatiAria, DatiAvvisi, DatiStrati, LetturaTreni, Luce, Media, Punto, Storia, Treno } from '../src/types';
 import {
+  puntiAvvisi,
   chiaveOrdine,
   contaRisultati,
   decidiTappe,
@@ -54,7 +55,7 @@ import { creaFonti } from '../src/ui/fonti';
 import { TESTO_CREDITO_OSM, URL_CREDITO_OSM, creaUI } from '../src/ui/index';
 import { creaRacconto, creditiMedia } from '../src/ui/racconto';
 import { CHIAVE_LUCE, PASSO_LUCE_MS, creaSelettoreLuce } from '../src/ui/luce';
-import { creaScheda } from '../src/ui/scheda';
+import { NOTA_CARTELLO, creaScheda } from '../src/ui/scheda';
 
 // Le schede leggono i dati dal modulo live: qui è finto, così nessun test tocca la rete.
 const live = vi.hoisted(() => ({
@@ -62,7 +63,6 @@ const live = vi.hoisted(() => ({
   leggiAvvisi: vi.fn(),
   leggiAria: vi.fn(),
   leggiBrenta: vi.fn(),
-  leggiDataStazioni: vi.fn(),
 }));
 vi.mock('../src/live/index', () => live);
 
@@ -937,6 +937,26 @@ describe('schede con dati in diretta', () => {
     ],
   };
 
+  it('la scheda del cartello spiega dove sta e porta a tutti gli avvisi', () => {
+    const p: Punto = {
+      id: 'avviso-1',
+      strato: 'mobilita',
+      tipo: 'avviso',
+      nome: 'SP73 (VI) Campesana Valvecchia',
+      x: 0,
+      y: 0,
+      nota: 'Tratto chiuso causa lavori',
+      url: 'https://www.cciss.it/web/cciss/situazione-della-viabilita',
+    };
+    const apriAvvisi = vi.fn();
+    const nodo = comeFinto(creaScheda(p, undefined, apriAvvisi).nodo);
+    expect(nodo.textContent).toContain('Avviso sulla strada');
+    expect(nodo.textContent).toContain(NOTA_CARTELLO);
+    const bottone = nodo.trova((n) => n.tag === 'button' && n.textContent === 'Tutti gli avvisi')[0];
+    bottone.click();
+    expect(apriAvvisi).toHaveBeenCalledOnce();
+    expect(nodo.trova((n) => n.tag === 'a')[0].textContent).toContain('Apri la mappa del CCISS');
+  });
   describe('scheda della stazione', () => {
     it('mentre legge lo dice, e sotto spiega sempre da dove vengono i ritardi', () => {
       live.leggiTreni.mockReturnValue(new Promise(() => {}));
@@ -1203,7 +1223,7 @@ describe('luce della mappa e aria in breve', () => {
     y: -781.6,
     nota: "Centralina ARPAV per la qualità dell'aria.",
   };
-  const STRATI: DatiStrati = { generato: '2026-11-14T10:00:00Z', fonti: [], punti: [CENTRALINA], linee: [] };
+  const STRATI: DatiStrati = { fonti: [], punti: [CENTRALINA], linee: [] };
 
   let memoria: Map<string, string>;
   let ora: Date;
@@ -1710,7 +1730,7 @@ describe('luce della mappa e aria in breve', () => {
 
 describe('crediti, fonti e indirizzi del progetto', () => {
   const REPOSITORY = 'https://github.com/evapassarini/bassano-aperta';
-  const STRATI: DatiStrati = { generato: '2026-11-14T10:00:00Z', fonti: [], punti: [], linee: [] };
+  const STRATI: DatiStrati = { fonti: [], punti: [], linee: [] };
 
   beforeEach(() => {
     fuoco.attivo = null;
@@ -1795,9 +1815,11 @@ describe('crediti, fonti e indirizzi del progetto', () => {
     expect(testo).toContain('Livello della Brenta: letto in diretta');
   });
 
-  it('«Fonti e licenze» parla delle illustrazioni dei luoghi simbolo', () => {
+  it('«Fonti e licenze» parla delle illustrazioni: luoghi simbolo e quello che si muove', () => {
     const testo = comeFinto(creaFonti({ strati: STRATI }).nodo).textContent;
-    expect(testo).toContain('Le illustrazioni dei luoghi simbolo');
+    expect(testo).toContain('Le illustrazioni: luoghi simbolo, treno e persone');
+    expect(testo).toContain('non segue gli orari di Trenitalia');
+    expect(testo).toContain('non sono presenze vere');
     expect(testo).toContain('a partire dalle sagome degli edifici su OpenStreetMap');
     expect(testo).toContain('Altezze e dettagli sono in gran parte stime');
   });
@@ -1909,4 +1931,53 @@ describe('crediti, fonti e indirizzi del progetto', () => {
       expect(nodo.textContent).not.toContain('Una nota interna di redazione.');
     });
   });
+});
+
+describe('cartelli degli avvisi sulla mappa', () => {
+  const ADESSO = new Date('2026-11-19T10:00:00Z');
+  const evento = (o: Partial<Avviso> = {}): Avviso => ({
+    tipo: 'evento',
+    strada: 'SP73 (VI) Campesana Valvecchia',
+    testo: 'Tratto chiuso causa lavori',
+    quando: '2026-10-12T08:41:00.000Z',
+    fonte: 'CCISS Viaggiare Informati',
+    url: 'https://www.cciss.it/web/cciss/situazione-della-viabilita',
+    attivo: true,
+    inizio: { lon: 11.72676, lat: 45.77569 },
+    fine: { lon: 11.62982, lat: 45.90025 },
+    ...o,
+  });
+  const dati = (avvisi: Avviso[], generato = '2026-11-19T09:00:00Z'): DatiAvvisi => ({ generato, fonti: [], avvisi });
+  // Finta posizione: si vede solo quello che sta a est di 11.7 gradi.
+  const dove = (ll: { lon: number; lat: number }) => (ll.lon > 11.7 ? { x: (ll.lon - 11.7) * 1000, y: (ll.lat - 45.7) * 1000 } : null);
+
+  it("mette il cartello sull'incrocio che si vede, con testo e link della fonte", () => {
+    const [p, ...altri] = puntiAvvisi(dati([evento()]), ADESSO, dove);
+    expect(altri).toHaveLength(0);
+    expect(p).toMatchObject({ strato: 'mobilita', tipo: 'avviso', nome: 'SP73 (VI) Campesana Valvecchia', nota: 'Tratto chiuso causa lavori' });
+    expect(p.x).toBeCloseTo(26.76, 1);
+    // Se l'inizio non si vede si prova la fine.
+    const [q] = puntiAvvisi(dati([evento({ inizio: { lon: 11.6, lat: 45.7 }, fine: { lon: 11.8, lat: 45.8 } })]), ADESSO, dove);
+    expect(q.x).toBeCloseTo(100, 5);
+  });
+
+  it('niente cartello per ordinanze, eventi senza coordinate o fuori vista, coordinate rotte', () => {
+    const ordinanza: Avviso = { ...evento(), tipo: 'ordinanza', attivo: undefined };
+    const senza = evento({ inizio: undefined, fine: undefined });
+    const fuori = evento({ inizio: { lon: 11.6, lat: 45.7 }, fine: { lon: 11.5, lat: 45.7 } });
+    const rotto = evento({ inizio: { lon: 'x' } as unknown as { lon: number; lat: number }, fine: undefined });
+    expect(puntiAvvisi(dati([ordinanza, senza, fuori, rotto]), ADESSO, dove)).toEqual([]);
+  });
+
+  it('con la fotografia vecchia di giorni non mette i cartelli degli eventi di settimane prima', () => {
+    expect(puntiAvvisi(dati([evento()], '2026-11-10T09:00:00Z'), ADESSO, dove)).toEqual([]);
+  });
+
+  it('due avvisi della stessa strada sullo stesso incrocio diventano un cartello con due testi', () => {
+    const punti = puntiAvvisi(dati([evento(), evento({ testo: 'Senso unico alternato', quando: '2026-11-01T08:00:00.000Z' })]), ADESSO, dove);
+    expect(punti).toHaveLength(1);
+    expect(punti[0].nota!.split('\n').sort()).toEqual(['Senso unico alternato', 'Tratto chiuso causa lavori']);
+  });
+
+
 });

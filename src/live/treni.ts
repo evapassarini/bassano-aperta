@@ -110,8 +110,7 @@ function trenoDi(voce: unknown, stazioni: Record<string, string>): TrenoLetto | 
   const grezze = campo(corsa, 'stopTimeUpdate');
   if (!viaggio || !Array.isArray(grezze)) return null;
 
-  // Se il numero non si riconosce il treno resta in elenco con il numero vuoto: meglio una
-  // riga senza numero che un treno mancante.
+  // Se il numero non si riconosce il treno resta in elenco, con il numero vuoto.
   const codiceCorsa = campo(viaggio, 'tripId');
   const numero = numeroTreno(codiceCorsa) ?? '';
 
@@ -133,7 +132,7 @@ function trenoDi(voce: unknown, stazioni: Record<string, string>): TrenoLetto | 
 
   // Un feed in diretta può non elencare più le fermate già fatte. Se Bassano è la prima
   // dell'elenco ma il suo numero d'ordine dice che non è la prima della corsa, l'origine
-  // non si conosce: è un transito, senza inventare da dove viene.
+  // non si conosce e il treno conta come transito.
   const inizioNoto = prima.sequenza === null || prima.sequenza <= 1;
   let verso: Treno['verso'];
   if (indice === 0 && inizioNoto) verso = 'partenza';
@@ -166,8 +165,8 @@ function trenoDi(voce: unknown, stazioni: Record<string, string>): TrenoLetto | 
 
 /**
  * Trasforma il feed nei treni che passano da Bassano, da un'ora prima di `adesso` a sei ore
- * dopo, ordinati per ora. `stazioni` traduce i codici in nomi: un codice sconosciuto dà null,
- * mai il codice grezzo. Lancia un errore se il feed non ha la forma attesa; le singole voci
+ * dopo, ordinati per ora. `stazioni` traduce i codici in nomi: un codice sconosciuto dà null
+ * invece del codice grezzo. Lancia un errore se il feed non ha la forma attesa; le singole voci
  * malformate vengono saltate. Un treno di cui non si riconosce il numero resta, con
  * `numero` vuoto. Le corse soppresse che arrivano senza fermate non si possono attribuire
  * a Bassano e non compaiono.

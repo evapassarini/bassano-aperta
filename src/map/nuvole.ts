@@ -64,6 +64,17 @@ export function fuoriDi(area: Rettangolo, x: number, y: number): number {
 }
 
 /**
+ * Quanti metri prima del contorno delle nuvole smettono i segnalini: lì il velo copre già
+ * quasi tutte le case, e un segnalino sembrerebbe sospeso sulle nuvole.
+ */
+export const MARGINE_SEGNALINI = 100;
+
+/** true se un segnalino in (x, y), metri locali, cade dove la città si vede ancora. */
+export function segnalinoInVista(area: Rettangolo, x: number, y: number): boolean {
+  return fuoriDi(area, x, y) <= -MARGINE_SEGNALINI;
+}
+
+/**
  * Le nuvole da disegnare nel riquadro visibile (in unità isometriche): prima un velo di
  * sbuffi piccoli a cavallo del contorno, che fa sfumare le ultime case, poi le nuvole grandi
  * che coprono tutto ciò che sta oltre. La griglia raddoppia il passo quando ci si allontana.

@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   colpisceMarcatore,
@@ -93,7 +94,6 @@ describe('ordinamento per profondità', () => {
 
   it('un edificio a nord-est viene disegnato prima di uno a sud-ovest', () => {
     const base = {
-      generato: '',
       fonte: '',
       strade: [],
       aree: [],
@@ -104,7 +104,7 @@ describe('ordinamento per profondità', () => {
         { p: [-40, -40, -30, -40, -30, -30, -40, -30], h: 6, t: 'casa' as const },
       ],
     };
-    const scena = costruisciScena(base, { generato: '', fonti: [], punti: [], linee: [] }, []);
+    const scena = costruisciScena(base, { fonti: [], punti: [], linee: [] }, []);
     // rif = indice dell'edificio di partenza: 1 (nord-est), 0, 2 (sud-ovest).
     expect([...scena.elementi.rif]).toEqual([1, 0, 2]);
   });
@@ -330,14 +330,13 @@ describe('griglia e selezione del visibile', () => {
 
   it("il riquadro di un edificio comprende l'altezza del tetto", () => {
     const base = {
-      generato: '',
       fonte: '',
       strade: [],
       aree: [],
       alberi: [],
       edifici: [{ p: [0, 0, 10, 0, 10, 10, 0, 10], h: 50, t: 'casa' as const }],
     };
-    const s = costruisciScena(base, { generato: '', fonti: [], punti: [], linee: [] }, []);
+    const s = costruisciScena(base, { fonti: [], punti: [], linee: [] }, []);
     // L'impronta arriva fino a sy = -7.07; il tetto sta 40.8 unità più su.
     expect(s.elementi.riquadri[1]).toBeLessThan(-7.07 - 40);
     // Una fascia sopra l'impronta, dove si vede solo il tetto, trova l'edificio.
@@ -1139,6 +1138,24 @@ describe('disegno nelle tre luci', () => {
       }
     }
     d.impostaLuce('giorno');
+    // Senza tempo l'acqua sta ferma; con il tempo le increspature scorrono (un rettangolo
+    // spostato dentro il ritaglio dell'acqua) e il Disegnatore dice che c'è movimento.
+    {
+      const ferma = registratore();
+      d.disegna(ferma.ctx, stato(3));
+      expect(d.animato).toBe(false);
+      const viva = registratore();
+      d.disegna(viva.ctx, { ...stato(3), tempo: 5000 });
+      expect(d.animato).toBe(true);
+      expect(viva.passi.some((p) => p.stile === increspature && p.nome === 'fillRect')).toBe(true);
+      expect(viva.conta.save ?? 0).toBe(viva.conta.restore ?? 0);
+      // Da lontano le increspature non ci sono, e nemmeno il movimento.
+      d.disegna(registratore().ctx, { ...stato(1.2), tempo: 5000 });
+      expect(d.animato).toBe(false);
+      // Lontano dall'acqua (e senza treno né piazze in vista) non c'è nulla da animare.
+      d.disegna(registratore().ctx, { ...stato(3), camera: { x: 2000, y: -2000, zoom: 3 }, tempo: 5000 });
+      expect(d.animato).toBe(false);
+    }
     // Da lontano niente velo e niente lastre: a zoom 1,2 nessun riempimento a motivo.
     const lontano = registratore();
     d.disegna(lontano.ctx, stato(1.2));
@@ -1240,5 +1257,101 @@ describe('interruttore dei tasselli', () => {
     expect(finto).toHaveBeenCalledTimes(1);
     expect(finto).toHaveBeenCalledWith('./tasselli/indice.json');
     tasselli?.distruggi();
+  });
+});
+
+describe('segnalini vicino alle nuvole e cartelli degli avvisi', () => {
+  it('nasconde i segnalini dove le nuvole coprono le case', async () => {
+    const { segnalinoInVista, fuoriDi, MARGINE_SEGNALINI } = await import('../src/map/nuvole');
+    const { riquadroInMetri } = await import('../src/map/proiezione');
+    const area = riquadroInMetri();
+    // Il centro di Bassano si vede; gli angoli del riquadro stanno sotto le nuvole.
+    expect(segnalinoInVista(area, 0, 0)).toBe(true);
+    expect(segnalinoInVista(area, area.maxX, area.maxY)).toBe(false);
+    expect(segnalinoInVista(area, area.minX, area.minY)).toBe(false);
+    // Il confine è MARGINE_SEGNALINI metri prima del contorno delle nuvole.
+    expect(fuoriDi(area, 0, 0)).toBeLessThan(-MARGINE_SEGNALINI);
+  });
+
+  it('il segnaposto del Monte Grappa, sul margine, non è più in vista', async () => {
+    const { segnalinoInVista } = await import('../src/map/nuvole');
+    const { riquadroInMetri } = await import('../src/map/proiezione');
+    const strati = JSON.parse(readFileSync(new URL('../public/data/strati.json', import.meta.url), 'utf8'));
+    const grappa = strati.punti.find((p: { storia?: string }) => p.storia === 'monte-grappa');
+    expect(grappa).toBeDefined();
+    expect(segnalinoInVista(riquadroInMetri(), grappa.x, grappa.y)).toBe(false);
+  });
+
+  it('preparaPunti tiene tutti i punti, dal più lontano al più vicino', async () => {
+    const { preparaPunti } = await import('../src/map/scena');
+    const p = (id: string, x: number, y: number) => ({ id, strato: 'mobilita' as const, tipo: 'avviso' as const, nome: id, x, y });
+    const pronti = preparaPunti([p('vicino', -50, -50), p('lontano', 50, 50)], []);
+    expect(pronti.map((q) => q.dati.id)).toEqual(['lontano', 'vicino']);
+    expect(pronti.every((q) => q.landmark === -1)).toBe(true);
+  });
+});
+
+describe('animazioni decorative: treno e corrente', () => {
+  // Una linea da sud a nord che passa per la stazione, con un binario laterale attaccato a T.
+  const binari = [
+    { t: 'ferrovia' as const, p: [500, -2000, 520, -800, 537.5, 5] },
+    { t: 'ferrovia' as const, p: [537.5, 5, 540, 900, 560, 2200] },
+    { t: 'ferrovia' as const, p: [700, -400, 525, -400] }, // tocca la linea a metà tratto
+    { t: 'principale' as const, p: [0, 0, 100, 0] },
+  ];
+
+  it('ricostruisce la linea attraverso la stazione, da sud a nord, spezzando i tratti a T', async () => {
+    const { percorsoTreno, puntoLungo, reteBinari } = await import('../src/map/animazioni');
+    const rete = reteBinari(binari);
+    // Il binario laterale si attacca in mezzo al primo tratto: il nodo di mezzo ha tre vicini.
+    expect(rete.some((n) => n.vicini.size === 3)).toBe(true);
+    const p = percorsoTreno(binari)!;
+    expect(p).not.toBeNull();
+    expect(p.punti.slice(0, 2)).toEqual([500, -2000]);
+    expect(p.punti.slice(-2)).toEqual([560, 2200]);
+    const staz = puntoLungo(p, p.stazione);
+    expect(Math.hypot(staz.x - 537.5, staz.y - 5)).toBeLessThan(1);
+    expect(percorsoTreno([{ t: 'principale', p: [0, 0, 10, 0] }])).toBeNull();
+  });
+
+  it('il treno arriva, si ferma in stazione, riparte, e tra due corse non c\'è', async () => {
+    const { percorsoTreno, momentoTreno, carrozze, istanteInSosta, CARROZZE } = await import('../src/map/animazioni');
+    const p = percorsoTreno(binari)!;
+    const sosta = momentoTreno(p, istanteInSosta(p));
+    expect(sosta.fermo && !sosta.assente).toBe(true);
+    expect(sosta.prossimoCambio).toBeGreaterThan(0);
+    expect(carrozze(p, sosta)).toHaveLength(CARROZZE);
+    // Il treno in sosta sta lungo la stazione.
+    const [prima] = carrozze(p, sosta);
+    expect(Math.hypot(prima.testa.x - 537.5, prima.testa.y - 5)).toBeLessThan(120);
+    // Si muove senza salti: in 40 ms la testa fa al più un paio di metri.
+    let ultima = momentoTreno(p, 0);
+    let assente = false;
+    for (let t = 40; t < 2_000_000; t += 40) {
+      const m = momentoTreno(p, t);
+      if (m.assente) assente = true;
+      else if (!ultima.assente && m.verso === ultima.verso) expect(Math.abs(m.testa - ultima.testa)).toBeLessThan(2);
+      ultima = m;
+    }
+    expect(assente).toBe(true);
+  });
+
+  it('a mappa ferma il treno sta sul binario aperto, prima della stazione', async () => {
+    const { percorsoTreno, momentoTreno, istanteFermo } = await import('../src/map/animazioni');
+    const p = percorsoTreno(binari)!;
+    const m = momentoTreno(p, istanteFermo(p));
+    expect(m.assente).toBe(false);
+    expect(m.verso).toBe(1);
+    expect(m.testa).toBeLessThan(p.stazione);
+  });
+
+  it('la corrente si ripete senza stacchi e va verso valle', async () => {
+    const { spostamentoCorrente, PERIODO_CORRENTE_MS } = await import('../src/map/animazioni');
+    expect(spostamentoCorrente(0)).toEqual({ dx: 0, dy: 0 });
+    const meta = spostamentoCorrente(PERIODO_CORRENTE_MS / 2);
+    expect(meta.dx).toBeCloseTo(18, 5);
+    expect(meta.dy).toBeCloseTo(9, 5);
+    const giro = spostamentoCorrente(PERIODO_CORRENTE_MS * 3 + 1);
+    expect(giro.dx).toBeLessThan(0.01);
   });
 });

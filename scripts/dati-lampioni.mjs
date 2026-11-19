@@ -2,7 +2,7 @@
 // Lampioni della mappa di notte: scrive public/data/lampioni.json
 // (tipo DatiLampioni in src/types.ts), con le coordinate in metri locali.
 //
-// 1. Scarica da OpenStreetMap (Overpass API) i lampioni rilevati davvero nel
+// 1. Scarica da OpenStreetMap (Overpass API) i lampioni rilevati nel
 //    riquadro (highway=street_lamp): sono i "veri".
 // 2. Legge public/data/base.json e, dove OpenStreetMap non ha lampioni, ne
 //    dispone altri lungo le strade: sono illustrativi, servono a far leggere
@@ -13,9 +13,9 @@
 // Overpass e la riusa alla corsa successiva, senza riscaricare.
 //
 // Se Overpass non risponde lo script tiene i lampioni veri del lampioni.json
-// che c'è già (i primi `veri` punti) e lo dice chiaro. Solo se un file
-// precedente con lampioni veri non esiste prosegue con zero veri: non ne
-// inventa. Se invece manca base.json, o i controlli falliscono, esce con
+// che c'è già (i primi `veri` punti) e lo scrive nel log. Se non esiste un
+// file precedente con lampioni veri prosegue con zero veri. Se invece manca
+// base.json, o i controlli falliscono, esce con
 // codice diverso da zero e non tocca il file esistente.
 
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
@@ -49,7 +49,7 @@ const INTESTAZIONI = {
   'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
 };
 const GIRI = 2; // quante volte si riprova l'intero elenco di specchi
-const ATTESA_MS = 90_000; // l'interrogazione è piccola: se non arriva in fretta non arriva
+const ATTESA_MS = 90_000; // tempo massimo per una risposta
 
 // Quanti lampioni in tutto ci si aspetta: abbastanza per leggere le strade,
 // non così tanti da appesantire la mappa.
@@ -207,7 +207,6 @@ async function principale() {
   );
 
   const dati = {
-    generato: new Date().toISOString(),
     fonte:
       veri.length > 0
         ? `I primi ${veri.length} lampioni sono rilevati: © OpenStreetMap contributors, licenza ODbL 1.0. ` +

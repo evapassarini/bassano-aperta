@@ -286,6 +286,9 @@ describe('CCISS per zona', () => {
       fonte: 'CCISS Viaggiare Informati',
       url: 'https://www.cciss.it/web/cciss/situazione-della-viabilita',
       attivo: true,
+      // I due incroci del tratto, arrotondati a 5 decimali, per il segnale sulla mappa.
+      inizio: { lon: 11.72676, lat: 45.77569 },
+      fine: { lon: 11.62982, lat: 45.90025 },
     });
   });
 
@@ -648,8 +651,8 @@ describe('file prodotti dagli script', () => {
   const leggi = (nome: string) => JSON.parse(readFileSync(new URL(`../public/data/${nome}`, import.meta.url), 'utf8'));
 
   it('stazioni-treni.json ha Bassano e Venezia con nomi leggibili', () => {
-    const dati = leggi('stazioni-treni.json') as { generato: string; fonte: { nome: string; url: string; licenza: string }; stazioni: Record<string, string> };
-    expect(Number.isNaN(Date.parse(dati.generato))).toBe(false);
+    const dati = leggi('stazioni-treni.json') as { fonte: { nome: string; url: string; licenza: string }; stazioni: Record<string, string> };
+    expect('generato' in dati).toBe(false);
     expect(dati.fonte.nome).toContain('BusOne (busone.app)');
     expect(dati.stazioni['02520']).toBe('Bassano del Grappa');
     expect(dati.stazioni['02593']).toBe('Venezia S. Lucia');
