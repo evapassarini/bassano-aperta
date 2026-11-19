@@ -108,9 +108,9 @@ export function creaFonti(opzioni: OpzioniFonti): FinestraFonti {
 
   // --- Illustrazioni dei luoghi simbolo ---------------------------------------
   const illustrazioni = voce(
-    'Le illustrazioni: luoghi simbolo, treno e persone',
+    'Le illustrazioni: luoghi simbolo, fontana, treni, macchine e persone',
     'I disegni dei luoghi simbolo, come il Ponte Vecchio, sono fatti per questo progetto a partire dalle sagome degli edifici su OpenStreetMap. Altezze e dettagli sono in gran parte stime: sono illustrazioni, non rilievi.',
-    "Anche quello che si muove sulla mappa è un'illustrazione: il treno che entra in stazione non segue gli orari di Trenitalia, le persone nelle piazze e sul Ponte Vecchio non sono presenze vere, e l'acqua della Brenta scorre a una velocità scelta da noi. Chi ha chiesto al proprio dispositivo meno animazioni vede la mappa ferma.",
+    "Anche quello che si muove sulla mappa è un'illustrazione: i treni che entrano in stazione non seguono gli orari di Trenitalia, le macchine non sono il traffico vero, le persone nelle piazze, nelle vie e sul Ponte Vecchio non sono presenze vere, e l'acqua della Brenta scorre a una velocità scelta da noi. La Fontana Bonaguro di Piazza Garibaldi è disegnata a partire da una xilografia del 1901: forma e misure sono un'interpretazione. Chi ha chiesto al proprio dispositivo meno animazioni vede la mappa ferma.",
   );
 
   // --- ARPAV ---------------------------------------------------------------

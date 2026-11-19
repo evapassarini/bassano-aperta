@@ -111,37 +111,89 @@ function cammini(nodi: Nodo[], da: number): { dist: number[]; prima: number[] } 
  * treno esce dalle nuvole e ci rientra. null se nei dati i binari non bastano.
  */
 export function percorsoTreno(strade: Strada[], stazione: { x: number; y: number } = STAZIONE): Percorso | null {
+  return percorsiTreni(strade, stazione)[0] ?? null;
+}
+
+/**
+ * Tutte le linee che passano per la stazione: da ognuno dei due estremi più lontani a sud
+ * (le linee per Padova e per Castelfranco, nei dati di oggi) fino all'estremo più lontano a
+ * nord (la Valsugana). Il primo percorso è quello della linea più lunga.
+ */
+export function percorsiTreni(strade: Strada[], stazione: { x: number; y: number } = STAZIONE): Percorso[] {
   const nodi = reteBinari(strade);
-  if (nodi.length < 3) return null;
+  if (nodi.length < 3) return [];
   let s = 0;
   for (let i = 1; i < nodi.length; i++) {
     if (Math.hypot(nodi[i].x - stazione.x, nodi[i].y - stazione.y) < Math.hypot(nodi[s].x - stazione.x, nodi[s].y - stazione.y)) s = i;
   }
-  if (Math.hypot(nodi[s].x - stazione.x, nodi[s].y - stazione.y) > 150) return null;
+  if (Math.hypot(nodi[s].x - stazione.x, nodi[s].y - stazione.y) > 150) return [];
   const { dist, prima } = cammini(nodi, s);
   const foglie = nodi.map((n, i) => i).filter((i) => nodi[i].vicini.size === 1 && dist[i] < Infinity);
-  const lontana = (lato: (n: Nodo) => boolean): number =>
-    foglie.filter((i) => lato(nodi[i])).reduce((m, i) => (m < 0 || dist[i] > dist[m] ? i : m), -1);
-  const sud = lontana((n) => n.y < nodi[s].y - 300);
-  const nord = lontana((n) => n.y > nodi[s].y + 300);
-  if (sud < 0 || nord < 0) return null;
+  const perDistanza = (lato: (n: Nodo) => boolean): number[] =>
+    foglie.filter((i) => lato(nodi[i]) && dist[i] > 800).sort((a, b) => dist[b] - dist[a]);
+  const nord = perDistanza((n) => n.y > nodi[s].y + 300)[0];
+  if (nord === undefined) return [];
   const verso = (da: number): number[] => {
     const elenco: number[] = [];
     for (let i = da; i >= 0; i = prima[i]) elenco.push(i);
     return elenco; // da `da` alla stazione
   };
-  const indici = [...verso(sud), ...verso(nord).reverse().slice(1)];
-  const punti: number[] = [];
-  const cumulate: number[] = [];
-  let somma = 0;
-  for (let k = 0; k < indici.length; k++) {
-    const n = nodi[indici[k]];
-    if (k > 0) somma += Math.hypot(n.x - punti[punti.length - 2], n.y - punti[punti.length - 1]);
-    punti.push(n.x, n.y);
-    cumulate.push(somma);
+  // Due estremi a sud contano come linee diverse solo se corrono separati per almeno 300 m
+  // prima di unirsi (binari di scalo e tronchini corti non contano).
+  const separata = (f: number, g: number): boolean => {
+    const altra = new Set(verso(g));
+    return !altra.has(f) && dist[f] - (verso(f).map((i) => dist[i]).find((d, k) => altra.has(verso(f)[k])) ?? 0) >= 300;
+  };
+  const sud: number[] = [];
+  for (const f of perDistanza((n) => n.y < nodi[s].y - 300)) {
+    if (sud.every((g) => separata(f, g))) sud.push(f);
+    if (sud.length === 2) break;
   }
-  return { punti, cumulate, lunghezza: somma, stazione: dist[sud] };
+  return sud.map((da) => {
+    const indici = [...verso(da), ...verso(nord).reverse().slice(1)];
+    const punti: number[] = [];
+    const cumulate: number[] = [];
+    let somma = 0;
+    for (let k = 0; k < indici.length; k++) {
+      const n = nodi[indici[k]];
+      if (k > 0) somma += Math.hypot(n.x - punti[punti.length - 2], n.y - punti[punti.length - 1]);
+      punti.push(n.x, n.y);
+      cumulate.push(somma);
+    }
+    return { punti, cumulate, lunghezza: somma, stazione: dist[da] };
+  });
 }
+
+/** Un treno decorativo: la sua linea, quando parte nel ciclo e con che colori. */
+export interface Treno {
+  percorso: Percorso;
+  /** Millisecondi aggiunti al tempo: treni diversi sono in punti diversi del loro ciclo. */
+  fase: number;
+  /** Durata del ciclo, uguale per tutti i treni (vedi `momentoTreno`). */
+  ciclo: number;
+  /** Indice della livrea nella tavolozza. */
+  livrea: number;
+}
+
+/**
+ * I treni della mappa: due sulla linea principale e uno sull'altra. Hanno tutti lo stesso ciclo
+ * e sono sfasati di un terzo, così non sostano mai insieme sullo stesso binario; chi va in
+ * versi opposti corre su un binario suo (`carrozze`), quindi non si attraversano.
+ */
+export function treni(strade: Strada[]): Treno[] {
+  const linee = percorsiTreni(strade);
+  if (linee.length === 0) return [];
+  const [prima, seconda] = linee;
+  const ciclo = Math.max(...linee.map(cicloTreno));
+  return [
+    { percorso: prima, fase: 0, ciclo, livrea: 0 },
+    { percorso: seconda ?? prima, fase: ciclo / 3, ciclo, livrea: 1 },
+    { percorso: prima, fase: (2 * ciclo) / 3, ciclo, livrea: 2 },
+  ];
+}
+
+/** Ogni verso di marcia ha il suo binario: le carrozze stanno così di lato rispetto all'asse. */
+export const SCARTO_BINARIO = 1.8;
 
 /** Il punto a `metri` dall'inizio del percorso (limitato agli estremi). */
 export function puntoLungo(p: Percorso, metri: number): { x: number; y: number } {
@@ -215,14 +267,28 @@ function fasi(p: Percorso, verso: 1 | -1): { arriva: number; frena: number; sost
  * corsa da nord a sud con sosta, pausa. Frenata e ripartenza sono a velocità uniformemente
  * variata, così il treno rallenta e riparte senza scatti.
  */
-export function momentoTreno(p: Percorso, ms: number): MomentoTreno {
+/** Durata in millisecondi di un ciclo intero (andata, pausa, ritorno, pausa) su un percorso. */
+export function cicloTreno(p: Percorso): number {
   const corsa = (verso: 1 | -1): number => {
     const f = fasi(p, verso);
     return f.arriva + f.frena + f.sosta + f.parte + f.via;
   };
-  const durate = [corsa(1), PAUSA_MS, corsa(-1), PAUSA_MS];
-  const ciclo = durate.reduce((a, b) => a + b, 0);
-  let t = ((ms % ciclo) + ciclo) % ciclo;
+  return corsa(1) + corsa(-1) + 2 * PAUSA_MS;
+}
+
+/**
+ * `ciclo`, se c'è, allunga le due pause perché il ciclo duri esattamente quanto chiesto: così
+ * treni su linee lunghe diverse restano sfasati sempre allo stesso modo.
+ */
+export function momentoTreno(p: Percorso, ms: number, ciclo?: number): MomentoTreno {
+  const corsa = (verso: 1 | -1): number => {
+    const f = fasi(p, verso);
+    return f.arriva + f.frena + f.sosta + f.parte + f.via;
+  };
+  const pausa = PAUSA_MS + Math.max(0, ((ciclo ?? 0) - cicloTreno(p)) / 2);
+  const durate = [corsa(1), pausa, corsa(-1), pausa];
+  const totale = durate.reduce((a, b) => a + b, 0);
+  let t = ((ms % totale) + totale) % totale;
   let fase = 0;
   while (t >= durate[fase]) {
     t -= durate[fase];
@@ -291,7 +357,15 @@ export function carrozze(p: Percorso, m: MomentoTreno): Carrozza[] {
     const davanti = m.testa - k * PASSO_CARROZZA;
     const dietro = davanti - LUNGHEZZA_CARROZZA;
     if (dietro < 0 || davanti > p.lunghezza) continue;
-    elenco.push({ testa: lungo(davanti), coda: lungo(dietro) });
+    const testa = lungo(davanti);
+    const coda = lungo(dietro);
+    // In Italia i treni tengono la sinistra: il binario di ogni verso sta alla sua sinistra.
+    const dx = testa.x - coda.x;
+    const dy = testa.y - coda.y;
+    const l = Math.hypot(dx, dy) || 1;
+    const ox = (-dy / l) * SCARTO_BINARIO;
+    const oy = (dx / l) * SCARTO_BINARIO;
+    elenco.push({ testa: { x: testa.x + ox, y: testa.y + oy }, coda: { x: coda.x + ox, y: coda.y + oy } });
   }
   return elenco;
 }
@@ -308,6 +382,20 @@ export const PERIODO_CORRENTE_MS = 24_000;
 export function spostamentoCorrente(ms: number): { dx: number; dy: number } {
   const k = (((ms / PERIODO_CORRENTE_MS) % 1) + 1) % 1;
   return { dx: 36 * k, dy: 18 * k };
+}
+
+/**
+ * I filoni della corrente: la stessa tessera delle increspature ingrandita, in due strati a
+ * grandezza e velocità diverse, perché la Brenta si veda scorrere anche da lontano. Lo
+ * spostamento di ogni strato si ripete ogni (36, 18) x scala unità isometriche.
+ */
+export const FILONI = [
+  { scala: 3.2, periodo: 7_000, alfa: 1 },
+  { scala: 1.9, periodo: 4_500, alfa: 0.75 },
+] as const;
+export function spostamentoFiloni(ms: number, scala: number, periodo: number): { dx: number; dy: number } {
+  const k = (((ms / periodo) % 1) + 1) % 1;
+  return { dx: 36 * scala * k, dy: 18 * scala * k };
 }
 
 // --- figurine nelle piazze ---------------------------------------------------------
@@ -383,7 +471,7 @@ export function passeggiate(aree: Area[], edifici: Edificio[]): Passeggiata[] {
     const cy = (minY + maxY) / 2;
     if (Math.hypot(cx, cy) > RAGGIO_PIAZZE) return;
     const superficie = Math.abs(doppia) / 2;
-    const quante = Math.max(2, Math.min(16, Math.round(superficie / 200)));
+    const quante = Math.max(2, Math.min(28, Math.round(superficie / 110)));
     const case_ = edifici.filter((e) => {
       for (let i = 0; i < e.p.length; i += 2) {
         if (e.p[i] >= minX - 2 && e.p[i] <= maxX + 2 && e.p[i + 1] >= minY - 2 && e.p[i + 1] <= maxY + 2) return true;
@@ -509,4 +597,315 @@ export function passanteSulPonte(p: { t: number; velocita: number; fase: number 
   const t = (((ms + p.fase) % ciclo) + ciclo) % ciclo;
   const u = t < andata ? t / andata : 1 - (t - andata) / andata;
   return { s: -l / 2 + l * u, cammina: true };
+}
+
+// --- macchine sulle strade ---------------------------------------------------------
+
+/** Un tratto di strada percorso dalle macchine: punti in metri e distanze cumulate. */
+export interface Corsia {
+  punti: number[];
+  cumulate: number[];
+  lunghezza: number;
+  /** Di quanto la macchina sta a destra dell'asse della strada (metri): meno nelle vie strette. */
+  scarto: number;
+}
+
+/** Una macchina: su quale corsia, in che verso, quanto veloce, quando, di che colore. */
+export interface Macchina {
+  corsia: number;
+  verso: 1 | -1;
+  velocita: number;
+  fase: number;
+  /** Sosta dopo la corsa, prima di ricomparire (millisecondi). */
+  pausa: number;
+  colore: number;
+}
+
+/** Lunghezza di una macchina, in metri. */
+export const LUNGHEZZA_MACCHINA = 5.4;
+/** Distanza dall'asse della strada (si tiene la destra), per tipo di strada. */
+export const SCARTO_MACCHINA = { principale: 1.9, secondaria: 1.4, locale: 0.9 } as const;
+
+/**
+ * Le strade con le macchine: principali e secondarie entro 1,5 km dal centro (almeno 80 m),
+ * strade locali entro 700 m (almeno 100 m). Le pedonali e la ferrovia no. Si scartano i tratti
+ * dove una macchina finirebbe dentro una casa (vie strette, passaggi coperti) o troppo vicino a
+ * una fontana disegnata.
+ */
+export function corsie(strade: Strada[], edifici: Edificio[] = [], fontane: Fontana[] = []): Corsia[] {
+  const elenco: Corsia[] = [];
+  // Le case per celle di 50 m, per controllare in fretta i punti lungo le strade.
+  const CELLA = 50;
+  const celle = new Map<number, Edificio[]>();
+  const chiave = (i: number, j: number): number => i * 100003 + j;
+  for (const e of edifici) {
+    if (!Array.isArray(e.p) || e.p.length < 6) continue;
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+    for (let k = 0; k < e.p.length; k += 2) {
+      minX = Math.min(minX, e.p[k]);
+      maxX = Math.max(maxX, e.p[k]);
+      minY = Math.min(minY, e.p[k + 1]);
+      maxY = Math.max(maxY, e.p[k + 1]);
+    }
+    for (let i = Math.floor(minX / CELLA); i <= Math.floor(maxX / CELLA); i++) {
+      for (let j = Math.floor(minY / CELLA); j <= Math.floor(maxY / CELLA); j++) {
+        const k = chiave(i, j);
+        const lista = celle.get(k);
+        if (lista) lista.push(e);
+        else celle.set(k, [e]);
+      }
+    }
+  }
+  const inCasa = (x: number, y: number): boolean =>
+    (celle.get(chiave(Math.floor(x / CELLA), Math.floor(y / CELLA))) ?? []).some((e) => dentro(x, y, e.p));
+  for (const s of strade) {
+    if (!Array.isArray(s.p) || s.p.length < 4) continue;
+    const grande = s.t === 'principale' || s.t === 'secondaria';
+    if (!grande && s.t !== 'locale') continue;
+    const raggio = grande ? 1500 : 700;
+    const minimo = grande ? 80 : 100;
+    let vicina = false;
+    for (let i = 0; i < s.p.length; i += 2) if (Math.hypot(s.p[i], s.p[i + 1]) < raggio) vicina = true;
+    if (!vicina) continue;
+    const cumulate = [0];
+    for (let i = 2; i < s.p.length; i += 2) cumulate.push(cumulate[cumulate.length - 1] + Math.hypot(s.p[i] - s.p[i - 2], s.p[i + 1] - s.p[i - 1]));
+    const lunghezza = cumulate[cumulate.length - 1];
+    if (lunghezza < minimo) continue;
+    const scarto = SCARTO_MACCHINA[s.t as keyof typeof SCARTO_MACCHINA];
+    // La macchina, nei due versi, con il suo fianco esterno: nessun punto dentro una casa.
+    const esterno = scarto + 1.15;
+    let libera = true;
+    for (let i = 2; i < s.p.length && libera; i += 2) {
+      const ax = s.p[i - 2];
+      const ay = s.p[i - 1];
+      const dx = s.p[i] - ax;
+      const dy = s.p[i + 1] - ay;
+      const l = Math.hypot(dx, dy) || 1;
+      const nx = dy / l;
+      const ny = -dx / l;
+      for (let d = 0; d <= l && libera; d += 1.5) {
+        const x = ax + (dx / l) * d;
+        const y = ay + (dy / l) * d;
+        if (fontane.some((f) => Math.hypot(x - f.x, y - f.y) < f.raggio + 6)) libera = false;
+        for (const lato of [scarto, -scarto, esterno, -esterno]) if (inCasa(x + nx * lato, y + ny * lato)) libera = false;
+      }
+    }
+    if (!libera) continue;
+    elenco.push({ punti: s.p, cumulate, lunghezza, scarto });
+  }
+  return elenco;
+}
+
+/**
+ * Le macchine: circa una ogni 90 m di strada, in tutti e due i versi, sempre le stesse. Sulla
+ * stessa corsia e nello stesso verso vanno tutte alla stessa velocità, a distanza regolare:
+ * così non si raggiungono.
+ */
+export function macchine(elenco: Corsia[]): Macchina[] {
+  const tutte: Macchina[] = [];
+  elenco.forEach((c, n) => {
+    const quante = Math.max(1, Math.round(c.lunghezza / 90));
+    for (const verso of [1, -1] as const) {
+      const v = verso === 1 ? 0 : 1;
+      const qui = Math.ceil(quante / 2) - (verso === -1 && quante % 2 === 1 ? 1 : 0);
+      if (qui <= 0) continue;
+      const velocita = 8 + 5 * caso(n + 7001, v);
+      const pausa = 1500 + 6000 * caso(n + 7003, v);
+      const ciclo = ((c.lunghezza + LUNGHEZZA_MACCHINA) / velocita) * 1000 + pausa;
+      const inizio = caso(n + 7002, v) * ciclo;
+      for (let k = 0; k < qui; k++) {
+        tutte.push({
+          corsia: n,
+          verso,
+          velocita,
+          fase: inizio + (k / qui) * ciclo,
+          pausa,
+          colore: Math.floor(caso(n + 7004, k * 2 + v) * 1000),
+        });
+      }
+    }
+  });
+  return tutte;
+}
+
+/** Un punto della corsia a `metri` dall'inizio; oltre i capi si prolunga il primo o l'ultimo tratto. */
+function lungoCorsia(c: Corsia, metri: number): { x: number; y: number } {
+  const n = c.cumulate.length - 1;
+  let lo = 0;
+  let hi = n;
+  if (metri <= 0) hi = 1;
+  else if (metri >= c.lunghezza) lo = n - 1;
+  else {
+    while (hi - lo > 1) {
+      const mid = (lo + hi) >> 1;
+      if (c.cumulate[mid] <= metri) lo = mid;
+      else hi = mid;
+    }
+  }
+  const ax = c.punti[lo * 2];
+  const ay = c.punti[lo * 2 + 1];
+  const bx = c.punti[hi * 2];
+  const by = c.punti[hi * 2 + 1];
+  const tratto = c.cumulate[hi] - c.cumulate[lo];
+  const t = tratto > 0 ? (metri - c.cumulate[lo]) / tratto : 0;
+  return { x: ax + (bx - ax) * t, y: ay + (by - ay) * t };
+}
+
+/**
+ * Dove sta una macchina al tempo `ms`: coda e testa in metri, già spostate sulla destra della
+ * strada nel suo verso. Entra ed esce intera, oltre i capi del tratto. null durante la pausa.
+ */
+export function macchinaDi(
+  m: Macchina,
+  c: Corsia,
+  ms: number,
+): { coda: { x: number; y: number }; testa: { x: number; y: number } } | null {
+  const corsa = ((c.lunghezza + LUNGHEZZA_MACCHINA) / m.velocita) * 1000;
+  const ciclo = corsa + m.pausa;
+  const t = (((ms + m.fase) % ciclo) + ciclo) % ciclo;
+  if (t >= corsa) return null;
+  const davanti = (t / 1000) * m.velocita;
+  const dietro = davanti - LUNGHEZZA_MACCHINA;
+  const su = (metri: number) => lungoCorsia(c, m.verso === 1 ? metri : c.lunghezza - metri);
+  const a = su(dietro);
+  const b = su(davanti);
+  // La destra del verso di marcia: (dy, -dx).
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const l = Math.hypot(dx, dy) || 1;
+  const ox = (dy / l) * c.scarto;
+  const oy = (-dx / l) * c.scarto;
+  return { coda: { x: a.x + ox, y: a.y + oy }, testa: { x: b.x + ox, y: b.y + oy } };
+}
+
+// --- gente nelle vie pedonali del centro storico -------------------------------------
+
+/** Entro questa distanza dal centro le vie pedonali hanno gente (metri). */
+const RAGGIO_VIE = 500;
+
+/**
+ * Passeggiate lungo le vie pedonali del centro storico: su ogni tratto dritto lungo almeno
+ * 12 m, una persona ogni 22 m circa (al più tre), un poco di lato rispetto al centro della via.
+ */
+export function passeggiateNelleVie(strade: Strada[], edifici: Edificio[] = []): Passeggiata[] {
+  const elenco: Passeggiata[] = [];
+  const vicine = edifici.filter((e) => {
+    for (let i = 0; i < e.p.length; i += 2) if (Math.hypot(e.p[i], e.p[i + 1]) < RAGGIO_VIE + 60) return true;
+    return false;
+  });
+  strade.forEach((s, n) => {
+    if (s.t !== 'pedonale' || s.ponte || !Array.isArray(s.p) || s.p.length < 4) return;
+    for (let i = 2; i < s.p.length; i += 2) {
+      const ax = s.p[i - 2];
+      const ay = s.p[i - 1];
+      const bx = s.p[i];
+      const by = s.p[i + 1];
+      if (Math.hypot((ax + bx) / 2, (ay + by) / 2) > RAGGIO_VIE) continue;
+      const l = Math.hypot(bx - ax, by - ay);
+      if (l < 12) continue;
+      const quante = Math.min(3, Math.max(1, Math.round(l / 22)));
+      const ux = (bx - ax) / l;
+      const uy = (by - ay) / l;
+      // Le case che toccano il riquadro di questo tratto, per non far entrare la gente nei muri.
+      const minX = Math.min(ax, bx) - 3;
+      const maxX = Math.max(ax, bx) + 3;
+      const minY = Math.min(ay, by) - 3;
+      const maxY = Math.max(ay, by) + 3;
+      const qui = vicine.filter((e) => {
+        for (let q = 0; q < e.p.length; q += 2) if (e.p[q] >= minX && e.p[q] <= maxX && e.p[q + 1] >= minY && e.p[q + 1] <= maxY) return true;
+        return false;
+      });
+      for (let k = 0; k < quante; k++) {
+        const lato = (caso(n * 31 + i, k) - 0.5) * 1.6;
+        const tappa = {
+          ax: ax + ux * l * 0.1 - uy * lato,
+          ay: ay + uy * l * 0.1 + ux * lato,
+          bx: ax + ux * l * 0.9 - uy * lato,
+          by: ay + uy * l * 0.9 + ux * lato,
+        };
+        let libera = true;
+        for (let d = 0; d <= 1.0001 && libera; d += 1 / Math.ceil(l)) {
+          const x = tappa.ax + (tappa.bx - tappa.ax) * d;
+          const y = tappa.ay + (tappa.by - tappa.ay) * d;
+          if (qui.some((e) => dentro(x, y, e.p))) libera = false;
+        }
+        if (!libera) continue;
+        elenco.push({
+          ...tappa,
+          velocita: 0.9 + 0.5 * caso(n * 31 + i + 1, k),
+          fase: caso(n * 31 + i + 2, k) * 60_000,
+          colore: Math.floor(caso(n * 31 + i + 3, k) * 1000),
+        });
+      }
+    }
+  });
+  return elenco;
+}
+
+// --- fontane -----------------------------------------------------------------------
+
+/**
+ * Una fontana disegnata: gradinata rotonda, vasca grande, colonna con una vasca piccola e
+ * zampilli, come la Fontana Bonaguro di Piazza Garibaldi nella xilografia del 1901.
+ */
+export interface Fontana {
+  x: number;
+  y: number;
+  /** Raggio del gradino più basso, in metri. */
+  raggio: number;
+}
+
+/** Chi sta attorno a una fontana: chi gira piano attorno alla vasca e chi è fermo sul bordo. */
+export interface AllaFontana {
+  fontana: number;
+  raggio: number;
+  /** Radianti al secondo: 0 per chi sta fermo. */
+  giro: number;
+  angolo: number;
+  colore: number;
+}
+
+export function genteAllaFontana(fontane: Fontana[], edifici: Edificio[] = []): AllaFontana[] {
+  const elenco: AllaFontana[] = [];
+  fontane.forEach((f, n) => {
+    const vicine = edifici.filter((e) => {
+      for (let i = 0; i < e.p.length; i += 2) if (Math.hypot(e.p[i] - f.x, e.p[i + 1] - f.y) < f.raggio + 30) return true;
+      return false;
+    });
+    // Un giro attorno alla fontana va bene solo se nessun suo punto (né un metro più in là) cade in una casa.
+    const giroLibero = (r: number): boolean => {
+      for (let k = 0; k < 48; k++) {
+        const a = (k / 48) * Math.PI * 2;
+        for (const d of [0, 1]) {
+          const x = f.x + Math.cos(a) * (r + d);
+          const y = f.y + Math.sin(a) * (r + d);
+          if (vicine.some((e) => dentro(x, y, e.p))) return false;
+        }
+      }
+      return true;
+    };
+    for (let k = 0; k < 12; k++) {
+      const fermo = k < 5;
+      let raggio = fermo ? f.raggio - 0.3 : f.raggio + 1.2 + 2.5 * caso(n + 9001, k);
+      if (!fermo && !giroLibero(raggio)) raggio = f.raggio + 1.2;
+      if (!fermo && !giroLibero(raggio)) continue;
+      elenco.push({
+        fontana: n,
+        raggio,
+        giro: fermo ? 0 : (caso(n + 9002, k) < 0.5 ? -1 : 1) * (0.05 + 0.06 * caso(n + 9003, k)),
+        angolo: caso(n + 9004, k) * Math.PI * 2,
+        colore: Math.floor(caso(n + 9005, k) * 1000),
+      });
+    }
+  });
+  return elenco;
+}
+
+/** Dove sta al tempo `ms` chi è attorno alla fontana. */
+export function allaFontanaDi(p: AllaFontana, f: Fontana, ms: number): { x: number; y: number; cammina: boolean } {
+  const a = p.angolo + p.giro * (ms / 1000);
+  return { x: f.x + Math.cos(a) * p.raggio, y: f.y + Math.sin(a) * p.raggio, cammina: p.giro !== 0 };
 }

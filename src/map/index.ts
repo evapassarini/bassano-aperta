@@ -639,7 +639,9 @@ export function creaMappa(opzioni: OpzioniMappa): Mappa {
     },
     mostraAvvisi(punti) {
       if (!vivo) return;
-      scena.punti = preparaPunti([...opzioni.strati.punti, ...punti], scena.landmark);
+      // I punti fissi come li ha preparati la scena (con il segnaposto della fontana spostato).
+      const fissi = scena.punti.filter((p) => p.dati.tipo !== 'avviso').map((p) => p.dati);
+      scena.punti = preparaPunti([...fissi, ...punti], scena.landmark);
       puntoSopra = -1;
       richiedi();
     },

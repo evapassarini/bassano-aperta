@@ -44,8 +44,8 @@ mappa che si guarda volentieri, e a dire sempre da dove viene ogni informazione.
 - **Le case** sono un'illustrazione, non un rilievo: forme e posizioni vengono da OpenStreetMap,
   ma le altezze sono quasi tutte stimate. Anche una parte degli alberi e dei lampioni è aggiunta
   dal codice, e il sito lo dice.
-- **Quello che si muove** (il treno che entra in stazione, le persone nelle piazze, l'acqua
-  della Brenta) è un'illustrazione: non segue orari né presenze vere.
+- **Quello che si muove** (i treni che entrano in stazione, le macchine, le persone nelle
+  piazze, l'acqua della Brenta) è un'illustrazione: non segue orari, traffico né presenze vere.
 - **La pagina «Fonti e licenze»** sul sito elenca ogni fonte, con i suoi limiti.
 
 ## Regole in breve

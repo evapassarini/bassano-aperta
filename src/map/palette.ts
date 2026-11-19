@@ -41,7 +41,10 @@ export interface Palette {
   /** Il cartello degli avvisi sulla viabilità (strato Mobilità). */
   avviso: { fondo: string; segno: string };
   /** Il treno decorativo: fianchi in luce e in ombra, tetto, finestrini. */
-  treno: { luce: string; ombra: string; tetto: string; finestrini: string };
+  /** I treni decorativi, una livrea per treno: fianchi in luce e in ombra, tetto, finestrini. */
+  treni: { luce: string; ombra: string; tetto: string; finestrini: string }[];
+  /** Le macchine decorative: tinte della carrozzeria, vetri, tetto più chiaro. */
+  macchine: { tinte: string[]; vetri: string };
   /** Le figurine decorative: pelle, capelli e otto colori di vestiti. */
   gente: { pelle: string; capelli: string; gambe: string; vesti: string[] };
   ciclabile: string;
@@ -115,13 +118,16 @@ export interface Palette {
   /** Quanto si vede, tra 0 e 1, la fascia chiara di corrente in mezzo al fiume. */
   corrente: number;
   /** Quanto pesano, tra 0 e 1, le lastre del selciato e le increspature dell'acqua. */
-  trame: { selciato: number; acqua: number };
+  /** Quanto coprono le trame; `corrente` sono i filoni grandi che fanno vedere l'acqua scorrere. */
+  trame: { selciato: number; acqua: number; corrente: number };
   /** Fughe tra le lastre del selciato di piazze e strade del centro. */
   selciato: string;
   /** Terra battuta e selciato del centro storico: la tinta e quanto copre la carta. */
   centro: { colore: string; alfa: number };
   /** Bordo di pietra lungo le rive: gli argini. */
   argine: string;
+  /** Le fontane disegnate: pietra in luce e in ombra, acqua, zampilli. */
+  fontana: { pietra: string; ombra: string; acqua: string; zampilli: string };
   /** Come si intonano i disegni dei luoghi simbolo; null per lasciarli come sono. */
   illustrazioni: TintaIllustrazioni | null;
 }
@@ -174,7 +180,12 @@ export const PALETTE: Palette = {
     mobilita: { fondo: '#2f5f7e', segno: '#fff6e0' },
   },
   avviso: { fondo: '#e8a23a', segno: '#3d2c20' },
-  treno: { luce: '#b9493a', ombra: '#8c3429', tetto: '#ddd4c2', finestrini: '#3f4b52' },
+  treni: [
+    { luce: '#b9493a', ombra: '#8c3429', tetto: '#ddd4c2', finestrini: '#3f4b52' },
+    { luce: '#e8e2d2', ombra: '#bdb5a2', tetto: '#5d7f9c', finestrini: '#2f4a63' },
+    { luce: '#5a8a72', ombra: '#3f6654', tetto: '#ddd4c2', finestrini: '#2e3b40' },
+  ],
+  macchine: { tinte: ['#a8392b', '#2f5f7e', '#e8e2d2', '#3d3a36', '#c9a24a', '#6f7d86', '#4f7f5c', '#8a5a7a'], vetri: '#34454f' },
   gente: { pelle: '#e3b48f', capelli: '#4a3324', gambe: '#4b4a58', vesti: ['#2f5f7e', '#a8392b', '#3f7d4e', '#e8a23a', '#7b5aa0', '#d9cfb8', '#8a6c50', '#c45f7a'] },
   ciclabile: '#3f7d4e',
   ferroviaTematica: '#2f5f7e',
@@ -207,10 +218,11 @@ export const PALETTE: Palette = {
   macchieTinta: { scuro: '#7a4a26', chiaro: '#fff3d6' },
   ombraCalda: 1,
   corrente: 0.5,
-  trame: { selciato: 0.62, acqua: 0.5 },
+  trame: { selciato: 0.62, acqua: 0.5, corrente: 1 },
   selciato: '#a98c62',
   centro: { colore: '#ecd7a8', alfa: 0.62 },
   argine: '#dcc8a0',
+  fontana: { pietra: '#e4d6b8', ombra: '#b8a382', acqua: '#86b4a4', zampilli: '#f4fbf8' },
   // Di giorno un velo caldo leggero: i disegni dei luoghi simbolo sono più lisci e più accesi
   // delle case dipinte accanto.
   illustrazioni: { velo: '#f6e3c8', luce: '', acqua: '#86b4a4' },
@@ -257,7 +269,12 @@ export const PALETTE_POMERIGGIO: Palette = {
   ombra: 'rgba(96, 52, 24, 0.3)',
   strati: PALETTE.strati,
   avviso: PALETTE.avviso,
-  treno: { luce: '#bf5a40', ombra: '#8f3c2c', tetto: '#e6cfae', finestrini: '#4a4a4c' },
+  treni: [
+    { luce: '#bf5a40', ombra: '#8f3c2c', tetto: '#e6cfae', finestrini: '#4a4a4c' },
+    { luce: '#ecdcc0', ombra: '#c0ab8c', tetto: '#667e92', finestrini: '#3a4a5a' },
+    { luce: '#66886a', ombra: '#48644e', tetto: '#e6cfae', finestrini: '#38403e' },
+  ],
+  macchine: { tinte: ['#b44a32', '#3a6a80', '#ecdcc0', '#45403a', '#d0a44c', '#7a8084', '#5a8058', '#94607a'], vetri: '#3e4a52' },
   gente: { pelle: '#e0a882', capelli: '#4a3324', gambe: '#4f4a52', vesti: ['#3a6a80', '#b44a32', '#4f8150', '#e5a03f', '#80609c', '#e2d2b4', '#94704f', '#c86a74'] },
   ciclabile: PALETTE.ciclabile,
   ferroviaTematica: PALETTE.ferroviaTematica,
@@ -276,7 +293,7 @@ export const PALETTE_POMERIGGIO: Palette = {
   ombraCase: 'rgba(98, 50, 40, 0.3)',
   macchie: 0.2,
   corrente: 0.28,
-  trame: { selciato: 0.62, acqua: 0.45 },
+  trame: { selciato: 0.62, acqua: 0.45, corrente: 0.95 },
   illustrazioni: { velo: '#fbe2bc', luce: '', acqua: '#86b09a' },
 };
 
@@ -320,7 +337,12 @@ export const PALETTE_NOTTE: Palette = {
   ombra: 'rgba(5, 8, 20, 0.32)',
   strati: PALETTE.strati,
   avviso: PALETTE.avviso,
-  treno: { luce: '#5b3036', ombra: '#3a2026', tetto: '#4b4858', finestrini: '#ffd58a' },
+  treni: [
+    { luce: '#5b3036', ombra: '#3a2026', tetto: '#4b4858', finestrini: '#ffd58a' },
+    { luce: '#6e6f80', ombra: '#4a4b5c', tetto: '#2e3a52', finestrini: '#ffd58a' },
+    { luce: '#34504a', ombra: '#243832', tetto: '#4b4858', finestrini: '#ffd58a' },
+  ],
+  macchine: { tinte: ['#5c2c36', '#2c3e60', '#6e6a78', '#22222c', '#7a6040', '#4a5060', '#2e4a40', '#56405a'], vetri: '#ffd58a' },
   gente: { pelle: '#8a6d68', capelli: '#2a2028', gambe: '#262838', vesti: ['#2c3e60', '#5c2c36', '#2e4a48', '#7a6040', '#463c64', '#6e6a78', '#4e4038', '#64404e'] },
   ciclabile: '#74c389',
   ferroviaTematica: '#7db4dc',
@@ -353,10 +375,11 @@ export const PALETTE_NOTTE: Palette = {
   macchieTinta: { scuro: '#0a0f26', chiaro: '#6570a8' },
   ombraCalda: 0,
   corrente: 0.75,
-  trame: { selciato: 0.5, acqua: 0.3 },
+  trame: { selciato: 0.5, acqua: 0.3, corrente: 0.75 },
   selciato: '#1d2440',
   centro: { colore: '#2f3654', alfa: 0.62 },
   argine: '#3a4263',
+  fontana: { pietra: '#5a5f78', ombra: '#3c4058', acqua: '#22375c', zampilli: '#9fb8d8' },
   illustrazioni: { velo: '#58618f', luce: 'rgba(255, 190, 112, 0.22)', acqua: '#15223f' },
 };
 

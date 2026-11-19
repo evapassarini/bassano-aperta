@@ -775,7 +775,8 @@ describe('disegno degli edifici dipinti', () => {
     const scena = costruisciScena(c.base, c.strati, c.landmark);
     const d = new Disegnatore(scena, illustrazioniFinte(c.landmark.length));
     const lontano = contestoFinto();
-    d.disegna(lontano.ctx, statoA(1.3));
+    // Appena sotto la soglia delle fasce e delle finestre (che entrano già prima dello zoom di apertura).
+    d.disegna(lontano.ctx, statoA(Math.min(DETTAGLI.fasce.da, DETTAGLI.finestre.da) - 0.1));
     const vicino = contestoFinto();
     d.disegna(vicino.ctx, statoA(8));
     // Da lontano niente vetri, persiane o porte; da vicino sì.

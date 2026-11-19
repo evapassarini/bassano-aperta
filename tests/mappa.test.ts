@@ -1149,17 +1149,22 @@ describe('disegno nelle tre luci', () => {
       expect(d.animato).toBe(true);
       expect(viva.passi.some((p) => p.stile === increspature && p.nome === 'fillRect')).toBe(true);
       expect(viva.conta.save ?? 0).toBe(viva.conta.restore ?? 0);
-      // Da lontano le increspature non ci sono, e nemmeno il movimento.
-      d.disegna(registratore().ctx, { ...stato(1.2), tempo: 5000 });
-      expect(d.animato).toBe(false);
+      // Anche da lontano l'acqua scorre: i filoni grandi della corrente si vedono e si muovono.
+      const lontano = registratore();
+      d.disegna(lontano.ctx, { ...stato(1.2), tempo: 5000 });
+      expect(d.animato).toBe(true);
+      expect(lontano.passi.some((p) => p.stile === increspature && p.nome === 'fillRect')).toBe(true);
+      expect(lontano.conta.save ?? 0).toBe(lontano.conta.restore ?? 0);
       // Lontano dall'acqua (e senza treno né piazze in vista) non c'è nulla da animare.
       d.disegna(registratore().ctx, { ...stato(3), camera: { x: 2000, y: -2000, zoom: 3 }, tempo: 5000 });
       expect(d.animato).toBe(false);
     }
-    // Da lontano niente velo e niente lastre: a zoom 1,2 nessun riempimento a motivo.
+    // Da lontano niente velo e niente lastre.
     const lontano = registratore();
     d.disegna(lontano.ctx, stato(1.2));
-    expect(lontano.passi.filter(aMotivo)).toHaveLength(0);
+    // Da lontano niente selciato né increspature fini: solo una passata dei filoni della corrente.
+    expect(lontano.passi.filter((p) => aMotivo(p) && p.stile !== increspature)).toHaveLength(0);
+    expect(lontano.passi.filter((p) => p.stile === increspature)).toHaveLength(2);
     // Avvicinandosi il velo usa una tela più fine: da lontano la più ridotta, da vicino la prima.
     const quale = (zoom: number): unknown => {
       const r = registratore();
@@ -1353,5 +1358,107 @@ describe('animazioni decorative: treno e corrente', () => {
     expect(meta.dy).toBeCloseTo(9, 5);
     const giro = spostamentoCorrente(PERIODO_CORRENTE_MS * 3 + 1);
     expect(giro.dx).toBeLessThan(0.01);
+  });
+});
+
+describe('altre animazioni: linee, macchine, vie, fontana', () => {
+  it('trova le due linee a sud che si uniscono in stazione, e i treni sono sfasati', async () => {
+    const { percorsiTreni, treni } = await import('../src/map/animazioni');
+    const binari = [
+      { t: 'ferrovia' as const, p: [500, -2000, 520, -800, 537.5, 5] },
+      { t: 'ferrovia' as const, p: [2000, -1500, 800, -600, 520, -800] },
+      { t: 'ferrovia' as const, p: [537.5, 5, 540, 900, 560, 2200] },
+    ];
+    const linee = percorsiTreni(binari);
+    expect(linee).toHaveLength(2);
+    // Prima la linea più lunga.
+    expect(linee.map((p) => p.punti.slice(0, 2))).toEqual([[2000, -1500], [500, -2000]]);
+    expect(linee[0].lunghezza).toBeGreaterThanOrEqual(linee[1].lunghezza);
+    for (const p of linee) expect(p.punti.slice(-2)).toEqual([560, 2200]);
+    const t = treni(binari);
+    expect(t).toHaveLength(3);
+    expect(new Set(t.map((x) => x.fase)).size).toBe(3);
+    expect(new Set(t.map((x) => x.livrea)).size).toBe(3);
+  });
+
+  it('le macchine tengono la destra, restano sulla loro strada e fanno una pausa', async () => {
+    const { corsie, macchine, macchinaDi, SCARTO_MACCHINA, LUNGHEZZA_MACCHINA } = await import('../src/map/animazioni');
+    const strade = [
+      { t: 'principale' as const, p: [0, 0, 300, 0] },
+      { t: 'pedonale' as const, p: [0, 10, 300, 10] },
+      { t: 'locale' as const, p: [0, 20, 50, 20] }, // troppo corta
+    ];
+    const c = corsie(strade);
+    expect(c).toHaveLength(1);
+    const m = macchine(c);
+    expect(m.length).toBe(Math.round(300 / 90));
+    let viste = 0;
+    let pausa = false;
+    for (let t = 0; t < 120_000; t += 250) {
+      for (const x of m) {
+        const q = macchinaDi(x, c[0], t);
+        if (!q) {
+          pausa = true;
+          continue;
+        }
+        viste++;
+        // Verso est la destra è a sud (y negativa), verso ovest a nord.
+        const ovest = q.testa.x < q.coda.x;
+        expect(q.coda.y).toBeCloseTo(ovest ? SCARTO_MACCHINA.principale : -SCARTO_MACCHINA.principale, 5);
+        // Sempre intera, anche quando entra o esce oltre i capi del tratto.
+        expect(Math.hypot(q.testa.x - q.coda.x, q.testa.y - q.coda.y)).toBeCloseTo(LUNGHEZZA_MACCHINA, 5);
+        expect(Math.min(q.coda.x, q.testa.x)).toBeGreaterThanOrEqual(-LUNGHEZZA_MACCHINA - 0.01);
+        expect(Math.max(q.coda.x, q.testa.x)).toBeLessThanOrEqual(300 + LUNGHEZZA_MACCHINA + 0.01);
+      }
+    }
+    expect(viste).toBeGreaterThan(0);
+    expect(pausa).toBe(true);
+    // Nello stesso verso non si raggiungono mai.
+    for (let t = 0; t < 120_000; t += 250) {
+      const pos = m.map((x) => ({ v: x.verso, q: macchinaDi(x, c[0], t) })).filter((p) => p.q);
+      for (let a = 0; a < pos.length; a++) {
+        for (let b = a + 1; b < pos.length; b++) {
+          if (pos[a].v !== pos[b].v) continue;
+          expect(Math.hypot(pos[a].q!.testa.x - pos[b].q!.testa.x, pos[a].q!.testa.y - pos[b].q!.testa.y)).toBeGreaterThan(LUNGHEZZA_MACCHINA);
+        }
+      }
+    }
+  });
+
+  it('niente macchine nelle vie dove finirebbero dentro una casa', async () => {
+    const { corsie } = await import('../src/map/animazioni');
+    const casa = { p: [100, -3, 120, -3, 120, -0.5, 100, -0.5], h: 8, t: 'residenziale' as never };
+    expect(corsie([{ t: 'principale', p: [0, 0, 300, 0] }], [casa])).toHaveLength(0);
+    expect(corsie([{ t: 'principale', p: [0, 0, 300, 0] }], [{ ...casa, p: [100, -30, 120, -30, 120, -20, 100, -20] }])).toHaveLength(1);
+  });
+
+  it('nelle vie pedonali del centro c\'è gente, fuori dal centro no', async () => {
+    const { passeggiateNelleVie } = await import('../src/map/animazioni');
+    const vie = passeggiateNelleVie([
+      { t: 'pedonale', p: [0, 0, 60, 0] },
+      { t: 'pedonale', p: [2000, 0, 2060, 0] },
+      { t: 'principale', p: [0, 30, 60, 30] },
+    ]);
+    expect(vie.length).toBeGreaterThan(0);
+    for (const v of vie) {
+      expect(Math.abs(v.ay)).toBeLessThan(1.3);
+      expect(v.ax).toBeGreaterThanOrEqual(5);
+      expect(v.bx).toBeLessThanOrEqual(55);
+    }
+  });
+
+  it('attorno alla fontana c\'è chi sta fermo sul bordo e chi le gira intorno', async () => {
+    const { genteAllaFontana, allaFontanaDi } = await import('../src/map/animazioni');
+    const f = { x: 64, y: 47, raggio: 8.5 };
+    const gente = genteAllaFontana([f]);
+    expect(gente.some((g) => g.giro === 0)).toBe(true);
+    expect(gente.some((g) => g.giro !== 0)).toBe(true);
+    for (const g of gente) {
+      const a = allaFontanaDi(g, f, 0);
+      const b = allaFontanaDi(g, f, 10_000);
+      expect(Math.hypot(a.x - f.x, a.y - f.y)).toBeCloseTo(g.raggio, 5);
+      if (g.giro === 0) expect(b).toEqual(a);
+      else expect(Math.hypot(b.x - a.x, b.y - a.y)).toBeGreaterThan(0.1);
+    }
   });
 });

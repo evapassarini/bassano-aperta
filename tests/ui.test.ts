@@ -1817,8 +1817,9 @@ describe('crediti, fonti e indirizzi del progetto', () => {
 
   it('«Fonti e licenze» parla delle illustrazioni: luoghi simbolo e quello che si muove', () => {
     const testo = comeFinto(creaFonti({ strati: STRATI }).nodo).textContent;
-    expect(testo).toContain('Le illustrazioni: luoghi simbolo, treno e persone');
-    expect(testo).toContain('non segue gli orari di Trenitalia');
+    expect(testo).toContain('Le illustrazioni: luoghi simbolo, fontana, treni, macchine e persone');
+    expect(testo).toContain('non seguono gli orari di Trenitalia');
+    expect(testo).toContain('non sono il traffico vero');
     expect(testo).toContain('non sono presenze vere');
     expect(testo).toContain('a partire dalle sagome degli edifici su OpenStreetMap');
     expect(testo).toContain('Altezze e dettagli sono in gran parte stime');

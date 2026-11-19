@@ -633,7 +633,7 @@ porte, portici. I dieci luoghi simbolo restano SVG a parte.
     tra zoom 1,3 e 3,4.
   - *Selciato*: lastre in isometria (giunti a mano, uno su quattro manca, qualche lastra più
     scura o più chiara; la tessera ripete ogni 7 lastre) su piazze e strade dentro la sagoma
-    del centro; entra tra zoom 2,6 e 4,2. Non si stende sul resto del terreno del centro, che è
+    del centro; entra tra zoom 1,5 e 2,2. Non si stende sul resto del terreno del centro, che è
     quasi tutto coperto dalle case.
   - *Acqua*: un bordo di pietra chiara (l'argine) tracciato prima dell'acqua, che ne copre la
     metà interna: resta fuori dalla riva e un canale stretto non si svuota. Sotto le rive due
@@ -651,15 +651,17 @@ porte, portici. I dieci luoghi simbolo restano SVG a parte.
     piatte; il disegno a motivo è provato con trame finte in `tests/mappa.test.ts`.
 - **Livelli di dettaglio** (`DETTAGLI` in `src/map/disegno.ts`). Da molto lontano sagome
   unite; poi tetti stesi a tessere, con le falde in ombra; da zoom 1 circa muri e tetti a
-  falde edificio per edificio. Avvicinandosi compaiono, in quest'ordine: la mano d'acquerello
-  (da 1,3 a 3,4), il terzo tono delle falde (1,45), le ombre a terra (1,5), colmi e displuvi a
-  penna (da 1,7 a 3), una fascia tenue
-  per ogni fila di finestre (da 1,9 a 2,8: sta al posto delle finestre finché sarebbero puntini, e se
-  ne va tra 2,9 e 3,6; pesa meno sugli intonaci scuri), finestre,
-  porte e archi (2,6; in centro le case hanno solo il davanzale chiaro, non la cornice), righe dei coppi una sì e una no (2,8), persiane, zoccolo e marcapiano
-  (3,3), le altre righe dei coppi e le cornici (3,5), comignoli e abbaini (3,9), coppi più
-  fitti e telai delle finestre (5,5); a terra il selciato (2,6). Ogni strato entra sfumando tra
-  due valori di zoom.
+  falde edificio per edificio. Allo zoom con cui la mappa si apre sul computer (circa 1,9) le
+  case sono già dipinte del tutto. Avvicinandosi compaiono, in quest'ordine: il terzo tono
+  delle falde (0,9), le ombre a terra (1), colmi e displuvi a penna (da 1 a 1,6), una fascia
+  tenue per ogni fila di finestre (da 1 a 1,4: sta al posto delle finestre finché sarebbero
+  puntini, e se ne va tra 1,4 e 1,8; pesa meno sugli intonaci scuri), la mano d'acquerello
+  (da 1,3 a 3,4), finestre, porte e archi (1,3; in centro le case hanno solo il davanzale
+  chiaro, non la cornice), righe dei coppi una sì e una no (1,5), persiane, zoccolo e
+  marcapiano (1,6), comignoli e abbaini (1,7), le altre righe dei coppi e le cornici (1,8),
+  coppi più fitti e telai delle finestre (5,5); a terra il selciato (1,5). Ogni strato entra
+  sfumando tra due valori di zoom. Così un fotogramma costa circa il doppio di prima (misurato
+  con Chrome senza interfaccia: da 8,5 a 17 ms circa alla vista iniziale).
 - **Luci.** Le tre tavolozze hanno le stesse chiavi anche per gli edifici (intonaci carichi e
   chiari, tetti piani, toni delle falde, coppi, vetro, cornice, telaio, persiane, porte, ombra
   di facciata, portico, tinta delle ombre, ombra a terra delle case, china, peso e tinte della
@@ -667,7 +669,7 @@ porte, portici. I dieci luoghi simbolo restano SVG a parte.
   corrente, velo dei luoghi simbolo). Di giorno l'ombra propria vira a una terra calda, nel
   pomeriggio appena al viola. Fuori dal centro le strade sono più chiare della carta e hanno
   il bordo scuro, così la trama delle vie si legge anche in periferia. Di notte le finestre accese sono un sottoinsieme fisso delle finestre
-  dipinte, le altre restano scure; compaiono sfumando tra zoom 1,9 e 2,3 (più da lontano
+  dipinte, le altre restano scure; compaiono sfumando tra zoom 1,2 e 1,6 (più da lontano
   restano solo le luci dei lampioni). I
   portici hanno una luce calda. I luoghi simbolo di notte prendono un velo blu-viola chiaro,
   vicino a quello dei muri.
@@ -693,27 +695,49 @@ regola vale per i cartelli degli avvisi.
 
 La mappa ha qualche movimento, solo decorativo (logica pura in `src/map/animazioni.ts`):
 
-- **La Brenta scorre**: le increspature dell'acqua si spostano verso valle, una tessera ogni
-  24 secondi (`spostamentoCorrente`). Si vedono da zoom 1,4 (`DETTAGLI.acqua`).
-- **Il treno**: quattro carrozze che escono dalle nuvole a sud-est, rallentano, sostano 20
-  secondi alla stazione e ripartono verso nord; dopo una pausa ne arriva uno in senso contrario.
-  Il percorso si ricava dai binari di `base.json` (`percorsoTreno`: i tratti si spezzano dove un
-  altro binario li tocca, poi il cammino più corto tra gli estremi a sud e a nord, attraverso la
-  stazione). Il tempo è quello dell'orologio: chi apre il sito nello stesso momento vede il
-  treno nello stesso punto. Non segue gli orari veri e non ha legami con i treni di BusOne.
-- **Le persone**: nelle piazze entro 700 m dal centro, fino a 16 per piazza secondo la
-  grandezza (nelle più piccole anche una o nessuna), vanno avanti e indietro su tragitti scelti una volta sola (dentro la piazza, lontano
-  dai muri, senza attraversare case). Sul Ponte Vecchio cinque passanti attraversano il ponte,
-  ritagliati sulle aperture tra le colonne della facciata sud. Compaiono da zoom 2,4.
-- Carrozze e persone sono un poco più grandi del vero, perché si riconoscano, ed entrano
-  nell'ordine di profondità insieme a case e alberi (`mobiliInVista` in `disegno.ts`).
-- **Quando si muove**: `StatoDisegno.tempo` porta il tempo; senza, tutto sta fermo (treno in
-  arrivo sul binario aperto a sud della stazione, dove nessuna pensilina lo copre).
+- **La Brenta scorre**: due strati di filoni della corrente (la tessera delle increspature
+  ingrandita 3,2 e 1,9 volte, `FILONI`) scivolano verso valle e si vedono già da zoom 0,45;
+  da zoom 1,4 si aggiungono le increspature fini (`spostamentoCorrente`).
+- **I treni**: tre treni, con livree diverse, sulle due linee che nei dati passano per la
+  stazione (`percorsiTreni`: dagli estremi a sud, Padova e Castelfranco, fino alla Valsugana).
+  Ognuno esce dalle nuvole, rallenta, sosta 20 secondi in stazione e riparte; poi torna in
+  senso contrario. Hanno tutti lo stesso ciclo (le pause si allungano sulla linea più corta) e
+  sono sfasati di un terzo, così non sostano mai insieme; chi va in versi opposti corre su un
+  binario suo, 1,8 m a sinistra dell'asse (`SCARTO_BINARIO`), come i treni in Italia. Il percorso si
+  ricava dai binari di `base.json` (i tratti si spezzano dove un altro binario li tocca, poi il
+  cammino più corto attraverso la stazione). Il tempo è quello dell'orologio: chi apre il sito
+  nello stesso momento vede i treni negli stessi punti. Non seguono gli orari veri e non hanno
+  legami con i treni di BusOne.
+- **Le macchine**: sulle strade principali e secondarie entro 1,5 km dal centro (tratti di
+  almeno 80 m) e sulle locali entro 700 m (almeno 100 m), circa una ogni 90 m, nei due versi,
+  sulla destra della strada, più vicine all'asse nelle strade strette (`SCARTO_MACCHINA`). Si
+  scartano i tratti dove una macchina finirebbe dentro una casa o vicino alla fontana. Sulla
+  stessa corsia e nello stesso verso vanno alla stessa velocità, a distanza regolare, quindi
+  non si raggiungono. Ognuna entra intera all'inizio del suo tratto, lo percorre ed esce
+  intera dall'altro capo, poi ricompare dopo una breve pausa. Compaiono con il dettaglio pieno.
+- **Le persone**: nelle piazze entro 700 m dal centro, fino a 28 per piazza secondo la
+  grandezza (nelle più piccole anche una o nessuna), su tragitti scelti una volta sola (dentro
+  la piazza, lontano dai muri, senza attraversare case e non appena davanti a una facciata);
+  lungo le vie pedonali entro 500 m (`passeggiateNelleVie`, fuori dalle case); attorno alla
+  fontana (chi gira lo fa solo dove il giro non tocca case; i tragitti delle piazze non la
+  attraversano); sul Ponte
+  Vecchio cinque passanti, ritagliati sulle aperture tra le colonne della facciata sud.
+  Compaiono da zoom 2,4.
+- **La fontana**: i punti degli strati che si chiamano «Fontana ...» (oggi la Fontana Bonaguro)
+  si disegnano come una fontana a più vasche su una gradinata rotonda, come nella xilografia del
+  1901 del racconto della Torre Civica, con zampilli che scorrono. Il segnaposto sta 11 m più a
+  nord-est, dietro la fontana, perché non copra colonna e zampilli.
+- Carrozze, macchine, persone e fontana sono un poco più grandi del vero, perché si
+  riconoscano, ed entrano nell'ordine di profondità insieme a case e alberi (`mobiliInVista` in
+  `disegno.ts`).
+- **Quando si muove**: `StatoDisegno.tempo` porta il tempo; senza, tutto sta fermo (il primo
+  treno in arrivo sul binario aperto a sud della stazione, dove nessuna pensilina lo copre).
   `src/map/index.ts` passa il tempo solo se la pagina si vede e chi guarda non ha chiesto meno
   movimento (`prefers-reduced-motion`). Il Disegnatore dice se c'è qualcosa in moto in vista
-  (`animato`) e ogni quanto ridisegnare (`intervalloAnimazione`: 100 ms per acqua e persone,
-  40 ms per il treno in corsa); con il treno in sosta o fuori vista la mappa si risveglia solo
-  quando serve (`prossimoMovimento`). Lontano da acqua, piazze e treno non si ridisegna nulla.
+  (`animato`) e ogni quanto ridisegnare (`intervalloAnimazione`: 100 ms per acqua, persone,
+  macchine e fontana, 40 ms per un treno in corsa); con i treni in sosta o fuori vista la mappa
+  si risveglia solo quando serve (`prossimoMovimento`). Lontano da acqua, piazze, strade e
+  binari non si ridisegna nulla.
 
 ### Tasselli dipinti (prova)
 

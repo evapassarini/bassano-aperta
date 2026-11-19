@@ -6,14 +6,19 @@ import {
   colonnePonte,
   VELOCITA_TRENO,
   istanteFermo,
+  allaFontanaDi,
+  macchinaDi,
   momentoTreno,
   PASSANTI_PONTE,
   passanteSulPonte,
   passoDi,
   PONTE,
+  FILONI,
   spostamentoCorrente,
+  spostamentoFiloni,
   suPonte,
 } from './animazioni';
+import type { Fontana } from './animazioni';
 import { creaNuvola, nuvoleInVista } from './nuvole';
 import type { Tasselli } from './tasselli';
 import type { IdStrato, Luce, TipoArea, TipoStrada } from '../types';
@@ -39,6 +44,7 @@ import {
   EL_LANDMARK,
   LATO_TESSERA,
   livelloDettaglio,
+  soglieDettaglio,
   MURO_DESTRO,
   MURO_DIETRO,
   MURO_SINISTRO,
@@ -90,14 +96,68 @@ interface Pezzo extends Rettangolo {
   percorso: Path2D;
 }
 
-/** Una carrozza pronta da disegnare: base in metri [x0, y0, ... x3, y3] e chiave di profondità. */
+/**
+ * Quanto si vedono macchine e fontana: sfumano a partire da dove comincia il dettaglio pieno
+ * (che sui computer arriva fino a zoom 1,25), non prima, perché prima non si disegnano.
+ */
+function presenzaMobili(s: StatoDisegno): number {
+  const da = Math.max(MACCHINE.da, soglieDettaglio(s.vista).muri);
+  return presenza(s.camera.zoom, { da, a: da + (MACCHINE.a - MACCHINE.da) });
+}
+
+/** Una scatola pronta da disegnare (carrozza o macchina): base in metri [x0, y0, ... x3, y3]. */
 interface Vagone {
   base: number[];
   chiave: number;
+  altezza: number;
+  colori: { luce: string; ombra: string; tetto: string; finestrini: string };
+  /** Quote in metri della fascia dei finestrini, e quanto resta di parete ai due capi. */
+  fascia: { da: number; a: number; capi: number };
+  riquadro: Rettangolo;
+}
+
+/**
+ * Una scatola lungo il segmento da `coda` a `testa`, larga 2 x `mezza`, alta `altezza`: base,
+ * chiave di profondità (l'angolo più vicino a chi guarda, come per le case) e riquadro sul piano.
+ */
+function scatola(
+  coda: { x: number; y: number },
+  testa: { x: number; y: number },
+  mezza: number,
+  altezza: number,
+  colori: Vagone['colori'],
+  fascia: Vagone['fascia'],
+): Vagone {
+  const dx = testa.x - coda.x;
+  const dy = testa.y - coda.y;
+  const l = Math.hypot(dx, dy) || 1;
+  const nx = (-dy / l) * mezza;
+  const ny = (dx / l) * mezza;
+  const base = [coda.x + nx, coda.y + ny, testa.x + nx, testa.y + ny, testa.x - nx, testa.y - ny, coda.x - nx, coda.y - ny];
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+  let chiave = Infinity;
+  for (let k = 0; k < 8; k += 2) {
+    const q = metriInIso(base[k], base[k + 1]);
+    minX = Math.min(minX, q.sx);
+    maxX = Math.max(maxX, q.sx);
+    minY = Math.min(minY, q.sy - altezza * ISO_Z);
+    maxY = Math.max(maxY, q.sy);
+    chiave = Math.min(chiave, base[k] + base[k + 1]);
+  }
+  return { base, chiave, altezza, colori, fascia, riquadro: { minX, minY, maxX, maxY } };
 }
 
 /** Misure delle carrozze, in metri: un poco più grandi del vero, perché si riconoscano. */
 const ALTEZZA_VAGONE = 4.4;
+const FASCIA_VAGONE = { da: 1.9, a: 2.7, capi: 1.5 };
+/** Macchine: un poco più grandi del vero, come carrozze e figurine. */
+const ALTEZZA_MACCHINA = 1.9;
+const MEZZA_LARGHEZZA_MACCHINA = 1.15;
+const FASCIA_MACCHINA = { da: 1.05, a: 1.6, capi: 0.9 };
+const MACCHINE = { da: 1.0, a: 1.4 };
 const MEZZA_LARGHEZZA_VAGONE = 1.75;
 /** Ogni quanto si ricontrolla un treno che corre fuori vista. */
 const CONTROLLO_TRENO_MS = 1000;
@@ -131,41 +191,44 @@ export const ZOOM_PALI = { giorno: 3, notte: 1.7 };
  * Di notte le finestre accese compaiono sfumando tra questi due zoom. Più da lontano sarebbero
  * puntini, e per averle bisognerebbe preparare la facciata di migliaia di case.
  */
-export const ZOOM_FINESTRE = { da: 1.9, a: 2.3 };
+export const ZOOM_FINESTRE = { da: 1.2, a: 1.6 };
 
 /**
- * Livelli di dettaglio degli edifici da vicino. Ogni strato di pittura compare sfumando tra
- * `da` e `a`: mai uno scatto. Da lontano restano i volumi con i tetti a falde e le tinte.
+ * Livelli di dettaglio degli edifici. Ogni strato di pittura compare sfumando tra `da` e `a`:
+ * mai uno scatto. Allo zoom con cui si apre la mappa sul computer (circa 1,9) le case sono già
+ * dipinte con finestre, coppi, persiane e cornici; da molto lontano restano volumi e tinte.
  */
 export const DETTAGLI = {
   /** Ombre delle case a terra: più da lontano sarebbero un filo, e costano. */
-  ombre: { da: 1.5, a: 2.1 },
+  ombre: { da: 1.0, a: 1.5 },
   /** Terzo tono dei tetti: le falde in piena luce. Prima ci sono solo base e ombra. */
-  luce: { da: 1.45, a: 2.1 },
+  luce: { da: 0.9, a: 1.4 },
   /** Colmi e displuvi tracciati a penna sopra le tinte delle falde. */
-  spigoli: { da: 1.7, a: 3 },
+  spigoli: { da: 1.0, a: 1.6 },
   /** Fasce tenui al posto delle file di finestre, quando le finestre sarebbero puntini. */
-  fasce: { da: 1.9, a: 2.8 },
+  fasce: { da: 1.0, a: 1.4 },
   /** Le fasce se ne vanno mentre entrano le finestre vere. */
-  fasceVia: { da: 2.9, a: 3.6 },
+  fasceVia: { da: 1.4, a: 1.8 },
   /** Finestre, porte e archi dei portici: sagome scure. */
-  finestre: { da: 2.6, a: 3.4 },
+  finestre: { da: 1.3, a: 1.8 },
   /** Righe dei coppi sulle falde: prima una riga sì e una no. */
-  coppi: { da: 2.8, a: 3.7 },
+  coppi: { da: 1.5, a: 2.0 },
   /** Le righe dei coppi che mancavano. */
-  coppiPieni: { da: 3.5, a: 4.5 },
+  coppiPieni: { da: 1.8, a: 2.4 },
   /** Comignoli, abbaini e torrini. */
-  comignoli: { da: 3.9, a: 4.9 },
+  comignoli: { da: 1.7, a: 2.3 },
   /** Persiane, zoccolo, marcapiano, ombra della gronda. */
-  facciata: { da: 3.3, a: 4.3 },
+  facciata: { da: 1.6, a: 2.1 },
   /** Cornici chiare attorno a finestre e porte. */
-  cornici: { da: 3.5, a: 4.6 },
+  cornici: { da: 1.8, a: 2.3 },
   /** Seconda serie di righe dei coppi, in mezzo alle prime; telai a croce delle finestre. */
   coppiFitti: { da: 5.5, a: 7.5 },
   /** Lastre del selciato su piazze e strade del centro. */
-  selciato: { da: 2.6, a: 4.2 },
-  /** Increspature dell'acqua: entrano prima del selciato, perché scorrono con la corrente. */
+  selciato: { da: 1.5, a: 2.2 },
+  /** Increspature fini dell'acqua: entrano prima del selciato, perché scorrono con la corrente. */
   acqua: { da: 1.4, a: 2.6 },
+  /** Filoni grandi della corrente: si vedono già da lontano, perché la Brenta scorra a ogni zoom. */
+  filoni: { da: 0.45, a: 0.8 },
   /** La mano d'acquerello stesa su tutto il foglio: macchie di colore e grana della carta. */
   macchie: { da: 1.3, a: 3.4 },
 };
@@ -538,6 +601,10 @@ export class Disegnatore {
   incompleto = false;
   /** Quanto si vedono le figurine in questo fotogramma (0 da lontano, 1 da vicino). */
   private pFigurine = 0;
+  /** Le tinte delle macchine, ombra e tetto compresi, preparate una volta per colore. */
+  private readonly coloriMacchine = new Map<string, Vagone['colori']>();
+  /** I riquadri delle strade con le macchine sul piano isometrico, calcolati alla prima richiesta. */
+  private riquadriCorsie: Rettangolo[] | null = null;
   /** true se nell'ultimo fotogramma si è disegnato qualcosa che si muove (acqua, treno in corsa). */
   animato = false;
   /**
@@ -1172,6 +1239,30 @@ export class Disegnatore {
         ctx.lineWidth = 5;
         ctx.stroke(acqua);
       }
+      const acquaInVista = this.riquadriAcqua.some((r) => siToccano(r, visibile));
+      const pFiloni = trame?.increspature && acquaInVista ? presenza(z, DETTAGLI.filoni) : 0;
+      if (pFiloni > 0 && trame?.increspature) {
+        // I filoni: la tessera delle increspature ingrandita, chiara e veloce. Da vicino sfuma un
+        // poco, perché lì le increspature fini bastano a far vedere il movimento.
+        const vicino = presenza(z, { da: 3, a: 5 });
+        ctx.fillStyle = trame.increspature;
+        const minX = Math.max(this.acqua.minX, visibile.minX);
+        const minY = Math.max(this.acqua.minY, visibile.minY);
+        const maxX = Math.min(this.acqua.maxX, visibile.maxX);
+        const maxY = Math.min(this.acqua.maxY, visibile.maxY);
+        for (const f of FILONI) {
+          const k = f.scala;
+          const { dx, dy } = tempo === undefined ? { dx: 0, dy: 0 } : spostamentoFiloni(tempo, f.scala, f.periodo);
+          ctx.globalAlpha = Math.min(1, pFiloni * P.trame.corrente * f.alfa * (1 - 0.45 * vicino));
+          ctx.save();
+          ctx.translate(dx, dy);
+          ctx.scale(k, k);
+          ctx.fillRect((minX - dx) / k - 36, (minY - dy) / k - 18, (maxX - minX) / k + 72, (maxY - minY) / k + 36);
+          ctx.restore();
+        }
+        ctx.globalAlpha = 1;
+        if (tempo !== undefined) this.inMovimentoLento();
+      }
       const pAcqua = trame?.increspature ? presenza(z, DETTAGLI.acqua) : 0;
       if (pAcqua > 0 && trame?.increspature) {
         ctx.globalAlpha = pAcqua * P.trame.acqua;
@@ -1191,7 +1282,7 @@ export class Disegnatore {
           ctx.fillRect(minX - dx - 36, minY - dy - 18, maxX - minX + 72, maxY - minY + 36);
           ctx.translate(-dx, -dy);
           // Il riquadro di tutta l'acqua copre quasi la città: si anima solo se un'area d'acqua è in vista.
-          if (this.riquadriAcqua.some((r) => siToccano(r, visibile))) this.inMovimentoLento();
+          if (acquaInVista) this.inMovimentoLento();
         }
         ctx.globalAlpha = 1;
       }
@@ -1656,6 +1747,8 @@ export class Disegnatore {
     const mobili: { chiave: number; disegna: (ctx: CanvasRenderingContext2D) => void }[] = this.vagoniInVista(s, visibile).map(
       (w) => ({ chiave: w.chiave, disegna: (ctx: CanvasRenderingContext2D) => this.vagone(ctx, w) }),
     );
+    this.macchineInVista(s, visibile, mobili);
+    this.fontaneInVista(s, visibile, mobili);
     if (this.pFigurine > 0) {
       const tempo = s.tempo ?? 0;
       let qualcuna = false;
@@ -1671,6 +1764,172 @@ export class Disegnatore {
       if (qualcuna && s.tempo !== undefined) this.inMovimentoLento();
     }
     return mobili.sort((a, b) => b.chiave - a.chiave);
+  }
+
+  /**
+   * Le macchine in vista, aggiunte ai mobili: scatole basse lungo la destra della strada. Da
+   * lontano non ci sono; compaiono sfumando come le figurine.
+   */
+  private macchineInVista(s: StatoDisegno, visibile: Rettangolo, mobili: { chiave: number; disegna: (ctx: CanvasRenderingContext2D) => void }[]): void {
+    const presente = presenzaMobili(s);
+    if (presente <= 0 || this.scena.macchine.length === 0) return;
+    const tempo = s.tempo ?? 0;
+    const M = this.P.macchine;
+    let qualcuna = false;
+    for (const m of this.scena.macchine) {
+      const c = this.scena.corsie[m.corsia];
+      const q = macchinaDi(m, c, tempo);
+      if (!q) continue;
+      const tinta = M.tinte[m.colore % M.tinte.length];
+      const chiaveColori = tinta + M.vetri;
+      let colori = this.coloriMacchine.get(chiaveColori);
+      if (!colori) {
+        colori = { luce: tinta, ombra: mescolaColori(tinta, '#1e1a18', 0.3), tetto: mescolaColori(tinta, '#ffffff', 0.22), finestrini: M.vetri };
+        this.coloriMacchine.set(chiaveColori, colori);
+      }
+      const v = scatola(q.coda, q.testa, MEZZA_LARGHEZZA_MACCHINA, ALTEZZA_MACCHINA, colori, FASCIA_MACCHINA);
+      if (!siToccano(v.riquadro, visibile)) continue;
+      qualcuna = true;
+      mobili.push({
+        chiave: v.chiave,
+        disegna: (ctx) => {
+          ctx.globalAlpha = presente;
+          this.vagone(ctx, v);
+          ctx.globalAlpha = 1;
+        },
+      });
+    }
+    if (s.tempo === undefined) return;
+    if (qualcuna) this.inMovimentoLento();
+    // Nessuna in vista adesso: se una strada con le macchine è vicina, ne arriverà qualcuna e si
+    // ricontrolla ogni secondo; lontano dalle strade no.
+    else if (this.corsieVicine(visibile)) this.prossimoMovimento = Math.min(this.prossimoMovimento, CONTROLLO_TRENO_MS);
+  }
+
+  /** true se qualche strada con le macchine tocca la vista, allargata di quanto si fa in un secondo. */
+  private corsieVicine(visibile: Rettangolo): boolean {
+    if (!this.riquadriCorsie) {
+      this.riquadriCorsie = this.scena.corsie.map((c) => {
+        let minX = Infinity;
+        let minY = Infinity;
+        let maxX = -Infinity;
+        let maxY = -Infinity;
+        for (let i = 0; i < c.punti.length; i += 2) {
+          const q = metriInIso(c.punti[i], c.punti[i + 1]);
+          minX = Math.min(minX, q.sx);
+          maxX = Math.max(maxX, q.sx);
+          minY = Math.min(minY, q.sy);
+          maxY = Math.max(maxY, q.sy);
+        }
+        return { minX: minX - 20, minY: minY - 20, maxX: maxX + 20, maxY: maxY + 20 };
+      });
+    }
+    return this.riquadriCorsie.some((r) => siToccano(r, visibile));
+  }
+
+  /** Le fontane in vista e chi ci sta attorno, aggiunti ai mobili. */
+  private fontaneInVista(s: StatoDisegno, visibile: Rettangolo, mobili: { chiave: number; disegna: (ctx: CanvasRenderingContext2D) => void }[]): void {
+    if (this.scena.fontane.length === 0) return;
+    const presente = presenzaMobili(s);
+    if (presente <= 0) return;
+    const tempo = s.tempo ?? 0;
+    let qualcuna = false;
+    this.scena.fontane.forEach((f, n) => {
+      const c = metriInIso(f.x, f.y);
+      if (c.sx + f.raggio < visibile.minX || c.sx - f.raggio > visibile.maxX || c.sy - 8 > visibile.maxY || c.sy + f.raggio < visibile.minY) return;
+      qualcuna = true;
+      mobili.push({ chiave: f.x + f.y - f.raggio * 0.5, disegna: (ctx) => this.fontana(ctx, f, tempo, presente) });
+      if (this.pFigurine <= 0) return;
+      for (const p of this.scena.allaFontana) {
+        if (p.fontana !== n) continue;
+        const q = allaFontanaDi(p, f, tempo);
+        const colore = p.colore;
+        mobili.push({ chiave: q.x + q.y, disegna: (ctx) => this.figurina(ctx, q.x, q.y, 0, colore, tempo / 1000 + p.angolo * 10, q.cammina) });
+      }
+    });
+    if (qualcuna && s.tempo !== undefined) this.inMovimentoLento();
+  }
+
+  /**
+   * Una fontana a più vasche su una gradinata rotonda: due gradini, la vasca grande con l'acqua,
+   * una colonna con la vasca piccola e gli zampilli che ricadono. Un cerchio in metri sul piano
+   * diventa un'ellisse larga r e alta r / 2.
+   */
+  private fontana(ctx: CanvasRenderingContext2D, f: Fontana, tempo: number, alfa: number): void {
+    const F = this.P.fontana;
+    ctx.globalAlpha = alfa;
+    const cilindro = (r: number, z0: number, z1: number, lato: string, sopra: string): void => {
+      const a = metriInIso(f.x, f.y, z0);
+      const b = metriInIso(f.x, f.y, z1);
+      ctx.fillStyle = lato;
+      ctx.beginPath();
+      ctx.ellipse(a.sx, a.sy, r, r / 2, 0, 0, Math.PI);
+      ctx.lineTo(b.sx - r, b.sy);
+      ctx.ellipse(b.sx, b.sy, r, r / 2, 0, Math.PI, 0, true);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = sopra;
+      ctx.beginPath();
+      ctx.ellipse(b.sx, b.sy, r, r / 2, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+    };
+    // Gli zampilli: dalla cima ricadono nella vasca piccola, dal bordo della vasca piccola nella
+    // grande. Tratti spezzati che scorrono verso il basso, così l'acqua si vede cadere. Quelli
+    // dietro (verso nord-est) si dipingono prima di colonna e vasca piccola, quelli davanti dopo.
+    const zampilli = (dietro: boolean): void => {
+      const cima = metriInIso(f.x, f.y, 4.7);
+      const bordo = metriInIso(f.x, f.y, 3.6);
+      const fondo = metriInIso(f.x, f.y, 1.35);
+      ctx.strokeStyle = F.zampilli;
+      ctx.lineCap = 'round';
+      ctx.lineWidth = 0.22;
+      ctx.setLineDash([0.5, 0.45]);
+      // In modulo, prima di passarlo al browser: un numero enorme perderebbe i decimali e il
+      // tratteggio resterebbe fermo.
+      ctx.lineDashOffset = -(((tempo / 1000) * 2.2) % 0.95);
+      ctx.beginPath();
+      for (let k = 0; k < 8; k++) {
+        const a = (k / 8) * Math.PI * 2 + Math.PI / 8;
+        if (Math.sin(a) < 0 !== dietro) continue;
+        const cx = Math.cos(a);
+        const cy = Math.sin(a) / 2;
+        ctx.moveTo(cima.sx, cima.sy);
+        ctx.quadraticCurveTo(cima.sx + cx * 1.4, cima.sy - 1.2 + cy * 1.4, bordo.sx + cx * 1.5, bordo.sy + cy * 1.5);
+        ctx.moveTo(bordo.sx + cx * 1.85, bordo.sy + cy * 1.85);
+        ctx.quadraticCurveTo(bordo.sx + cx * 2.9, bordo.sy + cy * 2.9 - 0.4, fondo.sx + cx * 3.1, fondo.sy + cy * 3.1);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.lineDashOffset = 0;
+      ctx.lineCap = 'butt';
+      ctx.lineWidth = this.spessoreTratto;
+      ctx.strokeStyle = this.tratto;
+    };
+    const R = f.raggio;
+    cilindro(R, 0, 0.35, F.ombra, F.pietra);
+    cilindro(R * 0.86, 0.35, 0.7, F.ombra, F.pietra);
+    cilindro(R * 0.7, 0.7, 1.45, F.ombra, F.pietra);
+    // L'acqua della vasca grande, un poco sotto il bordo.
+    const acqua = metriInIso(f.x, f.y, 1.35);
+    ctx.fillStyle = F.acqua;
+    ctx.beginPath();
+    ctx.ellipse(acqua.sx, acqua.sy, R * 0.62, R * 0.31, 0, 0, Math.PI * 2);
+    ctx.fill();
+    zampilli(true);
+    cilindro(0.55, 1.35, 3.3, F.ombra, F.pietra);
+    cilindro(1.9, 3.3, 3.65, F.ombra, F.pietra);
+    const alta = metriInIso(f.x, f.y, 3.6);
+    ctx.fillStyle = F.acqua;
+    ctx.beginPath();
+    ctx.ellipse(alta.sx, alta.sy, 1.6, 0.8, 0, 0, Math.PI * 2);
+    ctx.fill();
+    cilindro(0.25, 3.6, 4.6, F.ombra, F.pietra);
+    zampilli(false);
+    ctx.globalAlpha = 1;
+    ctx.lineWidth = this.spessoreTratto;
+    ctx.strokeStyle = this.tratto;
   }
 
   /** Qualcosa si muove piano (acqua, figurine): bastano dieci fotogrammi al secondo. */
@@ -1768,62 +2027,44 @@ export class Disegnatore {
    * Dice anche se c'è movimento (`animato`) o quando ricontrollare (`prossimoMovimento`).
    */
   private vagoniInVista(s: StatoDisegno, visibile: Rettangolo): Vagone[] {
-    const percorso = this.scena.binari;
-    if (!percorso) return [];
+    const elenco = this.scena.treni;
+    if (elenco.length === 0) return [];
     const animabile = s.tempo !== undefined;
-    const m = momentoTreno(percorso, s.tempo ?? istanteFermo(percorso));
+    // A mappa ferma ogni treno sta dove sarebbe nell'istante di posa del primo.
+    const fermo = istanteFermo(elenco[0].percorso);
     const vagoni: Vagone[] = [];
     // Un treno che corre fuori vista si ricontrolla ogni secondo; se in quel secondo può entrare
     // nella vista, si guarda a ritmo pieno, così non compare già dentro il bordo.
     const r = (VELOCITA_TRENO * CONTROLLO_TRENO_MS) / 1000 + MEZZA_LARGHEZZA_VAGONE * 2;
     const vicino = { minX: visibile.minX - r, minY: visibile.minY - r, maxX: visibile.maxX + r, maxY: visibile.maxY + r };
-    let inArrivo = false;
-    for (const c of carrozze(percorso, m)) {
-      const dx = c.testa.x - c.coda.x;
-      const dy = c.testa.y - c.coda.y;
-      const l = Math.hypot(dx, dy) || 1;
-      const nx = (-dy / l) * MEZZA_LARGHEZZA_VAGONE;
-      const ny = (dx / l) * MEZZA_LARGHEZZA_VAGONE;
-      const base = [
-        c.coda.x + nx, c.coda.y + ny,
-        c.testa.x + nx, c.testa.y + ny,
-        c.testa.x - nx, c.testa.y - ny,
-        c.coda.x - nx, c.coda.y - ny,
-      ];
-      let minX = Infinity;
-      let minY = Infinity;
-      let maxX = -Infinity;
-      let maxY = -Infinity;
-      let chiave = Infinity;
-      for (let k = 0; k < 8; k += 2) {
-        const q = metriInIso(base[k], base[k + 1]);
-        minX = Math.min(minX, q.sx);
-        maxX = Math.max(maxX, q.sx);
-        minY = Math.min(minY, q.sy - ALTEZZA_VAGONE * ISO_Z);
-        maxY = Math.max(maxY, q.sy);
-        chiave = Math.min(chiave, base[k] + base[k + 1]);
+    for (const treno of elenco) {
+      const m = momentoTreno(treno.percorso, (s.tempo ?? fermo) + treno.fase, treno.ciclo);
+      const colori = this.P.treni[treno.livrea % this.P.treni.length];
+      let inVista = 0;
+      let inArrivo = false;
+      for (const c of carrozze(treno.percorso, m)) {
+        const v = scatola(c.coda, c.testa, MEZZA_LARGHEZZA_VAGONE, ALTEZZA_VAGONE, colori, FASCIA_VAGONE);
+        if (!siToccano(v.riquadro, visibile)) {
+          if (siToccano(v.riquadro, vicino)) inArrivo = true;
+          continue;
+        }
+        vagoni.push(v);
+        inVista++;
       }
-      if (!siToccano({ minX, minY, maxX, maxY }, visibile)) {
-        if (siToccano({ minX, minY, maxX, maxY }, vicino)) inArrivo = true;
-        continue;
-      }
-      vagoni.push({ base, chiave });
-    }
-    if (animabile) {
-      if (vagoni.length > 0 && !m.fermo) {
+      if (!animabile) continue;
+      if (inVista > 0 && !m.fermo) {
         this.animato = true;
         this.intervalloAnimazione = Math.min(this.intervalloAnimazione, INTERVALLO_TRENO_MS);
-      }
-      else if (m.fermo) this.prossimoMovimento = Math.min(this.prossimoMovimento, m.prossimoCambio);
+      } else if (m.fermo) this.prossimoMovimento = Math.min(this.prossimoMovimento, m.prossimoCambio);
       // In corsa ma fuori vista: si ricontrolla ogni tanto, con un fotogramma solo.
       else this.prossimoMovimento = Math.min(this.prossimoMovimento, inArrivo ? INTERVALLO_TRENO_MS : CONTROLLO_TRENO_MS);
     }
-    return vagoni.sort((a, b) => b.chiave - a.chiave);
+    return vagoni;
   }
 
-  /** Una carrozza: le pareti che guardano verso chi osserva, una fascia di finestrini, il tetto. */
+  /** Una scatola (carrozza o macchina): le pareti che guardano verso chi osserva, una fascia di finestrini, il tetto. */
   private vagone(ctx: CanvasRenderingContext2D, v: Vagone): void {
-    const T = this.P.treno;
+    const T = v.colori;
     const b = v.base;
     const cx = (b[0] + b[2] + b[4] + b[6]) / 4;
     const cy = (b[1] + b[3] + b[5] + b[7]) / 4;
@@ -1849,37 +2090,37 @@ export class Disegnatore {
       const inizio = metriInIso(ax, ay);
       ctx.moveTo(inizio.sx, inizio.sy);
       punto(bx, by, 0);
-      punto(bx, by, ALTEZZA_VAGONE);
-      punto(ax, ay, ALTEZZA_VAGONE);
+      punto(bx, by, v.altezza);
+      punto(ax, ay, v.altezza);
       ctx.closePath();
       // Come per le case: la parete che guarda più a ovest prende la luce, quella a sud l'ombra.
       ctx.fillStyle = nx < ny ? T.luce : T.ombra;
       ctx.fill();
       ctx.stroke();
       const lato = Math.hypot(bx - ax, by - ay);
-      if (lato > 8) {
+      if (lato > v.fascia.capi * 2 + 1) {
         // La fascia dei finestrini, un metro e mezzo più corta della parete a ogni capo.
-        const t0 = 1.5 / lato;
+        const t0 = v.fascia.capi / lato;
         const t1 = 1 - t0;
         const x0 = ax + (bx - ax) * t0;
         const y0 = ay + (by - ay) * t0;
         const x1 = ax + (bx - ax) * t1;
         const y1 = ay + (by - ay) * t1;
         ctx.beginPath();
-        const f = metriInIso(x0, y0, 1.9);
+        const f = metriInIso(x0, y0, v.fascia.da);
         ctx.moveTo(f.sx, f.sy);
-        punto(x1, y1, 1.9);
-        punto(x1, y1, 2.7);
-        punto(x0, y0, 2.7);
+        punto(x1, y1, v.fascia.da);
+        punto(x1, y1, v.fascia.a);
+        punto(x0, y0, v.fascia.a);
         ctx.closePath();
         ctx.fillStyle = T.finestrini;
         ctx.fill();
       }
     }
     ctx.beginPath();
-    const t = metriInIso(b[0], b[1], ALTEZZA_VAGONE);
+    const t = metriInIso(b[0], b[1], v.altezza);
     ctx.moveTo(t.sx, t.sy);
-    for (let k = 2; k < 8; k += 2) punto(b[k], b[k + 1], ALTEZZA_VAGONE);
+    for (let k = 2; k < 8; k += 2) punto(b[k], b[k + 1], v.altezza);
     ctx.closePath();
     ctx.fillStyle = T.tetto;
     ctx.fill();

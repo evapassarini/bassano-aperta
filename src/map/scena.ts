@@ -15,8 +15,8 @@ import type {
   TipoEdificio,
   TipoStrada,
 } from '../types';
-import { passeggiate, percorsoTreno } from './animazioni';
-import type { Passeggiata, Percorso } from './animazioni';
+import { corsie, genteAllaFontana, macchine, passeggiate, passeggiateNelleVie, treni } from './animazioni';
+import type { AllaFontana, Corsia, Fontana, Macchina, Passeggiata, Treno } from './animazioni';
 import { ISO_X, ISO_Y, ISO_Z, lonLatInMetri, profondita } from './proiezione';
 import type { Rettangolo, Vista } from './proiezione';
 import { TIMPANO, TIMPANO_DESTRO, TIMPANO_SINISTRO, tettoInMetri } from './tetti';
@@ -747,8 +747,14 @@ export interface Scena {
    * scelta non dipende da che cosa è in vista, quindi trascinando la mappa le luci non cambiano.
    */
   rangoLampioni: Float32Array;
-  /** Il percorso del treno decorativo lungo i binari (metri locali), se i binari bastano. */
-  binari: Percorso | null;
+  /** I treni decorativi lungo i binari (metri locali), se i binari bastano. */
+  treni: Treno[];
+  /** Le fontane disegnate e chi ci sta attorno. */
+  fontane: Fontana[];
+  allaFontana: AllaFontana[];
+  /** Le strade con le macchine decorative e le macchine che le percorrono. */
+  corsie: Corsia[];
+  macchine: Macchina[];
   /** Le passeggiate decorative nelle piazze del centro (metri locali). */
   passeggiate: Passeggiata[];
 }
@@ -956,7 +962,17 @@ export function costruisciScena(
     linee.push({ dati: l, linea: proiettaPiatto(l.p) });
   }
 
-  const punti = preparaPunti(strati.punti, luoghi);
+  // Le fontane: i punti degli strati che si chiamano «Fontana ...» (oggi la Fontana Bonaguro).
+  const vasche: Fontana[] = strati.punti
+    .filter((p) => /^fontana\b/i.test(p.nome) && (p.tipo === 'monumento' || p.tipo === 'luogo-storico'))
+    .map((p) => ({ x: p.x, y: p.y, raggio: 8.5 }));
+  // Il segnaposto della fontana si sposta un poco dietro di lei (verso nord-est, cioè più su
+  // sullo schermo): così non copre colonna e zampilli e resta cliccabile.
+  const puntiDisegnati = strati.punti.map((p) =>
+    vasche.some((v) => v.x === p.x && v.y === p.y) ? { ...p, x: p.x + 11, y: p.y + 11 } : p,
+  );
+  const tratti = corsie(base.strade ?? [], base.edifici ?? [], vasche);
+  const punti = preparaPunti(puntiDisegnati, luoghi);
 
   return {
     edifici,
@@ -973,8 +989,24 @@ export function costruisciScena(
     lampioni,
     grigliaLampioni: new Griglia(riquadriLampioni, nLampioni, LATO_GRIGLIA),
     rangoLampioni,
-    binari: percorsoTreno(base.strade ?? []),
-    passeggiate: passeggiate(base.aree ?? [], base.edifici ?? []),
+    treni: treni(base.strade ?? []),
+    corsie: tratti,
+    macchine: macchine(tratti),
+    // Le passeggiate delle piazze non attraversano le fontane.
+    passeggiate: [
+      ...passeggiate(base.aree ?? [], base.edifici ?? []).filter((p) =>
+        vasche.every((v) => {
+          const dx = p.bx - p.ax;
+          const dy = p.by - p.ay;
+          const l2 = dx * dx + dy * dy || 1;
+          const t = Math.max(0, Math.min(1, ((v.x - p.ax) * dx + (v.y - p.ay) * dy) / l2));
+          return Math.hypot(p.ax + dx * t - v.x, p.ay + dy * t - v.y) > v.raggio + 1;
+        }),
+      ),
+      ...passeggiateNelleVie(base.strade ?? [], base.edifici ?? []),
+    ],
+    fontane: vasche,
+    allaFontana: genteAllaFontana(vasche, base.edifici ?? []),
   };
 }
 
