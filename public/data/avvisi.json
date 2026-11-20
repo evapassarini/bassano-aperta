@@ -1,5 +1,5 @@
 {
-  "generato": "2026-11-20T07:20:42.693Z",
+  "generato": "2026-11-20T20:25:07.301Z",
   "fonti": [
     {
       "nome": "CCISS Viaggiare Informati",
@@ -129,23 +129,6 @@
       "fine": {
         "lon": 11.68538,
         "lat": 45.96831
-      }
-    },
-    {
-      "tipo": "evento",
-      "strada": "SP73 (VI) Campesana Valvecchia",
-      "testo": "Tratto chiuso causa lavori dalle 08:30 del 2 alle 16:30 del 20 novembre 2026 tra Incrocio Bassano del Grappa Localita Contra dei Cani e Incrocio SP76-Cruni-Labental",
-      "quando": "2026-10-12T08:41:00.000Z",
-      "fonte": "CCISS Viaggiare Informati",
-      "url": "https://www.cciss.it/web/cciss/situazione-della-viabilita",
-      "attivo": true,
-      "inizio": {
-        "lon": 11.72676,
-        "lat": 45.77569
-      },
-      "fine": {
-        "lon": 11.62982,
-        "lat": 45.90025
       }
     },
     {
