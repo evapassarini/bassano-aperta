@@ -1,5 +1,5 @@
 {
-  "generato": "2026-11-20T20:25:07.301Z",
+  "generato": "2026-11-21T07:13:45.025Z",
   "fonti": [
     {
       "nome": "CCISS Viaggiare Informati",
@@ -45,23 +45,6 @@
       "fine": {
         "lon": 11.71809,
         "lat": 45.80629
-      }
-    },
-    {
-      "tipo": "evento",
-      "strada": "SS245 Castellana",
-      "testo": "Chiusura notturna, tratto chiuso causa lavori dalle 20:30 del 19 alle 06:00 del 21 novembre 2026 tra Incrocio Castelfranco Veneto/Incrocio SS53 Postumia e Incrocio Castione",
-      "quando": "2026-11-18T00:04:00.000Z",
-      "fonte": "CCISS Viaggiare Informati",
-      "url": "https://www.cciss.it/web/cciss/situazione-della-viabilita",
-      "attivo": true,
-      "inizio": {
-        "lon": 11.91285,
-        "lat": 45.67657
-      },
-      "fine": {
-        "lon": 11.8285,
-        "lat": 45.69716
       }
     },
     {
