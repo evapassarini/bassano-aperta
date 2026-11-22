@@ -1,5 +1,5 @@
 {
-  "generato": "2026-11-21T19:19:52.262Z",
+  "generato": "2026-11-22T06:54:12.092Z",
   "fonti": [
     {
       "nome": "CCISS Viaggiare Informati",
@@ -96,23 +96,6 @@
       "quando": "2026-10-28T09:44:56.000Z",
       "fonte": "Vi.abilità (Provincia di Vicenza)",
       "url": "https://vi-abilita.it/servizi/ufficio-concessioni-e-autorizzazioni/ordinanze-temporanee/s-p-72-fratellanza-al-km-8650-circa-in-comune-di-marostica/"
-    },
-    {
-      "tipo": "evento",
-      "strada": "SS47 della Valsugana",
-      "testo": "Riduzione di carreggiata causa lavori dalle 00:01 del 26 ottobre alle 23:55 del 21 novembre 2026 tra Incrocio Bassano Del Grappa - SS141 Strada Cadorna e Incrocio Pianello confine VI-TN",
-      "quando": "2026-10-26T12:22:00.000Z",
-      "fonte": "CCISS Viaggiare Informati",
-      "url": "https://www.cciss.it/web/cciss/situazione-della-viabilita",
-      "attivo": true,
-      "inizio": {
-        "lon": 11.76446,
-        "lat": 45.77201
-      },
-      "fine": {
-        "lon": 11.68538,
-        "lat": 45.96831
-      }
     },
     {
       "tipo": "evento",
