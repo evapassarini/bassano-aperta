@@ -19,7 +19,7 @@ mappa che si guarda volentieri, e a dire sempre da dove viene ogni informazione.
 
 - Girare per la città in vista isometrica: si trascina, si zooma, e la posizione resta
   nell'indirizzo, così la puoi condividere.
-- Aprire uno dei diciotto racconti (sedici luoghi e due temi), con la linea del tempo, le
+- Aprire uno dei diciannove racconti (diciassette luoghi e due temi), con la linea del tempo, le
   fonti e, dove ci sono, immagini e video.
 - Vedere il livello della Brenta in diretta e la qualità dell'aria a Bassano.
 - Guardare i prossimi treni alla stazione, con i ritardi dichiarati.

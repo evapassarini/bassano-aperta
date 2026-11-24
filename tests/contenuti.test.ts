@@ -37,7 +37,7 @@ const I18 = [
   'bassano-2029', 'bolle-nardini', 'brenta', 'castello-ezzelini', 'grappa', 'king-kong-rhino',
   'monte-grappa', 'mura-porte', 'museo-civico', 'museo-grappa-poli', 'nardini-alto', 'nardini-basso',
   'palazzo-bonaguro', 'palazzo-sturm', 'ponte-vecchio', 'tempio-ossario', 'torre-civica-piazze',
-  'viale-dei-martiri',
+  'viale-dei-martiri', 'villa-angaran-san-giuseppe',
 ];
 
 const TIPI_PUNTO = new Set([

@@ -1,0 +1,155 @@
+{
+  "id": "villa-angaran-san-giuseppe",
+  "nome": "Villa Angaran San Giuseppe",
+  "sottotitolo": "La villa incompiuta di Giacomo Angarano, dai gesuiti alle cooperative sociali",
+  "genere": "luogo",
+  "lat": 45.761294,
+  "lon": 11.724218,
+  "intro": "Ad Angarano, affacciata sulla Brenta, c'è una villa che Giacomo Angarano, amico di Andrea Palladio, fece costruire intorno al 1590 e che restò incompiuta. Non è la Villa Angarano disegnata da Palladio, che sta più a nord. Per novant'anni è stata la casa di esercizi spirituali dei gesuiti; oggi la gestiscono cooperative sociali.",
+  "tappe": [
+    {
+      "anno": "1590",
+      "titolo": "Una villa nuova, e troppo cara",
+      "testo": "Nel 1590 il cantiere è già aperto. Il 9 gennaio il cronista Fabio Monza visita la «nova fabbrica», cioè il nuovo edificio: lo trova una meraviglia per la sua grandezza, ma troppo costoso. Per pagarlo Giacomo Angarano deve vendere diversi beni. Secondo il catalogo delle Ville Venete, per avviare il cantiere aveva forse venduto, nel 1588, l'altra villa, quella disegnata da Palladio.",
+      "fonte": {
+        "titolo": "Istituto Regionale Ville Venete, catalogo Provincia di Vicenza (2005), scheda vi 065 «Villa Angarano, Gradenigo, Favero, Padri Gesuiti di Bassano del Grappa, detta San Giuseppe»",
+        "url": "https://culturaveneto.it/uploads/attachments/cm4it87381rljyx738aydeyts-vi-065-2005.pdf"
+      }
+    },
+    {
+      "anno": "Fine Cinquecento",
+      "titolo": "Un pezzo di un progetto più grande",
+      "testo": "La villa che vediamo è solo una parte di un progetto più grande, di cui non si conosce l'autore. Non può essere di Andrea Palladio, morto una decina d'anni prima che si cominciasse a costruirla, ma usa alcune sue soluzioni: per esempio le colonne che si fondono l'una nell'altra dove le ali si attaccano al corpo centrale, come a Palazzo Chiericati. Probabilmente i lavori si fermano perché un figlio di Giacomo è contrario.",
+      "fonte": {
+        "titolo": "Istituto Regionale Ville Venete, catalogo Provincia di Vicenza (2005), scheda vi 065 «Villa Angarano, Gradenigo, Favero, Padri Gesuiti di Bassano del Grappa, detta San Giuseppe»",
+        "url": "https://culturaveneto.it/uploads/attachments/cm4it87381rljyx738aydeyts-vi-065-2005.pdf"
+      }
+    },
+    {
+      "anno": "1595-1898",
+      "titolo": "Dagli Angaran ai Morosini, poi ai Favero",
+      "testo": "Secondo il sito della villa, Giacomo muore nel 1595 senza figli che possano dare discendenti alla famiglia, e lascia il suo patrimonio al cugino Orazio, della famiglia degli Angaran delle Stelle, a patto che le due famiglie si uniscano. I discendenti di Orazio abitano la villa fino all'Ottocento. Nel 1856 la villa passa al conte Luigi Morosini, che aggiunge Angaran al proprio cognome. Nel 1898 la sua vedova la vende alla famiglia Favero.",
+      "fonte": {
+        "titolo": "Villa Angaran San Giuseppe, pagina «Storia» (sito di chi gestisce la villa)",
+        "url": "https://www.villangaransangiuseppe.it/la-storia/storia/"
+      }
+    },
+    {
+      "anno": "1921-1924",
+      "titolo": "Arrivano i gesuiti",
+      "testo": "Nel 1921 la villa passa ai gesuiti, cioè alla Compagnia di Gesù, che la trasformano molto. Nel 1924 apre Villa San Giuseppe, una casa per esercizi spirituali: alcuni giorni dedicati alla preghiera e alla meditazione.",
+      "fonte": {
+        "titolo": "Villa Angaran San Giuseppe, pagina «Storia» (sito di chi gestisce la villa)",
+        "url": "https://www.villangaransangiuseppe.it/la-storia/storia/"
+      }
+    },
+    {
+      "anno": "Seconda guerra mondiale",
+      "titolo": "Il bombardamento",
+      "testo": "Durante la seconda guerra mondiale un grave bombardamento distrugge il fronte nord della villa, una delle due scale e parte del tetto. Nei lavori che seguono, i grandi saloni alti due piani vengono tagliati a metà da un nuovo pavimento, e il salone di sopra viene diviso in tante stanze.",
+      "fonte": {
+        "titolo": "Istituto Regionale Ville Venete, catalogo Provincia di Vicenza (2005), scheda vi 065 «Villa Angarano, Gradenigo, Favero, Padri Gesuiti di Bassano del Grappa, detta San Giuseppe»",
+        "url": "https://culturaveneto.it/uploads/attachments/cm4it87381rljyx738aydeyts-vi-065-2005.pdf"
+      }
+    },
+    {
+      "anno": "2014",
+      "titolo": "Chiude la casa di esercizi",
+      "testo": "Secondo i gesuiti, Villa San Giuseppe è stata la prima casa di esercizi del Triveneto. L'8 novembre 2014, nel giorno della festa per i novant'anni, la casa di esercizi chiude. Quel giorno i gesuiti affidano ufficialmente la villa a tre realtà sociali, che si preparano a gestirla insieme: le cooperative Adelante e Luoghi Comuni e la Fattoria Sociale Conca d'Oro.",
+      "fonte": {
+        "titolo": "Gesuiti.it, «Bassano del Grappa. Villa San Giuseppe: a 90 anni, un nuovo inizio» (24 novembre 2014)",
+        "url": "https://gesuiti.it/bassano-del-grappa-villa-san-giuseppe-a-90-anni-un-nuovo-inizio/"
+      }
+    },
+    {
+      "anno": "2021",
+      "titolo": "Sette anni di cantiere",
+      "testo": "Dal 2015 la villa è affidata in comodato a Rete Pictor, il consorzio che riunisce le cooperative che lavorano in villa. Dopo sette anni di lavori, la villa rinnovata viene inaugurata il 3 ottobre 2021, con il cardinale Pietro Parolin, segretario di Stato vaticano. Nel parco vincolato, di oltre quattro ettari, sono stati restaurati il giardino storico e l'area davanti all'Orangerie, ed è stato creato un sentiero lungo il fiume, con l'aiuto degli Alpini. Nella vecchia biblioteca dei gesuiti sono stati ricavati gli uffici.",
+      "fonte": {
+        "titolo": "Il Gazzettino, «Il cardinale Parolin, braccio destro del Papa, inaugura villa Angaran San Giuseppe, ceduta dai Gesuiti a un consorzio di imprese sociali» (1 ottobre 2021)",
+        "url": "https://www.ilgazzettino.it/nordest/vicenza_bassano/villa_angaran_san_giuseppe_gesuiti_cessione_consorzio_rete_pictor_attivita_sociali_inclusione_economiche-6230677.html"
+      }
+    },
+    {
+      "anno": "Oggi",
+      "titolo": "Una villa data in prestito",
+      "testo": "La villa è ancora dei gesuiti, che l'hanno data in comodato d'uso, cioè in prestito, a quel consorzio di cooperative sociali. Dentro ci sono attività per persone con disabilità e per ragazzi in difficoltà, percorsi di inserimento al lavoro nella ristorazione e nell'ospitalità, e iniziative culturali.",
+      "fonte": {
+        "titolo": "La Voce dei Berici, «Gesuiti, 'bassanesi' da cento anni» (27 ottobre 2024), ripubblicato su gesuiti.it",
+        "url": "https://gesuiti.it/wp-content/uploads/2024/11/40pag14_compressed_1.pdf"
+      }
+    }
+  ],
+  "media": [],
+  "live": [
+    {
+      "tipo": "link",
+      "etichetta": "Visite, ristorazione e camere",
+      "url": "https://www.villangaransangiuseppe.it/",
+      "nota": "Il sito di chi gestisce la villa: visite guidate, bar trattoria, camere ed eventi nel parco. Orari e contatti si leggono lì; le visite guidate sono su prenotazione."
+    }
+  ],
+  "curiosita": [
+    "In villa si produce ancora l'Amaro San Giuseppe: i padri gesuiti hanno cominciato a farlo nel 1928, e il liquore prende il nome dalla villa.",
+    "Sul fronte sud della villa ci sono una lapide del Cinquecento e l'insegna in pietra degli Angaran del Sole, la famiglia di Giacomo. Sulla facciata ovest c'è lo stemma che unisce le due famiglie, gli Angaran del Sole e gli Angaran delle Stelle.",
+    "La moglie di Giacomo Angarano, la poetessa Bianca Nievo, finì nella rete dell'Inquisizione e fu giustiziata a Vicenza. Secondo il sito della villa, accadde nel 1588, prima che questa villa fosse costruita. Bianca era indipendente dalle difficoltà economiche del marito grazie al commercio della seta.",
+    "Il centro diurno «Le Carubine», per persone con disabilità grave, porta il nome che nel Cinquecento aveva la zona dove fu costruita la villa."
+  ],
+  "fontiCuriosita": [
+    {
+      "titolo": "Gesuiti.it, «Bassano del Grappa. Tra l'amaro e gli esercizi, la storia dei gesuiti a Bassano» (6 novembre 2015)",
+      "url": "https://gesuiti.it/bassano-del-grappa-tra-lamaro-e-gli-esercizi-la-storia-dei-gesuiti-a-bassano/"
+    },
+    {
+      "titolo": "Villa Angaran San Giuseppe, pagina «Antico Laboratorio San Giuseppe» (sito di chi gestisce la villa)",
+      "url": "https://www.villangaransangiuseppe.it/progetti/laboratorio-san-giuseppe/"
+    },
+    {
+      "titolo": "Veneto Around Me (portale turistico della Regione Veneto), «Villa Angarano, Favero, detta San Giuseppe»",
+      "url": "https://venetoaroundme.regione.veneto.it/it/luoghi/villa-angarano-favero-detta-san-giuseppe"
+    },
+    {
+      "titolo": "Villa Angaran San Giuseppe, pagina «La pala della villa» (sito di chi gestisce la villa)",
+      "url": "https://www.villangaransangiuseppe.it/la-storia/la-pala-della-villa/"
+    },
+    {
+      "titolo": "Villa Angaran San Giuseppe, pagina «Centro Diurno Le Carubine» (sito di chi gestisce la villa)",
+      "url": "https://www.villangaransangiuseppe.it/progetti/disabilita/le-carubine/"
+    },
+    {
+      "titolo": "Villa Angaran San Giuseppe, pagina «Visite guidate» (sito di chi gestisce la villa)",
+      "url": "https://www.villangaransangiuseppe.it/la-storia/visite-guidate/"
+    },
+    {
+      "titolo": "Il Giornale di Vicenza, «Gli eretici nei roghi vicentini» (27 agosto 2018)",
+      "url": "https://www.ilgiornaledivicenza.it/argomenti/cultura/gli-eretici-nei-roghi-vicentini-1.6715523"
+    }
+  ],
+  "incertezze": [
+    "Confusione tra due ville: la pagina «Storia» del sito della villa (https://www.villangaransangiuseppe.it/la-storia/storia/) comincia con la villa commissionata a Palladio e venduta da Giacomo Angarano, che è Villa Angarano Bianchi Michiel a Sant'Eusebio (IRVV vi 049, https://culturaveneto.it/uploads/attachments/cm4it8cpr1rneyx73akqnc0yo-vi-049-2005.pdf), e poi continua con questa senza dirlo chiaramente. La pagina «La pala della villa» (https://www.villangaransangiuseppe.it/la-storia/la-pala-della-villa/) e quella delle visite guidate tengono separate le due ville. Da questa pagina si prendono, per l'edificio, solo i fatti dal 1595 in poi; per le persone della famiglia (Bianca Nievo, nella curiosità) si usa anche la parte precedente, perché non dipende da quale villa si parla, con la conferma della pagina della pala e di Avvenire 2022.",
+    "Architetto: per l'IRVV l'autore è sconosciuto e Andrea Palladio è escluso; il catalogo nazionale ICCD (https://sigecweb.beniculturali.it/sigec/item/print/ICCD13068053) scrive solo «cerchia palladiana». Chi gestisce la villa attribuisce la facciata originale, incompiuta, a Silla Palladio, figlio di Andrea (pagina «Visite guidate», https://www.villangaransangiuseppe.it/la-storia/visite-guidate/; la pagina «Storia» lo chiama procuratore e direttore di cantiere); il portale della Regione (https://venetoaroundme.regione.veneto.it/en/node/138321) gli affida la sorveglianza dei lavori. Nessuna scheda di un ente di tutela nomina Silla. Le pagine della guest house (https://www.villangaransangiuseppe.it/progetti/guest-house/) e di inTREEcciamo (https://www.villangaransangiuseppe.it/pianta-unalbero/) parlano di «villa palladiana» e di «stile palladiano», e la voce it.wikipedia «Bassano del Grappa» (https://it.wikipedia.org/wiki/Bassano_del_Grappa, senza fonte) di «stile palladiano».",
+    "Datazione: la pagina inTREEcciamo del sito (https://www.villangaransangiuseppe.it/pianta-unalbero/) dice «del '600»; le altre pagine del sito, l'IRVV e l'ICCD (fine XVI secolo circa) indicano il Cinquecento.",
+    "Inizio dei lavori: il portale della Regione (https://venetoaroundme.regione.veneto.it/en/node/138321) e la voce it.wikipedia «Bassano del Grappa» (https://it.wikipedia.org/wiki/Bassano_del_Grappa, senza fonte) dicono 1588; la voce dice anche che la villa fu commissionata da Giacomo e da Bianca Nievo, che però, secondo il sito della villa, morì nel febbraio 1588. Per l'IRVV il 1588 è l'anno della vendita dell'altra villa, quella di Palladio, forse servita per avviare questa; di questa villa l'IRVV attesta solo che era in costruzione all'inizio del 1590. Il sito della villa (https://www.villangaransangiuseppe.it/la-storia/storia/) dice che il nuovo cantiere comincia nel 1590.",
+    "Il figlio contrario al cantiere: l'IRVV lo chiama esplicitamente Girolamo («suscitando lo scontento del figlio Girolamo»). La pagina «La pala della villa» (https://www.villangaransangiuseppe.it/la-storia/la-pala-della-villa/) elenca come figli di Giacomo e Bianca Nievo Stefano, Marcantonio e Fabrizio e racconta le loro sventure, senza nominare Girolamo, e la pagina «Storia» dice che Giacomo morì «senza eredi diretti». Le fonti non concordano sui figli: per questo nel testo il figlio non ha nome, e la tappa del 1595 attribuisce al sito l'assenza di eredi.",
+    "Dal 1595 all'Ottocento: la pagina «Storia» dice «per circa tre secoli», ma le sue stesse date (1595/1600-1854/1856) fanno circa due secoli e mezzo: nel testo «fino all'Ottocento». La stessa pagina dice che Giacomo lascia «il suo patrimonio»; la pagina della pala dice «lascia tutto». Per il sito Luigi Morosini riceve la villa nel 1856 come gestore dell'eredità rimasta senza eredi; per il bollettino del Rotary Club Bassano Castelli (21 luglio 2016, racconto di un architetto che ha lavorato nella villa, https://bassanocastelli.rotary2060.org/images/bollettino-n-3---XVIII.pdf) Luigia Angaran, figlia dell'ultimo Angarano, sposa Luigi Morosini e la famiglia eredita la villa. L'IRVV non nomina i Morosini. Il portale della Regione (https://venetoaroundme.regione.veneto.it/en/node/138321) fa restare la villa agli Angaran delle Stelle per circa trecento anni e poi ai Favero.",
+    "I Favero: per il sito della villa (https://www.villangaransangiuseppe.it/la-storia/storia/) nel 1898 la vedova Luigia vende al cavalier Valentino Favero, imprenditore bassanese; per il bollettino Rotary (https://bassanocastelli.rotary2060.org/images/bollettino-n-3---XVIII.pdf) nel 1898 gli eredi vendono a Pompilio Favero, di famiglia di Castelfranco; l'IRVV dice solo «a fine Ottocento».",
+    "I nomi «Gradenigo» (titolo della scheda IRVV) e «Pisani» (nome nel catalogo ICCD, «Cà Pisani Angaran Morosini», https://sigecweb.beniculturali.it/sigec/item/print/ICCD13068053) compaiono anche tra i proprietari di Villa Angarano Bianchi Michiel. Nessuna fonte letta documenta un passaggio ai Gradenigo o ai Pisani per questa villa: non usati.",
+    "Nomi: le fonti usano sia «Angarano» sia «Angaran». Nel testo «Angarano» per Giacomo, e «Angaran del Sole» e «Angaran delle Stelle» per le due famiglie, come le chiama il sito; «Angaran» resta nel cognome aggiunto da Luigi Morosini.",
+    "Arrivo dei gesuiti: gesuiti.it (https://gesuiti.it/bassano-del-grappa-villa-san-giuseppe-a-90-anni-un-nuovo-inizio/) scrive che nel 1921 la villa «divenne opera» della Compagnia di Gesù; il sito della villa (https://www.villangaransangiuseppe.it/la-storia/storia/), Il Gazzettino (https://www.ilgazzettino.it/nordest/vicenza_bassano/villa_angaran_san_giuseppe_gesuiti_cessione_consorzio_rete_pictor_attivita_sociali_inclusione_economiche-6230677.html, «venne acquisita dai Gesuiti nel 1921»), BassanoNet (5 giugno 2015, https://www.bassanonet.it/territorio/19700-alla_scoperta_di_villa_san_giuseppe.html) e la voce it.wikipedia parlano di acquisto nel 1921; l'IRVV non dà l'anno. Nel testo si scrive «passa ai gesuiti». BassanoNet e il bollettino Rotary dicono che i gesuiti la comprarono pensando a un noviziato e solo dopo la adattarono a casa di esercizi; l'inaugurazione nel 1924 la danno il sito della villa (pagine «Storia» e «La pala della villa») e il portale della Regione; il Rotary dice che fu fissata per la prima metà di ottobre 1924. I novant'anni festeggiati nel 2014 si contano dal 1924.",
+    "Numero di persone passate per gli esercizi: la pagina «La storia» del sito (https://www.villangaransangiuseppe.it/la-storia/) dice «centinaia di migliaia», la pagina «Storia» «decine di migliaia» nel Novecento. Non usato.",
+    "Bombardamento: l'IRVV dice solo «durante la seconda guerra mondiale»; il sito della villa (https://www.villangaransangiuseppe.it/la-storia/storia/) e il portale della Regione dicono 1945; il bollettino Rotary (https://bassanocastelli.rotary2060.org/images/bollettino-n-3---XVIII.pdf) dice 24 aprile 1945. Le fonti concordano sulla distruzione del fronte nord. Il sito della villa parla di cinque ordigni.",
+    "Fine degli esercizi spirituali: gesuiti.it (https://gesuiti.it/bassano-del-grappa-villa-san-giuseppe-a-90-anni-un-nuovo-inizio/) dice 8 novembre 2014; Avvenire (20 gennaio 2026, https://www.avvenire.it/chiesa/chiesa-italiana/come-e-perche-i-beni-immobili-della-chiesa-possono-fare-del-bene-a-tutti_103459) scrive «fino ai primi anni Duemila».",
+    "Passaggio alle cooperative: gesuiti.it (https://gesuiti.it/bassano-del-grappa-villa-san-giuseppe-a-90-anni-un-nuovo-inizio/) indica il passaggio formale di consegne nella gestione l'8 novembre 2014 a Adelante, Luoghi Comuni e Conca d'Oro; il sito della villa (https://www.villangaransangiuseppe.it/la-storia/storia/) dà il comodato gratuito a Rete Pictor dal 15 aprile 2015, il bollettino Rotary (https://bassanocastelli.rotary2060.org/images/bollettino-n-3---XVIII.pdf) un comodato gratuito ventennale ad Adelante e Conca d'Oro. Probabilmente sono una cerimonia e un contratto diversi.",
+    "Durata del comodato: il bollettino Rotary (https://bassanocastelli.rotary2060.org/images/bollettino-n-3---XVIII.pdf) parla di comodato ventennale; Valori.it (12 novembre 2026, https://valori.it/villa-angaran-san-giuseppe/) scrive che il comodato era di dieci anni e che l'anno scorso, cioè nel 2025, è stato rinnovato per altri dieci anni. Non usato.",
+    "Perché la villa non fu venduta: il bollettino Rotary (https://bassanocastelli.rotary2060.org/images/bollettino-n-3---XVIII.pdf) e Valori.it (https://valori.it/villa-angaran-san-giuseppe/) parlano di una vendita bloccata da una disposizione di papa Francesco; Avvenire 2026 (https://www.avvenire.it/chiesa/chiesa-italiana/come-e-perche-i-beni-immobili-della-chiesa-possono-fare-del-bene-a-tutti_103459) parla di un invito di papa Francesco; nel giornale diocesano un gesuita dice che furono i gesuiti a scegliere di non vendere. Non usato.",
+    "Inaugurazione 2021: Il Gazzettino del 1 ottobre (https://www.ilgazzettino.it/nordest/vicenza_bassano/villa_angaran_san_giuseppe_gesuiti_cessione_consorzio_rete_pictor_attivita_sociali_inclusione_economiche-6230677.html) annuncia la cerimonia per domenica 3 ottobre; il sito della villa (https://www.villangaransangiuseppe.it/la-storia/storia/) conferma che il 3 ottobre 2021 c'è stata, con Pietro Parolin. Il titolo del Gazzettino dice «ceduta dai Gesuiti», ma la villa è data in comodato e resta dei gesuiti: il titolo si cita com'è, il testo non lo riprende. Il sentiero Lungobrenta, per il sito, era stato inaugurato il 4 ottobre 2019 con l'ANA Montegrappa: nel testo si dice solo che è stato restaurato, come scrive il Gazzettino.",
+    "Superficie del parco: Il Gazzettino dice «oltre quattro ettari», come altre fonti; Valori.it (2026, https://valori.it/villa-angaran-san-giuseppe/) scrive sei ettari.",
+    "Amaro San Giuseppe: Il Gazzettino (2021, https://www.ilgazzettino.it/nordest/vicenza_bassano/villa_angaran_san_giuseppe_gesuiti_cessione_consorzio_rete_pictor_attivita_sociali_inclusione_economiche-6230677.html) e la pagina «Antico Laboratorio San Giuseppe» del sito (https://www.villangaransangiuseppe.it/progetti/laboratorio-san-giuseppe/, «produce fin dal 1928») danno il 1928; la pagina «Storia» non dà l'anno; un articolo di Avvenire del 16 settembre 2022, letto solo nella copia sul blog dell'autrice (https://www.monicazornetta.it/comunita-accoglienti-a-bassano-del-grappa-la-villa-dellinclusione/), scrive che i prodotti del laboratorio si fanno «fin dal 1924».",
+    "Cappella: il bollettino Rotary (https://bassanocastelli.rotary2060.org/images/bollettino-n-3---XVIII.pdf) dice che nel 1924 i gesuiti costruirono una cappella; un post del 29 marzo 2019 del sito della villa (https://www.villangaransangiuseppe.it/dalla-teoria-alla-pratica-della-villa/) chiama la Sala Biancanievo «l'ex cappella»; il portale della Regione parla del portale di una vecchia cappella sulla facciata ovest. Non è chiaro se siano lo stesso ambiente: non usato nel testo. Che la Sala Biancanievo porti il nome di Bianca Nievo è probabile ma nessuna pagina letta lo dice: non scritto.",
+    "Stemmi: il portale della Regione (https://venetoaroundme.regione.veneto.it/en/node/138321) parla anche di uno stemma degli Angaran delle Stelle sul fronte nord, che però fu distrutto nel 1945 e ricostruito: non usato. Il testo del portale sembra fornito da chi gestisce la villa.",
+    "Bianca Nievo: l'eresia, il convento di Aracoeli a Vicenza e la data del 28 febbraio 1588 vengono dal sito della villa (pagine «Storia» e «La pala della villa»); Avvenire (16 settembre 2022, copia sul blog dell'autrice, https://www.monicazornetta.it/comunita-accoglienti-a-bassano-del-grappa-la-villa-dellinclusione/) conferma l'accusa di eresia e l'esecuzione nel 1588. Morì prima che questa villa fosse costruita. La frase sulla seta è nel riquadro sul gelso della pagina «Storia». Il Giornale di Vicenza (27 agosto 2018, fonte indipendente dalla villa) scrive invece che fu strangolata nelle carceri di Vicenza, senza dare l'anno: nel testo solo «giustiziata a Vicenza», e l'anno è attribuito al sito della villa.",
+    "Il bollettino Rotary (https://bassanocastelli.rotary2060.org/images/bollettino-n-3---XVIII.pdf) dice che padre Ettore Zanuso (1875-1963) ospitò ebrei e perseguitati politici. È l'unica fonte, non indipendente: non usato finché non si trova una conferma.",
+    "La via si chiama Ca' Morosini, ma nessuna fonte letta collega il nome della via ai Morosini proprietari della villa: non scritto.",
+    "Immagini: su Wikimedia Commons non c'è una foto con licenza libera che mostri con certezza questa villa, né una categoria o un elemento Wikidata. Le foto trovate cercando «Villa Angarano» sono della villa di Palladio a Sant'Eusebio (Category:Villa Angarano Bianchi Michiel, coordinate intorno a 45.780 N) e non vanno usate. Non vanno collegati a questa villa nemmeno l'elemento Wikidata Q110463555 «Villa Angaran delle Stelle» (è a Mason Vicentino) né il file «Angarano - Villa M. Giolai.jpg» (è un'altra villa)."
+  ]
+}

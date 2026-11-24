@@ -176,6 +176,12 @@ const LUOGHI = [
     osm: 'node/310353714', lat: 45.7636398, lon: 11.7334538,
     doppioni: /tempio ossario|ossario/, raggio: 80,
   },
+  {
+    // L'edificio «Villa S. Giuseppe» in OSM, il corpo principale della villa.
+    storia: 'villa-angaran-san-giuseppe', nome: 'Villa Angaran San Giuseppe', tipo: 'luogo-storico',
+    osm: 'way/145923845', lat: 45.761294, lon: 11.724218,
+    doppioni: /angaran san giuseppe|villa s(an|\.) ?giuseppe/, raggio: 120,
+  },
 ];
 
 /** Cima del Monte Grappa: serve solo per calcolare la distanza. */
