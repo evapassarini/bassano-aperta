@@ -1,5 +1,5 @@
 {
-  "generato": "2026-11-26T21:37:19.976Z",
+  "generato": "2026-11-27T08:39:37.657Z",
   "stazione": "Bassano (ARPAV, codice 500000106)",
   "fonte": {
     "nome": "ARPAV, qualità dell'aria: dati in diretta, non validati",
@@ -9,63 +9,19 @@
   "misure": [
     {
       "inquinante": "Ozono (media oraria)",
-      "valore": 12.2,
+      "valore": 4,
       "unita": "µg/m³",
-      "quando": "2026-11-26T21:00:00"
+      "quando": "2026-11-27T08:00:00"
     },
     {
       "inquinante": "PM10 (media giornaliera)",
-      "valore": 11.1,
+      "valore": 17.4,
       "unita": "µg/m³",
-      "quando": "2026-11-25"
+      "quando": "2026-11-26"
     }
   ],
   "serie": {
     "ozonoOrario": [
-      {
-        "quando": "2026-11-24T22:00:00",
-        "valore": 17
-      },
-      {
-        "quando": "2026-11-24T23:00:00",
-        "valore": 18
-      },
-      {
-        "quando": "2026-11-25T00:00:00",
-        "valore": 22.4
-      },
-      {
-        "quando": "2026-11-25T01:00:00",
-        "valore": 24.4
-      },
-      {
-        "quando": "2026-11-25T02:00:00",
-        "valore": 18
-      },
-      {
-        "quando": "2026-11-25T03:00:00",
-        "valore": 19.4
-      },
-      {
-        "quando": "2026-11-25T04:00:00",
-        "valore": 20
-      },
-      {
-        "quando": "2026-11-25T05:00:00",
-        "valore": 21.4
-      },
-      {
-        "quando": "2026-11-25T06:00:00",
-        "valore": 16.6
-      },
-      {
-        "quando": "2026-11-25T07:00:00",
-        "valore": 14.8
-      },
-      {
-        "quando": "2026-11-25T08:00:00",
-        "valore": 6.4
-      },
       {
         "quando": "2026-11-25T09:00:00",
         "valore": 5.2
@@ -213,13 +169,53 @@
       {
         "quando": "2026-11-26T21:00:00",
         "valore": 12.2
+      },
+      {
+        "quando": "2026-11-26T22:00:00",
+        "valore": 16.8
+      },
+      {
+        "quando": "2026-11-26T23:00:00",
+        "valore": 30.8
+      },
+      {
+        "quando": "2026-11-27T00:00:00",
+        "valore": 22.2
+      },
+      {
+        "quando": "2026-11-27T01:00:00",
+        "valore": 24
+      },
+      {
+        "quando": "2026-11-27T02:00:00",
+        "valore": 23.2
+      },
+      {
+        "quando": "2026-11-27T03:00:00",
+        "valore": 21.4
+      },
+      {
+        "quando": "2026-11-27T04:00:00",
+        "valore": 13.6
+      },
+      {
+        "quando": "2026-11-27T05:00:00",
+        "valore": 11.2
+      },
+      {
+        "quando": "2026-11-27T06:00:00",
+        "valore": 16.4
+      },
+      {
+        "quando": "2026-11-27T07:00:00",
+        "valore": 22
+      },
+      {
+        "quando": "2026-11-27T08:00:00",
+        "valore": 4
       }
     ],
     "pm10Giornaliero": [
-      {
-        "quando": "2026-11-19",
-        "valore": 14.700002
-      },
       {
         "quando": "2026-11-20",
         "valore": 8.5
@@ -243,6 +239,10 @@
       {
         "quando": "2026-11-25",
         "valore": 11.100002
+      },
+      {
+        "quando": "2026-11-26",
+        "valore": 17.399996
       }
     ]
   }
